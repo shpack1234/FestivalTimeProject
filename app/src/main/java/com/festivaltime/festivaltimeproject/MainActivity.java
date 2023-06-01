@@ -16,6 +16,11 @@ class HelloTwice extends Hello {
         super();
         System.out.println("Hello World");
     }
+    private void HelloPrint(int num) {
+        for(int i=0; i<num; i++) {
+            System.out.println("Hello World");
+        }
+    }
 }
 public class MainActivity extends AppCompatActivity {
     @Override
