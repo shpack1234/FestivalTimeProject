@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 
+interface HelloInterface {
+    final int num=5;
+    void helloFunction();
+}
 class Hello {
     Hello() {
         System.out.println("Hello World");
