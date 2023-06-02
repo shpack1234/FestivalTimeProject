@@ -2,48 +2,28 @@ package com.festivaltime.festivaltimeproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-
-interface HelloInterface {
-    final int num=5;
-    void helloFunction();
-}
-class Hello {
-    Hello() {
-        System.out.println("Hello World");
-    }
-}
-
-class HelloTwice extends Hello {
-    HelloTwice() {
-        super();
-        System.out.println("Hello World");
-    }
-    private void HelloPrint(int num) {
-        for(int i=0; i<num; i++) {
-            System.out.println("Hello World");
-        }
-    }
-}
-
-class Hellobabo extends Hello {
-    Hellobabo() {
-        super();
-        System.out.println("Hello World");
-    }
-    private void HelloPrint(int num) {
-        for(int i=0; i<num; i++) {
-            System.out.println("Hello World");
-        }
-    }
-}
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    Button b1  ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
+        b1 = findViewById(R.id.page1);
+        b1.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(MainActivity.this,CalendarActivity.class);
+                        startActivity(i);
+                    }
+                }
+        );
+    }
 }
