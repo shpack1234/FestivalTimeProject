@@ -22,6 +22,19 @@ class HelloTwice extends Hello {
         }
     }
 }
+
+class Hellobabo extends Hello {
+    Hellobabo() {
+        super();
+        System.out.println("Hello World");
+    }
+    private void HelloPrint(int num) {
+        for(int i=0; i<num; i++) {
+            System.out.println("Hello World");
+        }
+    }
+}
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
