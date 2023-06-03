@@ -22,7 +22,9 @@ class NewHello extends  Hello {
         this.a=a;
     }
 }
-
+class NY{
+    System.out.println("PLZ");
+}
 public class MainActivity extends AppCompatActivity {
     Button b1;
     int a;
