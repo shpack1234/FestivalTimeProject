@@ -16,6 +16,13 @@ class Hello {
     }
 }
 
+class NewHello extends  Hello {
+    int a;
+    NewHello() {
+        this.a=a;
+    }
+}
+
 public class MainActivity extends AppCompatActivity {
     Button b1;
     int a;
