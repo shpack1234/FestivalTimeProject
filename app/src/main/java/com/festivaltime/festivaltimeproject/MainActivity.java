@@ -7,8 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+class Hello {
+    Hello() {
+
+    }
+    private void HelloFunction() {
+        System.out.println("Hello World");
+    }
+}
+
 public class MainActivity extends AppCompatActivity {
-    Button b1  ;
+    Button b1;
+    int a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
