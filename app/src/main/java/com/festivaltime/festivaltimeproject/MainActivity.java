@@ -16,6 +16,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         searchView = findViewById(R.id.search_view);
+        searchView.setOnTouchListener((v, event) -> {
+            searchView.setIconified(false);
+            searchView.performClick();
+            return true;
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

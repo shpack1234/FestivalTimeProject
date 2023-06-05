@@ -8,13 +8,20 @@
 
     <SearchView
         android:id="@+id/search_view"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/radius_corner"
+        android:layoutDirection="rtl"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="어떤 축제를 즐겨볼까요?"
+        app:searchIcon="@drawable/ic_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
