@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <SearchView
         android:id="@+id/search_view"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="8dp"
+        android:theme="@style/AppSearchView"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginRight="30dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/radius_corner"
         android:layoutDirection="rtl"
@@ -21,7 +21,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:queryHint="어떤 축제를 즐겨볼까요?"
+        android:queryHint="어떤 축제를 즐겨볼까요?"
         app:searchIcon="@drawable/ic_search" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/hot_festival_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/HotFestival"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#000000"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_slide_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hot_festival_text_view"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="30dp"
+        app:cardCornerRadius="20dp">
+
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/image_slider"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/radius_corner"
+            app:sliderAnimationDuration="600"
+            app:sliderAutoCycleDirection="back_and_forth"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="15dp"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorRadius="2dp"
+            app:sliderIndicatorSelectedColor="#BCEFFF"
+            app:sliderIndicatorUnselectedColor="#D2D2D2"
+            app:sliderScrollTimeInSec="3"
+            app:sliderStartAutoCycle="true" />
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
