@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private String query;
 
     SliderView sliderView;
-    int[] images={R.drawable.image01, R.drawable.image02, R.drawable.image03};
-
+    int[] hot_festival_images={R.drawable.image01, R.drawable.image02, R.drawable.image03};
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         sliderView=findViewById(R.id.image_slider);
 
-        SliderAdapter sliderAdapter=new SliderAdapter(images);
+        SliderAdapter sliderAdapter=new SliderAdapter(hot_festival_images);
         sliderView.setSliderAdapter(sliderAdapter);
         sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
