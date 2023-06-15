@@ -22,26 +22,25 @@ public class SearchActivity extends AppCompatActivity {
 
         queryTextView = findViewById(R.id.search_text_View);
         String query = getIntent().getStringExtra("query");
-        queryTextView.setText(query);
+        if (query != null) {
+            queryTextView.setText(query);
+        }
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.action_home:
-                    navigateToMainActivity(SearchActivity.this);
-                    return true;
-                case R.id.action_map:
-                    navigateToMapActivity(SearchActivity.this);
-                    return true;
-                case R.id.action_calendar:
-                    navigateToCalendarActivity(SearchActivity.this);
-                    return true;
-                case R.id.action_favorite:
-                    return true;
-                case R.id.action_profile:
-                    return true;
-            }
-            return false;
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(SearchActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(SearchActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(SearchActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                return true;
+            } else return item.getItemId() == R.id.action_profile;
         });
     }
 }

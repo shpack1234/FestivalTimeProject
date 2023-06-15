@@ -5,14 +5,9 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.ImageView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     SliderView sliderView;
     int[] hot_festival_images={R.drawable.image01, R.drawable.image02, R.drawable.image03};
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
                 query = s;
                 performSearch(query);
-                navigateToSearchActivity(MainActivity.this);
-                return true;
+                navigateToSearchActivity(MainActivity.this, query);
+                return false;
             }
 
             @Override
@@ -53,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         sliderView=findViewById(R.id.image_slider);           //Hot Festival 배너 이미지 전환
         SliderAdapter sliderAdapter=new SliderAdapter(hot_festival_images);
         sliderView.setSliderAdapter(sliderAdapter);
@@ -60,28 +57,27 @@ public class MainActivity extends AppCompatActivity {
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.startAutoCycle();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.action_home:
-                     navigateToMainActivity(MainActivity.this);
-                    return true;
-                case R.id.action_map:
-                    navigateToMapActivity(MainActivity.this);
-                    return true;
-                case R.id.action_calendar:
-                    navigateToCalendarActivity(MainActivity.this);
-                    return true;
-                case R.id.action_favorite:
-                    return true;
-                case R.id.action_profile:
-                    return true;
-            }
-            return false;
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(MainActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(MainActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(MainActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                return true;
+            } else return item.getItemId() == R.id.action_profile;
         });
+
     }
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
+
 
 }

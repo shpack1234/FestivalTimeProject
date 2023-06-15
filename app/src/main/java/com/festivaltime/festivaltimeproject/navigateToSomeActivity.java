@@ -6,8 +6,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 public class navigateToSomeActivity {
-    public static void navigateToSearchActivity(Activity thisActivity) {
+    public static void navigateToSearchActivity(Activity thisActivity, String query) {
         Intent intent = new Intent(thisActivity, SearchActivity.class);
+        intent.putExtra("query", query);
         thisActivity.startActivity(intent);
     }
 
