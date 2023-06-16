@@ -31,8 +31,8 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
     } */
 
-    /*public static void navigateToFavoriteActivity(Activity thisActivity) {
-        Intent intent = new Intent(thisActivity, Favoritectivity.class);
+    public static void navigateToFavoriteActivity(Activity thisActivity) {
+        Intent intent = new Intent(thisActivity, FavoriteActivity.class);
         thisActivity.startActivity(intent);
-    } */
+    }
 }

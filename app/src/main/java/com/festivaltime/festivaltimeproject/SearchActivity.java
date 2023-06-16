@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 
@@ -39,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
                 navigateToCalendarActivity(SearchActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(SearchActivity.this);
                 return true;
             } else return item.getItemId() == R.id.action_profile;
         });
