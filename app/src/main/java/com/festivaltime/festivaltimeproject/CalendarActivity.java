@@ -1,4 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
-public class CalendarActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class CalendarActivity extends AppCompatActivity {
 }

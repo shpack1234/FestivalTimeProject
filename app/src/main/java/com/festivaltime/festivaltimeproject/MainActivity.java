@@ -16,6 +16,7 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
     private String query;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        HashGetter.getHashKey(getApplicationContext());
 
         searchView = findViewById(R.id.search_view);
         searchView.setOnTouchListener((v, event) -> {
