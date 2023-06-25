@@ -30,10 +30,10 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
-    /*public static void navigateToMyPageActivity(Activity thisActivity) {
+    public static void navigateToMyPageActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, MyPageActivity.class);
         thisActivity.startActivity(intent);
-    } */
+    }
 
     public static void navigateToFavoriteActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, FavoriteActivity.class);

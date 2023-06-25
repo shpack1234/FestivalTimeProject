@@ -4,6 +4,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.annotation.SuppressLint;
@@ -86,7 +87,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.action_favorite) {
                 navigateToFavoriteActivity(MainActivity.this);
                 return true;
-            } else return item.getItemId() == R.id.action_profile;
+            } else {
+                navigateToMyPageActivity(MainActivity.this);
+                return true;
+            }
         });
 
     }
