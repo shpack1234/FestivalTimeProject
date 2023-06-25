@@ -28,16 +28,17 @@ public class navigateToSomeActivity {
     public static void navigateToCalendarActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, CalendarActivity.class);
         thisActivity.startActivity(intent);
-        thisActivity.overridePendingTransition(0,0);
-    }
-    public static void navigateToMyPageActivity(Activity thisActivity) {
-        Intent intent = new Intent(thisActivity, MyPageActivity.class);
-        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0, 0);
     }
 
     public static void navigateToFavoriteActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, FavoriteActivity.class);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
+    }
+
+    public static void navigateToMyPageActivity(Activity thisActivity) {
+        Intent intent = new Intent(thisActivity, MyPageActivity.class);
+        thisActivity.startActivity(intent);
     }
 }

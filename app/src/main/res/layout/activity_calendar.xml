@@ -36,5 +36,4 @@
         android:layout_marginTop="35dp"
         android:text="TextView" />
 
-
 </RelativeLayout>
