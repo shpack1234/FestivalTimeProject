@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,16 +18,45 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
+    private final Context mContext;
+    private final View mCalloutBalloon;
+    public CustomCalloutBalloonAdapter(Context context) {
+        mContext=context;
+        mCalloutBalloon= LayoutInflater.from(mContext).inflate(R.layout.custom_callout_balloon, null);
+    }
+
+    @Override
+    public View getCalloutBalloon(MapPOIItem mapPOIItem) {
+        ((TextView)mCalloutBalloon.findViewById(R.id.festival_detail_title)).setText(mapPOIItem.getItemName());
+        ((Button)mCalloutBalloon.findViewById(R.id.festival_detail_button)).setText("Custom CalloutBalloon");
+        return mCalloutBalloon;
+    }
+
+    @Override
+    public View getPressedCalloutBalloon(MapPOIItem mapPOIItem) {
+        return null;
+    }
+}
 
 public class MapActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
     private MapView mapView;
@@ -36,6 +66,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
 
         int permission = ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.INTERNET);
@@ -63,6 +94,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
         mapView.setPOIItemEventListener(this);
         onMapViewInitialized(mapView);
+        mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter(MapActivity.this));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_map);
@@ -174,7 +206,8 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-
+        MapPoint selectedMapPoint=mapPOIItem.getMapPoint();
+        mapView.setMapCenterPointAndZoomLevel(selectedMapPoint, 5, true);
     }
 
     @Override

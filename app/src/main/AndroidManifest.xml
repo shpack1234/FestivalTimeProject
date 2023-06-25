@@ -31,7 +31,9 @@
         <activity
             android:name=".FavoriteActivity"
             android:exported="false" />
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".SearchActivity"
             android:exported="true">

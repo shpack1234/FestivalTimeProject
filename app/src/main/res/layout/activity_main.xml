@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -17,25 +18,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <SearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:windowSoftInputMode="adjustPan"
-                android:theme="@style/AppSearchView"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="30dp"
-                android:animateLayoutChanges="true"
-                android:background="@drawable/radius_corner"
-                android:layoutDirection="rtl"
-                app:iconifiedByDefault="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:queryHint="어떤 축제를 즐겨볼까요?"
-                app:searchIcon="@drawable/ic_search" />
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp">
+
+                <SearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="330dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="0dp"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/radius_corner"
+                    android:layoutDirection="rtl"
+                    android:queryHint="어떤 축제를 즐겨볼까요?"
+                    android:theme="@style/AppSearchView"
+                    android:windowSoftInputMode="adjustPan"
+                    app:iconifiedByDefault="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:searchIcon="@drawable/ic_search"/>
+
+                <ImageButton
+                    android:id="@+id/search_option"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_search_option"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginStart="0dp"
+                    android:background="@color/white"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="ImageButton" />
+            </LinearLayout>
 
 
             <TextView
@@ -43,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/search_view"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/HotFestival"
                 android:textColor="#000000"
@@ -55,10 +73,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/hot_festival_text_view"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="30dp"
-                app:cardCornerRadius="20dp">
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="10dp">
 
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/image_slider"
@@ -79,24 +97,34 @@
                     app:sliderStartAutoCycle="true" />
             </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="@string/vacation_festival"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_below="@+id/vacation_festival_view"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
             <HorizontalScrollView
                 android:id="@+id/vacation_festival_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="5dp">
 
                         <ImageButton
@@ -104,14 +132,15 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"/>
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="5dp">
 
                         <ImageButton
@@ -119,29 +148,31 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"/>
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="5dp">
 
                         <ImageButton
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
+                            android:contentDescription="ImageButton"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"/>
+                            tools:ignore="SpeakableTextPresentCheck" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="5dp">
 
                         <ImageButton
@@ -149,14 +180,15 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"/>
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:layout_margin="10dp"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="5dp">
 
                         <ImageButton
@@ -164,246 +196,262 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"/>
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
 
             </HorizontalScrollView>
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="420dp"
-                android:layout_height="8dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="@string/vacation_recommend"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_below="@+id/festival_recommendation"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
 
-
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:id="@+id/festival_recommendation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="20dp"
-                android:layout_marginLeft="20dp">
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="20dp">
 
-                    <ImageButton
-                        android:id="@+id/festival_01_image"
-                        android:layout_width="130dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/radius_corner"
-                        tools:ignore="SpeakableTextPresentCheck"/>
-
-                    <TextView
-                        android:id="@+id/festival_01_title"
-                        android:layout_toRightOf="@+id/festival_01_image"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="title"
-                        android:layout_marginLeft="10dp"/>
-                    <TextView
-                        android:id="@+id/festival_01_status"
-                        android:layout_toRightOf="@+id/festival_01_title"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/festival_01_image"
+                            android:layout_width="130dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/ic_image"
+                            android:background="@drawable/radius_corner"
+                            tools:ignore="SpeakableTextPresentCheck"/>
+
+                        <TextView
+                            android:id="@+id/festival_01_title"
+                            android:layout_toEndOf="@+id/festival_01_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:text="@string/festival_title"
+                            android:layout_marginStart="10dp"/>
+                        <TextView
+                            android:id="@+id/festival_01_status"
+                            android:layout_toEndOf="@+id/festival_01_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold"
+                            android:text="status"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="20dp">
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:textStyle="bold"
-                        android:text="status"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_height="wrap_content">
 
-                </RelativeLayout>
+                        <ImageButton
+                            android:id="@+id/festival_02_image"
+                            android:layout_width="130dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/ic_image"
+                            android:background="@drawable/radius_corner"
+                            tools:ignore="SpeakableTextPresentCheck"/>
 
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="20dp"
-                android:layout_marginLeft="20dp">
+                        <TextView
+                            android:id="@+id/festival_02_title"
+                            android:layout_toEndOf="@+id/festival_02_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:text="@string/festival_title"
+                            android:layout_marginStart="10dp"/>
+                        <TextView
+                            android:id="@+id/festival_02_status"
+                            android:layout_toEndOf="@+id/festival_02_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold"
+                            android:text="status"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"/>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/festival_02_image"
-                        android:layout_width="130dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/radius_corner"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="20dp">
 
-                    <TextView
-                        android:id="@+id/festival_02_title"
-                        android:layout_toRightOf="@+id/festival_02_image"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="title"
-                        android:layout_marginLeft="10dp"/>
-                    <TextView
-                        android:id="@+id/festival_02_status"
-                        android:layout_toRightOf="@+id/festival_02_title"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/festival_03_image"
+                            android:layout_width="130dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/ic_image"
+                            android:background="@drawable/radius_corner"
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
+
+                        <TextView
+                            android:id="@+id/festival_03_title"
+                            android:layout_toEndOf="@+id/festival_03_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:text="@string/festival_title"
+                            android:layout_marginStart="10dp"/>
+                        <TextView
+                            android:id="@+id/festival_03_status"
+                            android:layout_toEndOf="@+id/festival_03_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold"
+                            android:text="status"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="20dp">
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:textStyle="bold"
-                        android:text="status"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_height="wrap_content">
 
-                </RelativeLayout>
+                        <ImageButton
+                            android:id="@+id/festival_04_image"
+                            android:layout_width="130dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/ic_image"
+                            android:background="@drawable/radius_corner"
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
 
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="20dp"
-                android:layout_marginLeft="20dp">
+                        <TextView
+                            android:id="@+id/festival_04_title"
+                            android:layout_toEndOf="@+id/festival_04_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:text="@string/festival_title"
+                            android:layout_marginStart="10dp"/>
+                        <TextView
+                            android:id="@+id/festival_04_status"
+                            android:layout_toEndOf="@+id/festival_04_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold"
+                            android:text="status"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"/>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/festival_03_image"
-                        android:layout_width="130dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/radius_corner"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginStart="20dp">
 
-                    <TextView
-                        android:id="@+id/festival_03_title"
-                        android:layout_toRightOf="@+id/festival_03_image"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="title"
-                        android:layout_marginLeft="10dp"/>
-                    <TextView
-                        android:id="@+id/festival_03_status"
-                        android:layout_toRightOf="@+id/festival_03_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:textStyle="bold"
-                        android:text="status"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_height="wrap_content">
 
-                </RelativeLayout>
+                        <ImageButton
+                            android:id="@+id/festival_05_image"
+                            android:layout_width="130dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/ic_image"
+                            android:background="@drawable/radius_corner"
+                            tools:ignore="SpeakableTextPresentCheck"
+                            android:contentDescription="ImageButton"/>
 
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="20dp"
-                android:layout_marginLeft="20dp">
+                        <TextView
+                            android:id="@+id/festival_05_title"
+                            android:layout_toEndOf="@+id/festival_05_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:text="@string/festival_title"
+                            android:layout_marginStart="10dp"/>
+                        <TextView
+                            android:id="@+id/festival_05_status"
+                            android:layout_toEndOf="@+id/festival_05_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/gray"
+                            android:textStyle="bold"
+                            android:text="status"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="4dp"/>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/festival_04_image"
-                        android:layout_width="130dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/radius_corner"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/festival_04_title"
-                        android:layout_toRightOf="@+id/festival_04_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="title"
-                        android:layout_marginLeft="10dp"/>
-                    <TextView
-                        android:id="@+id/festival_04_status"
-                        android:layout_toRightOf="@+id/festival_04_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:textStyle="bold"
-                        android:text="status"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="4dp"/>
+            </LinearLayout>
 
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="20dp"
-                android:layout_marginLeft="20dp">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:id="@+id/festival_05_image"
-                        android:layout_width="130dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/radius_corner"
-                        tools:ignore="SpeakableTextPresentCheck"/>
-
-                    <TextView
-                        android:id="@+id/festival_05_title"
-                        android:layout_toRightOf="@+id/festival_05_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="title"
-                        android:layout_marginLeft="10dp"/>
-                    <TextView
-                        android:id="@+id/festival_05_status"
-                        android:layout_toRightOf="@+id/festival_05_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
-                        android:textStyle="bold"
-                        android:text="status"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="4dp"/>
-
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 

@@ -3,4 +3,7 @@
     <string name="search_title">search</string>
     <string name="search_hint">어떤 축제를 즐겨볼까요?</string>
     <string name="HotFestival">HOT</string>
+    <string name="vacation_festival">축제와 함께 하는 휴가!</string>
+    <string name="festival_title">title</string>
+    <string name="vacation_recommend">추천 축제</string>
 </resources>

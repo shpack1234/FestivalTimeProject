@@ -7,7 +7,15 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.annotation.SuppressLint;
+import android.media.Image;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +27,7 @@ import com.smarteist.autoimageslider.SliderView;
 
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
+    private ImageButton searchOptionButton;
     private String query;
 
     SliderView sliderView;
@@ -38,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             searchView.performClick();
             return true;
         });
+        searchOptionButton = findViewById(R.id.search_option);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
@@ -80,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
-
 
 }
