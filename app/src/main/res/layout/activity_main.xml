@@ -131,9 +131,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/radius_corner"
+                            android:contentDescription="ImageButton"
                             android:src="@drawable/ic_image"
-                            tools:ignore="SpeakableTextPresentCheck"
-                            android:contentDescription="ImageButton"/>
+                            tools:ignore="SpeakableTextPresentCheck" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -246,7 +246,7 @@
                             android:layout_toEndOf="@+id/festival_01_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:text="@string/festival_title"
@@ -256,7 +256,7 @@
                             android:layout_toEndOf="@+id/festival_01_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="10sp"
                             android:textColor="@color/gray"
                             android:textStyle="bold"
                             android:text="status"
@@ -291,7 +291,7 @@
                             android:layout_toEndOf="@+id/festival_02_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:text="@string/festival_title"
@@ -301,7 +301,7 @@
                             android:layout_toEndOf="@+id/festival_02_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="10sp"
                             android:textColor="@color/gray"
                             android:textStyle="bold"
                             android:text="status"
@@ -337,7 +337,7 @@
                             android:layout_toEndOf="@+id/festival_03_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:text="@string/festival_title"
@@ -347,7 +347,7 @@
                             android:layout_toEndOf="@+id/festival_03_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="10sp"
                             android:textColor="@color/gray"
                             android:textStyle="bold"
                             android:text="status"
@@ -383,7 +383,7 @@
                             android:layout_toEndOf="@+id/festival_04_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:text="@string/festival_title"
@@ -393,7 +393,7 @@
                             android:layout_toEndOf="@+id/festival_04_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="10sp"
                             android:textColor="@color/gray"
                             android:textStyle="bold"
                             android:text="status"
@@ -403,6 +403,7 @@
                     </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -429,7 +430,7 @@
                             android:layout_toEndOf="@+id/festival_05_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:text="@string/festival_title"
@@ -439,7 +440,7 @@
                             android:layout_toEndOf="@+id/festival_05_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="10sp"
                             android:textColor="@color/gray"
                             android:textStyle="bold"
                             android:text="status"
@@ -452,10 +453,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-
 
     </ScrollView>
 
