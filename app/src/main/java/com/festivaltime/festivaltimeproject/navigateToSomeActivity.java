@@ -40,5 +40,6 @@ public class navigateToSomeActivity {
     public static void navigateToMyPageActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, MyPageActivity.class);
         thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
     }
 }

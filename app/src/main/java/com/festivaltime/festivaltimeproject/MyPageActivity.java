@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,7 +17,10 @@ public class MyPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_home:
@@ -31,6 +35,7 @@ public class MyPageActivity extends AppCompatActivity {
                 case R.id.action_favorite:
                     return true;
                 case R.id.action_profile:
+                    navigateToMyPageActivity(MyPageActivity.this);
                     return true;
             }
             return false;
