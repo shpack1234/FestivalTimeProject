@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <meta-data
+        android:name="com.kakao.sdk.AppKey"
+        android:value="9e01496ae154026b9bbbb5a0277a7e57" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,10 +27,6 @@
         <activity
             android:name=".MapActivity"
             android:exported="false" />
-
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="9e01496ae154026b9bbbb5a0277a7e57" />
 
         <activity
             android:name=".FavoriteActivity"

@@ -88,6 +88,7 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         MapView.setMapTilePersistentCacheEnabled(false);
         mapView = new MapView(this);
+        Log.d("MapActivity", "MapView initialized");
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
         mapView.setMapViewEventListener(this);
