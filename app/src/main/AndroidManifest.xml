@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.festivaltime.festivaltimeproject">
+    package="com.festivaltime.festivaltimeproject" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <meta-data
-        android:name="com.kakao.sdk.AppKey"
-        android:value="9e01496ae154026b9bbbb5a0277a7e57" />
 
     <application
         android:allowBackup="true"
@@ -20,23 +16,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FestivalTimeProject"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
-        <activity
-            android:name=".MyPageActivity"
-            android:exported="false" />
+        tools:targetApi="31" >
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="9e01496ae154026b9bbbb5a0277a7e57" />
         <activity
             android:name=".MapActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".MyPageActivity"
+            android:exported="false" />
         <activity
             android:name=".FavoriteActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SearchActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -44,10 +42,11 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
         </activity>
         <activity
             android:name=".IntroActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
