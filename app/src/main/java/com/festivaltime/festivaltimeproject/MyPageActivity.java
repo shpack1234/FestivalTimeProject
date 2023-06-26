@@ -7,7 +7,13 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,8 +23,6 @@ public class MyPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
-
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -42,4 +46,8 @@ public class MyPageActivity extends AppCompatActivity {
         });
 
     }
+    public void customOnClick(View v) {
+        navigateToMainActivity(MyPageActivity.this);
+    }
 }
+

@@ -22,48 +22,47 @@
         android:background="@color/gray"/>
 
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="90dp"
-        android:orientation="horizontal">
+        android:onClick="customOnClick"
+        android:layout_marginTop="100dp">
 
-        <LinearLayout
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:focusable="false"/>
+
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="102dp"
+            android:layout_height="102dp"
+            android:src="@drawable/ic_user" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="nickname"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_below="@+id/user_icon"
+            android:layout_marginTop="90dp"/>
 
-            <ImageView
-                android:id="@+id/user_icon"
-                android:layout_width="102dp"
-                android:layout_height="102dp"
-                android:src="@drawable/ic_user"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_icon"
-                android:text="NICKNAME"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ID:#ad36f5"
-                android:textSize="16sp"
-                android:textColor="@color/gray"
-                android:layout_marginLeft="11dp"/>
-        </LinearLayout>
-        
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation=""
-    </LinearLayout>
+            android:text="ID:#ad36f5"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:layout_below="@+id/user_icon"
+            android:layout_marginTop="120dp"/>
+    </FrameLayout>
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
