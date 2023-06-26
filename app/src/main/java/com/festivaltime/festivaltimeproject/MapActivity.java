@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,26 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
-    private final Context mContext;
-    private final View mCalloutBalloon;
-    public CustomCalloutBalloonAdapter(Context context) {
-        mContext=context;
-        mCalloutBalloon= LayoutInflater.from(mContext).inflate(R.layout.custom_callout_balloon, null);
-    }
-
-    @Override
-    public View getCalloutBalloon(MapPOIItem mapPOIItem) {
-        ((TextView)mCalloutBalloon.findViewById(R.id.festival_detail_title)).setText(mapPOIItem.getItemName());
-        ((Button)mCalloutBalloon.findViewById(R.id.festival_detail_button)).setText("Custom CalloutBalloon");
-        return mCalloutBalloon;
-    }
-
-    @Override
-    public View getPressedCalloutBalloon(MapPOIItem mapPOIItem) {
-        return null;
-    }
-}
 
 public class MapActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
     private MapView mapView;
@@ -67,35 +49,12 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-
-        int permission = ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.INTERNET);
-
-        int permission2 = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        int permission3 = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        if (permission == PackageManager.PERMISSION_DENIED || permission2 == PackageManager.PERMISSION_DENIED || permission3 == PackageManager.PERMISSION_DENIED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(
-                        new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1000);
-            }
-        }
-
-
-        MapView.setMapTilePersistentCacheEnabled(false);
         mapView = new MapView(this);
-        Log.d("MapActivity", "MapView initialized");
+
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
-        mapView.setMapViewEventListener(this);
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-        mapView.setPOIItemEventListener(this);
-        onMapViewInitialized(mapView);
-        mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter(MapActivity.this));
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_map);
@@ -117,11 +76,11 @@ public class MapActivity extends AppCompatActivity implements MapView.CurrentLoc
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grandResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grandResults);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1000) {
             boolean check_result = true;
-            for (int result : grandResults) {
+            for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     check_result = false;
                     break;
