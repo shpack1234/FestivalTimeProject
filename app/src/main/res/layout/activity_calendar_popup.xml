@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:background="#eeeeee"
@@ -30,7 +28,6 @@
             android:id="@+id/main_text"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_toRightof="@+id/close_btn"
             android:background="#00000000"
             android:gravity="center"
             android:text="일정 추가"
@@ -42,7 +39,6 @@
             android:id="@+id/add_btn"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_toRightof="@+id/main_text"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
