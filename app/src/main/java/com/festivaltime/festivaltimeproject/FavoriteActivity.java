@@ -8,9 +8,13 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import android.content.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -18,29 +22,65 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private ImageButton imgbtn;
     private ImageButton delbtn;
+
+    private ImageButton addbtn;
     private RelativeLayout relative1;
+    private LinearLayout lila;
+    private ViewGroup parentView1;
+    private ViewGroup parentView2;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+        addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
-        delbtn = findViewById(R.id.deleteButton);
 
 
-        imgbtn.setOnClickListener(new View.OnClickListener(){
+        lila = findViewById(R.id.linearLayout);
+        parentView1 = findViewById(R.id.rela1);
+        parentView2 = findViewById(R.id.rela2);
+
+
+        imgbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent = new Intent(FavoriteActivity.this, MainActivity.class); //실행해보려고 잠깐 Main으로 이동하게 해놓음
                 startActivity(intent);
 
             }
         });
+
+        // 삭제 버튼 1, 2
+        ImageButton delbtn1 = findViewById(R.id.deleteButton);
+        delbtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeRelativeLayout(parentView1);
+            }
+        });
+
+        ImageButton delbtn2 = findViewById(R.id.deleteButton2);
+        delbtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeRelativeLayout(parentView2);
+            }
+        });
+
+
+
+/**
         delbtn.setOnClickListener(view -> { // 찜 삭제
             RelativeLayout rela1 = findViewById(R.id.rela1);
             rela1.setVisibility(View.GONE);
         });
+**/
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_favorite);
@@ -63,6 +103,10 @@ public class FavoriteActivity extends AppCompatActivity {
         });
 
     }
-
-
+    // relativeLayout 삭제 메소드
+    private void removeRelativeLayout(ViewGroup parentView) {
+        parentView.removeAllViews();
+    }
 }
+
+

@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/view1"
+        android:orientation="vertical"
         android:layout_marginTop="3dp">
 
         <LinearLayout
@@ -152,6 +153,129 @@
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/rela2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rela1"
+        android:layout_marginTop="-20dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="193dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@id/linearLayout6"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@id/linearLayout6"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="축제 이름"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="진행여부"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="찜 개수"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="193dp"
+            android:layout_height="71dp"
+            android:layout_below="@id/linearLayout5"
+            android:layout_alignEnd="@+id/linearLayout5"
+            android:layout_alignBottom="@+id/linearLayout6"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@id/linearLayout6"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="축제 내용"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="133dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imagebutton2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/radius_corner"
+                android:contentDescription="festival image"
+                android:src="@drawable/ic_image" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="59dp"
+            android:layout_height="103dp"
+            android:layout_alignBottom="@+id/linearLayout7"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/linearLayout7"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/deleteButton2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:contentDescription="Delete button"
+                android:src="@drawable/minus" />
+
+            <ImageButton
+                android:id="@+id/addButton2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/white"
+                android:contentDescription="plus button"
+                android:src="@drawable/plus" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
