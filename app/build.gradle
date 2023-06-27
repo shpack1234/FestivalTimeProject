@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation files('libs/libDaumMapAndroid.jar')
     implementation 'com.android.car.ui:car-ui-lib:2.5.0'
+    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
