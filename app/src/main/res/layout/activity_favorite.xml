@@ -1,9 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FavoriteActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center_horizontal"
+        android:text="찜"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="62dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="193dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@id/linearLayout2"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@id/linearLayout2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="--축제"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="진행"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="찜"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="193dp"
+        android:layout_height="71dp"
+        android:layout_below="@id/linearLayout"
+        android:layout_alignBottom="@+id/linearLayout2"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@id/linearLayout2"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:text="--축제내용"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="133dp"
+        android:layout_height="103dp"
+        android:layout_below="@id/textView4"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/radius_corner"
+            android:src="@drawable/ic_image" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="54dp"
+        android:layout_height="103dp"
+        android:layout_below="@id/textView4"
+        android:layout_alignBottom="@+id/linearLayout3"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/linearLayout3"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="삭제"
+            android:background="@drawable/round"/>
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="추가"
+            android:background="@drawable/round"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_nevigation_background"
+        app:itemIconTint="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu" />
+</RelativeLayout>
