@@ -11,4 +11,10 @@
     <string name="my_badge">MY 뱃지</string>
     <string name="nickname">NICKNAME</string>
     <string name="my_id">ID:#ad36f5</string>
+    <string name="personal_information">개인 정보</string>
+    <string name="password_change">비밀번호 변경</string>
+    <string name="setting">설정</string>
+    <string name="privacy_security">개인정보 보호 및 보호</string>
+    <string name="app_information">앱 정보</string>
+    <string name="developer_contact">개발자 문의</string>
 </resources>
