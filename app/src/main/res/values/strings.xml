@@ -6,4 +6,9 @@
     <string name="vacation_festival">축제와 함께 하는 휴가!</string>
     <string name="festival_title">title</string>
     <string name="vacation_recommend">추천 축제</string>
+
+    <string name="my_page">마이페이지</string>
+    <string name="my_badge">MY 뱃지</string>
+    <string name="nickname">NICKNAME</string>
+    <string name="my_id">ID:#ad36f5</string>
 </resources>
