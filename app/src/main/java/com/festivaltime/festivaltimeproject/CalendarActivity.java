@@ -1,6 +1,5 @@
 package com.festivaltime.festivaltimeproject;
 
-import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -17,9 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
+    //현재 시간 가져오기 now, date, sdf
+    public long now = System.currentTimeMillis();
+    public Date date = new Date(now);
+    public SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
     private CalendarPopupActivity Popup_btn;
     public String readDay = null;
     public CalendarView calendarView;
@@ -38,10 +42,13 @@ public class CalendarActivity extends AppCompatActivity {
         add_Btn = findViewById(R.id.add_Btn);
         del_Btn = findViewById(R.id.del_Btn);
 
+        //상단바 year 현재시간으로 출력
+        Main_Year_textView.setText(sdf.format(date));
+        //캘린더 날짜 선택시 실행
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Main_Year_textView.setText(String.format("%d", year));
+                //해당 날짜 내용 visible
                 add_Btn.setVisibility(View.VISIBLE);
                 del_Btn.setVisibility(View.VISIBLE);
                 SelectDateView.setVisibility(View.VISIBLE);
@@ -49,6 +56,8 @@ public class CalendarActivity extends AppCompatActivity {
                 SelectDateView.setText(String.format("%d.%d.%d",year,month,dayOfMonth));
             }
         });
+
+        //날짜 추가하기 버튼 클릭시 popup창 연결
         add_Btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -57,6 +66,8 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+
+        //bottomNavi
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_calendar);
         bottomNavigationView.setOnItemSelectedListener(item -> {
