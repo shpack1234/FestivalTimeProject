@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:background="#eeeeee"
@@ -36,7 +38,7 @@
 
         <!-- 일정 추가 버튼 -->
         <Button
-            android:id="@+id/add_btn"
+            android:id="@+id/add_finish_btn"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:background="#00000000"
@@ -141,9 +143,14 @@
                     android:textSize="10sp" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/date_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:textSize="10sp" />
+
         </LinearLayout>
 
-
     </LinearLayout>
-
 </LinearLayout>
