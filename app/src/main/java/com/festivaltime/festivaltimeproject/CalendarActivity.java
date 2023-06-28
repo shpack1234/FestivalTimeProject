@@ -24,6 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
     public long now = System.currentTimeMillis();
     public Date date = new Date(now);
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+    public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn;
     public String readDay = null;
     public CalendarView calendarView;
@@ -42,8 +43,10 @@ public class CalendarActivity extends AppCompatActivity {
         add_Btn = findViewById(R.id.add_Btn);
         del_Btn = findViewById(R.id.del_Btn);
 
-        //상단바 year 현재시간으로 출력
+        //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
         Main_Year_textView.setText(sdf.format(date));
+        SelectDateView.setText(sdf2.format(date));
+
         //캘린더 날짜 선택시 실행
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
