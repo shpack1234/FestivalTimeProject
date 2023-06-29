@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
+import static android.content.ContentValues.TAG;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
@@ -24,6 +25,7 @@ import jxl.Workbook;
 public class SearchActivity extends AppCompatActivity {
 
     private TextView queryTextView;
+    private ApiReader apiReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,26 +38,22 @@ public class SearchActivity extends AppCompatActivity {
             queryTextView.setText(query);
         }
 
-        String filePath = "festivaldb01.xls";
+        apiReader=new ApiReader();
 
-        List<Cell[]> rowsWithKeyword = XlsReader.extractRowsWithKeyword(this, filePath, query);
-        List<String> columnAValues = new ArrayList<>();
+        String apiKey="+PeS/AaGG2FGyEefCu+aZX9omuFpOLt6WuOHOISer4B/SF8V0AxTL8D//MWCr6xveNZTi2pCrYWew+IGKOZYJg==";
+        String keyword=query;
 
-        if (rowsWithKeyword.isEmpty()) {
-            Log.d("SearchActivity", "검색 결과가 없습니다.");
-        } else {
-            // 추출된 행에서 A열 값 추출
-            for (Cell[] row : rowsWithKeyword) {
-                if (row.length > 0) {
-                    String cellContent = row[0].getContents(); // A열 값
-                    columnAValues.add(cellContent);
-                }
+        apiReader.searchKeword(apiKey, keyword, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d(TAG,"API Response: "+response);
             }
-        }
 
-        for (String value : columnAValues) {
-            Log.d("SearchActivity", value);
-        }
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: "+error);
+            }
+        });
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
