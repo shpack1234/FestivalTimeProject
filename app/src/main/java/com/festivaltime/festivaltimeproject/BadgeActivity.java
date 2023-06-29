@@ -18,7 +18,7 @@ public class BadgeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_badge);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {

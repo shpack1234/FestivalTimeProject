@@ -17,4 +17,12 @@
     <string name="privacy_security">개인정보 보호 및 보호</string>
     <string name="app_information">앱 정보</string>
     <string name="developer_contact">개발자 문의</string>
+
+    <string name="holding_badge">보유 뱃지</string>
+    <string name="title_image01">남이섬 어쿠스틱...</string>
+    <string name="title_image02">대한민국 독서대...</string>
+    <string name="title_image03">문정동 로데오거...</string>
+    <string name="title">title</string>
+    <string name="total_having_badge">총           보유중</string>
+    <string name="count">7개</string>
 </resources>
