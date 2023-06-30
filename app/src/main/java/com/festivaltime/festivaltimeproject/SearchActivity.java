@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d(TAG, "Festival List Size: " + festivalList.size());
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
+                    public void run() { //UI 추가 부분
                         LinearLayout festivalContainer = findViewById(R.id.festival_container);
                         festivalContainer.removeAllViews();
 
