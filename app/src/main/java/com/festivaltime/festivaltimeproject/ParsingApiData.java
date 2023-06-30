@@ -23,6 +23,7 @@ public class ParsingApiData {
     private static List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     public static void parseXmlDataFromSearchKeyword(String xmlData) {
+        festivalList.clear();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();

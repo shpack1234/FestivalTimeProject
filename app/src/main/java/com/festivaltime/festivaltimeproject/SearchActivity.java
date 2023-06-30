@@ -22,13 +22,13 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-
-    private TextView queryTextView;
     private ApiReader apiReader;
+    private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,13 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
 
-                List<HashMap<String, String>> festivalList = ParsingApiData.getFestivalList();
-                Log.d(TAG, "Festival List Size: " + festivalList.size());
+                List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() { //UI 추가 부분
+                        festivalList.clear(); // 기존 데이터를 모두 제거
+                        festivalList.addAll(parsedFestivalList);
                         LinearLayout festivalContainer = findViewById(R.id.festival_container);
                         festivalContainer.removeAllViews();
 
