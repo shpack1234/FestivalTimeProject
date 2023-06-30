@@ -8,28 +8,37 @@
     android:orientation="vertical"
     tools:context=".FavoriteActivity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/favorite_actionbar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:gravity="center_horizontal"
-        android:text="찜"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <View
-        android:id ="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="62dp"
-        android:background="@color/gray" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="찜"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id ="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray" />
+
+    </LinearLayout>
 
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:id="@+id/festival_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation">
 
         <LinearLayout
             android:layout_width="wrap_content"

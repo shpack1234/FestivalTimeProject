@@ -31,17 +31,17 @@ public class ApiReader {
 
     public void searchKeyword(String serviceKey, String keyword, final ApiResponseListener listener){
         try {
-            String encodedKeyWord = URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString());
             HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
                     .scheme("https")
                     .host("apis.data.go.kr")
                     .addPathSegment("B551011")
                     .addPathSegment("KorService1")
                     .addPathSegment("searchKeyword1")
-                    .addQueryParameter("numOfRows", "100")
+                    .addQueryParameter("numOfRows", "10")
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
-                    .addQueryParameter("keyword", "서울")
+                    .addQueryParameter("keyword", keyword)
+                    .addQueryParameter("contentTypeId", "15")
                     .addQueryParameter("serviceKey", serviceKey);
 
             String url = urlBuilder.build().toString();
@@ -68,7 +68,6 @@ public class ApiReader {
         catch (Exception e) {
             e.printStackTrace();
             listener.onError("URL Encoding Error");
-
         }
 
     }
