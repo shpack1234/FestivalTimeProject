@@ -1,8 +1,14 @@
 package com.festivaltime.festivaltimeproject;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Queue;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,42 +29,47 @@ public class ApiReader {
         client=new OkHttpClient();
     }
 
-    public void searchKeword(String serviceKey, String keyword, final ApiResponseListener listener) {
-        HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
-                .scheme("https")
-                .host("apis.data.go.kr")
-                .addPathSegment("B551973")
-                .addPathSegment("KorService1")
-                .addPathSegment("searchFestival1")
-                .addQueryParameter("ServiceKey", serviceKey)
-                .addQueryParameter("eventStartDate", "20210101")
-                .addQueryParameter("eventEndDate", "20251231")
-                .addQueryParameter("arrange", "P")
-                .addQueryParameter("listYN", "Y")
-                .addQueryParameter("MobileOS", "AND")
-                .addQueryParameter("MobileApp", "AppTest")
-                .addQueryParameter("keyword", keyword)
-                .addQueryParameter("_type", "json");
-        String url = urlBuilder.build().toString();
+    public void searchKeyword(String serviceKey, String keyword, final ApiResponseListener listener){
+        try {
+            String encodedKeyWord = URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString());
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B551011")
+                    .addPathSegment("KorService1")
+                    .addPathSegment("searchKeyword1")
+                    .addQueryParameter("numOfRows", "100")
+                    .addQueryParameter("MobileOS", "AND")
+                    .addQueryParameter("MobileApp", "FestivalTime")
+                    .addQueryParameter("keyword", "서울")
+                    .addQueryParameter("serviceKey", serviceKey);
 
-        Request request = new Request.Builder().url(url).build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                listener.onError("Network Error");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseData = response.body().string();
-                    listener.onSuccess(responseData);
-                } else {
-                    listener.onError("Server Error: " + response.code());
+            String url = urlBuilder.build().toString();
+            Log.d("url", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+            });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+
+        }
+
     }
 }

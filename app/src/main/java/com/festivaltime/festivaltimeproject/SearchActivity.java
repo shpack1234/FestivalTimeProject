@@ -9,18 +9,10 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -40,10 +32,8 @@ public class SearchActivity extends AppCompatActivity {
 
         apiReader=new ApiReader();
 
-        String apiKey="+PeS/AaGG2FGyEefCu+aZX9omuFpOLt6WuOHOISer4B/SF8V0AxTL8D//MWCr6xveNZTi2pCrYWew+IGKOZYJg==";
-        String keyword=query;
-
-        apiReader.searchKeword(apiKey, keyword, new ApiReader.ApiResponseListener() {
+        String apiKey="HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==";
+        apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Log.d(TAG,"API Response: "+response);
