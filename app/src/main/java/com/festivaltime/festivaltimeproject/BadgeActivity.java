@@ -9,6 +9,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,8 +29,7 @@ public class BadgeActivity extends AppCompatActivity {
         back_Btn = findViewById(R.id.before_btn);
         back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                navigateToMyPageActivity(BadgeActivity.this);}
+            public void onClick(View view) { finish(); }
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
