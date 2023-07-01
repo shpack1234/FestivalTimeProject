@@ -59,6 +59,45 @@ public class ParsingApiData {
         }
     }
 
+    public static void parseXmlDataFromDetailCommon(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    HashMap<String, String> festivalInfo = new HashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String address1 = getElementText(itemElement, "addr1");
+                    String address2 = getElementText(itemElement, "addr2");
+                    String img = getElementText(itemElement, "firstimage2");
+                    String overview=getElementText(itemElement, "overview");
+                    String contentid=getElementText(itemElement, "contentid");
+
+                    festivalInfo.put("title", title);
+                    festivalInfo.put("address1", address1);
+                    festivalInfo.put("address2", address2);
+                    festivalInfo.put("img", img);
+                    festivalInfo.put("overview", overview);
+                    festivalInfo.put("contentid", contentid);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<HashMap<String, String>> getFestivalList() {
         return festivalList;
     }

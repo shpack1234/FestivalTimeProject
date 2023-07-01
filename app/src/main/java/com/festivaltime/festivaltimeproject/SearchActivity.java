@@ -1,7 +1,9 @@
 package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -68,6 +70,18 @@ public class SearchActivity extends AppCompatActivity {
                             titleTextView.setText(title);
                             locationTextView.setText(location);
                             idTextView.setText(id);
+
+                            festivalInfoBox.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // 클릭 시 contentid 값을 가져오는 작업 수행
+                                    String contentId = idTextView.getText().toString();
+
+                                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                    navigateToDetailFestivalActivity(SearchActivity.this, contentId);
+                                }
+                            });
+
                             Log.d(TAG, "Rep Image URL: " + repImage);
                             if(repImage == null || repImage.isEmpty()) {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);

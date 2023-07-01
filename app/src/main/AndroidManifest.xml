@@ -26,6 +26,10 @@
             android:value="9e01496ae154026b9bbbb5a0277a7e57" />
 
         <activity
+            android:name=".DetailFestivalActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MapActivity"
             android:exported="false" />
         <activity
