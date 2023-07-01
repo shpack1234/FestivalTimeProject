@@ -44,12 +44,7 @@
     <string name="title_image02">대한민국 독서대...</string>
     <string name="title_image03">문정동 로데오거...</string>
     <string name="title">title</string>
-<<<<<<< HEAD
-=======
     <string name="total_having_badge">총           보유중</string>
     <string name="count">7개</string>
     <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
->>>>>>> 62d4314aa2becf243dcf5a806204062216b7da24
 </resources>
