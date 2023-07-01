@@ -5,7 +5,7 @@
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:background="#eeeeee"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
     <!-- 타이틀바 -->
@@ -58,11 +58,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/ic_cal_roundbox"
             android:orientation="horizontal">
 
             <TextView
@@ -80,8 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="3dp"
+                android:background="#00000000"
                 android:ems="30"
-                android:gravity="right"
+                android:gravity="right|center"
                 android:hint="제목을 입력하는 란"
                 android:inputType="textShortMessage"
                 android:textColor="@color/black"
@@ -93,7 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/ic_cal_roundbox">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,7 +135,7 @@
 
                 <Button
                     android:id="@+id/start_date"
-                    android:layout_width="200dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:background="#00ff0000"
                     android:gravity="right|center"
@@ -141,8 +144,8 @@
 
                 <Button
                     android:id="@+id/start_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_time"
@@ -199,7 +202,7 @@
 
                 <Button
                     android:id="@+id/end_date"
-                    android:layout_width="200dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:background="#00ff0000"
                     android:gravity="right|center"
@@ -209,7 +212,7 @@
                 <Button
                     android:id="@+id/end_time"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_time"
@@ -248,53 +251,57 @@
                     android:timePickerMode="spinner"
                     android:visibility="gone" />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="23dp">
-
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp"
-                    android:gravity="left|center"
-                    android:text="@string/category"
-                    android:textColor="@color/black"
-                    android:textSize="13sp"/>
-                <Button
-                    android:id="@+id/category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#00ff0000"
-                    android:gravity="right|center"
-                    android:text="@string/category"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="23dp">
-
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp"
-                    android:gravity="left|center"
-                    android:text="@string/alert"
-                    android:textColor="@color/black"
-                    android:textSize="13sp"/>
-                <Switch
-                    android:id="@+id/alert_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="right|center" />
-            </LinearLayout>
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/ic_cal_roundbox"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:gravity="left|center"
+                android:text="@string/category"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:gravity="right|center"
+                android:text="@string/category"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/ic_cal_roundbox"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:gravity="left|center"
+                android:text="@string/alert"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <Switch
+                android:id="@+id/alert_switch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="right|center" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

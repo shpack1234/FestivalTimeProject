@@ -5,7 +5,7 @@
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:background="#eeeeee"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
     <LinearLayout
@@ -53,7 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/ic_cal_roundbox">
 
         <ImageButton
             android:id="@+id/select_color"
