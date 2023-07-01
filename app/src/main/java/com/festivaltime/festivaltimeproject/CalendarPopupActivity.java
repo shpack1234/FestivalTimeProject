@@ -1,24 +1,22 @@
 package com.festivaltime.festivaltimeproject;
 
+
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class CalendarPopupActivity extends Dialog {
     public EditText TitleText;
-    private Button shutdownClick, startdateClick, starttimeClick, enddateClick, endtimeClick;
+    private Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick;
     public DatePicker StartDatePicker, EndDatePicker;
     public TimePicker StartTimePicker, EndTimePicker;
     public Switch alldaySwitch;
@@ -29,6 +27,7 @@ public class CalendarPopupActivity extends Dialog {
 
         TitleText = findViewById(R.id.u_title_Text);
         shutdownClick = findViewById(R.id.close_btn);
+        addBtn = findViewById(R.id.add_finish_btn);
         startdateClick = findViewById(R.id.start_date);
         starttimeClick = findViewById(R.id.start_time);
         StartDatePicker = findViewById(R.id.StartDatePicker);
@@ -51,10 +50,12 @@ public class CalendarPopupActivity extends Dialog {
             }
         });
 
-        TitleText.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.putExtra("result", TitleText.getText());
+                dismiss();
             }
         });
 

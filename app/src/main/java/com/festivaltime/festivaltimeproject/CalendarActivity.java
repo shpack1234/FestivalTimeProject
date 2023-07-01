@@ -26,9 +26,10 @@ public class CalendarActivity extends AppCompatActivity {
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn;
+    private CalendarCategory Add_category;
     public String readDay = null;
     public CalendarView calendarView;
-    public Button add_Btn, del_Btn;
+    public Button cal_setting, add_Btn, del_Btn;
     public TextView Main_Year_textView, SelectDateView, textView;
 
     @Override
@@ -40,12 +41,22 @@ public class CalendarActivity extends AppCompatActivity {
         Main_Year_textView = findViewById(R.id.Main_Year_textView);
         SelectDateView = findViewById(R.id.SelectDateView);
         textView = findViewById(R.id.textView);
+        cal_setting = findViewById(R.id.cal_setting);
         add_Btn = findViewById(R.id.add_Btn);
         del_Btn = findViewById(R.id.del_Btn);
 
         //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
         Main_Year_textView.setText(sdf.format(date));
         SelectDateView.setText(sdf2.format(date));
+
+        //캘린더 설정 (설정한 카테고리만 비추기, 카테고리 추가)
+        cal_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Add_category = new CalendarCategory(CalendarActivity.this);
+                Add_category.show();
+            }
+        });
 
         //캘린더 날짜 선택시 실행
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -90,5 +101,6 @@ public class CalendarActivity extends AppCompatActivity {
                 return true;
             }
         });
+
     }
 }

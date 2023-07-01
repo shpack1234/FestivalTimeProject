@@ -7,6 +7,27 @@
     <string name="festival_title">title</string>
     <string name="vacation_recommend">추천 축제</string>
 
+    <!--캘린더 string-->
+    <string name="cheerup_text">축제까지 얼마안남았어요! 화이팅!</string>
+    <string name="cal_setting">캘린더 설정</string>
+    <string name="add_button">추가하기</string>
+
+    <!--캘린더 팝업 string-->
+    <string name="short_add">추가</string>
+    <string name="dismiss_popup">X</string>
+    <string name="add_day">일정 추가</string>
+    <string name="title_kr">제목</string>
+    <string name="all_day">하루종일</string>
+    <string name="start">시작</string>
+    <string name="end">종료</string>
+    <string name="default_date">DATE</string>
+    <string name="default_time">00:00</string>
+    <string name="category">카테고리</string>
+    <string name="alert">알림</string>
+
+    <!--카테고리 추가 팝업 string-->
+    <string name="color">색상</string>
+
     <string name="my_page">마이페이지</string>
     <string name="my_badge">MY 뱃지</string>
     <string name="nickname">NICKNAME</string>
@@ -23,4 +44,12 @@
     <string name="title_image02">대한민국 독서대...</string>
     <string name="title_image03">문정동 로데오거...</string>
     <string name="title">title</string>
+<<<<<<< HEAD
+=======
+    <string name="total_having_badge">총           보유중</string>
+    <string name="count">7개</string>
+    <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+>>>>>>> 62d4314aa2becf243dcf5a806204062216b7da24
 </resources>
