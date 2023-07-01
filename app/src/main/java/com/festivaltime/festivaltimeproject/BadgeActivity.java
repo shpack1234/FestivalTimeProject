@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -9,15 +10,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BadgeActivity extends AppCompatActivity {
 
+    ImageButton back_Btn;
+    int count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_badge);
+
+        back_Btn = findViewById(R.id.before_btn);
+        back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToMyPageActivity(BadgeActivity.this);}
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {

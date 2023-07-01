@@ -5,27 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/holding_badge"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"/>
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/my_page"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"/>
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="62dp"
-        android:background="@color/gray"/>
+    <ImageButton
+        android:id="@+id/before_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_back_before"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="23dp"
+        android:onClick="customOnClick"
+        android:background="@android:color/transparent"
+        tools:ignore="SpeakableTextPresentCheck"/>
 
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="35dp"
         android:orientation= "horizontal"
         android:columnCount="3"
         android:rowCount="3">
@@ -37,8 +51,8 @@
             app:strokeWidth="1dp"
             app:strokeColor="@color/black">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/image01" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -48,10 +62,10 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginStart="15dp">
+            android:layout_marginStart="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/image02"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -61,10 +75,10 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginStart="15dp">
+            android:layout_marginStart="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/image03"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -76,6 +90,7 @@
             android:text="@string/title_image01"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
+            android:textSize="13sp"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
@@ -83,7 +98,8 @@
             android:text="@string/title_image02"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:textSize="13sp"
+            android:layout_marginStart="18dp"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
@@ -91,7 +107,8 @@
             android:text="@string/title_image03"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:textSize="13sp"
+            android:layout_marginStart="18dp"
             android:layout_gravity="center"/>
 
 
@@ -102,10 +119,10 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/ic_image"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -115,11 +132,11 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/ic_image"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -129,11 +146,11 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/ic_image"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -144,6 +161,7 @@
             android:text="@string/title"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
+            android:textSize="13sp"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
@@ -151,7 +169,8 @@
             android:text="@string/title"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:textSize="13sp"
+            android:layout_marginStart="18dp"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
@@ -159,7 +178,8 @@
             android:text="@string/title"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
+            android:textSize="13sp"
+            android:layout_marginStart="18dp"
             android:layout_gravity="center"/>
 
 
@@ -170,10 +190,10 @@
             app:cardCornerRadius="500dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="18dp">
             <ImageView
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="97dp"
+                android:layout_height="97dp"
                 android:src="@drawable/ic_image"/>
         </com.google.android.material.card.MaterialCardView>
 
@@ -183,35 +203,12 @@
             android:text="@string/title"
             android:layout_marginTop="4dp"
             android:textColor="@color/black"
+            android:textSize="13sp"
             android:layout_gravity="center"
             android:layout_column="0"/>
 
     </GridLayout>
 
-
-    <TextView
-        android:id="@+id/total_having"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="780dp"
-        android:text="@string/total_having_badge"
-        android:textSize="19sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:gravity="center_horizontal" />
-
-
-    <TextView
-        android:layout_alignBaseline="@id/total_having"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="780dp"
-        android:layout_marginStart="175dp"
-        android:text="@string/count"
-        android:textSize="20sp"
-        android:textColor="@color/red"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"/>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
