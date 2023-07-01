@@ -24,7 +24,8 @@
                 android:layout_height="29dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/CheerupText"
@@ -32,9 +33,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="35dp"
                 android:gravity="right|center"
-                android:text="축제까지 얼마안남았어요! 화이팅!" />
+                android:text="@string/cheerup_text"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/cal_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="17dp"
+            android:background="#00ff0000"
+            android:text="@string/cal_setting"/>
 
         <CalendarView
             android:id="@+id/calendarView"
@@ -43,8 +54,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="0dp"
             android:gravity="center" />
 
         <!--layout_constraint안먹어서 임시로 marginLeft으로 처리함 -->
@@ -55,9 +64,10 @@
             android:layout_marginLeft="300dp"
             android:background="#00ff0000"
             android:drawableLeft="@drawable/ic_add_cal"
-            android:text="추가하기"
+            android:text="@string/add_button"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:gravity="center|center"
             app:layout_constraintRight_toLeftOf="parent" />
 
 
