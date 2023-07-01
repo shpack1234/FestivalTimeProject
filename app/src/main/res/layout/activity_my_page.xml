@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="500dp"
                         app:strokeWidth="1dp"
-                        app:strokeColor="@color/black">
+                        app:strokeColor="@android:color/black">
                         <ImageView
                             android:layout_width="65dp"
                             android:layout_height="65dp"
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="500dp"
                         app:strokeWidth="1dp"
-                        app:strokeColor="@color/black"
+                        app:strokeColor="@android:color/black"
                         android:layout_marginStart="5dp">
                         <ImageView
                             android:layout_width="65dp"
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="500dp"
                         app:strokeWidth="1dp"
-                        app:strokeColor="@color/black"
+                        app:strokeColor="@android:color/black"
                         android:layout_marginStart="5dp">
                         <ImageView
                             android:layout_width="65dp"
@@ -363,19 +363,15 @@
             android:background="@color/black"/>
     </LinearLayout>
 
-
-
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_nevigation_background"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu"
+        android:background="@drawable/bottom_nevigation_background"
+        app:itemIconTint="@color/black"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/black" />
+        app:menu="@menu/menu" />
 
 </RelativeLayout>
 

@@ -1,15 +1,11 @@
 package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
-import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
-import static com.google.android.material.color.utilities.MaterialDynamicColors.error;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +42,7 @@ public class DetailFestivalActivity extends AppCompatActivity {
                 List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
                 runOnUiThread(new Runnable() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void run() { //UI 추가 부분
                         festivalList.clear(); // 기존 데이터를 모두 제거
@@ -63,10 +60,13 @@ public class DetailFestivalActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String firstImage = festivalInfo.get("img");
                             String overview = festivalInfo.get("overview");
+
+                            Log.d("imgUrl", firstImage);
+
+                            Picasso.get().load(firstImage).placeholder(R.drawable.ic_image).error(R.drawable.image01).into(festivalFirstImage);
                             titleTextView.setText(title);
                             address.setText(address1 + " " + address2);
                             idTextView.setText(id);
-                            Picasso.get().load(firstImage).placeholder(R.drawable.ic_image).into(festivalFirstImage);
                             overviewText.setText(overview);
                         }
                     }
@@ -79,4 +79,6 @@ public class DetailFestivalActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
