@@ -8,9 +8,11 @@
     <string name="vacation_recommend">추천 축제</string>
 
     <!--캘린더 string-->
+    <string name="festival">축제</string>
     <string name="cheerup_text">축제까지 얼마안남았어요! 화이팅!</string>
     <string name="cal_setting">캘린더 설정</string>
     <string name="add_button">추가하기</string>
+    <string name="finish">완료</string>
 
     <!--캘린더 팝업 string-->
     <string name="short_add">추가</string>
@@ -25,11 +27,14 @@
     <string name="category">카테고리</string>
     <string name="alert">알림</string>
 
+    <string name="select_view">설정한 카테고리 보기</string>
+
     <!--카테고리 추가 팝업 string-->
     <string name="color">색상</string>
 
     <!--축제 캘린더 string-->
     <string name="festi_cal">축제 캘린더</string>
+    <string name="normal_cal">개인 캘린더</string>
 
     <string name="my_page">마이페이지</string>
     <string name="my_badge">MY 뱃지</string>

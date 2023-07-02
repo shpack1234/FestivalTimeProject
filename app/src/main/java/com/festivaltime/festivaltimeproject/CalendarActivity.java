@@ -29,9 +29,9 @@ public class CalendarActivity extends AppCompatActivity {
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn;
-    private CalendarCategory Add_category;
+    private CalendarSetting Cal_Set;
     public String readDay = null;
-    public Button cal_setting, add_Btn, del_Btn;
+    public Button cal_setting, add_Btn, del_Btn, festi_cal;
     public TextView SelectDateView, textView, Year_text, monthYearText;
     public RecyclerView recyclerView;
 
@@ -51,6 +51,7 @@ public class CalendarActivity extends AppCompatActivity {
         cal_setting = findViewById(R.id.cal_setting);
         add_Btn = findViewById(R.id.add_Btn);
         del_Btn = findViewById(R.id.del_Btn);
+        festi_cal = findViewById(R.id.festical_btn);
 
         //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
         Year_text.setText(sdf.format(date));
@@ -61,15 +62,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         //화면 설정
         setMonthView();
-
-        //캘린더 설정 (설정한 카테고리만 비추기, 카테고리 추가)
-        cal_setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Add_category = new CalendarCategory(CalendarActivity.this);
-                Add_category.show();
-            }
-        });
 
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +78,23 @@ public class CalendarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CalendarUtil.selectedDate.add(Calendar.MONTH, 1);
                 setMonthView();
+            }
+        });
+
+        //festival cal로 이동
+        festi_cal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //navigateToFestivalCalendarActivity(CalendarActivity.this);
+            }
+        });
+
+        //캘린더 설정 (설정한 카테고리만 비추기, 카테고리 추가)
+        cal_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cal_Set = new CalendarSetting(CalendarActivity.this);
+                Cal_Set.show();
             }
         });
 

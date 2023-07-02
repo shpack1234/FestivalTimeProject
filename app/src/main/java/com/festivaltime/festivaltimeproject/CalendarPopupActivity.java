@@ -4,7 +4,12 @@ package com.festivaltime.festivaltimeproject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -15,6 +20,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 
 public class CalendarPopupActivity extends Dialog {
+    protected Context mContext;
     public EditText TitleText;
     private Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick;
     public DatePicker StartDatePicker, EndDatePicker;
@@ -23,7 +29,9 @@ public class CalendarPopupActivity extends Dialog {
 
     public CalendarPopupActivity(@NonNull Context context, String contents) {
         super(context);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_calendar_popup);
+        this.mContext = context;
 
         TitleText = findViewById(R.id.u_title_Text);
         shutdownClick = findViewById(R.id.close_btn);
@@ -37,6 +45,26 @@ public class CalendarPopupActivity extends Dialog {
         EndDatePicker = findViewById(R.id.EndDatePicker);
         EndTimePicker = findViewById(R.id.EndTimePicker);
         alldaySwitch = findViewById(R.id.switchView);
+
+        setCancelable(true);
+        setCanceledOnTouchOutside(true);
+
+        Window window = getWindow();
+
+        if(window!=null){
+            //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            WindowManager.LayoutParams params = window.getAttributes();
+            // 화면에 가득 차도록
+            params.width         = WindowManager.LayoutParams.MATCH_PARENT;
+            params.height        = WindowManager.LayoutParams.WRAP_CONTENT;
+
+            // 열기&닫기 시 애니메이션 설정
+            params.windowAnimations = R.style.AnimationPopupStyle;
+            window.setAttributes( params );
+            // UI 하단 정렬
+            window.setGravity( Gravity.BOTTOM );
+        }
 
         //사용자 선택한 날짜로 초기화 (미선택시 현재 날짜로 초기화)
         startdateClick.setText(contents);
@@ -128,19 +156,6 @@ public class CalendarPopupActivity extends Dialog {
         enddateClick.setOnClickListener(onClickListener);
         endtimeClick.setOnClickListener(onClickListener);
 
-        //시작 시간-날짜 클릭시 표시 (숨기기는 미완)
-        /*startdateClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (StartDatePicker.getVisibility() == View.GONE) {
-                    StartDatePicker.setVisibility(View.VISIBLE);
-                } else {
-                    StartDatePicker.setVisibility(View.GONE);
-                }
-            }
-        });
-        */
-
         //시작 시간-날짜 변화시
         StartDatePicker.init(StartDatePicker.getYear(), StartDatePicker.getMonth(), StartDatePicker.getDayOfMonth(),
                 new DatePicker.OnDateChangedListener() {
@@ -149,19 +164,6 @@ public class CalendarPopupActivity extends Dialog {
                         startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
                     }
                 });
-
-        /*
-        //시작 시간-시간 클릭
-        starttimeClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (StartTimePicker.getVisibility() == View.GONE) {
-                    StartTimePicker.setVisibility(View.VISIBLE);
-                } else {
-                    StartTimePicker.setVisibility(View.GONE);
-                }
-            }
-        });*/
 
 
         //시작 시간-시간 변화시

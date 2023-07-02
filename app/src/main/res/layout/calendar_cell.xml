@@ -18,16 +18,19 @@
         android:layout_width="match_parent"
         android:layout_height="3px"
         android:layout_marginTop="5dp"
-        android:background="#ed8a54"/>
+        android:background="#ed8a54"
+        android:visibility="invisible"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="3px"
         android:layout_marginTop="3dp"
-        android:background="#edc652"/>
+        android:background="#edc652"
+        android:visibility="invisible"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="3px"
         android:layout_marginTop="3dp"
-        android:background="#52c8ed"/>
+        android:background="#52c8ed"
+        android:visibility="invisible"/>
 
 </LinearLayout>

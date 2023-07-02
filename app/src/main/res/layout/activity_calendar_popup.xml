@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:background="#F5F5F5"
@@ -17,8 +17,9 @@
         <!-- 닫기 버튼 -->
         <Button
             android:id="@+id/close_btn"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
@@ -29,8 +30,9 @@
 
         <TextView
             android:id="@+id/main_text"
-            android:layout_width="240dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="5"
             android:background="#00000000"
             android:gravity="center"
             android:text="@string/add_day"
@@ -40,8 +42,9 @@
         <!-- 일정 추가 버튼 -->
         <Button
             android:id="@+id/add_finish_btn"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
@@ -58,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,7 +147,7 @@
 
                 <Button
                     android:id="@+id/start_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="#00ff0000"
                     android:gravity="right|center"

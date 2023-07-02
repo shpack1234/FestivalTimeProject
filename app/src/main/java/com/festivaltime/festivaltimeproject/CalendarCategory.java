@@ -30,6 +30,7 @@ public class CalendarCategory extends Dialog {
         color4 = findViewById(R.id.select_color4);
         color5 = findViewById(R.id.select_color5);
 
+        //close시 팝업나가기
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,6 +38,7 @@ public class CalendarCategory extends Dialog {
             }
         });
 
+        //add시 데이터 전달 (미구현)
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +46,7 @@ public class CalendarCategory extends Dialog {
             }
         });
 
+        //카테고리 색 버튼 클릭시 색 visible
         select_color.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

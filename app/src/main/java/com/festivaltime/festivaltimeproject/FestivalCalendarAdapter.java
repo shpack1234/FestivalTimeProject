@@ -1,14 +1,9 @@
 package com.festivaltime.festivaltimeproject;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,23 +12,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
+public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalendarAdapter.FestivalCalendarViewHolder> {
     ArrayList<Date> dayList;
 
-    public CalendarAdapter(ArrayList<Date> dayList) {
+    public FestivalCalendarAdapter(ArrayList<Date> dayList) {
         this.dayList = dayList;
     }
 
     @NonNull
     @Override
-    public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FestivalCalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.calendar_cell, parent, false);
-        return new CalendarViewHolder(view);
+        View view = inflater.inflate(R.layout.festivalcalendar_cell, parent, false);
+        return new FestivalCalendarViewHolder(view);
     }
 
     @Override
-        public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FestivalCalendarViewHolder holder, int position) {
         Date monthDate = dayList.get(position); //날짜 변수 적용
         Calendar dateCalendar = Calendar.getInstance();
         dateCalendar.setTime(monthDate);
@@ -58,14 +53,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //다른거 숨기기 위한 for문 생성중
-                for(int i=0; i<dayList.size(); i++){
-                    if(dayList.get(i)==holder.dayText.getText()){
-                        break;
-                    }
-                }
-                holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
-                holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
             }
         });
     }
@@ -75,12 +62,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         return dayList.size();
     }
 
-    class CalendarViewHolder extends RecyclerView.ViewHolder {
+    class FestivalCalendarViewHolder extends RecyclerView.ViewHolder {
         //초기화
         TextView dayText;
         View parentView;
 
-        public CalendarViewHolder(@NonNull View itemView) {
+        public FestivalCalendarViewHolder(@NonNull View itemView) {
             super(itemView);
             dayText = itemView.findViewById(R.id.dayText);
             parentView = itemView.findViewById(R.id.parentView);
