@@ -124,9 +124,12 @@ public class CalendarActivity extends AppCompatActivity {
     //화면 설정
     private void setMonthView() {
         int month = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
-        //년월 텍스트뷰
+        //월>영어 텍스트뷰
         monthYearText.setText(Month_eng(month));
+
+        //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
+
         CalendarAdapter adapter = new CalendarAdapter(dayList);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         recyclerView.setLayoutManager(manager);

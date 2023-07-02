@@ -1,9 +1,12 @@
 package com.festivaltime.festivaltimeproject;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,7 +57,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.parentView.setBackgroundColor(Color.parseColor("#C8BFE7"));
+                holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
+                holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
             }
         });
     }
@@ -75,4 +79,5 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             parentView = itemView.findViewById(R.id.parentView);
         }
     }
+
 }
