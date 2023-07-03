@@ -114,6 +114,9 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private void saveIDToDatabase(String id) {
         FestivalDao festivalDao = db.festivalDao();
+        if (festivalDao.getEntityById(id) != null) {
+            return; // 중복 저장 방지
+        }
         FestivalEntity entity = new FestivalEntity();
         entity.setId(id);
         festivalDao.insert(entity);

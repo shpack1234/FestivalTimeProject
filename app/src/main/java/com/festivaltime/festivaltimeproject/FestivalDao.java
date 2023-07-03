@@ -11,5 +11,6 @@ public interface FestivalDao {
     void insert(FestivalEntity entity);
 
     @Query("SELECT * FROM FestivalEntity WHERE id = :id")
-    FestivalEntity getEntityById(int id);
+    FestivalEntity getEntityById(String id);
 }
+
