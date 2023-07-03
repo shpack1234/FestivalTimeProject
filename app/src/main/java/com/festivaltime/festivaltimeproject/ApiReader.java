@@ -5,10 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Queue;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,9 +34,9 @@ public class ApiReader {
                     .addPathSegment("searchKeyword1")
                     .addQueryParameter("numOfRows", "10")
                     .addQueryParameter("MobileOS", "AND")
-                    .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("keyword", keyword)
                     .addQueryParameter("contentTypeId", "15")
+                    .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("serviceKey", serviceKey);
 
             String url = urlBuilder.build().toString();

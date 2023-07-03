@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DetailFestivalActivity extends AppCompatActivity {
+public class
+DetailFestivalActivity extends AppCompatActivity {
 
     private ApiReader apiReader;
 

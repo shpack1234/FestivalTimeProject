@@ -5,20 +5,22 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import android.content.*;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class FavoriteActivity extends AppCompatActivity {
+
+    private ApiReader apiReader; //onCreate 밖에
 
     private ImageButton imgbtn;
     private ImageButton delbtn;
@@ -33,10 +35,14 @@ public class FavoriteActivity extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
+
+        apiReader=new ApiReader();
 
         addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
@@ -45,6 +51,8 @@ public class FavoriteActivity extends AppCompatActivity {
         lila = findViewById(R.id.linearLayout);
         parentView1 = findViewById(R.id.rela1);
         parentView2 = findViewById(R.id.rela2);
+
+
 
 
         imgbtn.setOnClickListener(new View.OnClickListener() {
