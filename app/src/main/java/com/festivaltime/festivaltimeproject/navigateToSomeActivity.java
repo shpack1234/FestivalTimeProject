@@ -55,4 +55,11 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
+
+    public static void navigateToPrivacyActivity(Activity thisActivity, String userId) {
+        Intent intent = new Intent(thisActivity, PrivacyActivity.class);
+        intent.putExtra("userId", userId);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
 }
