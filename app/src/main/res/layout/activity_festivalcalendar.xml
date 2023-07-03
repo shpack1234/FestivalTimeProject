@@ -45,16 +45,16 @@
             android:layout_marginTop="20dp">
 
             <Button
-                android:id="@+id/fet_cal"
+                android:id="@+id/nomal_cal_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00ff0000"
                 android:gravity="right|center"
-                android:drawableLeft="@drawable/ic_cal_festi"
+                android:drawableStart="@drawable/ic_cal_festi"
                 android:text="@string/normal_cal"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                android:drawableRight="@drawable/ic_cal_nxtbtn"/>
+                android:drawableEnd="@drawable/ic_cal_nxtbtn"/>
 
         </LinearLayout>
 
@@ -78,8 +78,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:gravity="center|center"
-                android:text="MAY"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -87,7 +85,7 @@
             <ImageButton
                 android:id="@+id/next_btn"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:src="@drawable/ic_cal_nxtbtn"
@@ -112,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="일"
+                android:text="@string/sun"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -121,7 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="월"
+                android:text="@string/mon"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -130,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="화"
+                android:text="@string/tue"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -139,7 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="수"
+                android:text="@string/wed"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -148,7 +146,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="목"
+                android:text="@string/thu"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -157,7 +155,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="금"
+                android:text="@string/fri"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -166,7 +164,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="토"
+                android:text="@string/sat"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -187,7 +185,7 @@
             android:layout_marginTop="3dp"
             android:background="#CFCFCF" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
