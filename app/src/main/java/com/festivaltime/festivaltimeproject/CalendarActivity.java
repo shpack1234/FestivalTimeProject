@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -85,7 +86,8 @@ public class CalendarActivity extends AppCompatActivity {
         festi_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //navigateToFestivalCalendarActivity(CalendarActivity.this);
+                Intent intent = new Intent(CalendarActivity.this, FestivalCalendarActivity.class);
+                startActivity(intent);
             }
         });
 

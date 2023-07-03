@@ -14,6 +14,14 @@
     <string name="add_button">추가하기</string>
     <string name="finish">완료</string>
 
+    <string name="mon">월</string>
+    <string name="tue">화</string>
+    <string name="wed">수</string>
+    <string name="thu">목</string>
+    <string name="fri">금</string>
+    <string name="sat">토</string>
+    <string name="sun">일</string>
+
     <!--캘린더 팝업 string-->
     <string name="short_add">추가</string>
     <string name="dismiss_popup">X</string>
