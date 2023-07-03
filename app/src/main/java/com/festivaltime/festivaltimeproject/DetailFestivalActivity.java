@@ -64,7 +64,6 @@ DetailFestivalActivity extends AppCompatActivity {
 
                             Log.d("imgUrl", firstImage);
 
-                            Picasso.get().load(firstImage).placeholder(R.drawable.ic_image).error(R.drawable.image01).into(festivalFirstImage);
                             titleTextView.setText(title);
                             address.setText(address1 + " " + address2);
                             idTextView.setText(id);
