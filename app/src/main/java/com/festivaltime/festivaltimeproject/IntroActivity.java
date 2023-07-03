@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 public class IntroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceStare) {
         super.onCreate(savedInstanceStare);
         setContentView(R.layout.activity_intro);
+
+        UserDataBase db = Room.databaseBuilder(getApplicationContext(), UserDataBase.class, "User_Database").build();
 
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
