@@ -7,6 +7,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.view.*;
@@ -29,8 +30,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private LinearLayout lila;
     private ViewGroup parentView1;
     private ViewGroup parentView2;
-
-
+    private FestivalDataBase db;
 
 
 
@@ -39,6 +39,12 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+         db= Room.databaseBuilder(getApplicationContext(), FestivalDataBase.class, "FestivalDatabase.db")
+                .fallbackToDestructiveMigration()
+                .build();
+
+        saveIDToDatabase("1234");
+        
         addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
 
@@ -105,6 +111,14 @@ public class FavoriteActivity extends AppCompatActivity {
         });
 
     }
+
+    private void saveIDToDatabase(String id) {
+        FestivalDao festivalDao = db.festivalDao();
+        FestivalEntity entity = new FestivalEntity();
+        entity.setId(id);
+        festivalDao.insert(entity);
+    }
+
     // relativeLayout 삭제 메소드
     private void removeRelativeLayout(ViewGroup parentView) {
         parentView.removeAllViews();
