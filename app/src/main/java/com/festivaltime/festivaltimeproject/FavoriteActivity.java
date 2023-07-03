@@ -6,16 +6,16 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
-import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import android.content.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -44,6 +44,8 @@ public class FavoriteActivity extends AppCompatActivity {
                 .build();
 
         saveIDToDatabase("1234");
+
+        deleteIDFromDatabase("1234");
         
         addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
@@ -60,23 +62,6 @@ public class FavoriteActivity extends AppCompatActivity {
                 Intent intent = new Intent(FavoriteActivity.this, MainActivity.class); //실행해보려고 잠깐 Main으로 이동하게 해놓음
                 startActivity(intent);
 
-            }
-        });
-
-        // 삭제 버튼 1, 2
-        ImageButton delbtn1 = findViewById(R.id.deleteButton);
-        delbtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeRelativeLayout(parentView1);
-            }
-        });
-
-        ImageButton delbtn2 = findViewById(R.id.deleteButton2);
-        delbtn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeRelativeLayout(parentView2);
             }
         });
 
@@ -120,6 +105,14 @@ public class FavoriteActivity extends AppCompatActivity {
         FestivalEntity entity = new FestivalEntity();
         entity.setId(id);
         festivalDao.insert(entity);
+    }
+
+    private void deleteIDFromDatabase(String id){
+        FestivalDao festivalDao = db.festivalDao();
+        FestivalEntity entitiyToDelete = festivalDao.getEntityById(id);
+        if(entitiyToDelete != null){
+            festivalDao.delete(entitiyToDelete);
+        }
     }
 
     // relativeLayout 삭제 메소드

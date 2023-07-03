@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -12,5 +13,8 @@ public interface FestivalDao {
 
     @Query("SELECT * FROM FestivalEntity WHERE id = :id")
     FestivalEntity getEntityById(String id);
+
+    @Delete
+    void delete(FestivalEntity entity); // 삭제 메소드
 }
 
