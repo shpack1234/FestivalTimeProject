@@ -7,12 +7,14 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -41,12 +43,9 @@ public class FavoriteActivity extends AppCompatActivity {
 
          db= Room.databaseBuilder(getApplicationContext(), FestivalDataBase.class, "FestivalDatabase.db")
                 .fallbackToDestructiveMigration()
+                 .setQueryExecutor(AsyncTask.THREAD_POOL_EXECUTOR) // 백그라운드 스레드에서 작업을 실행하도록 설정
                 .build();
 
-        saveIDToDatabase("1234");
-
-        deleteIDFromDatabase("1234");
-        
         addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
 
@@ -64,7 +63,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
             }
         });
-
 
 
 /**
@@ -95,24 +93,42 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
+
+
+        saveIDToDatabase("1234");
+
+        deleteIDFromDatabase("1234");
+
     }
 
     private void saveIDToDatabase(String id) {
-        FestivalDao festivalDao = db.festivalDao();
-        if (festivalDao.getEntityById(id) != null) {
-            return; // 중복 저장 방지
-        }
-        FestivalEntity entity = new FestivalEntity();
-        entity.setId(id);
-        festivalDao.insert(entity);
+        new AsyncTask<String, Void, Void>() {
+            @Override
+            protected Void doInBackground(String... strings) {
+                FestivalDao festivalDao = db.festivalDao();
+                if (festivalDao.getEntityById(strings[0]) != null) {
+                    return null; // 중복 저장 방지
+                }
+                FestivalEntity entity = new FestivalEntity();
+                entity.setId(strings[0]);
+                festivalDao.insert(entity);
+                return null;
+            }
+        }.execute(id);
     }
 
-    private void deleteIDFromDatabase(String id){
-        FestivalDao festivalDao = db.festivalDao();
-        FestivalEntity entitiyToDelete = festivalDao.getEntityById(id);
-        if(entitiyToDelete != null){
-            festivalDao.delete(entitiyToDelete);
-        }
+    private void deleteIDFromDatabase(String id) {
+        new AsyncTask<String, Void, Void>() {
+            @Override
+            protected Void doInBackground(String... strings) {
+                FestivalDao festivalDao = db.festivalDao();
+                FestivalEntity entityToDelete = festivalDao.getEntityById(strings[0]);
+                if (entityToDelete != null) {
+                    festivalDao.delete(entityToDelete);
+                }
+                return null;
+            }
+        }.execute(id);
     }
 
     // relativeLayout 삭제 메소드

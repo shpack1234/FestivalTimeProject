@@ -11,10 +11,10 @@ public interface FestivalDao {
     @Insert
     void insert(FestivalEntity entity);
 
-    @Query("SELECT * FROM FestivalEntity WHERE id = :id")
-    FestivalEntity getEntityById(String id);
-
     @Delete
     void delete(FestivalEntity entity); // 삭제 메소드
+
+    @Query("SELECT * FROM FestivalEntity WHERE id = :id")
+    FestivalEntity getEntityById(String id);
 }
 
