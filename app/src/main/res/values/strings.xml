@@ -35,7 +35,9 @@
     <string name="category">카테고리</string>
     <string name="alert">알림</string>
 
-    <string name="select_view">설정한 카테고리 보기</string>
+    <string name="select_day_view">선택 보기</string>
+    <string name="last_month">지난 달</string>
+    <string name="next_month">다음 달</string>
 
     <!--카테고리 추가 팝업 string-->
     <string name="color">색상</string>

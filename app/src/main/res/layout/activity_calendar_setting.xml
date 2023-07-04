@@ -60,9 +60,9 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="4"
                 android:gravity="left|center"
-                android:text="@string/select_view"
+                android:text="@string/select_day_view"
                 android:textSize="13sp" />
 
             <Button
@@ -70,9 +70,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:text="@string/add_button"
+                android:background="#00000000"
                 android:gravity="right|center"
-                android:background="#00000000"/>
+                android:text="@string/add_button" />
 
         </LinearLayout>
 
@@ -88,18 +88,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:clickable="true"
                 android:focusable="false"
-                android:clickable="true"/>
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
+                android:gravity="left|center"
                 android:text="@string/festival"
-                android:textSize="13sp"
-                android:gravity="left|center" />
+                android:textSize="13sp" />
+
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
@@ -107,6 +108,65 @@
                 android:layout_weight="1"
                 android:padding="15dp"
                 android:src="@drawable/ic_cal_category" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/ic_cal_roundbox">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/lastmonth_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/last_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:gravity="left|center"
+                    android:text="@string/last_month"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/nextmonth_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/next_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:gravity="left|center"
+                    android:text="@string/next_month"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

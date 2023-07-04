@@ -29,7 +29,9 @@ public class CalendarPopupActivity extends Dialog {
 
     public CalendarPopupActivity(@NonNull Context context, String contents) {
         super(context);
+        //팝업 애니메이션 위한 윈도우
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_calendar_popup);
         this.mContext = context;
 
@@ -46,12 +48,14 @@ public class CalendarPopupActivity extends Dialog {
         EndTimePicker = findViewById(R.id.EndTimePicker);
         alldaySwitch = findViewById(R.id.switchView);
 
+        //뒤로가기 true
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 
         Window window = getWindow();
 
         if(window!=null){
+            //팝업 배경 투명설정 별로같아서 주석처리함)
             //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             WindowManager.LayoutParams params = window.getAttributes();
@@ -87,11 +91,12 @@ public class CalendarPopupActivity extends Dialog {
             }
         });
 
-        //하루종일 스위치 on off시 시간 표시 on off
+        //하루종일 스위치 on off시 시간(time) 표시 on off
         alldaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    //date > time 위치 이동은 미구현
                     starttimeClick.setVisibility(View.GONE);
                     endtimeClick.setVisibility(View.GONE);
                 }

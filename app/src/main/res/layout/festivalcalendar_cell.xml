@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_gravity="center"
-        android:text="축제 갯수"
+        android:text="축제 개수"
         android:textSize="10sp"/>
 
 </LinearLayout>
