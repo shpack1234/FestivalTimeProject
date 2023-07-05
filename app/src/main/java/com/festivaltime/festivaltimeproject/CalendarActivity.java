@@ -125,6 +125,9 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Popup_btn = new CalendarPopupActivity(CalendarActivity.this, SelectDateView.getText().toString());
+                // startdateClick와 enddateClick에 선택한 날짜 설정
+                Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
+                Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
                 Popup_btn.show();
             }
         });
