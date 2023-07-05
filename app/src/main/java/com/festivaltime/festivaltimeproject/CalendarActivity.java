@@ -25,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.text.SimpleDateFormat;
 
 public class CalendarActivity extends AppCompatActivity {
-    private boolean showOtherMonths=false; // 다른 달의 일자를 표시할지 여부를 저장하는 변수
+    private boolean showOtherMonths=true; // 다른 달의 일자를 표시할지 여부를 저장하는 변수
     //현재 시간 가져오기 now, date, sdf
     public long now = System.currentTimeMillis();
     public Date date = new Date(now);

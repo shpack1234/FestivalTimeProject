@@ -68,21 +68,34 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             public void onClick(View v) {
                 int adapterPosition = holder.getAbsoluteAdapterPosition(); // getAdapterPosition()를 사용하여 현재 위치를 가져옵니다.
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    // 이전에 클릭한 날짜의 텍스트 색상과 배경 리소스를 초기화
-                    if (previousSelectedPosition != -1) {
-                        CalendarViewHolder previousHolder = (CalendarViewHolder) recyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
-                        if (previousHolder != null) {
-                            previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
-                            previousHolder.dayText.setBackgroundResource(0);
+                    Date selectedDate = dayList.get(adapterPosition);
+
+                    Calendar selectedCalendar = Calendar.getInstance();
+                    selectedCalendar.setTime(selectedDate);
+
+                    int selectedMonth = selectedCalendar.get(Calendar.MONTH) + 1;
+                    int selectedYear = selectedCalendar.get(Calendar.YEAR);
+
+                    int currentMonth = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
+                    int currentYear = CalendarUtil.selectedDate.get(Calendar.YEAR);
+
+                    if ((showOtherMonths && selectedMonth == currentMonth) || (selectedYear == currentYear && selectedMonth == currentMonth)) {
+                        // 이전에 클릭한 날짜의 텍스트 색상과 배경 리소스를 초기화
+                        if (previousSelectedPosition != -1) {
+                            CalendarViewHolder previousHolder = (CalendarViewHolder) recyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
+                            if (previousHolder != null) {
+                                previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
+                                previousHolder.dayText.setBackgroundResource(0);
+                            }
                         }
+
+                        // 현재 클릭한 날짜의 텍스트 색상과 배경 리소스를 설정
+                        holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
+                        holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+
+                        // 이전에 클릭한 날짜의 위치 업데이트
+                        previousSelectedPosition = adapterPosition;
                     }
-
-                    // 현재 클릭한 날짜의 텍스트 색상과 배경 리소스를 설정
-                    holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
-                    holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
-
-                    // 이전에 클릭한 날짜의 위치 업데이트
-                    previousSelectedPosition = adapterPosition;
                 }
             }
         });
