@@ -4,8 +4,6 @@ package com.festivaltime.festivaltimeproject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +20,7 @@ import androidx.annotation.NonNull;
 public class CalendarPopupActivity extends Dialog {
     protected Context mContext;
     public EditText TitleText;
-    private Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick;
+    final Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick;
     public DatePicker StartDatePicker, EndDatePicker;
     public TimePicker StartTimePicker, EndTimePicker;
     public Switch alldaySwitch;

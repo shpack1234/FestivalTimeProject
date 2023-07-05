@@ -1,14 +1,10 @@
 package com.festivaltime.festivaltimeproject;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +15,11 @@ import java.util.Date;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
     ArrayList<Date> dayList;
+    boolean showOtherMonths;
 
-    public CalendarAdapter(ArrayList<Date> dayList) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths) {
         this.dayList = dayList;
+        this.showOtherMonths = showOtherMonths;
     }
 
     @NonNull
@@ -34,7 +32,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
 
     @Override
-        public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         Date monthDate = dayList.get(position); //날짜 변수 적용
         Calendar dateCalendar = Calendar.getInstance();
         dateCalendar.setTime(monthDate);
@@ -48,8 +46,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         int displayYear = dateCalendar.get(Calendar.YEAR);
 
         if (displayMonth == currentMonth && displayYear == currentYear) {
+            holder.parentView.setVisibility(View.VISIBLE);
         } else {
-            holder.parentView.setVisibility(View.INVISIBLE);
+            holder.dayText.setTextColor(Color.parseColor("#D6D6D6"));
+            if (showOtherMonths) {
+                holder.parentView.setVisibility(View.VISIBLE);
+            } else {
+                holder.parentView.setVisibility(View.INVISIBLE);
+            }
         }
 
         int dayNo = dateCalendar.get(Calendar.DAY_OF_MONTH);
@@ -60,8 +64,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             @Override
             public void onClick(View v) {
                 //다른거 숨기기 위한 for문 생성중
-                for(int i=0; i<dayList.size(); i++){
-                    if(dayList.get(i)==holder.dayText.getText()){
+                for (int i = 0; i < dayList.size(); i++) {
+                    if (dayList.get(i) == holder.dayText.getText()) {
                         break;
                     }
                 }

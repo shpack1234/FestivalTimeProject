@@ -87,7 +87,7 @@
                 android:background="#00000000"
                 android:ems="30"
                 android:gravity="right|center"
-                android:hint="제목을 입력하는 란"
+                android:hint="@string/input_title"
                 android:inputType="textShortMessage"
                 android:textColor="@color/black"
                 android:textSize="13sp" />

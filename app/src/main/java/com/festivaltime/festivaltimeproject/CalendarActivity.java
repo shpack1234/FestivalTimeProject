@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,13 +25,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.text.SimpleDateFormat;
 
 public class CalendarActivity extends AppCompatActivity {
+    private boolean showOtherMonths=false; // 다른 달의 일자를 표시할지 여부를 저장하는 변수
     //현재 시간 가져오기 now, date, sdf
     public long now = System.currentTimeMillis();
     public Date date = new Date(now);
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn;
-    private CalendarSetting Cal_Set;
     public String readDay = null;
     public Button cal_setting, add_Btn, del_Btn, festi_cal;
     public TextView SelectDateView, textView, Year_text, monthYearText;
@@ -95,10 +96,20 @@ public class CalendarActivity extends AppCompatActivity {
         cal_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Cal_Set = new CalendarSetting(CalendarActivity.this);
-                Cal_Set.show();
+                CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        CalendarSetting settingDialog = (CalendarSetting) dialog;
+                        showOtherMonths = settingDialog.getShowOtherMonths(); // 값을 가져옴
+                        setMonthView();
+                    }
+                });
+                dialog.show();
             }
         });
+
+
 
         //날짜 추가하기 버튼 클릭시 popup창 연결
         add_Btn.setOnClickListener(new View.OnClickListener(){
@@ -141,7 +152,7 @@ public class CalendarActivity extends AppCompatActivity {
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
 
-        CalendarAdapter adapter = new CalendarAdapter(dayList);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);

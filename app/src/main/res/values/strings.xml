@@ -37,10 +37,11 @@
 
     <string name="select_day_view">선택 보기</string>
     <string name="last_month">지난 달</string>
-    <string name="next_month">다음 달</string>
+    <string name="other_months">다른 달</string>
 
     <!--카테고리 추가 팝업 string-->
     <string name="color">색상</string>
+    <string name="input_title">제목을 입력하는 란</string>
 
     <!--축제 캘린더 string-->
     <string name="festi_cal">축제 캘린더</string>
