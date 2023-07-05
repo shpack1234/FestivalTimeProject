@@ -9,20 +9,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
+
+
     ArrayList<Date> dayList;
     boolean showOtherMonths;
     private RecyclerView recyclerView;
     private int previousSelectedPosition = -1;
+    private TextView selectDateView;
+    private TextView textView;
+    private View del_Btn;
 
-    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, TextView textView, View del_Btn) {
         this.dayList = dayList;
         this.showOtherMonths = showOtherMonths;
         this.recyclerView = recyclerView;
+        this.selectDateView = selectDateView;
+        this.textView = textView;
+        this.del_Btn = del_Btn;
     }
 
     @NonNull
@@ -95,6 +104,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
                         // 이전에 클릭한 날짜의 위치 업데이트
                         previousSelectedPosition = adapterPosition;
+
+                        // 선택한 날짜에 따라 SelectDateView, textView, del_Btn을 표시
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                        String selectedDateString = dateFormat.format(selectedDate);
+                        selectDateView.setText(selectedDateString);
+                        selectDateView.setVisibility(View.VISIBLE);
+                        textView.setVisibility(View.VISIBLE);
+                        del_Btn.setVisibility(View.VISIBLE);
                     }
                 }
             }

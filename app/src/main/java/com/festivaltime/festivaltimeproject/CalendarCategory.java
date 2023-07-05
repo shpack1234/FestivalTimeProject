@@ -42,7 +42,8 @@ public class CalendarCategory extends Dialog {
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                select_color.getColorFilter();
+                //select_color.getColorFilter();
+                dismiss();
             }
         });
 

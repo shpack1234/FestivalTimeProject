@@ -70,6 +70,9 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CalendarUtil.selectedDate.add(Calendar.MONTH, -1);
+                textView.setVisibility(View.INVISIBLE);
+                SelectDateView.setVisibility(View.INVISIBLE);
+                del_Btn.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -79,6 +82,9 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 CalendarUtil.selectedDate.add(Calendar.MONTH, 1);
+                textView.setVisibility(View.INVISIBLE);
+                SelectDateView.setVisibility(View.INVISIBLE);
+                del_Btn.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -102,6 +108,9 @@ public class CalendarActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         CalendarSetting settingDialog = (CalendarSetting) dialog;
                         showOtherMonths = settingDialog.getShowOtherMonths(); // 값을 가져옴
+                        textView.setVisibility(View.INVISIBLE);
+                        SelectDateView.setVisibility(View.INVISIBLE);
+                        del_Btn.setVisibility(View.INVISIBLE);
                         setMonthView();
                     }
                 });
@@ -152,7 +161,7 @@ public class CalendarActivity extends AppCompatActivity {
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
 
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, recyclerView);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, recyclerView, SelectDateView, textView, del_Btn);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);

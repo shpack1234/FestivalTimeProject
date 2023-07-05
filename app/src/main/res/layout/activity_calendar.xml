@@ -49,12 +49,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00ff0000"
-                android:gravity="right|center"
                 android:drawableStart="@drawable/ic_cal_festi"
+                android:drawableEnd="@drawable/ic_cal_nxtbtn"
+                android:gravity="right|center"
                 android:text="@string/festi_cal"
                 android:textColor="@color/black"
-                android:textSize="13sp"
-                android:drawableEnd="@drawable/ic_cal_nxtbtn"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -190,8 +190,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp">
 
             <Button
                 android:id="@+id/cal_setting"
@@ -206,7 +206,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3" />
 
             <Button
                 android:id="@+id/add_Btn"
@@ -225,17 +225,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="100dp"
             android:layout_marginRight="30dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-            app:layout_constraintRight_toRightOf="parent">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/SelectDateView"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:gravity="left|center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"

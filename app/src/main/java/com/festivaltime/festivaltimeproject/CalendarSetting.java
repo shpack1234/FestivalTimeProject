@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -12,7 +13,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 
 public class CalendarSetting extends Dialog {
-    final Switch lastmonth_switch;
+    final Switch othermonth_switch;
     final  boolean showOtherMonths;
     protected Context mContext;
     public Button finish_btn, add_category;
@@ -28,11 +29,7 @@ public class CalendarSetting extends Dialog {
 
         finish_btn = findViewById(R.id.add_finish_btn);
         add_category = findViewById(R.id.add_category);
-        lastmonth_switch = findViewById(R.id.othermonth_switch);
-        //CheckBox nextmonth = (CheckBox) findViewById(R.id.nextmonth_check);
-
-        //lastmonth.setChecked(showOtherMonths);
-        //nextmonth.setChecked(showOtherMonths);
+        othermonth_switch = findViewById(R.id.othermonth_switch);
 
         setCancelable(true);
         setCanceledOnTouchOutside(true);
@@ -68,28 +65,27 @@ public class CalendarSetting extends Dialog {
         add_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Add_category = new CalendarCategory(null);
-                //Add_category.show();
+                CalendarCategory dialog = new CalendarCategory(mContext);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        // 카테고리 팝업이 닫힐 때 수행할 작업
+                    }
+                });
+                dialog.show();
             }
         });
 
-        //지난달 visible
+        //다른달 날짜 visible
         if (showOtherMonths) {
-            lastmonth_switch.setChecked(true);
+            othermonth_switch.setChecked(true);
         } else {
-            lastmonth_switch.setChecked(false);
+            othermonth_switch.setChecked(false);
         }
-
-        //다음달 visible
-        /*if (nextmonth.isChecked()) {
-            intent.putExtra("state", VISIBLE);
-        } else {
-            intent.putExtra("state", INVISIBLE);
-        }*/
 
     }
     public boolean getShowOtherMonths() {
-        return lastmonth_switch.isChecked();
+        return othermonth_switch.isChecked();
     }
 
 }
