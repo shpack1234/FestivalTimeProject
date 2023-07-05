@@ -3,6 +3,8 @@ package com.festivaltime.festivaltimeproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,34 +29,28 @@ public class PrivacyActivity extends AppCompatActivity {
 
     private UserEntity loadedUser;
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("userId", null);
+
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
-        String userId = getIntent().getStringExtra("userId");
-
         TextView privacy_userid = findViewById(R.id.privacy_userid);
-        if (userId == null) {
-            userId="123456";
-            privacy_userid.setText("no Id");
-        } else {
-            privacy_userid.setText(userId);
-        }
-
         EditText userName = findViewById(R.id.privacy_username);
         DatePicker userBirthDatePicker = findViewById(R.id.privacy_userbirth);
         RadioGroup userGender = findViewById(R.id.privacy_usergender);
         Button saveButton = findViewById(R.id.privacy_savebutton);
-
-        String finalUserId = userId;
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                loadedUser = userDao.getUserInfoById(finalUserId);
+                loadedUser = userDao.getUserInfoById(userId);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -63,6 +59,7 @@ public class PrivacyActivity extends AppCompatActivity {
                             RadioButton radioButtonMale = findViewById(R.id.radioButtonMale);
                             RadioButton radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
+                            privacy_userid.setText(userId);
                             userName.setText(loadedUser.getUserName());
                             String userBirth = loadedUser.getUserBirth();
                             String[] birthParts = userBirth.split("-");
@@ -104,7 +101,7 @@ public class PrivacyActivity extends AppCompatActivity {
                     Log.d("loadUser", "null");
                     // 신규 사용자
                     userEntity = new UserEntity();
-                    userEntity.setUserId(finalUserId);
+                    userEntity.setUserId(userId);
                 } else {
                     // 기존 사용자
                     userEntity = loadedUser;

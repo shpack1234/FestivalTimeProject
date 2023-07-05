@@ -15,7 +15,6 @@ public class UserEntity {
     private int id;
 
     private String userId;
-
     private String userName;
     private String userBirth;
     private String userGender;

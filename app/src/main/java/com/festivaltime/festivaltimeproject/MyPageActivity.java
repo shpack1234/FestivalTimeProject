@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -64,16 +65,17 @@ public class MyPageActivity extends AppCompatActivity {
             return false;
         });
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("userId", null);
+
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
 
         userDao = db.userDao();
 
-        String exampleID="123456";
-
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                loadedUser = userDao.getUserInfoById(exampleID);
+                loadedUser = userDao.getUserInfoById(userId);
 
                 if (loadedUser!=null) {
                     userId = loadedUser.getUserId();
