@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject;
 
 import android.os.StrictMode;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Query;
@@ -10,20 +11,22 @@ import java.util.ArrayList;
 
 @Entity
 public class UserEntity {
-    @PrimaryKey
-    private boolean isUserIdAssigned;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private String userId;
+
     private String userName;
     private String userBirth;
     private String userGender;
     private ArrayList<String> userFavoriteFestival = new ArrayList<>();
 
-    public boolean isUserIdAssigned() {
-        return isUserIdAssigned;
+    public int getId() {
+        return id;
     }
 
-    public void setUserIdAssigned(boolean userIdAssigned) {
-        isUserIdAssigned = userIdAssigned;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUserId() {

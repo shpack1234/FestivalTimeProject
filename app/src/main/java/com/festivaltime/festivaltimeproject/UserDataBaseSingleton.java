@@ -9,7 +9,9 @@ public class UserDataBaseSingleton {
 
     public static synchronized UserDataBase getInstance(Context context) {
         if(instance==null) {
-            instance= Room.databaseBuilder(context.getApplicationContext(), UserDataBase.class, "User_Database").build();
+            instance= Room.databaseBuilder(context.getApplicationContext(), UserDataBase.class, "User_Database")
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }

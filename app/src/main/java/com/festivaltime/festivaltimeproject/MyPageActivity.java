@@ -34,7 +34,7 @@ public class MyPageActivity extends AppCompatActivity {
     private UserDao userDao;
     private String userId;
 
-    private boolean isUserIdAssigned;
+    private UserEntity loadedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +64,19 @@ public class MyPageActivity extends AppCompatActivity {
             return false;
         });
 
-        db = Room.databaseBuilder(getApplicationContext(), UserDataBase.class, "User_Database")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = UserDataBaseSingleton.getInstance(getApplicationContext());
 
         userDao = db.userDao();
+
+        String exampleID="123456";
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                isUserIdAssigned = userDao.isUserIdAssigned();
+                loadedUser = userDao.getUserInfoById(exampleID);
 
-                if (isUserIdAssigned) {
-                    userId = userDao.getUserId();
+                if (loadedUser!=null) {
+                    userId = loadedUser.getUserId();
                 } else {
                     userId = null;
                 }

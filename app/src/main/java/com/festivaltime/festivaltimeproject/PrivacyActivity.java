@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -31,14 +32,14 @@ public class PrivacyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
 
-        db = Room.databaseBuilder(getApplicationContext(), UserDataBase.class, "User_Database").fallbackToDestructiveMigration().build();
+        db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
         String userId = getIntent().getStringExtra("userId");
 
         TextView privacy_userid = findViewById(R.id.privacy_userid);
         if (userId == null) {
-            userId="null";
+            userId="123456";
             privacy_userid.setText("no Id");
         } else {
             privacy_userid.setText(userId);
@@ -49,10 +50,11 @@ public class PrivacyActivity extends AppCompatActivity {
         RadioGroup userGender = findViewById(R.id.privacy_usergender);
         Button saveButton = findViewById(R.id.privacy_savebutton);
 
+        String finalUserId = userId;
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                loadedUser = userDao.getUserInfo();
+                loadedUser = userDao.getUserInfoById(finalUserId);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -81,8 +83,6 @@ public class PrivacyActivity extends AppCompatActivity {
                 });
             }
         });
-
-        String finalUserId = userId;
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,10 +99,16 @@ public class PrivacyActivity extends AppCompatActivity {
                 RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                 gender = selectedRadioButton.getText().toString();
 
-                UserEntity userEntity = new UserEntity();
-                if (loadedUser==null) {
-                    userEntity.setUserIdAssigned(true);
+                UserEntity userEntity;
+                if (loadedUser == null) {
+                    Log.d("loadUser", "null");
+                    // 신규 사용자
+                    userEntity = new UserEntity();
                     userEntity.setUserId(finalUserId);
+                } else {
+                    // 기존 사용자
+                    userEntity = loadedUser;
+                    userEntity.setUserId(loadedUser.getUserId());
                 }
                 userEntity.setUserName(name);
                 userEntity.setUserBirth(birth);
@@ -111,7 +117,7 @@ public class PrivacyActivity extends AppCompatActivity {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        userDao.insert(userEntity);
+                        userDao.insertOrUpdate(userEntity);
                     }
                 });
 
