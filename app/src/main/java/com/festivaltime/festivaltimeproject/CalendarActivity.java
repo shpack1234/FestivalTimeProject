@@ -152,7 +152,7 @@ public class CalendarActivity extends AppCompatActivity {
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
 
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, recyclerView);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
