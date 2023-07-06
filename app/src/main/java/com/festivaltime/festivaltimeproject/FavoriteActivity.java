@@ -46,6 +46,8 @@ public class FavoriteActivity extends AppCompatActivity {
                  .setQueryExecutor(AsyncTask.THREAD_POOL_EXECUTOR) // 백그라운드 스레드에서 작업을 실행하도록 설정
                 .build();
 
+
+
         addbtn = findViewById(R.id.addButton);
         imgbtn = findViewById(R.id.imagebutton);
 

@@ -124,7 +124,7 @@
             android:src="@drawable/minus" />
 
         <ImageButton
-            android:id="@+id/addButton"
+            android:id="@+id/festival_addButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="5dp"
