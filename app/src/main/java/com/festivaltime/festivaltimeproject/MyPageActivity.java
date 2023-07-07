@@ -9,25 +9,15 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToPrivacyActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 
+import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.lifecycle.Observer;
-
-import kotlinx.coroutines.Dispatchers;
 
 public class MyPageActivity extends AppCompatActivity {
 
@@ -69,7 +59,6 @@ public class MyPageActivity extends AppCompatActivity {
         userId = sharedPreferences.getString("userId", null);
 
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
-
         userDao = db.userDao();
 
         AsyncTask.execute(new Runnable() {

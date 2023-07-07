@@ -1,8 +1,10 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.userdatabasepackage;
 
 import android.content.Context;
 
 import androidx.room.Room;
+
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 
 public class UserDataBaseSingleton {
     private static UserDataBase instance;

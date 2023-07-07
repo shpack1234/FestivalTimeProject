@@ -22,6 +22,7 @@ public class DetailFestivalActivity extends AppCompatActivity {
 
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

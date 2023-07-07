@@ -1,7 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class PrivacyActivity extends AppCompatActivity {
 

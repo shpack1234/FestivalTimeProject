@@ -1,4 +1,4 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.festivaldatabasepackage;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

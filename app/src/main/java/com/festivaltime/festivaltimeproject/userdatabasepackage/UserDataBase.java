@@ -1,8 +1,10 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.userdatabasepackage;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+
+import com.festivaltime.festivaltimeproject.ArrayListConverter;
 
 @Database(entities = {UserEntity.class}, version = 1)
 @TypeConverters({ArrayListConverter.class})

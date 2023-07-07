@@ -20,7 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.festivaltime.festivaltimeproject.festivaldatabasepackage.*;
 
+import java.util.ArrayList;
 
 public class FavoriteActivity extends AppCompatActivity {
 
@@ -34,18 +36,12 @@ public class FavoriteActivity extends AppCompatActivity {
     private ViewGroup parentView2;
     private FestivalDataBase db;
 
-
+    private ArrayList<String>  FavoriteFestivalList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
-
-         db= Room.databaseBuilder(getApplicationContext(), FestivalDataBase.class, "FestivalDatabase.db")
-                .fallbackToDestructiveMigration()
-                 .setQueryExecutor(AsyncTask.THREAD_POOL_EXECUTOR) // 백그라운드 스레드에서 작업을 실행하도록 설정
-                .build();
-
 
 
         addbtn = findViewById(R.id.addButton);
@@ -65,14 +61,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
             }
         });
-
-
-/**
-        delbtn.setOnClickListener(view -> { // 찜 삭제
-            RelativeLayout rela1 = findViewById(R.id.rela1);
-            rela1.setVisibility(View.GONE);
-        });
-**/
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_favorite);
@@ -95,48 +83,5 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
-
-
-        saveIDToDatabase("1234");
-
-        deleteIDFromDatabase("1234");
-
-    }
-
-    private void saveIDToDatabase(String id) {
-        new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... strings) {
-                FestivalDao festivalDao = db.festivalDao();
-                if (festivalDao.getEntityById(strings[0]) != null) {
-                    return null; // 중복 저장 방지
-                }
-                FestivalEntity entity = new FestivalEntity();
-                entity.setId(strings[0]);
-                festivalDao.insert(entity);
-                return null;
-            }
-        }.execute(id);
-    }
-
-    private void deleteIDFromDatabase(String id) {
-        new AsyncTask<String, Void, Void>() {
-            @Override
-            protected Void doInBackground(String... strings) {
-                FestivalDao festivalDao = db.festivalDao();
-                FestivalEntity entityToDelete = festivalDao.getEntityById(strings[0]);
-                if (entityToDelete != null) {
-                    festivalDao.delete(entityToDelete);
-                }
-                return null;
-            }
-        }.execute(id);
-    }
-
-    // relativeLayout 삭제 메소드
-    private void removeRelativeLayout(ViewGroup parentView) {
-        parentView.removeAllViews();
     }
 }
-
-

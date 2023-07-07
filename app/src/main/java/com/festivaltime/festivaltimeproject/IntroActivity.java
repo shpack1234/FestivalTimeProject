@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import java.util.Random;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class IntroActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefs";
@@ -34,7 +35,7 @@ public class IntroActivity extends AppCompatActivity {
 
         Log.d("Your ID", userId);
 
-        UserDataBase db = Room.databaseBuilder(getApplicationContext(), UserDataBase.class, "User_Database").build();
+        UserDataBase db = UserDataBaseSingleton.getInstance(getApplicationContext());
 
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {

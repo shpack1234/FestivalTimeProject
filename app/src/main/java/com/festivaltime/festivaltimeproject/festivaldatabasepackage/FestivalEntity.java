@@ -1,4 +1,4 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.festivaldatabasepackage;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
