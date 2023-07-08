@@ -5,8 +5,10 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
@@ -33,9 +35,11 @@ public class CalendarActivity extends AppCompatActivity {
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn;
     public String readDay = null;
-    public Button cal_setting, add_Btn, del_Btn, festi_cal;
-    public TextView SelectDateView, textView, Year_text, monthYearText;
-    public RecyclerView recyclerView;
+    public Button cal_setting, add_Btn, festi_cal;
+    public TextView SelectDateView, Year_text, monthYearText;
+    public RecyclerView recyclerView, scheduleText;
+    private ArrayList<CalendarSchedule> calendarScheduleArrayList;
+    private CalendarScheduleAdapter calendarScheduleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +51,12 @@ public class CalendarActivity extends AppCompatActivity {
         ImageButton prevBtn = findViewById(R.id.pre_btn);
         ImageButton nextBtn = findViewById(R.id.next_btn);
         recyclerView = findViewById(R.id.recyclerView);
+        //일정 recylerview
+        scheduleText = findViewById(R.id.scheduleText);
 
         SelectDateView = findViewById(R.id.SelectDateView);
-        textView = findViewById(R.id.textView);
         cal_setting = findViewById(R.id.cal_setting);
         add_Btn = findViewById(R.id.add_Btn);
-        del_Btn = findViewById(R.id.del_Btn);
         festi_cal = findViewById(R.id.festical_btn);
 
         //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
@@ -64,15 +68,14 @@ public class CalendarActivity extends AppCompatActivity {
 
         //화면 설정
         setMonthView();
+        setScheduleView();
 
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CalendarUtil.selectedDate.add(Calendar.MONTH, -1);
-                textView.setVisibility(View.INVISIBLE);
                 SelectDateView.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -82,9 +85,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 CalendarUtil.selectedDate.add(Calendar.MONTH, 1);
-                textView.setVisibility(View.INVISIBLE);
                 SelectDateView.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -108,9 +109,7 @@ public class CalendarActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         CalendarSetting settingDialog = (CalendarSetting) dialog;
                         showOtherMonths = settingDialog.getShowOtherMonths(); // 값을 가져옴
-                        textView.setVisibility(View.INVISIBLE);
                         SelectDateView.setVisibility(View.INVISIBLE);
-                        del_Btn.setVisibility(View.INVISIBLE);
                         setMonthView();
                     }
                 });
@@ -119,15 +118,24 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
-
         //날짜 추가하기 버튼 클릭시 popup창 연결
-        add_Btn.setOnClickListener(new View.OnClickListener(){
+        add_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Popup_btn = new CalendarPopupActivity(CalendarActivity.this, SelectDateView.getText().toString());
-                // startdateClick와 enddateClick에 선택한 날짜 설정
+            public void onClick(View view) {
+                Popup_btn = new CalendarPopupActivity(CalendarActivity.this);
                 Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
                 Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
+                CalendarPopupActivity dialog = new CalendarPopupActivity(CalendarActivity.this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        CalendarPopupActivity popupDialog = (CalendarPopupActivity) dialog;
+                        CalendarSchedule newschedule = new CalendarSchedule(popupDialog.TitleText.getText().toString());
+                        calendarScheduleArrayList.add(newschedule);
+                        calendarScheduleAdapter.notifyDataSetChanged();
+                        setScheduleView();
+                    }
+                });
                 Popup_btn.show();
             }
         });
@@ -155,7 +163,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    //화면 설정
+    //calendar 화면 설정
     private void setMonthView() {
         int month = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
         //월>영어 텍스트뷰
@@ -164,11 +172,22 @@ public class CalendarActivity extends AppCompatActivity {
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
 
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, recyclerView, SelectDateView, textView, del_Btn);
+        //calendar 어뎁터 사용 위한 정의
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, recyclerView, SelectDateView, scheduleText);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
     }
+
+    //schedule 화면 설정
+    private void setScheduleView(){
+        calendarScheduleArrayList = new ArrayList<>();
+        calendarScheduleAdapter = new CalendarScheduleAdapter(calendarScheduleArrayList);
+        //schedule recylerview LinearLayoutManager 객체 지정
+        scheduleText.setLayoutManager(new LinearLayoutManager(this));
+        scheduleText.setAdapter(calendarScheduleAdapter);
+    }
+
 
     //날짜 생성
     private ArrayList<Date> daysInMonthArray() {
@@ -187,6 +206,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         return dayList;
     }
+
 
     //월_ENG 출력
     public String Month_eng(int month) {

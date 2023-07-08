@@ -19,19 +19,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
     ArrayList<Date> dayList;
     boolean showOtherMonths;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView, scheduleText;
     private int previousSelectedPosition = -1;
     private TextView selectDateView;
-    private TextView textView;
-    private View del_Btn;
 
-    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, TextView textView, View del_Btn) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, RecyclerView scheduleText) {
         this.dayList = dayList;
         this.showOtherMonths = showOtherMonths;
         this.recyclerView = recyclerView;
         this.selectDateView = selectDateView;
-        this.textView = textView;
-        this.del_Btn = del_Btn;
+        this.scheduleText = scheduleText;
     }
 
     @NonNull
@@ -110,8 +107,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                         String selectedDateString = dateFormat.format(selectedDate);
                         selectDateView.setText(selectedDateString);
                         selectDateView.setVisibility(View.VISIBLE);
-                        textView.setVisibility(View.VISIBLE);
-                        del_Btn.setVisibility(View.VISIBLE);
+                        scheduleText.setVisibility(View.VISIBLE);
                     }
                 }
             }

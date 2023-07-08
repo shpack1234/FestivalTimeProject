@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,10 @@ import android.widget.Switch;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class CalendarPopupActivity extends Dialog {
     protected Context mContext;
@@ -25,7 +30,7 @@ public class CalendarPopupActivity extends Dialog {
     public TimePicker StartTimePicker, EndTimePicker;
     public Switch alldaySwitch;
 
-    public CalendarPopupActivity(@NonNull Context context, String contents) {
+    public CalendarPopupActivity(@NonNull Context context) {
         super(context);
         //팝업 애니메이션 위한 윈도우
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -69,8 +74,7 @@ public class CalendarPopupActivity extends Dialog {
         }
 
         //사용자 선택한 날짜로 초기화 (미선택시 현재 날짜로 초기화)
-        startdateClick.setText(contents);
-        enddateClick.setText(contents);
+
 
         //팝업창 나가기 모션
         shutdownClick.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +87,19 @@ public class CalendarPopupActivity extends Dialog {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("result", TitleText.getText());
+                String title = TitleText.getText().toString();
+
+                // 일정 객체 생성
+                CalendarSchedule newSchedule = new CalendarSchedule(title);
+
+                // 일정 추가 결과를 팝업 창을 호출한 액티비티로 전달
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("newSchedule", newSchedule);
+                ((Activity) mContext).setResult(Activity.RESULT_OK, resultIntent);
                 dismiss();
             }
         });
+
 
         //하루종일 스위치 on off시 시간(time) 표시 on off
         alldaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
