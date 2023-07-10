@@ -74,18 +74,6 @@ public class SearchActivity extends AppCompatActivity {
                         festivalList.clear(); // 기존 데이터를 모두 제거
                         festivalList.addAll(parsedFestivalList);
 
-                        // 데이터베이스에 접근하는 부분도 백그라운드 스레드에서 실행
-                        loadedUser = userDao.getUserInfoById(userId);
-                        if (loadedUser != null) {
-                            for (HashMap<String, String> festivalInfo : festivalList) {
-                                String id = festivalInfo.get("contentid");
-                                if (!loadedUser.getUserFavoriteFestival().contains(id)) {
-                                    loadedUser.getUserFavoriteFestival().add(id);
-                                }
-                            }
-                            userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
-                        }
-
                         // UI 갱신은 메인 스레드에서 실행
                         runOnUiThread(new Runnable() {
                             @Override
@@ -135,23 +123,23 @@ public class SearchActivity extends AppCompatActivity {
                                             executor.execute(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    String contentId = idTextView.getText().toString();
                                                     loadedUser = userDao.getUserInfoById(userId);
-
-                                                    List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
-                                                    for (String festivalId : favoriteFestivals) {
-                                                        Log.d("Favorite Festival", festivalId);
-                                                    }
                                                     if (loadedUser != null) {
-                                                        if (loadedUser.getUserFavoriteFestival().contains(id)) {
-                                                            Log.d("Festival Id", id);
+                                                        List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
+                                                        for (String festivalId : favoriteFestivals) {
+                                                            Log.d("Favorite Festival", festivalId);
+                                                        }
+                                                        if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                            Log.d("Festival Id", contentId);
                                                             Log.d("Button Listener", "ID already exists in userFavoriteFestival");
                                                         } else {
-                                                            Log.d("Festival Id", id);
-                                                            loadedUser.getUserFavoriteFestival().add(id);
+                                                            Log.d("Festival Id", contentId);
+                                                            loadedUser.addUserFavoriteFestival(contentId);
                                                             userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                         }
                                                     } else {
-                                                        Log.d("No UserInfo", "You should get your information in MyPage");
+                                                        Log.e("No UserInfo", "You should get your information in MyPage");
                                                     }
                                                 }
                                             });

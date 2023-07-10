@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
@@ -102,6 +103,7 @@ public class PrivacyActivity extends AppCompatActivity {
                     // 신규 사용자
                     userEntity = new UserEntity();
                     userEntity.setUserId(userId);
+                    userEntity.setUserFavoriteFestival(new ArrayList<>());
                 } else {
                     // 기존 사용자
                     userEntity = loadedUser;

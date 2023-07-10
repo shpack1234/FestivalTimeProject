@@ -18,7 +18,7 @@ public class UserEntity {
     private String userName;
     private String userBirth;
     private String userGender;
-    private ArrayList<String> userFavoriteFestival = new ArrayList<>();
+    private ArrayList<String> userFavoriteFestival;
 
     public int getId() {
         return id;
@@ -65,7 +65,11 @@ public class UserEntity {
     }
 
     public void setUserFavoriteFestival(ArrayList<String> userFavoriteFestival) {
-        this.userFavoriteFestival = userFavoriteFestival;
+        this.userFavoriteFestival=userFavoriteFestival;
+    }
+
+    public void addUserFavoriteFestival(String FestivalId) {
+        this.userFavoriteFestival.add(FestivalId);
     }
 
 }

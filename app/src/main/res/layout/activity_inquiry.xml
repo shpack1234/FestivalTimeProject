@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:textColor="@color/black"
-                android:TextSize="17sp"
+                android:textSize="17sp"
                 android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim."
                 android:maxLines="2"/>
         </LinearLayout>
