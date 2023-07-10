@@ -22,6 +22,9 @@
             android:name=".InquiryActivity"
             android:exported="false" />
         <activity
+            android:name=".AppSettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".PrivacyActivity"
             android:exported="false" />
         <activity
