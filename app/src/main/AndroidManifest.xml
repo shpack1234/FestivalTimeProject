@@ -17,6 +17,7 @@
         android:theme="@style/Theme.FestivalTimeProject"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".PrivacyActivity"
             android:exported="false" />
@@ -66,8 +67,7 @@
         <activity
             android:name=".CalendarActivity"
             android:exported="false" />
-        <activity android:name=".FestivalCalendarActivity"/>
-
+        <activity android:name=".FestivalCalendarActivity" />
     </application>
 
 </manifest>
