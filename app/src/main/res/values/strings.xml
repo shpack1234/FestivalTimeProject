@@ -47,6 +47,7 @@
     <string name="festi_cal">축제 캘린더</string>
     <string name="normal_cal">개인 캘린더</string>
 
+    <!--마이페이지 string-->
     <string name="my_page">마이페이지</string>
     <string name="my_badge">MY 뱃지</string>
     <string name="nickname">NICKNAME</string>
@@ -58,15 +59,22 @@
     <string name="app_information">앱 정보</string>
     <string name="developer_contact">개발자 문의</string>
 
+    <!--마이 뱃지 string-->
     <string name="holding_badge">보유 뱃지</string>
     <string name="title_image01">남이섬 어쿠스틱...</string>
     <string name="title_image02">대한민국 독서대...</string>
     <string name="title_image03">문정동 로데오거...</string>
     <string name="title">title</string>
-    <string name="total_having_badge">총           보유중</string>
-    <string name="count">7개</string>
+    <string name="version">1.0.0</string>
     <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
+
     <string name="title_activity_settings">settings</string>
 
     <string name="AppSetting">설정</string>
+
+
+    <!--문의하기 페이지 string-->
+    <string name="inquiry">문의하기</string>
+    <string name="write">글쓰기</string>
+>>>>>>> dff436ac0ad890582ca20e5436816bb09e356878
 </resources>
