@@ -1,7 +1,5 @@
 package com.festivaltime.festivaltimeproject;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 
@@ -51,6 +49,12 @@ public class navigateToSomeActivity {
 
     public static void navigateToInquiryActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, InquiryActivity.class);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
+    public static void navigateToAppSettingActivity(Activity thisActivity){
+        Intent intent = new Intent(thisActivity, AppSettingActivity.class);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
