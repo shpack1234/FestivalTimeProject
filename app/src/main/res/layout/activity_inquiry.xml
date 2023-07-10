@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/inquiry"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/before_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_back_before"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="23dp"
+        android:onClick="customOnClick"
+        android:background="@android:color/transparent"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="80dp">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/user_iquiry1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:TextSize="17sp"
+                android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim."
+                android:maxLines="2"/>
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/write_savebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/write"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_nevigation_background"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/black"/>
+
+</RelativeLayout>

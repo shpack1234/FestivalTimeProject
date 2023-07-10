@@ -49,6 +49,12 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
+    public static void navigateToInquiryActivity(Activity thisActivity) {
+        Intent intent = new Intent(thisActivity, InquiryActivity.class);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
     public static void navigateToDetailFestivalActivity(Activity thisActivity, String contentId) {
         Intent intent = new Intent(thisActivity, DetailFestivalActivity.class);
         intent.putExtra("contentid", contentId);

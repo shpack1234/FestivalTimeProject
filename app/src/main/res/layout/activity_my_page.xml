@@ -188,7 +188,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="1dp"
                     android:text="@string/personal_information"
                     android:textColor="@color/black"
@@ -220,7 +220,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="2dp"
                     android:text="@string/password_change"
                     android:textColor="@color/black"
@@ -252,7 +252,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="1dp"
                     android:text="@string/setting"
                     android:textSize="15sp"
@@ -267,69 +267,6 @@
             android:background="@color/black"/>
 
 
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="customOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_marginTop="1dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_privacysecurity" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/privacy_security"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="customOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="7dp">
-                <ImageView
-                    android:layout_marginTop="1dp"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:src="@drawable/ic_app_information"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/app_information"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
 
         <FrameLayout
             android:layout_width="355dp"
@@ -348,12 +285,56 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="2dp"
                     android:text="@string/developer_contact"
                     android:textSize="15sp"
                     android:textStyle="normal"
                     android:textColor="@color/black"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+        <FrameLayout
+            android:layout_width="355dp"
+            android:layout_height="68dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_marginTop="1dp"
+                    android:src="@drawable/ic_app_information" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/app_information"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/version"/>
+                </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 
