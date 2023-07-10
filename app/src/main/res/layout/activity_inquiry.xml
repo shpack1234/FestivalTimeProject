@@ -39,24 +39,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="80dp">
-        
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
-            >
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/user_iquiry1"
+                android:id="@+id/user_inquiry1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:textColor="@color/black"
-                android:TextSize="17sp"
+                android:maxLines="2"
                 android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim."
-                android:maxLines="2"/>
-        </LinearLayout>
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/writer_name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/writer_name"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:src="@drawable/ic_write_time" />
+
+                    <TextView
+                        android:id="@+id/write_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/write_time"
+                        android:textColor="@color/dark_gray" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/gray"
+                android:gravity="right"
+                android:textSize="13sp" />
+        </LinearLayout>
 
 
         <Button
@@ -64,14 +111,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:text="@string/write"
             android:textSize="15dp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

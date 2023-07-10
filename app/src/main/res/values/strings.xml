@@ -76,5 +76,6 @@
     <!--문의하기 페이지 string-->
     <string name="inquiry">문의하기</string>
     <string name="write">글쓰기</string>
->>>>>>> dff436ac0ad890582ca20e5436816bb09e356878
+    <string name="writer_name">작성자:뿌꾸</string>
+    <string name="write_time">2023-07-10</string>
 </resources>

@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToInquiryActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
@@ -87,6 +88,7 @@ public class MyPageActivity extends AppCompatActivity {
         navigateToBadgeActivity(MyPageActivity.this);
     }
 
+    public void InquiryOnClick(View v){navigateToInquiryActivity(MyPageActivity.this); }
     public void PrivacyOnClick(View v) {
         navigateToPrivacyActivity(MyPageActivity.this, userId);
     }
