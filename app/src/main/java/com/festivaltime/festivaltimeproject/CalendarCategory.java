@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 
 public class CalendarCategory extends Dialog {
 
-    private EditText txtText;
-    private Button close_btn, add_btn;
-    public ImageButton select_color, color1, color2, color3, color4, color5;
+    private EditText txtText; //카테고리명
+    private Button close_btn, add_btn; //닫기, 추가하기 btn
+    public ImageButton select_color, color1, color2, color3, color4, color5; //설정 색상 5가지 제한 > 수정 필요시 추후에 수정
 
     public CalendarCategory(@NonNull Context context){
         super(context);
@@ -57,6 +57,7 @@ public class CalendarCategory extends Dialog {
             }
         });
 
+        // 카테고리 색상 선택시 현재 선택한 색상 표시
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

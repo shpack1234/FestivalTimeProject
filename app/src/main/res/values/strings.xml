@@ -69,9 +69,13 @@
     <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
 
     <string name="title_activity_settings">settings</string>
-
+    <!--설정-->
     <string name="AppSetting">설정</string>
-
+    <string name="setting_alarm">알림 설정</string>
+    <string name="alarm_push">앱 푸쉬 알림받기</string>
+    <string name="alarm_calender">캘린더 디데이에 따른 알림</string>
+    <string name="search_autosave">최근 검색 자동 저장</string>
+    <string name="search_autosave_explain">검색창에서 최근에 검색한 내역을 보여줍니다</string>
 
     <!--문의하기 페이지 string-->
     <string name="inquiry">문의하기</string>
