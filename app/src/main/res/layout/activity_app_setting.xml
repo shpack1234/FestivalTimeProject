@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AppSetting">
+    tools:context=".AppSettingActivity">
 
     <LinearLayout
         android:id="@+id/AppSetting_actionbar"
@@ -32,24 +32,70 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="95dp"
-
+        android:id="@+id/setting_linear1"
+        android:layout_width="349dp"
+        android:layout_height="180dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="30dp"
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="221dp"
-            android:layout_height="48dp" />
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/setting_alarm" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:switchMinWidth="50dp"
+            android:switchPadding="10dp"
+            android:text="@string/alarm_push" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:switchMinWidth="50dp"
+            android:switchPadding="10dp"
+            android:text="@string/alarm_calender" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="351dp"
+        android:layout_height="102dp"
+        android:layout_below="@+id/setting_linear1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:orientation="vertical">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:switchMinWidth="50dp"
+            android:switchPadding="10dp"
+            android:text="@string/search_autosave" />
 
         <TextView
-            android:layout_width="251dp"
-            android:layout_height="48dp" />
-
-        <TextView
-            android:layout_width="251dp"
-            android:layout_height="48dp" />
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/search_autosave_explain"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -62,6 +108,8 @@
         app:itemIconTint="@color/black"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu" />
+
+
 
 
 </RelativeLayout>

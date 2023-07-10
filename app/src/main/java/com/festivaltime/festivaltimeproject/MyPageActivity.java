@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToAppSettingActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
@@ -8,15 +9,18 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToPrivacyActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
-import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MyPageActivity extends AppCompatActivity {
@@ -90,4 +94,6 @@ public class MyPageActivity extends AppCompatActivity {
     public void PrivacyOnClick(View v) {
         navigateToPrivacyActivity(MyPageActivity.this, userId);
     }
+
+    public void settingOnClick(View v) { navigateToAppSettingActivity(MyPageActivity.this);}
 }
