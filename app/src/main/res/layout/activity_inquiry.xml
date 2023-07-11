@@ -43,32 +43,64 @@
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="글을 입력하세요" />
+
+            <Button
+                android:id="@+id/write_submitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/write"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/gray"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+
+
 
         <LinearLayout
             android:id="@+id/inquiry1_layout"
             android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/inquiry1_text"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim." />
+                <TextView
+                    android:id="@+id/inquiry1_text"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim." />
 
-            <TextView
-                android:id="@+id/moreButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="더보기"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/content"
-                app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/moreButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/content"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,17 +148,6 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/write_savebtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="@string/write"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
     </LinearLayout>
 
 

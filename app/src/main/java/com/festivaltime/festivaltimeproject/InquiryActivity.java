@@ -14,15 +14,22 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class InquiryActivity extends AppCompatActivity {
-
+     //
     private TextView inquiryText;
     private TextView moreButton;
     private LinearLayout inquiryLayout;
     private boolean isExpanded = false;
+
+
+    private EditText editText;
+    private Button submitButton;
+    private LinearLayout postContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
