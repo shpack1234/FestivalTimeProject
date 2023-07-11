@@ -36,6 +36,8 @@
         tools:ignore="SpeakableTextPresentCheck"/>
 
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,25 +45,34 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/inquiry1_layout"
             android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user_inquiry1"
-                android:layout_width="wrap_content"
+                android:id="@+id/inquiry1_text"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:text="er pretium, eros odio pretium orci, vel lobortis sapien nisl vel libero.Aliquam hendrerit velit non lorem tincidunt, non dictum ex suscipit. Morbi eget lorem sit amet ante ultricies vulputate. Sed mattis erat at sapien sagittis, in maximus nulla dignissim." />
 
+            <TextView
+                android:id="@+id/moreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="더보기"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/content"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:orientation="horizontal">
 
@@ -76,7 +87,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:orientation="horizontal">
@@ -103,8 +114,8 @@
                 android:background="@color/gray"
                 android:gravity="right"
                 android:textSize="13sp" />
-        </LinearLayout>
 
+        </LinearLayout>
 
         <Button
             android:id="@+id/write_savebtn"
@@ -117,6 +128,10 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
