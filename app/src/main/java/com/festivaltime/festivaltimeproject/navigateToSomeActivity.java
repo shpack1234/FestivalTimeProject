@@ -3,6 +3,8 @@ package com.festivaltime.festivaltimeproject;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.festivaltime.festivaltimeproject.calendaract.CalendarActivity;
+
 public class navigateToSomeActivity {
     public static void navigateToSearchActivity(Activity thisActivity, String query) {
         Intent intent = new Intent(thisActivity, SearchActivity.class);

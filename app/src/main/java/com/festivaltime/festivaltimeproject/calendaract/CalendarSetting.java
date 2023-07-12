@@ -1,4 +1,4 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.calendaract;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +12,9 @@ import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 
+import com.festivaltime.festivaltimeproject.R;
+
+//캘린더 설정 dialog class 카테고리 관리, 카테고리별/날짜별 표시 기능
 public class CalendarSetting extends Dialog {
     final Switch othermonth_switch;
     final  boolean showOtherMonths;
