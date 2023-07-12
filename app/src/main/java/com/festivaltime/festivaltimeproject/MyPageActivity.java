@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToAppSettingActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToChangePasswordActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
@@ -98,4 +99,6 @@ public class MyPageActivity extends AppCompatActivity {
     }
 
     public void settingOnClick(View v) { navigateToAppSettingActivity(MyPageActivity.this);}
+
+    public void changePWOnClick(View v) { navigateToChangePasswordActivity(MyPageActivity.this);}
 }

@@ -77,6 +77,13 @@
     <string name="search_autosave">최근 검색 자동 저장</string>
     <string name="search_autosave_explain">검색창에서 최근에 검색한 내역을 보여줍니다</string>
 
+    <!--비밀번호 변경-->
+    <string name="changePassword">비밀번호 변경</string>
+    <string name="currentPW">현재 비밀번호</string>
+    <string name="changePW">비밀번호 변경</string>
+    <string name="checkPW">비밀번호 확인</string>
+    <string name="savePW">저장</string>
+
     <!--문의하기 페이지 string-->
     <string name="inquiry">문의하기</string>
     <string name="write">글쓰기</string>
