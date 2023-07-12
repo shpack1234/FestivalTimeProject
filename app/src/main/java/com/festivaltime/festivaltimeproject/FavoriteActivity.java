@@ -38,6 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -52,7 +53,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private String userId;
     private Executor executor;
 
-    List<HashMap<String, String>> festivalList;
+    List<LinkedHashMap<String, String>> festivalList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class FavoriteActivity extends AppCompatActivity {
         userDao = db.userDao();
 
 
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -80,7 +82,7 @@ public class FavoriteActivity extends AppCompatActivity {
                         Log.d("Favorite Festival", festivalId);
                     }
 
-                    List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
+                    List<LinkedHashMap<String, String>> parsedFestivalList = new ArrayList<>();
 
                     for (String contentId : loadedUser.getUserFavoriteFestival()) {
                         apiReader = new ApiReader();
@@ -88,7 +90,7 @@ public class FavoriteActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(String response) {
                                 ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
-                                List<HashMap<String, String>> festivalList = ParsingApiData.getFestivalList();
+                                List<LinkedHashMap<String, String>> festivalList = ParsingApiData.getFestivalList();
                                 synchronized (parsedFestivalList) {
                                     parsedFestivalList.addAll(festivalList);
                                 }
@@ -138,11 +140,11 @@ public class FavoriteActivity extends AppCompatActivity {
 
     }
 
-    private void updateUI(List<HashMap<String, String>> festivalList) {
+    private void updateUI(List<LinkedHashMap<String, String>> festivalList) {
         LinearLayout festivalContainer = findViewById(R.id.festival_container);
         festivalContainer.removeAllViews();
 
-        for (HashMap<String, String> festivalInfo : festivalList) {
+        for (LinkedHashMap<String, String> festivalInfo : festivalList) {
             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);

@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class DetailFestivalActivity extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class DetailFestivalActivity extends AppCompatActivity {
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
 
-                List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
                 runOnUiThread(new Runnable() {
                     @SuppressLint("SetTextI18n")

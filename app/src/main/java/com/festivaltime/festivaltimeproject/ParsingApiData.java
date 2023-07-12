@@ -1,7 +1,5 @@
 package com.festivaltime.festivaltimeproject;
 
-import android.util.Log;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,14 +10,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ParsingApiData {
-    private static List<HashMap<String, String>> festivalList = new ArrayList<>();
+    private static List<LinkedHashMap<String, String>> festivalList = new ArrayList<>();
 
     public static void parseXmlDataFromSearchKeyword(String xmlData) {
         festivalList.clear();
@@ -36,7 +33,7 @@ public class ParsingApiData {
                 Node itemNode = itemList.item(i);
                 if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element itemElement = (Element) itemNode;
-                    HashMap<String, String> festivalInfo = new HashMap<>();
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
 
                     String title = getElementText(itemElement, "title");
                     String address = getElementText(itemElement, "addr1");
@@ -73,7 +70,7 @@ public class ParsingApiData {
                 Node itemNode = itemList.item(i);
                 if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element itemElement = (Element) itemNode;
-                    HashMap<String, String> festivalInfo = new HashMap<>();
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
 
                     String title = getElementText(itemElement, "title");
                     String address1 = getElementText(itemElement, "addr1");
@@ -97,7 +94,7 @@ public class ParsingApiData {
         }
     }
 
-    public static List<HashMap<String, String>> getFestivalList() {
+    public static List<LinkedHashMap<String, String>> getFestivalList() {
         return festivalList;
     }
 

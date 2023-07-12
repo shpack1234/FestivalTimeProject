@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -64,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
 
-                List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
 
                 // UI 갱신을 위한 작업을 executor를 사용하여 백그라운드 스레드에서 실행
