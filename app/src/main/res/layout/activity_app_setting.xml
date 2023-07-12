@@ -31,6 +31,17 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/before_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_back_before"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="23dp"
+        android:onClick="customOnClick"
+        android:background="@android:color/transparent"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
     <LinearLayout
         android:id="@+id/setting_linear1"
         android:layout_width="349dp"
@@ -98,6 +109,8 @@
             android:textSize="12sp" />
 
     </LinearLayout>
+
+    
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
