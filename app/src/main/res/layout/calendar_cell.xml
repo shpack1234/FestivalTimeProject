@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/parentView"
+    android:id="@+id/calendar_cell_parentView"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="vertical"
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/dayText"
+        android:id="@+id/calendar_cell_dayText"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_gravity="center"

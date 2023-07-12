@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:id="@+id/parentView"
+    android:id="@+id/festival_cell_parentView"
     android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/dayText"
+        android:id="@+id/festival_cell_dayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

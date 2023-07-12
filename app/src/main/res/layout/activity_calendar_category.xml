@@ -14,7 +14,7 @@
 
         <!-- 카테고리 추가창 나가기 -->
         <Button
-            android:id="@+id/close_btn"
+            android:id="@+id/calendar_category_close_btn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="#00000000"
@@ -36,7 +36,7 @@
 
         <!-- 카테고리 추가 버튼 -->
         <Button
-            android:id="@+id/add_finish_btn"
+            android:id="@+id/calendar_category_add_finish_btn"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:background="#00000000"
@@ -57,7 +57,7 @@
         android:background="@drawable/ic_cal_roundbox">
 
         <ImageButton
-            android:id="@+id/select_color"
+            android:id="@+id/calendar_category_select_color"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category"
@@ -65,7 +65,7 @@
             tools:ignore="SpeakableTextPresentCheck"/>
 
         <EditText
-            android:id="@+id/new_category"
+            android:id="@+id/calendar_category_new_category"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginLeft="15dp"
@@ -78,7 +78,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/color_laout"
+        android:id="@+id/calendar_category_color_laout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -87,7 +87,7 @@
         android:animateLayoutChanges="true">
 
         <ImageButton
-            android:id="@+id/select_color1"
+            android:id="@+id/calendar_category_select_color1"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category"
@@ -95,7 +95,7 @@
             android:visibility="gone"
             tools:ignore="SpeakableTextPresentCheck"/>
         <ImageButton
-            android:id="@+id/select_color2"
+            android:id="@+id/calendar_category_select_color2"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category2"
@@ -103,7 +103,7 @@
             android:visibility="gone"
             tools:ignore="SpeakableTextPresentCheck"/>
         <ImageButton
-            android:id="@+id/select_color3"
+            android:id="@+id/calendar_category_select_color3"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category3"
@@ -111,7 +111,7 @@
             android:visibility="gone"
             tools:ignore="SpeakableTextPresentCheck"/>
         <ImageButton
-            android:id="@+id/select_color4"
+            android:id="@+id/calendar_category_select_color4"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category4"
@@ -119,7 +119,7 @@
             android:visibility="gone"
             tools:ignore="SpeakableTextPresentCheck"/>
         <ImageButton
-            android:id="@+id/select_color5"
+            android:id="@+id/calendar_category_select_color5"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_cal_category5"

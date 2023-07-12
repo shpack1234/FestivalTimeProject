@@ -7,7 +7,7 @@
     android:layout_margin="10dp">
 
     <ImageButton
-        android:id="@+id/select_color1"
+        android:id="@+id/schedule_cell_select_color1"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_cal_category"
@@ -15,7 +15,7 @@
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck"/>
     <ImageButton
-        android:id="@+id/select_color2"
+        android:id="@+id/schedule_cell_select_color2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_cal_category2"
@@ -23,7 +23,7 @@
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck"/>
     <ImageButton
-        android:id="@+id/select_color3"
+        android:id="@+id/schedule_cell_select_color3"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_cal_category3"
@@ -31,7 +31,7 @@
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck"/>
     <ImageButton
-        android:id="@+id/select_color4"
+        android:id="@+id/schedule_cell_select_color4"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_cal_category4"
@@ -39,7 +39,7 @@
         android:visibility="gone"
         tools:ignore="SpeakableTextPresentCheck"/>
     <ImageButton
-        android:id="@+id/select_color5"
+        android:id="@+id/schedule_cell_select_color5"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_cal_category5"
@@ -48,14 +48,14 @@
         tools:ignore="SpeakableTextPresentCheck"/>
 
     <TextView
-        android:id="@+id/scheduleText"
+        android:id="@+id/schedule_cell_scheduleText"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:textSize="13sp"
         android:layout_weight="7"/>
 
     <ImageButton
-        android:id="@+id/delte_schedule"
+        android:id="@+id/schedule_cell_delte_schedule"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_weight="1"
