@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchScreenActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="330dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="0dp"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/radius_corner"
+            android:layoutDirection="rtl"
+            android:queryHint="어떤 축제를 즐겨볼까요?"
+            android:theme="@style/AppSearchView"
+            android:windowSoftInputMode="adjustPan"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:searchIcon="@drawable/ic_search"/>
+
+        <ImageButton
+            android:id="@+id/search_option"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_search_option"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="0dp"
+            android:background="@color/white"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="ImageButton" />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="667dp"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="77dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/search_festival"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="100dp"
+                    android:layout_height="34dp"
+                    android:layout_marginLeft="190dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/white"
+                    android:text="@string/search_showAll"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="96dp"
+                android:layout_height="74dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/radius_corner"
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_nevigation_background"
+        app:itemIconTint="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu" />
+</RelativeLayout>
