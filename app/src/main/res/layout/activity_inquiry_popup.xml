@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="#F5F5F5"
+    android:orientation="vertical">
+
+
+    <!-- 타이틀바 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 닫기 버튼 -->
+        <Button
+            android:id="@+id/calendar_popup_close_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:gravity="center"
+            android:onClick="mOnClose"
+            android:padding="16dp"
+            android:text="@string/dismiss_popup"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="#00000000"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <!-- 일정 추가 버튼 -->
+        <Button
+            android:id="@+id/inquiry_layout"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:onClick="OnAdd"
+            android:padding="16dp"
+            android:text="@string/submit"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+    <EditText
+        android:layout_width="400dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

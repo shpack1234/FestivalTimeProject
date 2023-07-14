@@ -55,6 +55,7 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
+
     public static void navigateToAppSettingActivity(Activity thisActivity){
         Intent intent = new Intent(thisActivity, AppSettingActivity.class);
         thisActivity.startActivity(intent);
