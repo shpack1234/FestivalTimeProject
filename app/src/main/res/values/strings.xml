@@ -7,6 +7,21 @@
     <string name="festival_title">title</string>
     <string name="vacation_recommend">추천 축제</string>
 
+    <!-- 상세 설정 팝업 string -->
+    <string name="detail_setting">상세 설정</string>
+    <string name="festival_category">축제 분류</string>
+    <string name="first_category">대분류</string>
+    <string name="second_category">소분류</string>
+    <string name="everycategory">모든 카테고리</string>
+
+    <string name="location">지역</string>
+    <string name="seoul">서울</string>
+    <string name="busan">부산</string>
+    <string name="daegu">대구</string>
+
+    <string name="date">기간</string>
+    <string name="month_select">월별</string>
+
     <!--캘린더 string-->
     <string name="festival">축제</string>
     <string name="cheerup_text">축제까지 얼마안남았어요! 화이팅!</string>
