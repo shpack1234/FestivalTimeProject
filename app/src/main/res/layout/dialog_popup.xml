@@ -12,7 +12,7 @@
 
         <!-- 닫기 버튼 -->
         <Button
-            android:id="@+id/calendar_popup_close_btn"
+            android:id="@+id/dialog_popup_close_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,7 +25,6 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/calendar_popup_main_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
@@ -35,10 +34,16 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <View
+        <Button
+            android:id="@+id/dialog_popup_add_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="@string/short_add"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
@@ -215,6 +220,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <DatePicker
+                android:id="@+id/dialog_popup_StartDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <TimePicker
+                android:id="@+id/dialog_popup_StartTimePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:timePickerMode="spinner"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
@@ -252,6 +289,38 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <DatePicker
+                android:id="@+id/dialog_popup_EndDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <TimePicker
+                android:id="@+id/dialog_popup_EndTimePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:timePickerMode="spinner"
+                android:visibility="gone" />
         </LinearLayout>
 
         <View

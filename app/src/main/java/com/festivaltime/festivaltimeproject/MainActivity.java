@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
@@ -102,21 +103,26 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
+        Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
+        Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
         dialogBuilder.setView(dialogView);
 
-        dialogBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        dialogBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
         AlertDialog alertDialog = dialogBuilder.create();
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 취소 버튼을 눌렀을 때 실행할 코드 작성
+                alertDialog.dismiss(); // 팝업 대화상자 닫기
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 확인 버튼을 눌렀을 때 실행할 코드 작성
+                // 추가 동작 수행
+            }
+        });
         alertDialog.show();
     }
 
