@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -105,6 +107,144 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
+        // 시작 날짜 선택 버튼
+        Button startdateClick = dialogView.findViewById(R.id.dialog_popup_start_date);
+        Button starttimeClick = dialogView.findViewById(R.id.dialog_popup_start_time);
+        Button enddateClick = dialogView.findViewById(R.id.dialog_popup_end_date);
+        Button endtimeClick = dialogView.findViewById(R.id.dialog_popup_end_time);
+
+        DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
+        TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
+        DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
+        TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
+
+        startdateClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // StartDatePicker의 가시성을 토글
+                switch (StartDatePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        StartDatePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        StartDatePicker.setVisibility(View.VISIBLE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        starttimeClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // StartTimePicker의 가시성을 토글
+                switch (StartTimePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        StartTimePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        StartTimePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        enddateClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EndDatePicker의 가시성을 토글
+                switch (EndDatePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        EndDatePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        EndDatePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        endtimeClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EndTimePicker의 가시성을 토글
+                switch (EndTimePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        EndTimePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        //시작 시간-날짜 변화시
+        StartDatePicker.init(StartDatePicker.getYear(), StartDatePicker.getMonth(), StartDatePicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int month, int day) {
+                        startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+                    }
+                });
+
+
+        //시작 시간-시간 변화시
+        StartTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if (hourOfDay < 10 && minute < 10) {
+                    starttimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
+                } else if (minute < 10) {
+                    starttimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
+                } else if (hourOfDay < 10) {
+                    starttimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
+                } else {
+                    starttimeClick.setText(String.format("%d:%d", hourOfDay, minute));
+                }
+            }
+        });
+
+        //end 시간-날짜 변화시
+        EndDatePicker.init(EndDatePicker.getYear(), EndDatePicker.getMonth(), EndDatePicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int month, int day) {
+                        enddateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+                    }
+                });
+
+        //end 시간-시간 변화시
+        EndTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if (hourOfDay < 10 && minute < 10) {
+                    endtimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
+                } else if (minute < 10) {
+                    endtimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
+                } else if (hourOfDay < 10) {
+                    endtimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
+                } else {
+                    endtimeClick.setText(String.format("%d:%d", hourOfDay, minute));
+                }
+            }
+        });
+
         dialogBuilder.setView(dialogView);
 
         AlertDialog alertDialog = dialogBuilder.create();
@@ -123,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 // 추가 동작 수행
             }
         });
+
         alertDialog.show();
     }
 
