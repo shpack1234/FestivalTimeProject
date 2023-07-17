@@ -54,10 +54,11 @@ public class SearchDetailActivity extends AppCompatActivity {
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
+        String type = getIntent().getStringExtra("type");
         String query = getIntent().getStringExtra("query");
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
-        apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
+        apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Log.d("response", response);
@@ -93,7 +94,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                             LinearLayout.LayoutParams.MATCH_PARENT,
                                             LinearLayout.LayoutParams.WRAP_CONTENT
                                     );
-                                    layoutParams.setMargins(0, 0, 0, 40); // 아래에 16dp의 마진을 추가
+                                    layoutParams.setMargins(0, 0, 0, 40);
                                     festivalInfoBox.setLayoutParams(layoutParams);
 
                                     String title = festivalInfo.get("title");
