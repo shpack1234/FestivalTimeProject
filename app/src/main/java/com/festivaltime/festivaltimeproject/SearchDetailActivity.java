@@ -89,6 +89,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
                                     ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
 
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.WRAP_CONTENT
+                                    );
+                                    layoutParams.setMargins(0, 0, 0, 40); // 아래에 16dp의 마진을 추가
+                                    festivalInfoBox.setLayoutParams(layoutParams);
+
                                     String title = festivalInfo.get("title");
                                     String location = festivalInfo.get("address");
                                     String id = festivalInfo.get("contentid");
