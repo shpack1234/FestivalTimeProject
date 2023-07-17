@@ -17,11 +17,13 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         type="A02080200";
 
+        String query = getIntent().getStringExtra("query");
+
         Button entireButton=findViewById(R.id.detail_search_button);
         entireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, type);
+                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
             }
         });
     }

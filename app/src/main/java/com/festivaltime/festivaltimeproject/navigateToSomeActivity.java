@@ -82,9 +82,10 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
-    public static void navigateToSearchDetailActivity(Activity thisActivity, String type) {
+    public static void navigateToSearchDetailActivity(Activity thisActivity, String query, String type) {
         Intent intent = new Intent(thisActivity, SearchDetailActivity.class);
         intent.putExtra("type", type);
+        intent.putExtra("query", query);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
