@@ -7,7 +7,7 @@ import com.festivaltime.festivaltimeproject.calendaract.CalendarActivity;
 
 public class navigateToSomeActivity {
     public static void navigateToSearchActivity(Activity thisActivity, String query) {
-        Intent intent = new Intent(thisActivity, SearchActivity.class);
+        Intent intent = new Intent(thisActivity, SearchScreenActivity.class);
         intent.putExtra("query", query);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
@@ -78,6 +78,13 @@ public class navigateToSomeActivity {
     public static void navigateToPrivacyActivity(Activity thisActivity, String userId) {
         Intent intent = new Intent(thisActivity, PrivacyActivity.class);
         intent.putExtra("userId", userId);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
+    public static void navigateToSearchDetailActivity(Activity thisActivity, String type) {
+        Intent intent = new Intent(thisActivity, SearchDetailActivity.class);
+        intent.putExtra("type", type);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }

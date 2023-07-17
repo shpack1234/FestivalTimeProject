@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
@@ -31,10 +30,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.festivaltime.festivaltimeproject.festivaldatabasepackage.*;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchDetailActivity extends AppCompatActivity {
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private UserDataBase db;
@@ -113,7 +111,7 @@ public class SearchActivity extends AppCompatActivity {
                                             // 클릭 시 contentid 값을 가져오는 작업 수행
                                             String contentId = idTextView.getText().toString();
                                             // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                            navigateToDetailFestivalActivity(SearchActivity.this, contentId);
+                                            navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                         }
                                     });
 
@@ -163,16 +161,16 @@ public class SearchActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.action_home) {
-                navigateToMainActivity(SearchActivity.this);
+                navigateToMainActivity(SearchDetailActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_map) {
-                navigateToMapActivity(SearchActivity.this);
+                navigateToMapActivity(SearchDetailActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_calendar) {
-                navigateToCalendarActivity(SearchActivity.this);
+                navigateToCalendarActivity(SearchDetailActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_favorite) {
-                navigateToFavoriteActivity(SearchActivity.this);
+                navigateToFavoriteActivity(SearchDetailActivity.this);
                 return true;
             } else {
                 return item.getItemId() == R.id.action_profile;

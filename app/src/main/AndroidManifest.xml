@@ -59,7 +59,7 @@
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".SearchDetailActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

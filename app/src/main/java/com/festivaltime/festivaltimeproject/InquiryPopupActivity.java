@@ -7,9 +7,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 public class InquiryPopupActivity extends Dialog {
-
 
     public InquiryPopupActivity(@NonNull Context context) {
         super(context);
@@ -30,6 +31,8 @@ public class InquiryPopupActivity extends Dialog {
         }
         return true;
     }
+
 }
+
 
 

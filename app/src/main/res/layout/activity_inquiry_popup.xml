@@ -17,13 +17,13 @@
 
         <!-- 닫기 버튼 -->
         <Button
-            android:id="@+id/calendar_popup_close_btn"
+            android:id="@+id/inquiry_popup_close_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#00000000"
             android:gravity="center"
-            android:onClick="mOnClose"
+            android:onClick="closePopup"
             android:padding="16dp"
             android:text="@string/dismiss_popup"
             android:textColor="@color/black"
@@ -55,7 +55,7 @@
 
 
     <EditText
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"/>
 
