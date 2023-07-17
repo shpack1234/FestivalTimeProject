@@ -196,6 +196,7 @@
                 android:textSize="13sp"/>
 
             <Button
+                android:id="@+id/dialog_popup_start_date"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="2"
@@ -204,6 +205,7 @@
                 android:textSize="13sp"/>
 
             <Button
+                android:id="@+id/dialog_popup_start_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
@@ -227,7 +229,7 @@
 
             <DatePicker
                 android:id="@+id/dialog_popup_StartDatePicker"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
@@ -269,6 +271,7 @@
                 android:textSize="13sp"/>
 
             <Button
+                android:id="@+id/dialog_popup_end_date"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="2"
@@ -277,6 +280,7 @@
                 android:textSize="13sp"/>
 
             <Button
+                android:id="@+id/dialog_popup_end_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
