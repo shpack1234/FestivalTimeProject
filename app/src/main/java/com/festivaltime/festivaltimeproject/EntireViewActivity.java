@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -10,14 +11,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class DetailFestivalActivity extends AppCompatActivity {
+public class EntireViewActivity extends AppCompatActivity {
 
     private ApiReader apiReader;
 
@@ -27,7 +26,9 @@ public class DetailFestivalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_festival);
+        setContentView(R.layout.activity_entire_view);
+
+        final TextView title=(TextView)findViewById(R.id.Entire_view_title);
 
         String contentId = getIntent().getStringExtra("contentid");
         TextView contentidTextView = findViewById(R.id.festival_contentid);
@@ -79,6 +80,15 @@ public class DetailFestivalActivity extends AppCompatActivity {
 
             }
         });
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            String content = intent.getStringExtra("content");
+            if(content != null){
+                TextView entireContent = findViewById(R.id.Entire_view_title);
+                entireContent.setText(content);
+            }
+        }
     }
 
 

@@ -69,7 +69,7 @@ public class navigateToSomeActivity {
     }
 
     public static void navigateToDetailFestivalActivity(Activity thisActivity, String contentId) {
-        Intent intent = new Intent(thisActivity, DetailFestivalActivity.class);
+        Intent intent = new Intent(thisActivity, EntireViewActivity.class);
         intent.putExtra("contentid", contentId);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
