@@ -21,7 +21,7 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/entire_button"
+            android:id="@+id/detail_search_button"
             android:layout_width="100dp"
             android:layout_height="34dp"
             android:layout_marginTop="10dp"
@@ -39,26 +39,6 @@
         android:columnCount="3"
         android:rowCount="2">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/search_image"
-                android:layout_width="96dp"
-                android:layout_height="74dp"
-                android:layout_margin="17dp"
-                android:background="@drawable/radius_corner"/>
-
-            <TextView
-                android:id="@+id/search_text"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/black"/>
-        </LinearLayout>
 
 
     </GridLayout>
