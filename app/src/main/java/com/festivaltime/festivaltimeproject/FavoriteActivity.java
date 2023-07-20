@@ -155,9 +155,10 @@ public class FavoriteActivity extends AppCompatActivity {
             String location = festivalInfo.get("address");
             String id = festivalInfo.get("contentid");
             String repImage = festivalInfo.get("img");
+            String overview=festivalInfo.get("overview");
             titleTextView.setText(title);
             locationTextView.setText(location);
-            idTextView.setText(id);
+            idTextView.setText(overview);
 
             Log.d(TAG, "Rep Image URL: " + repImage);
             if (repImage == null || repImage.isEmpty()) {
