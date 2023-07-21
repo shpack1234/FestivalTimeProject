@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 public class SearchScreenActivity extends AppCompatActivity {
 
     String type;
+    
 
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
@@ -31,11 +32,13 @@ public class SearchScreenActivity extends AppCompatActivity {
     private LinearLayout festivalContainer2;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
         //setContentView(R.layout.festivalsearch_container);
+
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -131,4 +134,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
     }
+
+
+
 }
