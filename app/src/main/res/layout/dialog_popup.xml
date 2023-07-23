@@ -80,6 +80,7 @@
                 android:textSize="13sp"/>
 
             <Button
+                android:id="@+id/dialog_popup_category01"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="2"
@@ -101,6 +102,56 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/everycategory"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_popup_category01_lists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <!--레이아웃 위치 임시-->
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="2"
+                android:drawableRight="@drawable/ic_cal_nxtbtn"
+                android:layout_marginRight="5dp"/>
+
+            <Button
+                android:id="@+id/dialog_popup_everycateogry01"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:background="#00000000"
+                android:gravity="center|center"
+                android:text="@string/everycategory"
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/dialog_popup_festival"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:background="#00000000"
+                android:gravity="center|center"
+                android:text="@string/festival"
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/dialog_popup_concert"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:background="#00000000"
+                android:gravity="center|center"
+                android:text="@string/concert"
                 android:textSize="13sp"/>
 
         </LinearLayout>

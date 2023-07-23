@@ -112,10 +112,54 @@ public class MainActivity extends AppCompatActivity {
         Button enddateClick = dialogView.findViewById(R.id.dialog_popup_end_date);
         Button endtimeClick = dialogView.findViewById(R.id.dialog_popup_end_time);
 
+        Button bigcategory = dialogView.findViewById(R.id.dialog_popup_category01);
+        Button bigeverycategory = dialogView.findViewById(R.id.dialog_popup_everycateogry01);
+        Button bigfestival = dialogView.findViewById(R.id.dialog_popup_festival);
+        Button bigconcert = dialogView.findViewById(R.id.dialog_popup_concert);
+
         DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
         TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
+
+        bigcategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (dialogView.findViewById(R.id.dialog_popup_category01_lists).getVisibility()) {
+                    case View.VISIBLE:
+                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+        });
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.dialog_popup_everycateogry01:
+                        bigcategory.setText(bigeverycategory.getText());
+                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
+                        break;
+                    case R.id.dialog_popup_festival:
+                        bigcategory.setText(bigfestival.getText());
+                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
+                        break;
+                    case R.id.dialog_popup_concert:
+                        bigcategory.setText(bigconcert.getText());
+                    default:
+                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
+                        break;
+                }
+            }
+        };
+        bigeverycategory.setOnClickListener(onClickListener);
+        bigfestival.setOnClickListener(onClickListener);
+        bigconcert.setOnClickListener(onClickListener);
 
         startdateClick.setOnClickListener(new View.OnClickListener() {
             @Override
