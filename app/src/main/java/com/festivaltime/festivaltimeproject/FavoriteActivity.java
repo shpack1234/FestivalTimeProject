@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class FavoriteActivity extends AppCompatActivity {
     private ApiReader apiReader;
@@ -67,6 +68,8 @@ public class FavoriteActivity extends AppCompatActivity {
 
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
+
+        executor = Executors.newSingleThreadExecutor();
 
 
 
@@ -145,11 +148,19 @@ public class FavoriteActivity extends AppCompatActivity {
         festivalContainer.removeAllViews();
 
         for (LinkedHashMap<String, String> festivalInfo : festivalList) {
-            View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
-            TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
-            TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
-            ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
+            View favoriteInfoBox = getLayoutInflater().inflate(R.layout.favorite_info_box, null);
+            TextView titleTextView = favoriteInfoBox.findViewById(R.id.festival_title);
+            TextView locationTextView = favoriteInfoBox.findViewById(R.id.festival_location);
+            TextView idTextView = favoriteInfoBox.findViewById(R.id.festival_overview);
+            ImageButton festivalRepImage = favoriteInfoBox.findViewById(R.id.festival_rep_image);
+            ImageButton deleteButton = favoriteInfoBox.findViewById(R.id.festival_deleteButton);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, 0, 0, 40);
+            favoriteInfoBox.setLayoutParams(layoutParams);
 
             String title = festivalInfo.get("title");
             String location = festivalInfo.get("address");
@@ -166,9 +177,9 @@ public class FavoriteActivity extends AppCompatActivity {
             } else {
                 Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
             }
-            festivalContainer.addView(festivalInfoBox);
+            festivalContainer.addView(favoriteInfoBox);
 
-            festivalInfoBox.setOnClickListener(new View.OnClickListener() {
+            favoriteInfoBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 클릭 시 contentid 값을 가져오는 작업 수행
@@ -177,6 +188,36 @@ public class FavoriteActivity extends AppCompatActivity {
                     navigateToDetailFestivalActivity(FavoriteActivity.this, contentId);
                 }
             });
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("Button Listener", "deleteBtn");
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            String contentId = id;
+                            loadedUser = userDao.getUserInfoById(userId);
+                            if (loadedUser != null) {
+                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                    loadedUser.deleteUserFavoriteFestival(contentId);
+                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            festivalContainer.removeView(favoriteInfoBox);
+                                        }
+                                    });
+                                }
+                            } else {
+                                Log.e("No UserInfo", "You should get your information in MyPage");
+                            }
+                        }
+                    });
+                }
+            });
+
 
         }
     }

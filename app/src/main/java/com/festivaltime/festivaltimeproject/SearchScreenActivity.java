@@ -2,9 +2,11 @@ package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,13 +26,12 @@ import java.util.concurrent.Executors;
 public class SearchScreenActivity extends AppCompatActivity {
 
     String type;
-    
+
 
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private Executor executor;
     private LinearLayout festivalContainer2;
-
 
 
     @Override
@@ -42,23 +43,13 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
-        type="A02080200";
+        type = "A02080200";
 
         String query = getIntent().getStringExtra("query");
-/**
-        Button entireButton = findViewById(R.id.detail_search_button);
-        entireButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
-            }
-        });
-**/
-
 
         String type = getIntent().getStringExtra("type");
         String apiKey = getResources().getString(R.string.api_key);
-        apiReader=new ApiReader();
+        apiReader = new ApiReader();
         apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
@@ -113,6 +104,15 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 }
                                 searchContainer.addView(searchContainerView);
 
+                                Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
+                                detailSearchButton.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
+                                    }
+                                });
+
                             }
 
 
@@ -122,6 +122,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
             }
+
             @Override
             public void onError(String error) {
                 Log.e(TAG, "API Error: " + error);
@@ -129,12 +130,7 @@ public class SearchScreenActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
-
 
 
 }

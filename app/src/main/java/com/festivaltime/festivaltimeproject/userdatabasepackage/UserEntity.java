@@ -72,4 +72,8 @@ public class UserEntity {
         this.userFavoriteFestival.add(FestivalId);
     }
 
+    public void deleteUserFavoriteFestival(String FestivalId) {
+        this.userFavoriteFestival.remove(FestivalId);
+    }
+
 }

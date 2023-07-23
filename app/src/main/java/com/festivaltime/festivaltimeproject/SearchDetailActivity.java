@@ -133,10 +133,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                     String contentId = idTextView.getText().toString();
                                                     loadedUser = userDao.getUserInfoById(userId);
                                                     if (loadedUser != null) {
-                                                        List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
-                                                        for (String festivalId : favoriteFestivals) {
-                                                            Log.d("Favorite Festival", festivalId);
-                                                        }
                                                         if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                             Log.d("Festival Id", contentId);
                                                             Log.d("Button Listener", "ID already exists in userFavoriteFestival");
