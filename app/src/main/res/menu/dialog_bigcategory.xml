@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bigcategory_every"
+        android:title="@string/everycategory"/>
+
+    <item
+        android:id="@+id/bigcategory_festival"
+        android:title="@string/festival"/>
+
+    <item
+        android:id="@+id/bigcategory_concert"
+        android:title="@string/concert"/>
+
+</menu>

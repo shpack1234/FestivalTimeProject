@@ -10,10 +10,12 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TimePicker;
 
@@ -113,53 +115,68 @@ public class MainActivity extends AppCompatActivity {
         Button endtimeClick = dialogView.findViewById(R.id.dialog_popup_end_time);
 
         Button bigcategory = dialogView.findViewById(R.id.dialog_popup_category01);
-        Button bigeverycategory = dialogView.findViewById(R.id.dialog_popup_everycateogry01);
-        Button bigfestival = dialogView.findViewById(R.id.dialog_popup_festival);
-        Button bigconcert = dialogView.findViewById(R.id.dialog_popup_concert);
+        Button smallcategory = dialogView.findViewById(R.id.dialog_popup_category02);
 
         DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
         TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
 
+        //대분류 카테고리 버튼
         bigcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (dialogView.findViewById(R.id.dialog_popup_category01_lists).getVisibility()) {
-                    case View.VISIBLE:
-                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
-                        break;
-                    case View.GONE:
-                    default:
-                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.VISIBLE);
-                        break;
-                }
+                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+
+                getMenuInflater().inflate(R.menu.dialog_bigcategory, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.bigcategory_every:
+                                bigcategory.setText("모든 카테고리");
+                                break;
+                            case R.id.bigcategory_festival:
+                                bigcategory.setText("축제");
+                                break;
+                            case R.id.bigcategory_concert:
+                                bigcategory.setText("공연/행사");
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
             }
         });
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+        //소분류 카테고리
+        smallcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.dialog_popup_everycateogry01:
-                        bigcategory.setText(bigeverycategory.getText());
-                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
-                        break;
-                    case R.id.dialog_popup_festival:
-                        bigcategory.setText(bigfestival.getText());
-                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
-                        break;
-                    case R.id.dialog_popup_concert:
-                        bigcategory.setText(bigconcert.getText());
-                    default:
-                        dialogView.findViewById(R.id.dialog_popup_category01_lists).setVisibility(View.GONE);
-                        break;
-                }
+                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+
+                getMenuInflater().inflate(R.menu.dialog_smallcategory01, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.smallcategory01_every:
+                                smallcategory.setText("모든 카테고리");
+                                break;
+                            case R.id.smallcategory01_culture:
+                                smallcategory.setText("문화관광축제");
+                                break;
+                            case R.id.smallcategory01_normal:
+                                smallcategory.setText("일반축제");
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
             }
-        };
-        bigeverycategory.setOnClickListener(onClickListener);
-        bigfestival.setOnClickListener(onClickListener);
-        bigconcert.setOnClickListener(onClickListener);
+        });
 
         startdateClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         dialogBuilder.setView(dialogView);
 
         AlertDialog alertDialog = dialogBuilder.create();
@@ -306,7 +322,6 @@ public class MainActivity extends AppCompatActivity {
                 // 추가 동작 수행
             }
         });
-
         alertDialog.show();
     }
 

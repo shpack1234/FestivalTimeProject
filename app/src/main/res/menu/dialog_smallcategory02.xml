@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/smallcategory02_every"
+        android:title="@string/everycategory"/>
+
+    <item
+        android:id="@+id/smallcategory02_traditional"
+        android:title="@string/traditional"/>
+
+    <item
+        android:id="@+id/smallcategory02_act"
+        android:title="@string/act"/>
+
+    <item
+        android:id="@+id/smallcategory02_musical"
+        android:title="@string/musical"/>
+
+    <item
+        android:id="@+id/smallcategory02_exhibition"
+        android:title="@string/exhibition"/>
+
+    <item
+        android:id="@+id/smallcategory02_etc"
+        android:title="@string/etc"/>
+
+</menu>

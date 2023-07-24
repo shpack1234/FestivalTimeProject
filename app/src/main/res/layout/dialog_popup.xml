@@ -69,7 +69,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/festival_category"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -77,7 +77,7 @@
                 android:layout_weight="1"
                 android:gravity="center|center"
                 android:text="@string/first_category"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_category01"
@@ -86,7 +86,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/everycategory"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -94,65 +94,16 @@
                 android:layout_weight="1"
                 android:gravity="center|center"
                 android:text="@string/second_category"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
+                android:id="@+id/dialog_popup_category02"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/everycategory"
-                android:textSize="13sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/dialog_popup_category01_lists"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <!--레이아웃 위치 임시-->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="2"
-                android:drawableRight="@drawable/ic_cal_nxtbtn"
-                android:layout_marginRight="5dp"/>
-
-            <Button
-                android:id="@+id/dialog_popup_everycateogry01"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="2"
-                android:background="#00000000"
-                android:gravity="center|center"
-                android:text="@string/everycategory"
-                android:textSize="13sp"/>
-
-            <Button
-                android:id="@+id/dialog_popup_festival"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="2"
-                android:background="#00000000"
-                android:gravity="center|center"
-                android:text="@string/festival"
-                android:textSize="13sp"/>
-
-            <Button
-                android:id="@+id/dialog_popup_concert"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="2"
-                android:background="#00000000"
-                android:gravity="center|center"
-                android:text="@string/concert"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -174,7 +125,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/location"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -194,7 +145,7 @@
                         android:layout_weight="2"
                         android:gravity="center|center"
                         android:text="@string/seoul"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -202,7 +153,7 @@
                         android:layout_weight="2"
                         android:gravity="center|center"
                         android:text="@string/busan"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -210,7 +161,7 @@
                         android:layout_weight="2"
                         android:gravity="center|center"
                         android:text="@string/daegu"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -236,7 +187,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/date"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -244,7 +195,7 @@
                 android:layout_weight="1"
                 android:gravity="center|center"
                 android:text="@string/start"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_start_date"
@@ -253,7 +204,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/default_date"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_start_time"
@@ -262,12 +213,12 @@
                 android:layout_weight="1.5"
                 android:gravity="center|center"
                 android:text="@string/default_time"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"/>
+                android:layout_weight="1.5" />
 
         </LinearLayout>
 
@@ -311,7 +262,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"/>
+                android:layout_weight="2" />
 
             <TextView
                 android:layout_width="0dp"
@@ -319,7 +270,7 @@
                 android:layout_weight="1"
                 android:gravity="center|center"
                 android:text="@string/end"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_end_date"
@@ -328,7 +279,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/default_date"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_end_time"
@@ -337,12 +288,12 @@
                 android:layout_weight="1.5"
                 android:gravity="center|center"
                 android:text="@string/default_time"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"/>
+                android:layout_weight="1.5" />
 
         </LinearLayout>
 
@@ -387,7 +338,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="100dp"
             android:orientation="horizontal">
 
             <!--임시-->
@@ -395,57 +346,150 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:gravity="center|center"
+                android:layout_marginTop="10dp"
+                android:gravity="center|top"
                 android:text="@string/month_select"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="1"
-                android:textSize="13sp"/>
+                android:layout_weight="6"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="2"
-                android:textSize="13sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="3"
-                android:textSize="13sp"/>
+                    <Button
+                        android:id="@+id/one"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/one"
+                        android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="4"
-                android:textSize="13sp"/>
+                    <Button
+                        android:id="@+id/two"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/two"
+                        android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="5"
-                android:textSize="13sp"/>
+                    <Button
+                        android:id="@+id/three"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/three"
+                        android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="6"
-                android:textSize="13sp"/>
+                    <Button
+                        android:id="@+id/four"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/four"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/five"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/five"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/six"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/six"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/seven"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/seven"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/eight"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/eight"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/nine"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/nine"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/ten"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/ten"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/eleven"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/eleven"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/twelve"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:background="#00000000"
+                        android:text="@string/twelve"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
