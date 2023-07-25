@@ -2,7 +2,8 @@ package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
 
-import android.annotation.SuppressLint;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+
 
 public class SearchScreenActivity extends AppCompatActivity {
 
@@ -101,6 +104,18 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
                                     }
                                     festivalImageNText.addView(festivalItemView);
+
+
+                                    festivalItemView.setOnClickListener(new View.OnClickListener(){
+                                        @Override
+                                        public void onClick(View v){
+                                            String contentId = id;
+                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                        }
+                                    });
+
+
                                 }
                                 searchContainer.addView(searchContainerView);
 
