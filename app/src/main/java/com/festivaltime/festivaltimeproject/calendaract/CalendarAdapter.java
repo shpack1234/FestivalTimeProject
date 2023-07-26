@@ -18,7 +18,6 @@ import java.util.Date;
 
 //개인 캘린더 calendar recyclerview class
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
-
     ArrayList<Date> dayList;
     boolean showOtherMonths;
     private TextView scheduleText;
@@ -119,6 +118,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         });
 
     }
+
 
     @Override
     public int getItemCount() {

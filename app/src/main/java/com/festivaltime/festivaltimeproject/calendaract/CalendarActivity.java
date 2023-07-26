@@ -73,6 +73,7 @@ public class CalendarActivity extends AppCompatActivity {
         //화면 설정
         setMonthView();
         //setScheduleView();
+        setScheduleView();
 
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
@@ -142,20 +143,6 @@ public class CalendarActivity extends AppCompatActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         CalendarPopupActivity popupDialog = (CalendarPopupActivity) dialog;
-
-                        // 사용자가 작성한 일정 데이터 가져오기
-                        /*String title = popupDialog.TitleText.getText().toString();
-                        String startDate = popupDialog.startdateClick.getText().toString();
-                        String endDate = popupDialog.enddateClick.getText().toString();
-
-                        // 데이터베이스에 일정 데이터 저장
-                        CalendarDatabase calendarDatabase = CalendarDatabase.getInstance(CalendarActivity.this);
-                        CalendarDao calendarDao = calendarDatabase.calendarDao();
-                        CalendarEntity schedule = new CalendarEntity(title, startDate, endDate);
-                        calendarDao.InsertSchedule(schedule);*/
-
-                        // 저장된 일정 데이터를 화면에 표시하기 위해 setScheduleView() 호출
-                        setScheduleView();
                     }
                 });
                 Popup_btn.show();

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -103,24 +104,28 @@ public class CalendarPopupActivity extends Dialog {
                 String endDate = enddateClick.getText().toString();
                 String endTime = endtimeClick.getText().toString();
 
-                // 시작 날짜와 시간을 결합합니다.
-                String startDateTime = startDate + " " + startTime;
-                // 종료 날짜와 시간을 결합합니다.
-                String endDateTime = endDate + " " + endTime;
+                if (title.isEmpty()) {
+                    // 제목이 입력되지 않았을 때 토스트 메시지를 표시합니다.
+                    Toast.makeText(mContext, "Title을 입력하세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 시작 날짜와 시간을 결합합니다.
+                    String startDateTime = startDate + " " + startTime;
+                    // 종료 날짜와 시간을 결합합니다.
+                    String endDateTime = endDate + " " + endTime;
 
-                // 사용자 입력으로 새로운 CalendarEntity 객체를 생성합니다.
-                CalendarEntity newSchedule = new CalendarEntity();
-                newSchedule.title = title;
-                newSchedule.startDate = startDateTime;
-                newSchedule.endDate = endDateTime;
+                    // 사용자 입력으로 새로운 CalendarEntity 객체를 생성합니다.
+                    CalendarEntity newSchedule = new CalendarEntity();
+                    newSchedule.title = title;
+                    newSchedule.startDate = startDateTime;
+                    newSchedule.endDate = endDateTime;
 
-                // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가합니다.
-                ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
-                loader.forceLoad();
+                    // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가합니다.
+                    ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                    loader.forceLoad();
 
-                // 다이얼로그를 닫습니다.
-                dismiss();
-
+                    // 다이얼로그를 닫습니다.
+                    dismiss();
+                }
             }
         });
 

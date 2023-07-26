@@ -243,7 +243,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical"
+                android:visibility="invisible"/>
 
             <!--<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendar_scheduleText"
