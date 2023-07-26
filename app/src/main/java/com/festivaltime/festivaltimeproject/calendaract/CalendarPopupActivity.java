@@ -1,11 +1,11 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,11 +14,14 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 
 //캘린더 일정 추가 dialog class
 public class CalendarPopupActivity extends Dialog {
@@ -29,6 +32,9 @@ public class CalendarPopupActivity extends Dialog {
     public TimePicker StartTimePicker, EndTimePicker;
     public Switch alldaySwitch;
 
+    // CalendarDatabase에 대한 참조 추가
+    private CalendarDatabase calendarDatabase;
+
     public CalendarPopupActivity(@NonNull Context context) {
         super(context);
         //팝업 애니메이션 위한 윈도우
@@ -36,6 +42,7 @@ public class CalendarPopupActivity extends Dialog {
 
         setContentView(R.layout.activity_calendar_popup);
         this.mContext = context;
+
 
         TitleText = findViewById(R.id.calendar_popup_title_Text);
         shutdownClick = findViewById(R.id.calendar_popup_close_btn);
@@ -49,6 +56,9 @@ public class CalendarPopupActivity extends Dialog {
         EndDatePicker = findViewById(R.id.calendar_popup_EndDatePicker);
         EndTimePicker = findViewById(R.id.calendar_popup_EndTimePicker);
         alldaySwitch = findViewById(R.id.calendar_popup_switchView);
+
+        // CalendarDatabase 인스턴스 초기화
+        calendarDatabase = CalendarDatabase.getInstance(context);
 
         //뒤로가기 true
         setCancelable(true);
@@ -88,15 +98,29 @@ public class CalendarPopupActivity extends Dialog {
             @Override
             public void onClick(View v) {
                 String title = TitleText.getText().toString();
+                String startDate = startdateClick.getText().toString();
+                String startTime = starttimeClick.getText().toString();
+                String endDate = enddateClick.getText().toString();
+                String endTime = endtimeClick.getText().toString();
 
-                // 일정 객체 생성
-                CalendarSchedule newSchedule = new CalendarSchedule(title);
+                // 시작 날짜와 시간을 결합합니다.
+                String startDateTime = startDate + " " + startTime;
+                // 종료 날짜와 시간을 결합합니다.
+                String endDateTime = endDate + " " + endTime;
 
-                // 일정 추가 결과를 팝업 창을 호출한 액티비티로 전달
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("newSchedule", newSchedule);
-                ((Activity) mContext).setResult(Activity.RESULT_OK, resultIntent);
+                // 사용자 입력으로 새로운 CalendarEntity 객체를 생성합니다.
+                CalendarEntity newSchedule = new CalendarEntity();
+                newSchedule.title = title;
+                newSchedule.startDate = startDateTime;
+                newSchedule.endDate = endDateTime;
+
+                // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가합니다.
+                ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                loader.forceLoad();
+
+                // 다이얼로그를 닫습니다.
                 dismiss();
+
             }
         });
 

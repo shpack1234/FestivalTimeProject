@@ -21,12 +21,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
     ArrayList<Date> dayList;
     boolean showOtherMonths;
-    private RecyclerView recyclerView, scheduleText;
+    private TextView scheduleText;
+    private RecyclerView recyclerView;
     private int previousSelectedPosition = -1;
     private TextView selectDateView;
 
     //recyclerview 정렬한 arraylist, 다른달 표시 여부, calendar recyclerview, 선택 날짜, 일정 view
-    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, RecyclerView scheduleText) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, TextView scheduleText) {
         this.dayList = dayList;
         this.showOtherMonths = showOtherMonths;
         this.recyclerView = recyclerView;

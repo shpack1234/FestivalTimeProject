@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchScheduleTask;
 import com.festivaltime.festivaltimeproject.festivalcalendaract.FestivalCalendarActivity;
 import com.festivaltime.festivaltimeproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,8 +40,8 @@ public class CalendarActivity extends AppCompatActivity {
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn; //popup창에서 startdate, enddate default 설정위한 클래스 변수 지정
     public Button cal_setting, add_Btn, festi_cal;
-    public TextView SelectDateView, Year_text, monthText;
-    public RecyclerView calendarrecycler, scheduleText; //캘린더 recyclerview, 일정 담는 recyclerview
+    public TextView SelectDateView, Year_text, monthText, scheduleText;
+    public RecyclerView calendarrecycler; //캘린더 recyclerview, 일정 담는 recyclerview
     private ArrayList<CalendarSchedule> calendarScheduleArrayList; //일정 담는 recyclerview
     private CalendarScheduleAdapter calendarScheduleAdapter;
 
@@ -125,27 +129,33 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
-        //날짜 추가하기 버튼 클릭시 popup창 연결
+        // 날짜 추가하기 버튼 클릭시 popup창 연결
         add_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Popup_btn = new CalendarPopupActivity(CalendarActivity.this);
-                //선택한 날짜 popup전송 후 startdate, enddate default 값으로 설정
+                // 선택한 날짜 popup 전송 후 startdate, enddate default 값으로 설정
                 Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
                 Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
 
-                CalendarPopupActivity dialog = new CalendarPopupActivity(CalendarActivity.this);
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 설정 > 수정 요함
+                Popup_btn.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         CalendarPopupActivity popupDialog = (CalendarPopupActivity) dialog;
 
-                        //사용자가 작성한 title값 가져와서 calendarScheduleArrayList에 추가함
-                        CalendarSchedule newschedule = new CalendarSchedule(popupDialog.TitleText.getText().toString());
-                        calendarScheduleArrayList.add(newschedule);
-                        //변화 데이터 설정
-                        calendarScheduleAdapter.notifyDataSetChanged();
-                        //setScheduleView();
+                        // 사용자가 작성한 일정 데이터 가져오기
+                        /*String title = popupDialog.TitleText.getText().toString();
+                        String startDate = popupDialog.startdateClick.getText().toString();
+                        String endDate = popupDialog.enddateClick.getText().toString();
+
+                        // 데이터베이스에 일정 데이터 저장
+                        CalendarDatabase calendarDatabase = CalendarDatabase.getInstance(CalendarActivity.this);
+                        CalendarDao calendarDao = calendarDatabase.calendarDao();
+                        CalendarEntity schedule = new CalendarEntity(title, startDate, endDate);
+                        calendarDao.InsertSchedule(schedule);*/
+
+                        // 저장된 일정 데이터를 화면에 표시하기 위해 setScheduleView() 호출
+                        setScheduleView();
                     }
                 });
                 Popup_btn.show();
@@ -191,6 +201,15 @@ public class CalendarActivity extends AppCompatActivity {
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);
     }
+
+    private void setScheduleView() {
+        // 일정 데이터베이스에서 데이터 가져오기
+        CalendarDatabase calendarDatabase = CalendarDatabase.getInstance(this);
+        CalendarDao calendarDao = calendarDatabase.calendarDao();
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, scheduleText, calendarDao);
+        fetchScheduleTask.fetchSchedules();
+    }
+
 
     //schedule 화면 설정 재수정중
     /*private void setScheduleView(){
