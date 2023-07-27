@@ -63,70 +63,6 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center|center"
-                android:text="@string/festival_category"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="@string/first_category"
-                android:textSize="13sp" />
-
-            <Button
-                android:id="@+id/dialog_popup_category01"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="2"
-                android:gravity="center|center"
-                android:text="@string/everycategory"
-                android:textSize="13sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|center"
-                android:text="@string/second_category"
-                android:textSize="13sp" />
-
-            <Button
-                android:id="@+id/dialog_popup_category02"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center|center"
-                android:text="@string/everycategory"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3px"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#CFCFCF" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center|center"
-                android:text="@string/location"
-                android:textSize="15sp" />
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -135,33 +71,93 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center|center"
+                        android:text="@string/festival_category"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:text="@string/first_category"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/dialog_popup_category01"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="2"
+                        android:gravity="center|center"
+                        android:text="@string/everycategory"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|center"
+                        android:text="@string/second_category"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/dialog_popup_category02"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center|center"
+                        android:text="@string/everycategory"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3px"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#CFCFCF" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <!--임시-->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center|center"
-                        android:text="@string/seoul"
+                        android:text="@string/location"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000" />
+
+                    <Button
+                        android:id="@+id/dialog_popup_location"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="4"
+                        android:gravity="center|center"
+                        android:text="@string/location_select"
                         android:textSize="13sp" />
 
-                    <TextView
+                    <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center|center"
-                        android:text="@string/busan"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center|center"
-                        android:text="@string/daegu"
-                        android:textSize="13sp" />
+                        android:layout_weight="1"
+                        android:background="#00000000" />
 
                 </LinearLayout>
 
@@ -345,8 +341,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:layout_marginTop="10dp"
+                android:layout_weight="2"
                 android:gravity="center|top"
                 android:text="@string/month_select"
                 android:textSize="15sp" />
@@ -362,64 +358,71 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/one"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/one"
+                        android:padding="5dp"
+                        android:textOff="@string/one"
+                        android:textOn="@string/one"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/two"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/two"
+                        android:textOff="@string/two"
+                        android:textOn="@string/two"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/three"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/three"
+                        android:textOff="@string/three"
+                        android:textOn="@string/three"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/four"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/four"
+                        android:textOff="@string/four"
+                        android:textOn="@string/four"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/five"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/five"
+                        android:textOff="@string/five"
+                        android:textOn="@string/five"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/six"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/six"
+                        android:textOff="@string/six"
+                        android:textOn="@string/six"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -428,64 +431,70 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/seven"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/seven"
+                        android:textOff="@string/seven"
+                        android:textOn="@string/seven"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/eight"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/eight"
+                        android:textOff="@string/eight"
+                        android:textOn="@string/eight"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/nine"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/nine"
+                        android:textOff="@string/nine"
+                        android:textOn="@string/nine"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/ten"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/ten"
+                        android:textOff="@string/ten"
+                        android:textOn="@string/ten"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/eleven"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/eleven"
+                        android:textOff="@string/eleven"
+                        android:textOn="@string/eleven"
                         android:textSize="13sp" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/twelve"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/toggle_background"
                         android:gravity="center|center"
-                        android:background="#00000000"
-                        android:text="@string/twelve"
+                        android:textOff="@string/twelve"
+                        android:textOn="@string/twelve"
                         android:textSize="13sp" />
                 </LinearLayout>
 

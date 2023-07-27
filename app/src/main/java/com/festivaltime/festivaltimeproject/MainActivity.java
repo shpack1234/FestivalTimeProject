@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button bigcategory = dialogView.findViewById(R.id.dialog_popup_category01);
         Button smallcategory = dialogView.findViewById(R.id.dialog_popup_category02);
+        Button location = dialogView.findViewById(R.id.dialog_popup_location);
 
         DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
         TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
@@ -169,6 +170,74 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.smallcategory01_normal:
                                 smallcategory.setText("일반축제");
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+
+                getMenuInflater().inflate(R.menu.dialog_region, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.every_region:
+                                location.setText("모든 지역");
+                            case R.id.seoul:
+                                location.setText("서울");
+                                break;
+                            case R.id.gyeonggi:
+                                location.setText("경기");
+                                break;
+                            case R.id.incheon:
+                                location.setText("인천");
+                                break;
+                            case R.id.gangwon:
+                                location.setText("강원");
+                                break;
+                            case R.id.jeju:
+                                location.setText("제주");
+                                break;
+                            case R.id.daejeon:
+                                location.setText("대전");
+                                break;
+                            case R.id.chungbuk:
+                                location.setText("충북");
+                                break;
+                            case R.id.chungnam_sejong:
+                                location.setText("충남/세종");
+                                break;
+                            case R.id.busan:
+                                location.setText("부산");
+                                break;
+                            case R.id.ulsan:
+                                location.setText("울산");
+                                break;
+                            case R.id.gyeongnam:
+                                location.setText("경남");
+                                break;
+                            case R.id.daegu:
+                                location.setText("대구");
+                                break;
+                            case R.id.gyeongbuk:
+                                location.setText("경북");
+                                break;
+                            case R.id.gwangju:
+                                location.setText("광주");
+                                break;
+                            case R.id.jeonnam:
+                                location.setText("전남");
+                                break;
+                            case R.id.jeonju_jeonbuk:
+                                location.setText("전주/전북");
                                 break;
                         }
                         return false;

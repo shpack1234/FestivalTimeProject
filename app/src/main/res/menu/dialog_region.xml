@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/every_region"
+        android:title="@string/every_location"/>
+
+    <item
+        android:id="@+id/seoul"
+        android:title="@string/seoul"/>
+
+    <item
+        android:id="@+id/gyeonggi"
+        android:title="@string/gyeonggi"/>
+
+    <item
+        android:id="@+id/incheon"
+        android:title="@string/incheon"/>
+
+    <item
+        android:id="@+id/gangwon"
+        android:title="@string/gangwon"/>
+
+    <item
+        android:id="@+id/jeju"
+        android:title="@string/jeju"/>
+
+    <item
+        android:id="@+id/daejeon"
+        android:title="@string/daejeon"/>
+
+    <item
+        android:id="@+id/chungbuk"
+        android:title="@string/chungbuk"/>
+
+    <item
+        android:id="@+id/chungnam_sejong"
+        android:title="@string/chungnam_sejong"/>
+
+    <item
+        android:id="@+id/busan"
+        android:title="@string/busan"/>
+
+    <item
+        android:id="@+id/ulsan"
+        android:title="@string/ulsan"/>
+
+    <item
+        android:id="@+id/gyeongnam"
+        android:title="@string/gyeongnam"/>
+
+    <item
+        android:id="@+id/daegu"
+        android:title="@string/daegu"/>
+
+    <item
+        android:id="@+id/gyeongbuk"
+        android:title="@string/gyeongbuk"/>
+
+    <item
+        android:id="@+id/gwangju"
+        android:title="@string/gwangju"/>
+
+    <item
+        android:id="@+id/jeonnam"
+        android:title="@string/jeonnam"/>
+
+    <item
+        android:id="@+id/jeonju_jeonbuk"
+        android:title="@string/jeonju_jeonbuk"/>
+
+</menu>

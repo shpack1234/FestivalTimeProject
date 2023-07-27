@@ -6,10 +6,10 @@
     <string name="vacation_festival">축제와 함께 하는 휴가!</string>
     <string name="festival_title">title</string>
     <string name="vacation_recommend">추천 축제</string>
-    
+
     <string name="culture_festival">문화관광축제</string>
     <string name="normal_festival">일반축제</string>
-    
+
     <string name="traditional">전통공연</string>
     <string name="act">연극</string>
     <string name="musical">뮤지컬</string>
@@ -38,9 +38,27 @@
     <string name="everycategory">모든 카테고리</string>
 
     <string name="location">지역</string>
+    <string name="every_location">모든 지역</string>
+    <string name="location_select">지역 선택</string>
+
     <string name="seoul">서울</string>
+    <string name="gyeonggi">경기</string>
+    <string name="incheon">인천</string>
+    <string name="gangwon">강원</string>
+    <string name="jeju">제주</string>
+
+    <string name="daejeon">대전</string>
+    <string name="chungbuk">충북</string>
+    <string name="chungnam_sejong">충남/세종</string>
     <string name="busan">부산</string>
+    <string name="ulsan">울산</string>
+    <string name="gyeongnam">경남</string>
+
     <string name="daegu">대구</string>
+    <string name="gyeongbuk">경북</string>
+    <string name="gwangju">광주</string>
+    <string name="jeonnam">전남</string>
+    <string name="jeonju_jeonbuk">전주/전북</string>
 
     <string name="date">기간</string>
     <string name="month_select">월별</string>
