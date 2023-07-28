@@ -19,7 +19,8 @@
         tools:targetApi="31">
         <activity
             android:name=".InquiryPopupActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".SearchScreenActivity"
             android:exported="false" />
@@ -44,7 +45,7 @@
             android:value="9e01496ae154026b9bbbb5a0277a7e57" />
 
         <activity
-            android:name=".DetailFestivalActivity"
+            android:name=".EntireViewActivity"
             android:exported="false" />
         <activity
             android:name=".MapActivity"
