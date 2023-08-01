@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
 
-        //대분류 카테고리 버튼
+        // 대분류 카테고리 버튼
         bigcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,23 +133,22 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.bigcategory_every:
-                                bigcategory.setText("모든 카테고리");
-                                break;
-                            case R.id.bigcategory_festival:
-                                bigcategory.setText("축제");
-                                break;
-                            case R.id.bigcategory_concert:
-                                bigcategory.setText("공연/행사");
-                                break;
+                        String selectedBigCategory = item.getTitle().toString();
+                        bigcategory.setText(selectedBigCategory);
+
+                        // bigcategory를 변경한 후, smallcategory의 텍스트를 확인하여 조건에 따라 "모든 카테고리"로 변경합니다.
+                        String currentSmallCategory = smallcategory.getText().toString();
+                        if (!selectedBigCategory.equals(currentSmallCategory)) {
+                            smallcategory.setText("모든 카테고리");
                         }
+
                         return false;
                     }
                 });
                 popup.show();
             }
         });
+
 
         //소분류 카테고리
         smallcategory.setOnClickListener(new View.OnClickListener() {
@@ -157,27 +156,27 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(getApplicationContext(), v);
 
-                getMenuInflater().inflate(R.menu.dialog_smallcategory01, popup.getMenu());
+                // 대분류 카테고리에 따라 다른 메뉴를 보여줍니다.
+                String bigCategoryText = bigcategory.getText().toString();
+                if (bigCategoryText.equals("축제")) {
+                    getMenuInflater().inflate(R.menu.dialog_smallcategory01, popup.getMenu());
+                } else if (bigCategoryText.equals("공연/행사")) {
+                    getMenuInflater().inflate(R.menu.dialog_smallcategory02, popup.getMenu());
+                }
+
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.smallcategory01_every:
-                                smallcategory.setText("모든 카테고리");
-                                break;
-                            case R.id.smallcategory01_culture:
-                                smallcategory.setText("문화관광축제");
-                                break;
-                            case R.id.smallcategory01_normal:
-                                smallcategory.setText("일반축제");
-                                break;
-                        }
+                        // 선택한 항목의 title을 가져와서 smallcategory의 텍스트로 설정합니다.
+                        smallcategory.setText(item.getTitle().toString());
                         return false;
                     }
                 });
                 popup.show();
             }
         });
+
+
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()){
                             case R.id.every_region:
                                 location.setText("모든 지역");
+                                break;
                             case R.id.seoul:
                                 location.setText("서울");
                                 break;
