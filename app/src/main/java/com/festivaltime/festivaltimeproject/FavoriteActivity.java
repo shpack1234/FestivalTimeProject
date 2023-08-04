@@ -143,11 +143,11 @@ public class FavoriteActivity extends AppCompatActivity {
 
     }
 
-    private void updateUI(List<LinkedHashMap<String, String>> festivalList) {
+    private void updateUI(List<LinkedHashMap<String, String>> festivalList) {    //축제 박스 UI 추가 메소드
         LinearLayout festivalContainer = findViewById(R.id.festival_container);
         festivalContainer.removeAllViews();
 
-        for (LinkedHashMap<String, String> festivalInfo : festivalList) {
+        for (LinkedHashMap<String, String> festivalInfo : festivalList) {   //API 파싱한 데이터를 해시맵 리스트에 저장한 뒤 불러옴
             View favoriteInfoBox = getLayoutInflater().inflate(R.layout.favorite_info_box, null);
             TextView titleTextView = favoriteInfoBox.findViewById(R.id.festival_title);
             TextView locationTextView = favoriteInfoBox.findViewById(R.id.festival_location);
