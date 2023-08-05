@@ -34,7 +34,6 @@ public class SearchScreenActivity extends AppCompatActivity {
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private Executor executor;
-    private LinearLayout festivalContainer2;
 
 
     @Override
@@ -46,7 +45,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
-        type = "A02080200";
+        //type = "A02080200";
 
         String query = getIntent().getStringExtra("query");
 
@@ -143,8 +142,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
+/**
+        apiReader.categoryCode1(apiKey, query, type, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromCategoryCode(response); // 응답을 파싱하여 데이터를 저장
+                List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+            }
 
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
 
+**/
     }
 
 
