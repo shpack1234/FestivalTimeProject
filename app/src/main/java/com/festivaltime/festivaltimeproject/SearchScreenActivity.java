@@ -2,8 +2,14 @@ package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -123,6 +130,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onClick(View v) {
+                                        Intent intent =new Intent (SearchScreenActivity.this,SearchDetailActivity.class);
                                         navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
                                     }
                                 });
@@ -133,6 +141,10 @@ public class SearchScreenActivity extends AppCompatActivity {
                         });
                     }
                 });
+
+
+
+
 
 
             }
@@ -158,6 +170,30 @@ public class SearchScreenActivity extends AppCompatActivity {
         });
 
 **/
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_home:
+                    navigateToMainActivity(SearchScreenActivity.this);
+                    return true;
+                case R.id.action_map:
+                    navigateToMapActivity(SearchScreenActivity .this);
+                    return true;
+                case R.id.action_calendar:
+                    navigateToCalendarActivity(SearchScreenActivity.this);
+                    return true;
+                case R.id.action_favorite:
+                    navigateToFavoriteActivity(SearchScreenActivity.this);
+                    return true;
+                case R.id.action_profile:
+                    navigateToMyPageActivity(SearchScreenActivity.this);
+                    return true;
+            }
+            return false;
+        });
     }
 
 

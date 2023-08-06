@@ -33,6 +33,8 @@ import java.util.concurrent.Executors;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class SearchDetailActivity extends AppCompatActivity {
+
+    public ImageButton Back_Btn;
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private UserDataBase db;
@@ -44,7 +46,9 @@ public class SearchDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_search_detail);
+
+        Back_Btn=findViewById(R.id.before_btn);
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -159,6 +163,12 @@ public class SearchDetailActivity extends AppCompatActivity {
             public void onError(String error) {
                 Log.e(TAG, "API Error: " + error);
             }
+        });
+
+        Back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {   finish(); }
         });
 
 

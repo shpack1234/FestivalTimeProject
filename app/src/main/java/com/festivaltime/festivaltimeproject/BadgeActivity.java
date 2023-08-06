@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
@@ -46,6 +47,7 @@ public class BadgeActivity extends AppCompatActivity {
                     navigateToCalendarActivity(BadgeActivity.this);
                     return true;
                 case R.id.action_favorite:
+                    navigateToFavoriteActivity(BadgeActivity.this);
                     return true;
                 case R.id.action_profile:
                     navigateToMyPageActivity(BadgeActivity.this);

@@ -1,5 +1,10 @@
 package com.festivaltime.festivaltimeproject;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -31,6 +36,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.festivaltime.festivaltimeproject.InquiryPopupActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class InquiryActivity extends AppCompatActivity {
     Button writebtn;
@@ -66,6 +72,31 @@ public class InquiryActivity extends AppCompatActivity {
                 Popup_btn = new InquiryPopupActivity(InquiryActivity.this);
                 Popup_btn.show();
             }
+        });
+
+
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_home:
+                    navigateToMainActivity(InquiryActivity.this);
+                    return true;
+                case R.id.action_map:
+                    navigateToMapActivity(InquiryActivity.this);
+                    return true;
+                case R.id.action_calendar:
+                    navigateToCalendarActivity(InquiryActivity.this);
+                    return true;
+                case R.id.action_favorite:
+                    return true;
+                case R.id.action_profile:
+                    navigateToMyPageActivity(InquiryActivity.this);
+                    return true;
+            }
+            return false;
         });
     }
 }
