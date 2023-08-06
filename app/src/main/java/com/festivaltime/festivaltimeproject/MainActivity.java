@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -387,8 +393,29 @@ public class MainActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 확인 버튼을 눌렀을 때 실행할 코드 작성
-                // 추가 동작 수행
+                String startdate = startdateClick.getText().toString();
+                String starttime = starttimeClick.getText().toString();
+                String enddate = enddateClick.getText().toString();
+                String endtime = endtimeClick.getText().toString();
+
+                // 시작 및 종료 날짜-시간 문자열을 적절한 형식으로 변환
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+                try {
+                    Date startDate = sdf.parse(startdate + " " + starttime);
+                    Date endDate = sdf.parse(enddate + " " + endtime);
+
+                    if (endDate.after(startDate)) {
+                        // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
+                        // 여기에 추가 동작 수행
+
+                        // 대화 상자 닫기
+                        alertDialog.dismiss();
+                    } else {
+                        Toast.makeText(MainActivity.this, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
         alertDialog.show();
