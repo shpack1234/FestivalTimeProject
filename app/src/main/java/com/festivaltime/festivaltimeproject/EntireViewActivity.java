@@ -28,11 +28,9 @@ public class EntireViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entire_view);
 
-        final TextView title=(TextView)findViewById(R.id.Entire_view_title);
+        final TextView title=(TextView)findViewById(R.id.festival_title);
 
         String contentId = getIntent().getStringExtra("contentid");
-        TextView contentidTextView = findViewById(R.id.festival_contentid);
-        contentidTextView.setText(contentId);
 
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -53,7 +51,6 @@ public class EntireViewActivity extends AppCompatActivity {
                         for (HashMap<String, String> festivalInfo : festivalList) {
                             TextView titleTextView = findViewById(R.id.festival_title);
                             TextView address = findViewById(R.id.festival_address);
-                            TextView idTextView = findViewById(R.id.festival_contentid);
                             ImageView festivalFirstImage = findViewById(R.id.festival_firstimage);
                             TextView overviewText = findViewById(R.id.festival_overview);
 
@@ -68,7 +65,6 @@ public class EntireViewActivity extends AppCompatActivity {
 
                             titleTextView.setText(title);
                             address.setText(address1 + " " + address2);
-                            idTextView.setText(id);
                             overviewText.setText(overview);
                         }
                     }
@@ -85,7 +81,7 @@ public class EntireViewActivity extends AppCompatActivity {
         if(intent != null) {
             String content = intent.getStringExtra("content");
             if(content != null){
-                TextView entireContent = findViewById(R.id.Entire_view_title);
+                TextView entireContent = findViewById(R.id.festival_title);
                 entireContent.setText(content);
             }
         }

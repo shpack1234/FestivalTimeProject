@@ -3,73 +3,100 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/Entire_view_title"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@color/gray"/>
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/before_btn"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:src="@drawable/ic_back_before"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="23dp"
-        android:onClick="customOnClick"
-        android:background="@android:color/transparent"
-        tools:ignore="SpeakableTextPresentCheck"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <ImageButton
+                    android:id="@+id/before_btn"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_back_before"
+                    android:layout_marginStart="4dp"
+                    android:onClick="customOnClick"
+                    android:background="@android:color/transparent"
+                    tools:ignore="SpeakableTextPresentCheck"/>
+
+                <TextView
+                    android:id="@+id/festival_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/gray"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/festival_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="273dp"
+                    android:background="@drawable/rectangle"
+                    app:sliderAnimationDuration="600"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderIndicatorAnimationDuration="600"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderScrollTimeInSec="3"
+                    app:sliderStartAutoCycle="true" />
 
 
-    <ImageView
-        android:id="@+id/festival_firstimage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
+                <ImageView
+                    android:id="@+id/festival_firstimage"
+                    android:layout_marginTop="150dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="138dp"
+                    android:layout_height="195dp"
+                    android:background="@drawable/rectangle"/>
 
-    <TextView
-        android:id="@+id/festival_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="210dp" />
-    <TextView
-        android:id="@+id/festival_contentid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp" />
-    <TextView
-        android:id="@+id/festival_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp" />
-    <TextView
-        android:id="@+id/festival_overview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="500dp" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/festival_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/festival_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_nevigation_background"
-        app:itemIconTint="@color/black"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu" />
+        app:itemIconTint="@color/black" />
 
 </RelativeLayout>
