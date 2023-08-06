@@ -154,13 +154,13 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
-/**
+
         apiReader.categoryCode1(apiKey, query, type, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromCategoryCode(response); // 응답을 파싱하여 데이터를 저장
-                List<HashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
             }
 
             @Override
@@ -168,8 +168,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
-
-**/
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
@@ -194,6 +192,7 @@ public class SearchScreenActivity extends AppCompatActivity {
             }
             return false;
         });
+
     }
 
 
