@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class InquiryActivity extends AppCompatActivity {
     Button writebtn;
     TextView inquirytext;
+
+    ImageButton Back_Btn;
     private InquiryPopupActivity Popup_btn;
 
     @Override
@@ -50,6 +53,7 @@ public class InquiryActivity extends AppCompatActivity {
 
         inquirytext = findViewById(R.id.inquiry_text);
         writebtn = findViewById(R.id.write_submitBtn);
+        Back_Btn=findViewById(R.id.before_btn);
 
         // 2줄 이상이면 더보기
         inquirytext.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +76,12 @@ public class InquiryActivity extends AppCompatActivity {
                 Popup_btn = new InquiryPopupActivity(InquiryActivity.this);
                 Popup_btn.show();
             }
+        });
+
+        Back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {   onBackPressed(); }
         });
 
 
