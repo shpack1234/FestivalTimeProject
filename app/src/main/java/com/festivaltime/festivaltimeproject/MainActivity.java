@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TimePicker;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     SliderView sliderView;
     int[] hot_festival_images={R.drawable.image01, R.drawable.image02, R.drawable.image03};
+
+    private final int numberOfLayouts = 3;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -76,6 +79,19 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        LinearLayout mainFestivalContainer=findViewById(R.id.main_festival_container);
+
+        for (int i = 0; i < numberOfLayouts; i++) {
+            LinearLayout customFestivalLayout = (LinearLayout) LayoutInflater.from(this)
+                    .inflate(R.layout.main_festival_container, mainFestivalContainer, false);
+
+            // Add your logic to populate data into the custom_festival_layout views here
+
+            mainFestivalContainer.addView(customFestivalLayout);
+        }
+
 
 
         sliderView=findViewById(R.id.image_slider);           //Hot Festival 배너 이미지 전환
