@@ -6,6 +6,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -168,27 +169,32 @@ public class SearchDetailActivity extends AppCompatActivity {
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
-            {   finish(); }
+            {   onBackPressed(); }
         });
 
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.action_home) {
-                navigateToMainActivity(SearchDetailActivity.this);
-                return true;
-            } else if (item.getItemId() == R.id.action_map) {
-                navigateToMapActivity(SearchDetailActivity.this);
-                return true;
-            } else if (item.getItemId() == R.id.action_calendar) {
-                navigateToCalendarActivity(SearchDetailActivity.this);
-                return true;
-            } else if (item.getItemId() == R.id.action_favorite) {
-                navigateToFavoriteActivity(SearchDetailActivity.this);
-                return true;
-            } else {
-                return item.getItemId() == R.id.action_profile;
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setOnItemSelectedListener(item ->
+        {
+            switch (item.getItemId()) {
+                case R.id.action_home:
+                    navigateToMainActivity(SearchDetailActivity.this);
+                    return true;
+                case R.id.action_map:
+                    navigateToMapActivity(SearchDetailActivity.this);
+                    return true;
+                case R.id.action_calendar:
+                    navigateToCalendarActivity(SearchDetailActivity.this);
+                    return true;
+                case R.id.action_favorite:
+                    navigateToFavoriteActivity(SearchDetailActivity.this);
+                    return true;
+                case R.id.action_profile:
+                    navigateToMyPageActivity(SearchDetailActivity.this);
+                    return true;
             }
+            return false;
         });
     }
 }

@@ -30,7 +30,8 @@ public class BadgeActivity extends AppCompatActivity {
         back_Btn = findViewById(R.id.before_btn);
         back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { finish(); }
+            public void onClick(View v)
+            {   onBackPressed(); }
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
