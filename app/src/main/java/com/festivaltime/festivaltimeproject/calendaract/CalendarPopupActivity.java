@@ -20,9 +20,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 //캘린더 일정 추가 dialog class
 public class CalendarPopupActivity extends Dialog {
@@ -104,27 +110,42 @@ public class CalendarPopupActivity extends Dialog {
                 String endDate = enddateClick.getText().toString();
                 String endTime = endtimeClick.getText().toString();
 
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+
                 if (title.isEmpty()) {
                     // 제목이 입력되지 않았을 때 토스트 메시지를 표시합니다.
                     Toast.makeText(mContext, "Title을 입력하세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // 시작 날짜와 시간을 결합합니다.
-                    String startDateTime = startDate + " " + startTime;
-                    // 종료 날짜와 시간을 결합합니다.
-                    String endDateTime = endDate + " " + endTime;
+                    try {
+                        Date startdate = sdf.parse(startDate + " " + startTime);
+                        Date enddate = sdf.parse(endDate + " " + endTime);
 
-                    // 사용자 입력으로 새로운 CalendarEntity 객체를 생성합니다.
-                    CalendarEntity newSchedule = new CalendarEntity();
-                    newSchedule.title = title;
-                    newSchedule.startDate = startDateTime;
-                    newSchedule.endDate = endDateTime;
+                        if (enddate.after(startdate)) {
+                            // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
 
-                    // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가합니다.
-                    ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
-                    loader.forceLoad();
+                            // 시작 날짜와 시간을 결합
+                            String startDateTime = startDate + " " + startTime;
+                            // 종료 날짜와 시간을 결합
+                            String endDateTime = endDate + " " + endTime;
 
-                    // 다이얼로그를 닫습니다.
-                    dismiss();
+                            // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
+                            CalendarEntity newSchedule = new CalendarEntity();
+                            newSchedule.title = title;
+                            newSchedule.startDate = startDateTime;
+                            newSchedule.endDate = endDateTime;
+
+                            // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
+                            ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                            loader.forceLoad();
+
+                            // 대화 상자 닫기
+                            dismiss();
+                        } else {
+                            Toast.makeText(mContext, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
