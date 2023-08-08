@@ -13,8 +13,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,13 +46,21 @@ public class SearchDetailActivity extends AppCompatActivity {
     private String userId;
     private Executor executor;
 
+    private boolean isLoading = false;
+    private int currentPage = 1; // 시작 페이지
+    private final int ITEMS_PER_PAGE = 11; // 페이지당 아이템 수
+    private String apiKey;
+    private String query;
+    private String type;
+    ScrollView Scroll_View;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_detail);
 
-        Back_Btn=findViewById(R.id.before_btn);
-
+        Back_Btn = findViewById(R.id.before_btn);
+        Scroll_View = findViewById(R.id.scroll_view);
         executor = Executors.newSingleThreadExecutor();
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -59,9 +69,9 @@ public class SearchDetailActivity extends AppCompatActivity {
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
-        String type = getIntent().getStringExtra("type");
-        String query = getIntent().getStringExtra("query");
-        String apiKey = getResources().getString(R.string.api_key);
+        type = getIntent().getStringExtra("type");
+        query = getIntent().getStringExtra("query");
+        apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
         apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
             @Override
@@ -168,33 +178,75 @@ public class SearchDetailActivity extends AppCompatActivity {
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {   onBackPressed(); }
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
-        bottomNavigationView.setOnItemSelectedListener(item ->
-        {
-            switch (item.getItemId()) {
-                case R.id.action_home:
-                    navigateToMainActivity(SearchDetailActivity.this);
-                    return true;
-                case R.id.action_map:
-                    navigateToMapActivity(SearchDetailActivity.this);
-                    return true;
-                case R.id.action_calendar:
-                    navigateToCalendarActivity(SearchDetailActivity.this);
-                    return true;
-                case R.id.action_favorite:
-                    navigateToFavoriteActivity(SearchDetailActivity.this);
-                    return true;
-                case R.id.action_profile:
-                    navigateToMyPageActivity(SearchDetailActivity.this);
-                    return true;
+        Scroll_View.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if (!isLoading) {
+                    // 현재 스크롤 위치
+                    int scrollY = Scroll_View.getScrollY();
+                    // 현재 보여지는 영역의 높이
+                    int visibleHeight = Scroll_View.getHeight();
+                    // 스크롤 전체 영역의 높이
+                    int totalHeight = Scroll_View.getChildAt(0).getHeight();
+
+                    // 마지막에 도달했는지 체크
+                    if (scrollY + visibleHeight >= totalHeight && festivalList.size() % ITEMS_PER_PAGE == 0) {
+                        // 추가 데이터 로드
+                        loadMoreData();
+                    }
+                }
             }
-            return false;
         });
     }
+    // 추가 데이터 로드 메소드
+    private void loadMoreData() {
+        isLoading = true; // 로딩 상태 설정
+
+        // 다음 페이지의 데이터를 가져오는 API 호출
+        currentPage++;
+        apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                // 이전과 동일하게 파싱 후 festivalList에 추가
+                // UI 갱신을 위한 코드는 아래와 같이 수정
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        festivalList.addAll(parsedFestivalList);
+
+                        // UI 갱신은 메인 스레드에서 실행
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 기존 코드는 그대로 둔 상태로, 추가된 데이터만 UI에 추가
+                                LinearLayout festivalContainer = findViewById(R.id.festival_container);
+                                for (int i = festivalList.size() - parsedFestivalList.size(); i < festivalList.size(); i++) {
+                                    HashMap<String, String> festivalInfo = festivalList.get(i);
+                                    // ... UI 갱신 코드 ...
+                                }
+
+                                isLoading = false; // 로딩 상태 해제
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+                isLoading = false; // 로딩 상태 해제
+            }
+        });
+    }
+
 }
+
+

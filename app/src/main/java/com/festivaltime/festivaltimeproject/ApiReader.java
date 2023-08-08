@@ -24,6 +24,8 @@ public class ApiReader {
         client=new OkHttpClient();
     }
 
+
+
     public void searchKeyword(String serviceKey, String keyword, final ApiResponseListener listener){
         try {
             HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
@@ -32,7 +34,7 @@ public class ApiReader {
                     .addPathSegment("B551011")
                     .addPathSegment("KorService1")
                     .addPathSegment("searchKeyword1")
-                    .addQueryParameter("numOfRows", "10")
+                    .addQueryParameter("numOfRows", "11")
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("keyword", keyword)
@@ -74,7 +76,7 @@ public class ApiReader {
                     .addPathSegment("B551011")
                     .addPathSegment("KorService1")
                     .addPathSegment("searchKeyword1")
-                    .addQueryParameter("numOfRows", "10")
+                    .addQueryParameter("numOfRows", "11")
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("keyword", keyword)
