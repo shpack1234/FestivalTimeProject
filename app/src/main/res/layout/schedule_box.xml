@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -24,12 +24,13 @@
         <TextView
             android:id="@+id/schedule_box_text"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="5"
             android:gravity="left"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/schedule_box_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -37,7 +38,7 @@
             android:textSize="15sp" />
 
         <ImageButton
-            android:id="@+id/festival_deleteButton"
+            android:id="@+id/schedule_deleteButton"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
