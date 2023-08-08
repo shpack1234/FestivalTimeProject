@@ -192,8 +192,9 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     // FetchScheduleTask에서 일정 데이터를 가져온 후, 캘린더 레이어에 업데이트하는 메서드
     @Override
     public void onFetchCompleted(List<CalendarEntity> scheduleList) {
-        updateUI(scheduleList);
+        updateUI(scheduleList); // 매개변수를 전달하여 호출합니다.
     }
+
 
     //calendar 화면 설정
     private void setMonthView() {
@@ -212,6 +213,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         calendarrecycler.setAdapter(adapter);
     }
 
+    // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
@@ -220,6 +222,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             View scheduleBox = getLayoutInflater().inflate(R.layout.schedule_box, null);
             TextView titleTextView = scheduleBox.findViewById(R.id.schedule_box_text);
             TextView timeTextView = scheduleBox.findViewById(R.id.schedule_box_time);
+            ImageButton deleteButton = scheduleBox.findViewById(R.id.schedule_deleteButton);
 
             String title = schedule.title;
             String startDate = schedule.startDate;
@@ -231,41 +234,45 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
             // 각 scheduleBox를 scheduleContainer에 추가
             scheduleContainer.addView(scheduleBox);
-        
 
-            /*// 삭제 버튼 클릭 리스너 등록
+            // 삭제 버튼 클릭 리스너 등록
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 클릭된 일정 데이터를 데이터베이스에서 삭제
                     deleteSchedule(schedule);
-                    // 업데이트된 일정 데이터로 화면 갱신
-                    updateScheduleUI();
                 }
             });
-
-            // 각 scheduleBox를 scheduleContainer에 추가
-            scheduleContainer.addView(scheduleBox);*/
         }
     }
 
-    /*// 스케줄을 삭제하는 메서드
+
+
+
+    // 스케줄을 삭제하는 메서드
     private void deleteSchedule(CalendarEntity schedule) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 // CalendarDao를 사용하여 데이터베이스에서 일정 데이터를 삭제
                 calendarDao.DeleteSchedule(schedule);
+                // 삭제한 후에 화면 갱신
+                FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
+                fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
+                    @Override
+                    public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(scheduleList);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
 
-    // 화면을 업데이트하는 메서드
-    private void updateScheduleUI() {
-        // 데이터베이스에서 일정 데이터를 가져와서 화면을 업데이트하는 작업을 시작합니다.
-        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
-        fetchScheduleTask.fetchSchedules(this);
-    }*/
 
     //날짜 생성
     private ArrayList<Date> daysInMonthArray() {
