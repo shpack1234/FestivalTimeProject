@@ -238,21 +238,20 @@
                 android:textSize="18sp"
                 android:visibility="invisible" />
 
-            <TextView
-                android:id="@+id/calendar_scheduleText"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:scrollbars="vertical"
-                android:visibility="invisible"/>
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bottom_navigation">
 
-            <!--<androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/calendar_scheduleText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:scrollbars="vertical"
-                android:visibility="invisible"/>-->
+                <LinearLayout
+                    android:id="@+id/schedule_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+                </LinearLayout>
+
+            </ScrollView>
 
         </LinearLayout>
     </LinearLayout>

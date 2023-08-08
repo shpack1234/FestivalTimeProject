@@ -1,5 +1,7 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
+import static android.content.ContentValues.TAG;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -12,14 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.festivaltime.festivaltimeproject.FavoriteActivity;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
@@ -27,11 +32,17 @@ import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchSchedul
 import com.festivaltime.festivaltimeproject.festivalcalendaract.FestivalCalendarActivity;
 import com.festivaltime.festivaltimeproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 //개인 캘린더 총괄 class
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity implements FetchScheduleTask.FetchScheduleTaskListener {
+    private CalendarDao calendarDao;
     private boolean showOtherMonths=true; // 다른 달의 일자를 표시할지 여부를 저장 변수
     //현재 시간 가져오기 now, date, sdf
     public long now = System.currentTimeMillis();
@@ -40,10 +51,9 @@ public class CalendarActivity extends AppCompatActivity {
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn; //popup창에서 startdate, enddate default 설정위한 클래스 변수 지정
     public Button cal_setting, add_Btn, festi_cal;
-    public TextView SelectDateView, Year_text, monthText, scheduleText;
+    public TextView SelectDateView, Year_text, monthText;
     public RecyclerView calendarrecycler; //캘린더 recyclerview, 일정 담는 recyclerview
-    private ArrayList<CalendarSchedule> calendarScheduleArrayList; //일정 담는 recyclerview
-    private CalendarScheduleAdapter calendarScheduleAdapter;
+    private Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +64,6 @@ public class CalendarActivity extends AppCompatActivity {
         monthText = findViewById(R.id.calendar_monthText); //calendar 설정한 month 표시하는 text
         calendarrecycler = findViewById(R.id.calendar_recyclerView); //calendar recyclerview
 
-        scheduleText = findViewById(R.id.calendar_scheduleText); //일정 recyclerview
         SelectDateView = findViewById(R.id.calendar_SelectDateView); //일정 위 선택한 날짜 표시 text
 
         ImageButton prevBtn = findViewById(R.id.calendar_pre_btn); //calendar 이전 달 이동 btn
@@ -62,6 +71,8 @@ public class CalendarActivity extends AppCompatActivity {
         cal_setting = findViewById(R.id.calendar_cal_setting); //calendar 설정 dialog 띄우는 btn
         add_Btn = findViewById(R.id.calendar_add_Btn); //calendar 일정 추가 dialog 띄우는 btn
         festi_cal = findViewById(R.id.calendar_festical_btn); //festival calendar 이동 btn
+
+        executor = Executors.newSingleThreadExecutor();
 
         //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
         Year_text.setText(sdf.format(date));
@@ -73,7 +84,13 @@ public class CalendarActivity extends AppCompatActivity {
         //화면 설정
         setMonthView();
         //setScheduleView();
-        setScheduleView();
+
+        // CalendarDao 인스턴스 생성 (생략)
+        calendarDao = CalendarDatabase.getInstance(this).calendarDao();
+
+        // 데이터베이스에서 일정 데이터를 가져와서 캘린더 레이어에 업데이트하는 작업을 시작합니다.
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
+        fetchScheduleTask.fetchSchedules(this);
 
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +189,12 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    // FetchScheduleTask에서 일정 데이터를 가져온 후, 캘린더 레이어에 업데이트하는 메서드
+    @Override
+    public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+        updateUI(scheduleList);
+    }
+
     //calendar 화면 설정
     private void setMonthView() {
         //선택되어있는 달 저장
@@ -183,31 +206,66 @@ public class CalendarActivity extends AppCompatActivity {
         ArrayList<Date> dayList = daysInMonthArray();
 
         //calendar 어뎁터 사용 위한 정의
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, scheduleText);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7); //recyclerview layout 설정
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);
     }
 
-    private void setScheduleView() {
-        // 일정 데이터베이스에서 데이터 가져오기
-        CalendarDatabase calendarDatabase = CalendarDatabase.getInstance(this);
-        CalendarDao calendarDao = calendarDatabase.calendarDao();
-        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, scheduleText, calendarDao);
-        fetchScheduleTask.fetchSchedules();
+    private void updateUI(List<CalendarEntity> scheduleList) {
+        LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
+        scheduleContainer.removeAllViews();
+
+        for (CalendarEntity schedule : scheduleList) {
+            View scheduleBox = getLayoutInflater().inflate(R.layout.schedule_box, null);
+            TextView titleTextView = scheduleBox.findViewById(R.id.schedule_box_text);
+            TextView timeTextView = scheduleBox.findViewById(R.id.schedule_box_time);
+
+            String title = schedule.title;
+            String startDate = schedule.startDate;
+            String endDate = schedule.endDate;
+
+            // 일정 데이터를 각 scheduleBox에 담는 작업
+            titleTextView.setText(title);
+            timeTextView.setText(startDate + " ~ " + endDate);
+
+            // 각 scheduleBox를 scheduleContainer에 추가
+            scheduleContainer.addView(scheduleBox);
+        
+
+            /*// 삭제 버튼 클릭 리스너 등록
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭된 일정 데이터를 데이터베이스에서 삭제
+                    deleteSchedule(schedule);
+                    // 업데이트된 일정 데이터로 화면 갱신
+                    updateScheduleUI();
+                }
+            });
+
+            // 각 scheduleBox를 scheduleContainer에 추가
+            scheduleContainer.addView(scheduleBox);*/
+        }
     }
 
+    /*// 스케줄을 삭제하는 메서드
+    private void deleteSchedule(CalendarEntity schedule) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // CalendarDao를 사용하여 데이터베이스에서 일정 데이터를 삭제
+                calendarDao.DeleteSchedule(schedule);
+            }
+        });
+    }
 
-    //schedule 화면 설정 재수정중
-    /*private void setScheduleView(){
-        //일정 recyclerview 설정
-        calendarScheduleArrayList = new ArrayList<>();
-        calendarScheduleAdapter = new CalendarScheduleAdapter(calendarScheduleArrayList);
-        //schedule recylerview LinearLayoutManager 객체 지정
-        scheduleText.setLayoutManager(new LinearLayoutManager(this));
-        scheduleText.setAdapter(calendarScheduleAdapter);
+    // 화면을 업데이트하는 메서드
+    private void updateScheduleUI() {
+        // 데이터베이스에서 일정 데이터를 가져와서 화면을 업데이트하는 작업을 시작합니다.
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
+        fetchScheduleTask.fetchSchedules(this);
     }*/
-
 
     //날짜 생성
     private ArrayList<Date> daysInMonthArray() {
