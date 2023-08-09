@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface CalendarCategoryDao {
     @Query("SELECT * FROM calendarcategoryentity")
-    List<CalendarEntity> getAllCategoryEntity();
+    List<CalendarCategoryEntity> getAllCategoryEntity();
 
     @Insert
     void InsertCategory(CalendarCategoryEntity category);
