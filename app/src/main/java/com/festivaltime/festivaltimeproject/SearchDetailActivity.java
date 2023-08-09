@@ -203,35 +203,105 @@ public class SearchDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
-    // 추가 데이터 로드 메소드
+    //loadMoreData 메소드
     private void loadMoreData() {
         isLoading = true; // 로딩 상태 설정
 
         // 다음 페이지의 데이터를 가져오는 API 호출
-        currentPage++;
-        apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
+        apiReader.searchKeyword(apiKey, query, type, currentPage + 1, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
-                // 이전과 동일하게 파싱 후 festivalList에 추가
-                // UI 갱신을 위한 코드는 아래와 같이 수정
+                ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
+
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
                         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                        festivalList.addAll(parsedFestivalList);
+
+                        // 데이터가 없으면 로딩 상태 해제 후 종료
+                        if (parsedFestivalList.isEmpty()) {
+                            isLoading = false;
+                            return;
+                        }
 
                         // UI 갱신은 메인 스레드에서 실행
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                // 기존 코드는 그대로 둔 상태로, 추가된 데이터만 UI에 추가
                                 LinearLayout festivalContainer = findViewById(R.id.festival_container);
-                                for (int i = festivalList.size() - parsedFestivalList.size(); i < festivalList.size(); i++) {
-                                    HashMap<String, String> festivalInfo = festivalList.get(i);
-                                    // ... UI 갱신 코드 ...
+
+                                for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                                    View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                                    TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
+                                    TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
+                                    TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                                    ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
+                                    ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
+
+                                    String title = festivalInfo.get("title");
+                                    String location = festivalInfo.get("address");
+                                    String id = festivalInfo.get("contentid");
+                                    String repImage = festivalInfo.get("img");
+                                    titleTextView.setText(title);
+                                    locationTextView.setText(location);
+                                    idTextView.setText(id);
+
+                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.WRAP_CONTENT
+                                    );
+                                    layoutParams.setMargins(0, 0, 0, 40); // 40dp 간격 설정
+                                    festivalInfoBox.setLayoutParams(layoutParams);
+
+                                    Log.d(TAG, "Rep Image URL: " + repImage);
+                                    if (repImage == null || repImage.isEmpty()) {
+                                        festivalRepImage.setImageResource(R.drawable.ic_image);
+                                    } else {
+                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                                    }
+                                    festivalContainer.addView(festivalInfoBox);
+
+                                    festivalInfoBox.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // 클릭 시 contentid 값을 가져오는 작업 수행
+                                            String contentId = idTextView.getText().toString();
+                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                            navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
+                                        }
+                                    });
+                                    addButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Log.d("Button Listener", "addBtn");
+                                            executor.execute(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    String contentId = idTextView.getText().toString();
+                                                    loadedUser = userDao.getUserInfoById(userId);
+                                                    if (loadedUser != null) {
+                                                        if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                            Log.d("Festival Id", contentId);
+                                                            Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                        } else {
+                                                            Log.d("Festival Id", contentId);
+                                                            loadedUser.addUserFavoriteFestival(contentId);
+                                                            userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                        }
+                                                    } else {
+                                                        Log.e("No UserInfo", "You should get your information in MyPage");
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
                                 }
 
+                                // 다음 페이지 로드를 위해 currentPage 증가
+                                currentPage++;
                                 isLoading = false; // 로딩 상태 해제
                             }
                         });
@@ -246,7 +316,4 @@ public class SearchDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 }
-
-
