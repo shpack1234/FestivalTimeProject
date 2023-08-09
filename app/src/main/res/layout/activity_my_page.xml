@@ -27,321 +27,327 @@
 
     </LinearLayout>
 
-
     <LinearLayout
+        android:id="@+id/badge_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="90dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="102dp"
-                android:layout_height="102dp"
-                android:src="@drawable/ic_user" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/nickname"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:text="@string/my_id"
-                android:textColor="@color/gray"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-
-        <FrameLayout
-            android:id="@+id/entire_badge_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="customOnClick">
-
-            <View
-                android:layout_width="251dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="50dp"
-                android:background="@color/black" />
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <ImageView
+                    android:layout_width="102dp"
+                    android:layout_height="102dp"
+                    android:src="@drawable/ic_user" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nickname"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:text="@string/my_id"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:id="@+id/entire_badge_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="customOnClick">
+
+                <View
+                    android:layout_width="251dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="50dp"
+                    android:background="@color/black" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="15dp"
+                            android:text="@string/my_badge"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="150dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/ic_entirebadge" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="32dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="500dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@android:color/black">
+                            <ImageView
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:src="@drawable/image01"/>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="500dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@android:color/black"
+                            android:layout_marginStart="5dp">
+                            <ImageView
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:src="@drawable/image02"/>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="500dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@android:color/black"
+                            android:layout_marginStart="5dp">
+                            <ImageView
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:src="@drawable/image03"/>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/ic_moreview" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+            <FrameLayout
+                android:layout_width="355dp"
+                android:layout_height="50dp"
+                android:onClick="PrivacyOnClick">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_profile" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/my_badge"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="@string/personal_information"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="150dp"
-                        android:layout_marginTop="15dp"
-                        android:src="@drawable/ic_entirebadge" />
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
                 </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+            <FrameLayout
+                android:layout_width="355dp"
+                android:layout_height="50dp"
+                android:onClick="changePWOnClick">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_marginTop="2dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:src="@drawable/ic_lock" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/password_change"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+            <FrameLayout
+                android:layout_width="355dp"
+                android:layout_height="50dp"
+                android:onClick="settingOnClick">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="7dp">
+                    <ImageView
+                        android:layout_marginTop="1dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_setting"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="@string/setting"
+                        android:textSize="15sp"
+                        android:textStyle="normal"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+
+
+            <FrameLayout
+                android:layout_width="355dp"
+                android:layout_height="50dp"
+                android:onClick="InquiryOnClick">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="7dp">
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_developer_contact"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/developer_contact"
+                        android:textSize="15sp"
+                        android:textStyle="normal"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+            <FrameLayout
+                android:layout_width="355dp"
+                android:layout_height="68dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="500dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="@android:color/black">
-                        <ImageView
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:src="@drawable/image01"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="500dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="@android:color/black"
-                        android:layout_marginStart="5dp">
-                        <ImageView
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:src="@drawable/image02"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="500dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="@android:color/black"
-                        android:layout_marginStart="5dp">
-                        <ImageView
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:src="@drawable/image03"/>
-                    </com.google.android.material.card.MaterialCardView>
-
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginTop="15dp"
-                        android:src="@drawable/ic_moreview" />
-                </LinearLayout>
-            </LinearLayout>
-        </FrameLayout>
-    </LinearLayout>
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginTop="1dp"
+                        android:src="@drawable/ic_app_information" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:orientation="vertical"
-        android:layout_marginStart="30dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="PrivacyOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/ic_profile" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="1dp"
-                    android:text="@string/personal_information"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="changePWOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_marginTop="2dp"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:src="@drawable/ic_lock" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/password_change"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="settingOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="7dp">
-                <ImageView
-                    android:layout_marginTop="1dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_setting"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="1dp"
-                    android:text="@string/setting"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="50dp"
-            android:onClick="InquiryOnClick">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="7dp">
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_developer_contact"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/developer_contact"
-                    android:textSize="15sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <FrameLayout
-            android:layout_width="355dp"
-            android:layout_height="68dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginTop="1dp"
-                    android:src="@drawable/ic_app_information" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/app_information"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:textStyle="normal" />
+                        android:orientation="vertical"
+                        android:layout_marginStart="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/app_information"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:textStyle="normal" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/version"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/version"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </FrameLayout>
+            </FrameLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
