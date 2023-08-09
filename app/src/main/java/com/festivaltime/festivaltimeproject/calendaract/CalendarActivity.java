@@ -159,7 +159,18 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                 Popup_btn.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        CalendarPopupActivity popupDialog = (CalendarPopupActivity) dialog;
+                        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
+                        fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
+                            @Override
+                            public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateUI(scheduleList);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
                 Popup_btn.show();
