@@ -93,7 +93,7 @@ public class ParsingApiData {
         }
     }
 
-    public static void parseXmlDataFromCategoryCode(String xmlData) {
+    public static void parseXmlDataFromCategoryCode(String xmlData, String cat2Filter) {
         festivalList.clear();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -116,13 +116,15 @@ public class ParsingApiData {
                     String contentid=getElementText(itemElement, "contentid");
                     String cat2 = getElementText(itemElement, "cat2");
 
-                    festivalInfo.put("title", title);
-                    festivalInfo.put("img", img);
-                    festivalInfo.put("overview", overview);
-                    festivalInfo.put("contentid", contentid);
-                    festivalInfo.put("cat2", cat2);
+                    if (cat2Filter != null || cat2Filter.equals(cat2)) {
+                        festivalInfo.put("title", title);
+                        festivalInfo.put("img", img);
+                        festivalInfo.put("overview", overview);
+                        festivalInfo.put("contentid", contentid);
+                        festivalInfo.put("cat2", cat2);
 
-                    festivalList.add(festivalInfo);
+                        festivalList.add(festivalInfo);
+                    }
                 }
             }
         } catch (Exception e) {
