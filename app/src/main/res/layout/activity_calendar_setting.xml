@@ -76,38 +76,19 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_cal_roundbox"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <!--대충 요런식.. -->
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:src="@drawable/ic_cal_category" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:layout_marginLeft="5dp"
-                android:gravity="left|center"
-                android:text="@string/festival"
-                android:textSize="13sp" />
-
-            <Switch
-                android:id="@+id/add_switch"
+            <LinearLayout
+                android:id="@+id/category_container"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+            </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
