@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -86,8 +87,12 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < numberOfLayouts; i++) {
             LinearLayout customFestivalLayout = (LinearLayout) LayoutInflater.from(this)
                     .inflate(R.layout.main_festival_container, mainFestivalContainer, false);
-
-            // Add your logic to populate data into the custom_festival_layout views here
+            TextView containerTitle=customFestivalLayout.findViewById(R.id.main_festival_area_name);
+            containerTitle.setText("부산");
+            for(int j=0; j<5; j++) {
+                View festivalInfoBox=getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                customFestivalLayout.addView(festivalInfoBox);
+            }
 
             mainFestivalContainer.addView(customFestivalLayout);
         }
