@@ -70,6 +70,10 @@ public class SearchDetailActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         type = getIntent().getStringExtra("type");
+        String typeText = getTextToShow(type);
+        TextView titleTextView = findViewById(R.id.Entire_view_title);
+        titleTextView.setText(typeText);
+
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -119,6 +123,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     titleTextView.setText(title);
                                     locationTextView.setText(location);
                                     idTextView.setText(id);
+                                    titleTextView.setMaxEms(15);
 
                                     Log.d(TAG, "Rep Image URL: " + repImage);
                                     if (repImage == null || repImage.isEmpty()) {
@@ -201,6 +206,27 @@ public class SearchDetailActivity extends AppCompatActivity {
                         loadMoreData();
                     }
                 }
+            }
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(SearchDetailActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(SearchDetailActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(SearchDetailActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(SearchDetailActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(SearchDetailActivity.this);
+                return true;
             }
         });
 
@@ -315,5 +341,36 @@ public class SearchDetailActivity extends AppCompatActivity {
                 isLoading = false; // 로딩 상태 해제
             }
         });
+    }
+
+    private String getTextToShow(String type) {
+        switch (type) {
+            case "A02080100":
+                return "전통공연";
+            case "A02080200":
+                return "연극";
+            case "A02080300":
+                return "뮤지컬";
+            case "A02080400":
+                return "오페라";
+            case "A02080500":
+                return "전시회";
+            case "A02080600":
+                return "박람회";
+            case "A02080800":
+                return "무용";
+            case "A02080900":
+                return "클래식음악회";
+            case "A02081000":
+                return "대중콘서트";
+            case "A02081100":
+                return "영화";
+            default:
+                if (!type.isEmpty() && type.startsWith("A0207")) {
+                    return "축제";
+                } else {
+                    return "기타";
+                }
+        }
     }
 }
