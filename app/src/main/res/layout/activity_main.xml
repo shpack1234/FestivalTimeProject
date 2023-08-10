@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
@@ -8,9 +8,11 @@
     android:background="@color/white">
 
     <ScrollView
+        android:id="@+id/main_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="20dp">
+                android:layout_gravity="center">
 
                 <SearchView
                     android:id="@+id/search_view"
@@ -44,13 +46,12 @@
 
                 <ImageButton
                     android:id="@+id/search_option"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="18dp"
                     android:src="@drawable/ic_search_option"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginStart="0dp"
+
                     android:background="@color/white"
-                    android:layout_alignParentEnd="true"
                     android:contentDescription="ImageButton" />
             </LinearLayout>
 
@@ -72,15 +73,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/hot_festival_text_view"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
+                android:layout_gravity="center"
                 app:cardCornerRadius="10dp">
 
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/image_slider"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_width="376dp"
+                    android:layout_height="250dp"
                     android:background="@drawable/radius_corner"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="back_and_forth"
@@ -203,15 +202,6 @@
 
             </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/main_festival_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="80dp">
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </ScrollView>
@@ -222,10 +212,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nevigation_background"
         android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/black" />
+        app:itemIconTint="@color/black"
+        tools:ignore="MissingConstraints" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
