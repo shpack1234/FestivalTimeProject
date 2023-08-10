@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -26,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SearchScreenActivity extends AppCompatActivity {
 
@@ -82,6 +84,42 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                 titleTextView.setText(textToShow);
 
+                                int maxItems = Math.min(festivalList.size(), 6);
+
+                                for (int i = 0; i < maxItems; i++) {
+                                    HashMap<String, String> festivalInfo = festivalList.get(i);
+                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+
+                                    String title = festivalInfo.get("title");
+                                    String id = festivalInfo.get("contentid");
+                                    String repImage = festivalInfo.get("img");
+
+                                    searchTextView.setText(title);
+                                    searchTextView.setMaxEms(8);
+
+                                    Log.d(TAG, "Rep Image URL: " + repImage);
+                                    if (repImage == null || repImage.isEmpty()) {
+                                        searchImageButton.setImageResource(R.drawable.ic_image);
+                                    } else {
+                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                    }
+                                    festivalImageNText.addView(festivalItemView);
+
+
+                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            String contentId = id;
+                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                        }
+                                    });
+
+
+                                }
+
                                 searchContainer.addView(searchContainerView);
 
                                 Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
@@ -95,6 +133,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                         });
                     }
                 });
+                try {
+                    // 지정된 시간 동안 스레드 통합 대기
+                    Executors.newSingleThreadExecutor().awaitTermination(2, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
