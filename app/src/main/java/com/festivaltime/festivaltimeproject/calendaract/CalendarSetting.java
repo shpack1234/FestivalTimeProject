@@ -3,12 +3,14 @@ package com.festivaltime.festivaltimeproject.calendaract;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,17 +23,22 @@ import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.Cale
 import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
 import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.FetchCategoryTask;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchScheduleTask;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 //캘린더 설정 dialog class 카테고리 관리, 카테고리별/날짜별 표시 기능
-public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCategoryTaskListener{
+public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCategoryTaskListener {
     private CalendarCategoryDao categoryDao;
-    private LinearLayout categoryContainer;
+    private List<CalendarCategoryEntity> categorylist;
     final Switch othermonth_switch;
     final boolean showOtherMonths;
+    private boolean deleteVisible = false;
     protected Context mContext;
-    public Button finish_btn, add_category;
+    public Button finish_btn, del_categories, add_category;
+    private Executor executor;
 
     public CalendarSetting(@NonNull Context context, boolean showOtherMonths) {
         super(context);
@@ -42,8 +49,11 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
         this.mContext = context;
 
         finish_btn = findViewById(R.id.add_finish_btn);
+        del_categories = findViewById(R.id.del_category);
         add_category = findViewById(R.id.add_category);
         othermonth_switch = findViewById(R.id.othermonth_switch);
+
+        executor = Executors.newSingleThreadExecutor();
 
         categoryDao = CalendarCategoryDataBase.getInstance(mContext).categoryDao();
 
@@ -74,9 +84,21 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
         finish_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent();
-                intent.putExtra("showOtherMonths", lastmonth_switch.isChecked());*/
                 dismiss();
+            }
+        });
+
+        //삭제버튼
+        del_categories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (deleteVisible == false) {
+                    deleteVisible = true;
+                } else {
+                    deleteVisible = false;
+                }
+
+                updateUI();
             }
         });
 
@@ -85,13 +107,19 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
             @Override
             public void onClick(View v) {
                 CalendarCategory dialog = new CalendarCategory(mContext);
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                dialog.show();
+
+                dialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        // 카테고리 팝업이 닫힐 때 수행할 작업
+                        fetchCategoryTask.fetchCategories(new FetchCategoryTask.FetchCategoryTaskListener() {
+                            @Override
+                            public void onFetchCompleted(List<CalendarCategoryEntity> categorylist) {
+
+                            }
+                        });
                     }
                 });
-                dialog.show();
             }
         });
 
@@ -106,28 +134,64 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
 
     @Override
     public void onFetchCompleted(List<CalendarCategoryEntity> categorylist) {
-        updateUI(categorylist); // 매개변수를 전달하여 호출합니다.
+        this.categorylist = categorylist;
+        updateUI(); // 매개변수를 전달하여 호출합니다.
     }
 
     // 화면을 업데이트하는 메서드
-    private void updateUI(List<CalendarCategoryEntity> categorylist) {
+    private void updateUI() {
         LinearLayout categoryContainer = findViewById(R.id.category_container);
         categoryContainer.removeAllViews();
 
         for (CalendarCategoryEntity category : categorylist) {
             View categoryBox = getLayoutInflater().inflate(R.layout.category_box, null);
             TextView titleTextView = categoryBox.findViewById(R.id.category_box_text);
-            //ImageButton deleteButton = categoryBox.findViewById(R.id.schedule_deleteButton);
+            ImageView categoryColorView = categoryBox.findViewById(R.id.category_box_category);
+            ImageButton deleteButton = categoryBox.findViewById(R.id.category_deleteButton);
+
+            if (deleteVisible == true) {
+                deleteButton.setVisibility(View.VISIBLE);
+            } else {
+                deleteButton.setVisibility(View.GONE);
+            }
 
             String title = category.name;
+            String color = category.color;
 
-            // 일정 데이터를 각 scheduleBox에 담는 작업
             titleTextView.setText(title);
+            categoryColorView.setColorFilter(Color.parseColor(color));
 
-            // 각 scheduleBox를 scheduleContainer에 추가
             categoryContainer.addView(categoryBox);
+
+            // 삭제 버튼 클릭 리스너 등록카테
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭된 카테고리 데이터를 데이터베이스에서 삭제
+                    //deleteCategory(category);
+                }
+            });
         }
     }
+
+    /*// 카테고리 삭제 메서드
+    private void deleteCategory(CalendarCategoryEntity category) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                categoryDao.DeleteCategory(category);
+
+                // 삭제한 후에 화면 갱신
+                FetchCategoryTask fetchCategoryTask = new FetchCategoryTask(mContext, categoryDao);
+                fetchCategoryTask.fetchCategories(new FetchCategoryTask.FetchCategoryTaskListener() {
+                    @Override
+                    public void onFetchCompleted(List<CalendarCategoryEntity> categoryList) {
+                        updateUI();
+                    }
+                });
+            }
+        });
+    }*/
 
     public boolean getShowOtherMonths() {
         return othermonth_switch.isChecked();

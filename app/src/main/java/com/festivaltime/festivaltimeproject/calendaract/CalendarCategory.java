@@ -18,6 +18,7 @@ import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.Cale
 
 //캘린더 카테고리 관리 class
 public class CalendarCategory extends Dialog {
+    private int selectedColor = Color.parseColor("#ed5c55"); // 기본 색상 값
     protected Context mContext;
     private CalendarCategoryDataBase categoryDatabase;
     private EditText txtText; //카테고리명
@@ -49,13 +50,53 @@ public class CalendarCategory extends Dialog {
             }
         });
 
-        //add시 데이터 전달
+
+        //카테고리 색 버튼 클릭시 색 visible
+        select_color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color1.setVisibility(View.VISIBLE); color2.setVisibility(View.VISIBLE);
+                color3.setVisibility(View.VISIBLE); color4.setVisibility(View.VISIBLE);
+                color5.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // 선택한 색상 값 변경하는 클릭 이벤트 핸들러
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.calendar_category_select_color1:
+                        selectedColor = Color.parseColor("#ed5c55");
+                        break;
+                    case R.id.calendar_category_select_color2:
+                        selectedColor = Color.parseColor("#ed8a54");
+                        break;
+                    case R.id.calendar_category_select_color3:
+                        selectedColor = Color.parseColor("#edc652");
+                        break;
+                    case R.id.calendar_category_select_color4:
+                        selectedColor = Color.parseColor("#a7ed54");
+                        break;
+                    case R.id.calendar_category_select_color5:
+                        selectedColor = Color.parseColor("#52c8ed");
+                        break;
+                }
+
+                select_color.setColorFilter(selectedColor); // 선택한 색상을 시각적으로 표현
+            }
+        };
+        color1.setOnClickListener(onClickListener);
+        color2.setOnClickListener(onClickListener);
+        color3.setOnClickListener(onClickListener);
+        color4.setOnClickListener(onClickListener);
+        color5.setOnClickListener(onClickListener);
+
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = txtText.getText().toString();
-                int colorInt = ((ColorDrawable) select_color.getBackground()).getColor();
-                String color = String.format("#%06X", (0xFFFFFF & colorInt));
+                String color = String.format("#%06X", (0xFFFFFF & selectedColor));
 
                 if (name.isEmpty()) {
                     Toast.makeText(mContext, "제목을 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -71,46 +112,6 @@ public class CalendarCategory extends Dialog {
                 }
             }
         });
-
-
-        //카테고리 색 버튼 클릭시 색 visible
-        select_color.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                color1.setVisibility(View.VISIBLE); color2.setVisibility(View.VISIBLE);
-                color3.setVisibility(View.VISIBLE); color4.setVisibility(View.VISIBLE);
-                color5.setVisibility(View.VISIBLE);
-            }
-        });
-
-        // 카테고리 색상 선택시 현재 선택한 색상 표시
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.calendar_category_select_color1:
-                        select_color.setColorFilter(Color.parseColor("#ed5c55"));
-                        break;
-                    case R.id.calendar_category_select_color2:
-                        select_color.setColorFilter(Color.parseColor("#ed8a54"));
-                        break;
-                    case R.id.calendar_category_select_color3:
-                        select_color.setColorFilter(Color.parseColor("#edc652"));
-                        break;
-                    case R.id.calendar_category_select_color4:
-                        select_color.setColorFilter(Color.parseColor("#a7ed54"));
-                        break;
-                    case R.id.calendar_category_select_color5:
-                        select_color.setColorFilter(Color.parseColor("#52c8ed"));
-                        break;
-                }
-            }
-        };
-        color1.setOnClickListener(onClickListener);
-        color2.setOnClickListener(onClickListener);
-        color3.setOnClickListener(onClickListener);
-        color4.setOnClickListener(onClickListener);
-        color5.setOnClickListener(onClickListener);
 
     }
 

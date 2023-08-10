@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -10,14 +11,15 @@
         android:background="@drawable/ic_cal_roundbox"
         android:orientation="horizontal">
 
-        <!--대충 요런식.. -->
         <ImageView
             android:id="@+id/category_box_category"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|center"
             android:padding="5dp"
-            android:src="@drawable/ic_cal_category" />
+            android:src="@drawable/ic_cal_category"
+            android:background="#00000000"
+            tools:ignore="SpeakableTextPresentCheck"/>
 
         <TextView
             android:id="@+id/category_box_text"
@@ -33,6 +35,17 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/category_deleteButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@android:color/transparent"
+            android:src="@drawable/minus"
+            android:contentDescription="일정 삭제"
+            android:visibility="gone"/>
+
 
     </LinearLayout>
 
