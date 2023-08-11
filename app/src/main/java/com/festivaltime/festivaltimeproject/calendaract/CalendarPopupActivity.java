@@ -3,9 +3,7 @@ package com.festivaltime.festivaltimeproject.calendaract;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,19 +20,22 @@ import androidx.annotation.NonNull;
 
 import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 //캘린더 일정 추가 dialog class
 public class CalendarPopupActivity extends Dialog {
+    private CalendarCategoryDataBase categoryDataBase;
     protected Context mContext;
     public EditText TitleText;
-    final Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick;
+    final Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick, categoryButton;
     public DatePicker StartDatePicker, EndDatePicker;
     public TimePicker StartTimePicker, EndTimePicker;
     public Switch alldaySwitch;
@@ -54,6 +55,7 @@ public class CalendarPopupActivity extends Dialog {
         TitleText = findViewById(R.id.calendar_popup_title_Text);
         shutdownClick = findViewById(R.id.calendar_popup_close_btn);
         addBtn = findViewById(R.id.calendar_popup_add_finish_btn);
+        categoryButton = findViewById(R.id.calendar_popup_category);
         startdateClick = findViewById(R.id.calendar_popup_start_date);
         starttimeClick = findViewById(R.id.calendar_popup_start_time);
         StartDatePicker = findViewById(R.id.calendar_popup_StartDatePicker);
@@ -64,8 +66,10 @@ public class CalendarPopupActivity extends Dialog {
         EndTimePicker = findViewById(R.id.calendar_popup_EndTimePicker);
         alldaySwitch = findViewById(R.id.calendar_popup_switchView);
 
-        // CalendarDatabase 인스턴스 초기화
+        // CalendarDatabase 및 CalendarCategoryDataBase 인스턴스 초기화
         calendarDatabase = CalendarDatabase.getInstance(context);
+        categoryDataBase = CalendarCategoryDataBase.getInstance(context);
+
 
         //뒤로가기 true
         setCancelable(true);
@@ -271,6 +275,14 @@ public class CalendarPopupActivity extends Dialog {
                 }
             }
         });
+
+        categoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 카테고리 선택 다이얼로그를 표시
+            }
+        });
+
     }
 
 }
