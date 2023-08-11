@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
@@ -41,7 +41,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/festivalSearch_container3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="2"
         android:layout_marginTop="16dp">

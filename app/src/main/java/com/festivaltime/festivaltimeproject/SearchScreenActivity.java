@@ -81,18 +81,17 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 //GridLayout festivalImageNText = findViewById(R.id.festivalSearch_container3);
                                 festivalImageNText.removeAllViews();
 
+
                                 // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
                                 String textToShow = getTextToShow(type);
                                 TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                 titleTextView.setText(textToShow);
 
 
-
-
                                 int maxItems = Math.min(festivalList.size(), 6);
 
                                 switch (query) {
-                                    case "전시회":
+                                    case "부산":
                                         cat3 = "A02080500";
 
                                         apiReader.categoryCode2(apiKey, cat3, new ApiReader.ApiResponseListener() {
@@ -110,13 +109,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                LinearLayout searchContainer = findViewById(R.id.search_container);
-                                                                searchContainer.removeAllViews();
-
-
-                                                                View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
                                                                 GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                                                //GridLayout festivalImageNText = findViewById(R.id.festivalSearch_container3);
                                                                 festivalImageNText.removeAllViews();
 
                                                                 // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
@@ -128,46 +121,42 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                                 int loopItems = Math.min(festivalList.size(), 3);
 
                                                                 for (int i = 0; i < loopItems; i++) {
-                                                                    if(festivalList.size()>i){
-                                                                        HashMap<String, String> festivalInfo = festivalList.get(i);
-                                                                        View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                                                        TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                                                        ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+                                                                    HashMap<String, String> festivalInfo = festivalList.get(i);
+                                                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
-                                                                        String title = festivalInfo.get("title");
-                                                                        String id = festivalInfo.get("contentid");
-                                                                        String repImage = festivalInfo.get("img");
+                                                                    String title = festivalInfo.get("title");
+                                                                    String id = festivalInfo.get("contentid");
+                                                                    String repImage = festivalInfo.get("img");
 
-                                                                        searchTextView.setText(title);
-                                                                        searchTextView.setMaxEms(8);
+                                                                    searchTextView.setText(title);
+                                                                    searchTextView.setMaxEms(8);
 
-                                                                        Log.d(TAG, "Rep Image URL: " + repImage);
-                                                                        if (repImage == null || repImage.isEmpty()) {
-                                                                            searchImageButton.setImageResource(R.drawable.ic_image);
-                                                                        } else {
-                                                                            Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                                                        }
-                                                                        festivalImageNText.addView(festivalItemView);
-
-
-                                                                        festivalItemView.setOnClickListener(new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                String contentId = id;
-                                                                                // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                                                navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
-                                                                            }
-                                                                        });
-                                                                    }else{
-                                                                        System.out.println("no data exist"+ i);
+                                                                    Log.d(TAG, "Rep Image URL: " + repImage);
+                                                                    if (repImage == null || repImage.isEmpty()) {
+                                                                        searchImageButton.setImageResource(R.drawable.ic_image);
+                                                                    } else {
+                                                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
                                                                     }
+                                                                    festivalImageNText.addView(festivalItemView);
+
+
+                                                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(View v) {
+                                                                            String contentId = id;
+                                                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                                                        }
+                                                                    });
+
                                                                 }
                                                             }
                                                         });
                                                     }
                                                 });
                                             }
-
 
 
                                             @Override
