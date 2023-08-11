@@ -93,7 +93,7 @@ public class ParsingApiData {
         }
     }
 
-    public static void parseXmlDataFromCategoryCode(String xmlData, String cat2Filter) {
+    public static void parseXmlDataFromCategoryCode(String xmlData, String cat3Filter) {
         festivalList.clear();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -114,14 +114,14 @@ public class ParsingApiData {
                     String img = getElementText(itemElement, "firstimage2");
                     String overview=getElementText(itemElement, "overview");
                     String contentid=getElementText(itemElement, "contentid");
-                    String cat2 = getElementText(itemElement, "cat2");
+                    String cat3 = getElementText(itemElement, "cat3");
 
-                    if (cat2Filter != null || cat2Filter.equals(cat2)) {
+                    if (cat3Filter != null || cat3Filter.equals(cat3)) {
                         festivalInfo.put("title", title);
                         festivalInfo.put("img", img);
                         festivalInfo.put("overview", overview);
                         festivalInfo.put("contentid", contentid);
-                        festivalInfo.put("cat2", cat2);
+                        festivalInfo.put("cat3", cat3);
 
                         festivalList.add(festivalInfo);
                     }

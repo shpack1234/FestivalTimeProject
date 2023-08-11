@@ -239,7 +239,7 @@ public class ApiReader {
 
     }
 
-    public void categoryCode2(String serviceKey, String contentId, String cat, final ApiResponseListener listener) {
+    public void categoryCode2(String serviceKey, String cat, final ApiResponseListener listener) {
         try {
             HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
                     .scheme("https")
@@ -249,7 +249,6 @@ public class ApiReader {
                     .addPathSegment("categoryCode1")
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
-                    .addQueryParameter("contentId", contentId)
                     .addQueryParameter("cat3", cat)
                     .addQueryParameter("serviceKey", serviceKey);
 
