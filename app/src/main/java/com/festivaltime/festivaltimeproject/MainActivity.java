@@ -15,15 +15,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -40,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
     private String query;
 
-    SliderView sliderView;
-    int[] hot_festival_images={R.drawable.image01, R.drawable.image02, R.drawable.image03};
-
     private final int numberOfLayouts = 3;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
         HashGetter.getHashKey(getApplicationContext());
 
-        searchView = findViewById(R.id.search_view);
+        searchView = findViewById(R.id.main_search_bar);
         searchView.setOnTouchListener((v, event) -> {
             searchView.setIconified(false);
             searchView.performClick();
             return true;
         });
-        ImageButton searchoptionbutton = findViewById(R.id.search_option);
+        ImageButton searchoptionbutton = findViewById(R.id.detailButton);
         searchoptionbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,32 +81,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ViewPager2 banner = findViewById(R.id.main_festival_banner);  //배너
+        int[] bannerImages = {R.drawable.image02, R.drawable.image02, R.drawable.image02};
 
-        LinearLayout mainFestivalContainer=findViewById(R.id.main_festival_container);
+        ImageBannerAdapter adapter = new ImageBannerAdapter(this, bannerImages, banner);
+        banner.setAdapter(adapter);
+        adapter.startAutoSlide();
 
-        for (int i = 0; i < numberOfLayouts; i++) {
-            LinearLayout customFestivalLayout = (LinearLayout) LayoutInflater.from(this)
-                    .inflate(R.layout.main_festival_container, mainFestivalContainer, false);
-            TextView containerTitle=customFestivalLayout.findViewById(R.id.main_festival_area_name);
-            containerTitle.setText("부산");
-            for(int j=0; j<5; j++) {
-                View festivalInfoBox=getLayoutInflater().inflate(R.layout.festival_info_box, null);
-                customFestivalLayout.addView(festivalInfoBox);
+
+        int[] vacationImages = {R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example};
+
+        LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
+
+        for (int imageRes : vacationImages) {
+            View sliderItemView=getLayoutInflater().inflate(R.layout.slider_item, null);
+            ImageView imageView=sliderItemView.findViewById(R.id.image_view);
+
+            imageView.setImageResource(imageRes);
+            vacationFestival.addView(sliderItemView);
+        }
+
+        String[] mainFestivalArea={"부산", "서울", "경주", "김해", "인천"};
+        for(int area=0; area<5; area++) {
+            LinearLayout mainFestivalContainerGroup=findViewById(R.id.main_festival_container_group);
+            LinearLayout mainfestivalContainer= (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
+            TextView areaName=mainfestivalContainer.findViewById(R.id.main_festival_area_title);
+            for(int i=0; i<5; i++) {
+                View festivalBox=getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(0, 0, 0, 40);
+                festivalBox.setLayoutParams(layoutParams);
+                mainfestivalContainer.addView(festivalBox);
             }
-
-            mainFestivalContainer.addView(customFestivalLayout);
+            areaName.setText(mainFestivalArea[area]);
+            mainFestivalContainerGroup.addView(mainfestivalContainer);
         }
 
 
-
-        sliderView=findViewById(R.id.image_slider);           //Hot Festival 배너 이미지 전환
-        SliderAdapter sliderAdapter=new SliderAdapter(hot_festival_images);
-        sliderView.setSliderAdapter(sliderAdapter);
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM);
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.startAutoCycle();
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.action_home) {
@@ -204,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
+                        switch (item.getItemId()) {
                             case R.id.every_region:
                                 location.setText("모든 지역");
                                 break;
