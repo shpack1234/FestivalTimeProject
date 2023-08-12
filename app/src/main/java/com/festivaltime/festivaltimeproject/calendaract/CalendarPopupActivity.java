@@ -159,8 +159,15 @@ public class CalendarPopupActivity extends Dialog {
         alldaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                StartDatePicker.setVisibility(View.GONE);
+                StartTimePicker.setVisibility(View.GONE);
+                EndDatePicker.setVisibility(View.GONE);
+                EndTimePicker.setVisibility(View.GONE);
+
                 if (isChecked) {
-                    //date > time 위치 이동은 미구현
+                    starttimeClick.setText("00:00");
+                    endtimeClick.setText("00:00");
+
                     starttimeClick.setVisibility(View.GONE);
                     endtimeClick.setVisibility(View.GONE);
                 }
@@ -279,9 +286,10 @@ public class CalendarPopupActivity extends Dialog {
         categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 카테고리 선택 다이얼로그를 표시
+                // 캘린더 카테고리 팝업을 띄우기
             }
         });
+
 
     }
 

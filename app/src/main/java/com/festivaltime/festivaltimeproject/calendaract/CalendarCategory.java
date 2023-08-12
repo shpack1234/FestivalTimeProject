@@ -4,10 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -107,6 +110,16 @@ public class CalendarCategory extends Dialog {
 
                     CategoryLoader loader = new CategoryLoader(getContext(), newCategory, categoryDatabase.categoryDao());
                     loader.forceLoad();
+
+                    // 팝업 메뉴에 새로운 항목 추가
+                    PopupMenu popupMenu = new PopupMenu(mContext, v);
+                    popupMenu.getMenuInflater().inflate(R.menu.dialog_categorypopup, popupMenu.getMenu());
+
+                    // 동적으로 추가할 그룹 ID
+                    int groupId = R.id.dynamic_items_group;
+
+                    // 팝업 메뉴에 새로운 메뉴 아이템 추가
+                    popupMenu.getMenu().add(groupId, Menu.NONE, Menu.NONE, name);
 
                     dismiss();
                 }

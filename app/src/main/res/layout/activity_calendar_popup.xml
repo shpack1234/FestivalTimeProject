@@ -70,8 +70,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:layout_marginBottom="3dp"
                 android:gravity="left|center"
                 android:text="@string/title_kr"
@@ -80,8 +81,9 @@
 
             <EditText
                 android:id="@+id/calendar_popup_title_Text"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_weight="5"
                 android:layout_marginBottom="3dp"
                 android:background="#00000000"
                 android:ems="30"
@@ -96,7 +98,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical"
             android:background="@drawable/ic_cal_roundbox">
 
@@ -106,8 +108,9 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:layout_marginBottom="3dp"
                     android:gravity="left|center"
                     android:text="@string/all_day"
@@ -116,8 +119,9 @@
 
                 <Switch
                     android:id="@+id/calendar_popup_switchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="5"
                     android:gravity="right|center" />
             </LinearLayout>
 
@@ -127,8 +131,9 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_marginBottom="3dp"
                     android:gravity="left|center"
                     android:text="@string/start"
@@ -137,8 +142,9 @@
 
                 <Button
                     android:id="@+id/calendar_popup_start_date"
-                    android:layout_width="190dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_date"
@@ -146,8 +152,9 @@
 
                 <Button
                     android:id="@+id/calendar_popup_start_time"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:layout_weight="3"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_time"
@@ -194,8 +201,9 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_marginBottom="3dp"
                     android:gravity="left|center"
                     android:text="@string/end"
@@ -204,8 +212,9 @@
 
                 <Button
                     android:id="@+id/calendar_popup_end_date"
-                    android:layout_width="190dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_date"
@@ -213,8 +222,9 @@
 
                 <Button
                     android:id="@+id/calendar_popup_end_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:background="#00ff0000"
                     android:gravity="right|center"
                     android:text="@string/default_time"
@@ -257,14 +267,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_cal_roundbox"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:layout_marginBottom="3dp"
                 android:gravity="left|center"
                 android:text="@string/category"
@@ -273,8 +284,9 @@
 
             <Button
                 android:id="@+id/calendar_popup_category"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="5"
                 android:background="#00ff0000"
                 android:gravity="right|center"
                 android:text="@string/category"
@@ -283,14 +295,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_cal_roundbox"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:layout_marginBottom="3dp"
                 android:gravity="left|center"
                 android:text="@string/alert"
@@ -299,8 +312,9 @@
 
             <Switch
                 android:id="@+id/calendar_popup_alert_switch"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="5"
                 android:gravity="right|center" />
         </LinearLayout>
 
