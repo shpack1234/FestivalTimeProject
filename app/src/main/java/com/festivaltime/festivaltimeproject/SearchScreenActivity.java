@@ -35,6 +35,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
+    private String cat2 = "";
     private String cat3 = "";
 
     @Override
@@ -54,8 +55,10 @@ public class SearchScreenActivity extends AppCompatActivity {
         //type="A02070100";
         String apiKey = getResources().getString(R.string.api_key);
 
+        cat2 = "A0207";
+
         apiReader = new ApiReader();
-        apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
+        apiReader.searchKeyword2(apiKey, query, cat2, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Log.d("response", response);
@@ -83,7 +86,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
                                 // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                String textToShow = getTextToShow(type);
+                                String textToShow = getTextToShow(cat2);
                                 TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                 titleTextView.setText(textToShow);
 
@@ -94,11 +97,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     case "부산":
                                         cat3 = "A02080500";
 
-                                        apiReader.categoryCode2(apiKey, cat3, new ApiReader.ApiResponseListener() {
+                                        apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
                                             @Override
                                             public void onSuccess(String response) {
                                                 Log.d("response", response);
-                                                ParsingApiData.parseXmlDataFromCategoryCode(response, cat3); // 응답을 파싱하여 데이터를 저장
+                                                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
                                                 List<LinkedHashMap<String, String>> parsedFestivalList2 = ParsingApiData.getFestivalList();
                                                 executor.execute(new Runnable() {
                                                     @Override
@@ -113,7 +116,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                                 festivalImageNText.removeAllViews();
 
                                                                 // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                                                String textToShow = getTextToShow(type);
+                                                                String textToShow = getTextToShow(cat3);
                                                                 TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                                                 titleTextView.setText(textToShow);
 
@@ -167,7 +170,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         break;
 
 
-                                    case "축제":
+                                    case "서울":
                                         for (int i = 0; i < maxItems; i++) {
                                             HashMap<String, String> festivalInfo = festivalList.get(i);
                                             View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
