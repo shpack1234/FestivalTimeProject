@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,7 +45,7 @@ import java.util.concurrent.Executors;
 //개인 캘린더 총괄 class
 public class CalendarActivity extends AppCompatActivity implements FetchScheduleTask.FetchScheduleTaskListener {
     private CalendarDao calendarDao;
-    private boolean showOtherMonths=true; // 다른 달의 일자를 표시할지 여부를 저장 변수
+    private boolean showOtherMonths = true; // 다른 달의 일자를 표시할지 여부를 저장 변수
     //현재 시간 가져오기 now, date, sdf
     public long now = System.currentTimeMillis();
     public Date date = new Date(now);
@@ -239,12 +240,12 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             ImageButton deleteButton = scheduleBox.findViewById(R.id.schedule_deleteButton);
 
             String title = schedule.title;
-            String startDate = schedule.startDate;
-            String endDate = schedule.endDate;
+            String startTime = schedule.startTime;
+            String endTime = schedule.endTime;
 
-            // 일정 데이터를 각 scheduleBox에 담는 작업
             titleTextView.setText(title);
-            timeTextView.setText(startDate + " ~ " + endDate);
+            // 일정 데이터를 각 scheduleBox에 담는 작업
+            timeTextView.setText(startTime + "  " + endTime);
 
             // 각 scheduleBox를 scheduleContainer에 추가
             scheduleContainer.addView(scheduleBox);
@@ -259,8 +260,6 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             });
         }
     }
-
-
 
 
     // 스케줄을 삭제하는 메서드
@@ -296,10 +295,10 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         //1일로 set
         monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        int firstDayOfMonth = monthCalendar.get(Calendar.DAY_OF_WEEK)-1;
+        int firstDayOfMonth = monthCalendar.get(Calendar.DAY_OF_WEEK) - 1;
         monthCalendar.add(Calendar.DAY_OF_MONTH, -firstDayOfMonth);
 
-        while (dayList.size()<42) { //42칸 채우도록 날짜 추가
+        while (dayList.size() < 42) { //42칸 채우도록 날짜 추가
             dayList.add(monthCalendar.getTime());
             monthCalendar.add(Calendar.DAY_OF_MONTH, 1);
         }

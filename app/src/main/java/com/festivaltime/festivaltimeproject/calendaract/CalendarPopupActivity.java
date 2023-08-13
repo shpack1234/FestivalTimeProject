@@ -115,6 +115,7 @@ public class CalendarPopupActivity extends Dialog {
                 String startTime = starttimeClick.getText().toString();
                 String endDate = enddateClick.getText().toString();
                 String endTime = endtimeClick.getText().toString();
+                String categorytxt = categoryButton.getText().toString();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
 
@@ -126,19 +127,22 @@ public class CalendarPopupActivity extends Dialog {
                         Date startdate = sdf.parse(startDate + " " + startTime);
                         Date enddate = sdf.parse(endDate + " " + endTime);
 
-                        if (enddate.after(startdate)) {
+                        if (enddate.after(startdate) || enddate.equals(startdate)) {
                             // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
 
-                            // 시작 날짜와 시간을 결합
-                            String startDateTime = startDate + " " + startTime;
-                            // 종료 날짜와 시간을 결합
-                            String endDateTime = endDate + " " + endTime;
+                            if(startTime=="00:00" && endTime=="00:00"){
+                                startTime = "";
+                                endTime = "";
+                            }
 
                             // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
                             CalendarEntity newSchedule = new CalendarEntity();
                             newSchedule.title = title;
-                            newSchedule.startDate = startDateTime;
-                            newSchedule.endDate = endDateTime;
+                            newSchedule.startDate = startDate;
+                            newSchedule.endDate = endDate;
+                            newSchedule.startTime = startTime;
+                            newSchedule.endTime = endTime;
+                            newSchedule.category = categorytxt;
 
                             // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
                             ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());

@@ -18,17 +18,27 @@ public class CalendarEntity {
     @ColumnInfo(name = "schedule_enddate")
     public String endDate;
 
-    // 필요에 따라 추가적인 필드와 메서드를 여기에 추가할 수 있습니다.
+    @ColumnInfo(name = "schedule_starttime")
+    public String startTime;
+
+    @ColumnInfo(name = "schedule_endtime")
+    public String endTime;
+
+    @ColumnInfo(name = "schedule_category")
+    public String category;
 
     // 생성자
     public CalendarEntity() {
         // Room에 필요한 빈 생성자
     }
 
-    public CalendarEntity(String title, String startDate, String endDate) {
+    public CalendarEntity(String title, String startDate, String endDate, String startTime, String endTime, String category) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.category = category;
     }
 
     // Getter와 Setter (필요한 경우)

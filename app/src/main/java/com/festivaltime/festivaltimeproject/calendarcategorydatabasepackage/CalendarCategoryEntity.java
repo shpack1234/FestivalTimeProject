@@ -9,11 +9,11 @@ public class CalendarCategoryEntity {
     @PrimaryKey(autoGenerate = true)
     public int uid;
 
-    @ColumnInfo(name = "category_color")
-    public String color;
-
     @ColumnInfo(name = "category_name")
     public String name;
+
+    @ColumnInfo(name = "category_color")
+    public String color;
 
     // 생성자
     public CalendarCategoryEntity() {

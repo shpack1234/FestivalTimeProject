@@ -73,6 +73,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         int dayNo = dateCalendar.get(Calendar.DAY_OF_MONTH);
         holder.dayText.setText(String.valueOf(dayNo));
 
+        // 날짜가 현재 날짜일 경우 텍스트 색상을 빨간색으로 변경
+        if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
+            holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
+            holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+        }
+
         // 날짜 클릭 이벤트
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +123,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 }
             }
         });
+
+
 
     }
 
