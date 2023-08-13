@@ -293,31 +293,6 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/ic_cal_roundbox"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_marginBottom="3dp"
-                android:gravity="left|center"
-                android:text="@string/alert"
-                android:textColor="@color/black"
-                android:textSize="13sp" />
-
-            <Switch
-                android:id="@+id/calendar_popup_alert_switch"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="5"
-                android:gravity="right|center" />
-        </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

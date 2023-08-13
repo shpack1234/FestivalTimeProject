@@ -4,6 +4,7 @@ package com.festivaltime.festivaltimeproject.calendaract;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -286,9 +288,30 @@ public class CalendarPopupActivity extends Dialog {
         categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 캘린더 카테고리 팝업을 띄우기
+                // 팝업 메뉴를 생성하고 위치 지정
+                PopupMenu popupMenu = new PopupMenu(mContext, categoryButton);
+
+                // 메뉴 인플레이션
+                popupMenu.getMenuInflater().inflate(R.menu.dialog_categorypopup, popupMenu.getMenu());
+
+                // 팝업 메뉴 아이템 클릭 리스너 설정
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // 선택한 메뉴 아이템의 이름을 가져와서 처리
+                        String selectedCategory = item.getTitle().toString();
+                        // 선택한 카테고리 이름을 버튼에 설정
+                        categoryButton.setText(selectedCategory);
+                        return true;
+                    }
+                });
+
+                // 팝업 메뉴 보이기
+                popupMenu.show();
             }
         });
+
+
 
 
     }

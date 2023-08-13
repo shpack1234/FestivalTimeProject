@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Button;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     public SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
     private CalendarPopupActivity Popup_btn; //popup창에서 startdate, enddate default 설정위한 클래스 변수 지정
     public Button cal_setting, add_Btn, festi_cal;
+    public ScrollView schedules;
     public TextView SelectDateView, Year_text, monthText;
     public RecyclerView calendarrecycler; //캘린더 recyclerview, 일정 담는 recyclerview
     private Executor executor;
@@ -65,6 +67,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         calendarrecycler = findViewById(R.id.calendar_recyclerView); //calendar recyclerview
 
         SelectDateView = findViewById(R.id.calendar_SelectDateView); //일정 위 선택한 날짜 표시 text
+        schedules = findViewById(R.id.calendar_schedules);
 
         ImageButton prevBtn = findViewById(R.id.calendar_pre_btn); //calendar 이전 달 이동 btn
         ImageButton nextBtn = findViewById(R.id.calendar_next_btn); //calendar 다음 달 이동 btn
@@ -218,7 +221,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         ArrayList<Date> dayList = daysInMonthArray();
 
         //calendar 어뎁터 사용 위한 정의
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7); //recyclerview layout 설정
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);

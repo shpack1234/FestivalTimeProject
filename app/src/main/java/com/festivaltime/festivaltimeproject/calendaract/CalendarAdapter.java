@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,13 +24,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     private RecyclerView recyclerView;
     private int previousSelectedPosition = -1;
     private TextView selectDateView;
+    private ScrollView schedules;
 
     //recyclerview 정렬한 arraylist, 다른달 표시 여부, calendar recyclerview, 선택 날짜, 일정 view
-    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, ScrollView schedules) {
         this.dayList = dayList;
         this.showOtherMonths = showOtherMonths;
         this.recyclerView = recyclerView;
         this.selectDateView = selectDateView;
+        this.schedules = schedules;
     }
 
     @NonNull
@@ -109,6 +112,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                         String selectedDateString = dateFormat.format(selectedDate);
                         selectDateView.setText(selectedDateString);
                         selectDateView.setVisibility(View.VISIBLE);
+                        schedules.setVisibility(View.VISIBLE);
                     }
                 }
             }
