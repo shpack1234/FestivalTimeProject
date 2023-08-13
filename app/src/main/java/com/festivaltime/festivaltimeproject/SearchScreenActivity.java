@@ -40,6 +40,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private String cat3 = "";
     private boolean festivalListLoad = false;
     private boolean exhibitionListLoad = false;
+    private boolean theaterListLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,11 +162,14 @@ public class SearchScreenActivity extends AppCompatActivity {
             }
         });
 
+        festivalListLoad = false;
         cat3 = "A02080500";
         apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
+
                 exhibitionListLoad = true;
+
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -196,7 +200,46 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
+/**
+        exhibitionListLoad = false;
+        cat3 = "A02080200";
+        apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
 
+                theaterListLoad = true;
+
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!festivalListLoad && !exhibitionListLoad){
+                                    loopUI(query, cat3, 3);
+                                }
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+**/
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
