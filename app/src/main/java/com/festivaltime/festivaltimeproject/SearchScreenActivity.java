@@ -38,6 +38,8 @@ public class SearchScreenActivity extends AppCompatActivity {
     private String type;
     private String cat2 = "";
     private String cat3 = "";
+    private boolean festivalListLoad = false;
+    private boolean exhibitionListLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +58,14 @@ public class SearchScreenActivity extends AppCompatActivity {
         //type="A02070100";
         String apiKey = getResources().getString(R.string.api_key);
 
+
         cat2 = "A0207";
 
         apiReader = new ApiReader();
         apiReader.searchKeyword2(apiKey, query, cat2, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
+
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -126,41 +130,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                    if (query.equals("부산")) {
-                                        cat3 = "A02080500";
-
-                                        apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
-                                            @Override
-                                            public void onSuccess(String response) {
-                                                Log.d("response", response);
-                                                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
-                                                List<LinkedHashMap<String, String>> parsedFestivalList2 = ParsingApiData.getFestivalList();
-                                                executor.execute(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        festivalList2.clear();
-                                                        festivalList2.addAll(parsedFestivalList2);
-
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                loopUI(cat3, 3);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-
-
-                                            @Override
-                                            public void onError(String error) {
-                                                Log.e(TAG, "API Error: " + error);
-                                            }
-                                        });
-                                    }
-
 
                                 }
+
 
                                 searchContainer.addView(searchContainerView);
 
@@ -182,6 +154,42 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
             }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+        cat3 = "A02080500";
+        apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                exhibitionListLoad = true;
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!festivalListLoad){
+                                    loopUI(query, cat3, 3);
+                                }
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
 
             @Override
             public void onError(String error) {
@@ -211,9 +219,8 @@ public class SearchScreenActivity extends AppCompatActivity {
         });
     }
 
-    private void loopUI(String cat, int count){
+    private void loopUI(String query, String cat, int count) {
         LinearLayout searchContainer = findViewById(R.id.search_container);
-        searchContainer.removeAllViews();
 
         View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
         GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
@@ -225,10 +232,10 @@ public class SearchScreenActivity extends AppCompatActivity {
         titleTextView.setText(textToShow);
 
 
-        int loopItems = Math.min(festivalList2.size(), count);
+        int loopItems = Math.min(festivalList.size(), count);
 
         for (int i = 0; i < loopItems; i++) {
-            HashMap<String, String> festivalInfo = festivalList2.get(i);
+            HashMap<String, String> festivalInfo = festivalList.get(i);
             View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
             TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
             ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
@@ -259,7 +266,19 @@ public class SearchScreenActivity extends AppCompatActivity {
             });
 
         }
+
+        searchContainer.addView(searchContainerView);
+
+        Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
+        detailSearchButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
+            }
+        });
     }
+
     private String getTextToShow(String type) {
         switch (type) {
             case "A02080100":
