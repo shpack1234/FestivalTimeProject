@@ -33,6 +33,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private static final String TAG = "SearchScreenActivity";
     private Executor executor;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
+    private List<HashMap<String, String>> festivalList2 = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
     private String cat2 = "";
@@ -93,8 +94,39 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                 int maxItems = Math.min(festivalList.size(), 6);
 
-                                switch (query) {
-                                    case "부산":
+
+                                for (int i = 0; i < maxItems; i++) {
+                                    HashMap<String, String> festivalInfo = festivalList.get(i);
+                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+
+                                    String title = festivalInfo.get("title");
+                                    String id = festivalInfo.get("contentid");
+                                    String repImage = festivalInfo.get("img");
+
+                                    searchTextView.setText(title);
+                                    searchTextView.setMaxEms(8);
+
+                                    Log.d(TAG, "Rep Image URL: " + repImage);
+                                    if (repImage == null || repImage.isEmpty()) {
+                                        searchImageButton.setImageResource(R.drawable.ic_image);
+                                    } else {
+                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                    }
+                                    festivalImageNText.addView(festivalItemView);
+
+
+                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            String contentId = id;
+                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                        }
+                                    });
+
+                                    if (query.equals("부산")) {
                                         cat3 = "A02080500";
 
                                         apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
@@ -106,55 +138,13 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                 executor.execute(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        festivalList.clear();
-                                                        festivalList.addAll(parsedFestivalList2);
+                                                        festivalList2.clear();
+                                                        festivalList2.addAll(parsedFestivalList2);
 
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                                                festivalImageNText.removeAllViews();
-
-                                                                // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                                                String textToShow = getTextToShow(cat3);
-                                                                TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
-                                                                titleTextView.setText(textToShow);
-
-
-                                                                int loopItems = Math.min(festivalList.size(), 3);
-
-                                                                for (int i = 0; i < loopItems; i++) {
-                                                                    HashMap<String, String> festivalInfo = festivalList.get(i);
-                                                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
-
-                                                                    String title = festivalInfo.get("title");
-                                                                    String id = festivalInfo.get("contentid");
-                                                                    String repImage = festivalInfo.get("img");
-
-                                                                    searchTextView.setText(title);
-                                                                    searchTextView.setMaxEms(8);
-
-                                                                    Log.d(TAG, "Rep Image URL: " + repImage);
-                                                                    if (repImage == null || repImage.isEmpty()) {
-                                                                        searchImageButton.setImageResource(R.drawable.ic_image);
-                                                                    } else {
-                                                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                                                    }
-                                                                    festivalImageNText.addView(festivalItemView);
-
-
-                                                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            String contentId = id;
-                                                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
-                                                                        }
-                                                                    });
-
-                                                                }
+                                                                loopUI(cat3, 3);
                                                             }
                                                         });
                                                     }
@@ -167,44 +157,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                 Log.e(TAG, "API Error: " + error);
                                             }
                                         });
-                                        break;
+                                    }
 
 
-                                    case "서울":
-                                        for (int i = 0; i < maxItems; i++) {
-                                            HashMap<String, String> festivalInfo = festivalList.get(i);
-                                            View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                            TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                            ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
-
-                                            String title = festivalInfo.get("title");
-                                            String id = festivalInfo.get("contentid");
-                                            String repImage = festivalInfo.get("img");
-
-                                            searchTextView.setText(title);
-                                            searchTextView.setMaxEms(8);
-
-                                            Log.d(TAG, "Rep Image URL: " + repImage);
-                                            if (repImage == null || repImage.isEmpty()) {
-                                                searchImageButton.setImageResource(R.drawable.ic_image);
-                                            } else {
-                                                Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                            }
-                                            festivalImageNText.addView(festivalItemView);
-
-
-                                            festivalItemView.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    String contentId = id;
-                                                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                    navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
-                                                }
-                                            });
-
-
-                                        }
-                                        break;
                                 }
 
                                 searchContainer.addView(searchContainerView);
@@ -256,6 +211,55 @@ public class SearchScreenActivity extends AppCompatActivity {
         });
     }
 
+    private void loopUI(String cat, int count){
+        LinearLayout searchContainer = findViewById(R.id.search_container);
+        searchContainer.removeAllViews();
+
+        View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
+        GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
+        festivalImageNText.removeAllViews();
+
+        // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
+        String textToShow = getTextToShow(cat);
+        TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
+        titleTextView.setText(textToShow);
+
+
+        int loopItems = Math.min(festivalList2.size(), count);
+
+        for (int i = 0; i < loopItems; i++) {
+            HashMap<String, String> festivalInfo = festivalList2.get(i);
+            View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+            TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+            ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+
+            String title = festivalInfo.get("title");
+            String id = festivalInfo.get("contentid");
+            String repImage = festivalInfo.get("img");
+
+            searchTextView.setText(title);
+            searchTextView.setMaxEms(8);
+
+            Log.d(TAG, "Rep Image URL: " + repImage);
+            if (repImage == null || repImage.isEmpty()) {
+                searchImageButton.setImageResource(R.drawable.ic_image);
+            } else {
+                Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+            }
+            festivalImageNText.addView(festivalItemView);
+
+
+            festivalItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String contentId = id;
+                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                    navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                }
+            });
+
+        }
+    }
     private String getTextToShow(String type) {
         switch (type) {
             case "A02080100":
