@@ -2,8 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/non_category"
-        android:title="@string/none"/>
+        android:id="@+id/festival_category"
+        android:title="@string/festival"/>
+
+    <item
+        android:id="@+id/vacation_category"
+        android:title="@string/vacation"/>
 
     <!-- 동적으로 추가 메뉴 아이템 -->
     <group android:id="@+id/dynamic_items_group" />

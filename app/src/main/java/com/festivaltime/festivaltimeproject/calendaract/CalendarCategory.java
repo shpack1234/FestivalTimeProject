@@ -111,16 +111,6 @@ public class CalendarCategory extends Dialog {
                     CategoryLoader loader = new CategoryLoader(getContext(), newCategory, categoryDatabase.categoryDao());
                     loader.forceLoad();
 
-                    // 팝업 메뉴에 새로운 항목 추가
-                    PopupMenu popupMenu = new PopupMenu(mContext, v);
-                    popupMenu.getMenuInflater().inflate(R.menu.dialog_categorypopup, popupMenu.getMenu());
-
-                    // 동적으로 추가할 그룹 ID
-                    int groupId = R.id.dynamic_items_group;
-
-                    // 팝업 메뉴에 새로운 메뉴 아이템 추가
-                    popupMenu.getMenu().add(groupId, Menu.NONE, Menu.NONE, name);
-
                     dismiss();
                 }
             }

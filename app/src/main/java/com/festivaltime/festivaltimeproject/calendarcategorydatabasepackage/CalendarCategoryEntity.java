@@ -25,4 +25,12 @@ public class CalendarCategoryEntity {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
 }

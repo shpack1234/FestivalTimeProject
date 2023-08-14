@@ -3,7 +3,9 @@ package com.festivaltime.festivaltimeproject.calendaract;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +25,7 @@ import androidx.annotation.NonNull;
 import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 
@@ -79,20 +82,20 @@ public class CalendarPopupActivity extends Dialog {
 
         Window window = getWindow();
 
-        if(window!=null){
+        if (window != null) {
             //팝업 배경 투명설정 별로같아서 주석처리함)
             //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             WindowManager.LayoutParams params = window.getAttributes();
             // 화면에 가득 차도록
-            params.width         = WindowManager.LayoutParams.MATCH_PARENT;
-            params.height        = WindowManager.LayoutParams.WRAP_CONTENT;
+            params.width = WindowManager.LayoutParams.MATCH_PARENT;
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
             // 열기&닫기 시 애니메이션 설정
             params.windowAnimations = R.style.AnimationPopupStyle;
-            window.setAttributes( params );
+            window.setAttributes(params);
             // UI 하단 정렬
-            window.setGravity( Gravity.BOTTOM );
+            window.setGravity(Gravity.BOTTOM);
         }
 
         //사용자 선택한 날짜로 초기화 (미선택시 현재 날짜로 초기화)
@@ -130,7 +133,7 @@ public class CalendarPopupActivity extends Dialog {
                         if (enddate.after(startdate) || enddate.equals(startdate)) {
                             // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
 
-                            if(startTime=="00:00" && endTime=="00:00"){
+                            if (startTime == "00:00" && endTime == "00:00") {
                                 startTime = "";
                                 endTime = "";
                             }
@@ -176,8 +179,7 @@ public class CalendarPopupActivity extends Dialog {
 
                     starttimeClick.setVisibility(View.GONE);
                     endtimeClick.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     starttimeClick.setVisibility(View.VISIBLE);
                     endtimeClick.setVisibility(View.VISIBLE);
                 }
@@ -193,8 +195,10 @@ public class CalendarPopupActivity extends Dialog {
                         EndDatePicker.setVisibility(View.GONE);
                         EndTimePicker.setVisibility(View.GONE);
                         if (StartDatePicker.getVisibility() == View.VISIBLE) {
-                            StartDatePicker.setVisibility(View.GONE);}
-                        else {StartDatePicker.setVisibility(View.VISIBLE);}
+                            StartDatePicker.setVisibility(View.GONE);
+                        } else {
+                            StartDatePicker.setVisibility(View.VISIBLE);
+                        }
                         break;
 
                     case R.id.calendar_popup_start_time: //시작 시간-시간 클릭
@@ -202,8 +206,10 @@ public class CalendarPopupActivity extends Dialog {
                         EndDatePicker.setVisibility(View.GONE);
                         EndTimePicker.setVisibility(View.GONE);
                         if (StartTimePicker.getVisibility() == View.VISIBLE) {
-                            StartTimePicker.setVisibility(View.GONE);}
-                        else {StartTimePicker.setVisibility(View.VISIBLE);}
+                            StartTimePicker.setVisibility(View.GONE);
+                        } else {
+                            StartTimePicker.setVisibility(View.VISIBLE);
+                        }
                         break;
 
                     case R.id.calendar_popup_end_date: //end 시간-날짜 클릭시 표시
@@ -211,8 +217,10 @@ public class CalendarPopupActivity extends Dialog {
                         StartTimePicker.setVisibility(View.GONE);
                         EndTimePicker.setVisibility(View.GONE);
                         if (EndDatePicker.getVisibility() == View.VISIBLE) {
-                            EndDatePicker.setVisibility(View.GONE);}
-                        else {EndDatePicker.setVisibility(View.VISIBLE);}
+                            EndDatePicker.setVisibility(View.GONE);
+                        } else {
+                            EndDatePicker.setVisibility(View.VISIBLE);
+                        }
                         break;
 
                     case R.id.calendar_popup_end_time: //end 시간-시간 클릭
@@ -220,8 +228,10 @@ public class CalendarPopupActivity extends Dialog {
                         StartTimePicker.setVisibility(View.GONE);
                         EndDatePicker.setVisibility(View.GONE);
                         if (EndTimePicker.getVisibility() == View.VISIBLE) {
-                            EndTimePicker.setVisibility(View.GONE);}
-                        else {EndTimePicker.setVisibility(View.VISIBLE);}
+                            EndTimePicker.setVisibility(View.GONE);
+                        } else {
+                            EndTimePicker.setVisibility(View.VISIBLE);
+                        }
                         break;
 
                     default: //기타 버튼 선택시 감춤
@@ -292,32 +302,58 @@ public class CalendarPopupActivity extends Dialog {
         categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 팝업 메뉴를 생성하고 위치 지정
-                PopupMenu popupMenu = new PopupMenu(mContext, categoryButton);
+                // 백그라운드 스레드에서 작업을 처리하기 위해 AsyncTask를 생성하여 실행
+                new LoadCategoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+    }
 
-                // 메뉴 인플레이션
-                popupMenu.getMenuInflater().inflate(R.menu.dialog_categorypopup, popupMenu.getMenu());
+    private class LoadCategoryTask extends AsyncTask<Void, Void, List<CalendarCategoryEntity>> {
+        @Override
+        protected List<CalendarCategoryEntity> doInBackground(Void... voids) {
+            // 데이터베이스 인스턴스 생성
+            CalendarCategoryDataBase categoryDataBase = CalendarCategoryDataBase.getInstance(mContext);
 
-                // 팝업 메뉴 아이템 클릭 리스너 설정
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        // 선택한 메뉴 아이템의 이름을 가져와서 처리
-                        String selectedCategory = item.getTitle().toString();
-                        // 선택한 카테고리 이름을 버튼에 설정
-                        categoryButton.setText(selectedCategory);
-                        return true;
-                    }
-                });
+            // 데이터베이스에서 카테고리 목록을 가져옴
+            return categoryDataBase.categoryDao().getAllCategoryEntity();
+        }
 
-                // 팝업 메뉴 보이기
-                popupMenu.show();
+        @Override
+        protected void onPostExecute(List<CalendarCategoryEntity> categories) {
+            // 데이터베이스에서 가져온 카테고리 목록을 메뉴에 추가하는 코드
+            setupCategoryMenu(categories);
+        }
+    }
+    private void setupCategoryMenu (List < CalendarCategoryEntity > categories) {
+        // 팝업 메뉴를 생성하고 위치 지정
+        PopupMenu popupMenu = new PopupMenu(mContext, categoryButton);
+
+        // 메뉴 인플레이션
+        popupMenu.getMenuInflater().inflate(R.menu.dialog_categorypopup, popupMenu.getMenu());
+
+        // 동적으로 추가할 그룹 ID
+        int groupId = R.id.dynamic_items_group;
+
+        // 데이터베이스에서 가져온 카테고리 목록을 메뉴에 추가
+        for (CalendarCategoryEntity category : categories) {
+            popupMenu.getMenu().add(groupId, Menu.NONE, Menu.NONE, category.getName());
+        }
+
+        // 팝업 메뉴 아이템 클릭 리스너 설정
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // 선택한 메뉴 아이템의 이름을 가져와서 처리
+                String selectedCategory = item.getTitle().toString();
+                // 선택한 카테고리 이름을 버튼에 설정
+                categoryButton.setText(selectedCategory);
+                return true;
             }
         });
 
-
-
-
+        // 팝업 메뉴 보이기
+        popupMenu.show();
     }
+
 
 }

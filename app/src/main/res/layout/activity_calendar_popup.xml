@@ -289,7 +289,7 @@
                 android:layout_weight="5"
                 android:background="#00ff0000"
                 android:gravity="right|center"
-                android:text="@string/category"
+                android:text="@string/vacation"
                 android:textSize="13sp" />
         </LinearLayout>
 

@@ -1,7 +1,5 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
-import static android.content.ContentValues.TAG;
-import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -13,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -26,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.festivaltime.festivaltimeproject.FavoriteActivity;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDao;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
@@ -34,10 +35,8 @@ import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchSchedul
 import com.festivaltime.festivaltimeproject.festivalcalendaract.FestivalCalendarActivity;
 import com.festivaltime.festivaltimeproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -236,6 +235,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
         for (CalendarEntity schedule : scheduleList) {
             View scheduleBox = getLayoutInflater().inflate(R.layout.schedule_box, null);
+            ImageView scheduleCategory = scheduleBox.findViewById(R.id.schedule_box_category);
             TextView titleTextView = scheduleBox.findViewById(R.id.schedule_box_text);
             TextView timeTextView = scheduleBox.findViewById(R.id.schedule_box_time);
             ImageButton deleteButton = scheduleBox.findViewById(R.id.schedule_deleteButton);
@@ -243,10 +243,24 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             String title = schedule.title;
             String startTime = schedule.startTime;
             String endTime = schedule.endTime;
+            String categoryName = schedule.category;
 
             titleTextView.setText(title);
             // 일정 데이터를 각 scheduleBox에 담는 작업
             timeTextView.setText(startTime + "  " + endTime);
+
+            if ("축제".equals(categoryName)) {
+                scheduleCategory.setColorFilter(Color.parseColor("#ed5c55"));
+            } else if ("휴가".equals(categoryName)) {
+                scheduleCategory.setColorFilter(Color.parseColor("#52c8ed"));
+            }
+
+            // 카테고리 이름으로 색상을 가져와서 설정
+            /*for (CalendarCategoryEntity category : categoryEntities) {
+                if (category.name.equals(categoryName)) {
+                    scheduleCategory.setColorFilter(Color.parseColor(category.color));
+                }
+            }*/
 
             // 각 scheduleBox를 scheduleContainer에 추가
             scheduleContainer.addView(scheduleBox);
