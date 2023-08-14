@@ -27,20 +27,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 public class SearchScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchScreenActivity";
     private Executor executor;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
-    private List<HashMap<String, String>> festivalList2 = new ArrayList<>();
+    private List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
     private String cat2 = "";
     private String cat3 = "";
-    private boolean festivalListLoad = false;
-    private boolean exhibitionListLoad = false;
-    private boolean theaterListLoad = false;
+    private String cat4 = "";
+
+
+    private Semaphore secondSemaphore = new Semaphore(0);
+    private Semaphore thirdSemaphore = new Semaphore(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +149,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
+                                secondSemaphore.release();
                             }
 
 
@@ -162,13 +166,18 @@ public class SearchScreenActivity extends AppCompatActivity {
             }
         });
 
-        festivalListLoad = false;
+
         cat3 = "A02080500";
         apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
 
-                exhibitionListLoad = true;
+
+                try {
+                    thirdSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
@@ -182,9 +191,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(!festivalListLoad){
-                                    loopUI(query, cat3, 3);
-                                }
+
+                                loopUI(query, cat3, 3);
+
+
+
 
                             }
 
@@ -200,14 +211,19 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
-/**
-        exhibitionListLoad = false;
-        cat3 = "A02080200";
-        apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
+
+
+        cat4 = "A02080200";
+        apiReader.searchKeyword(apiKey, query, cat4, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
 
-                theaterListLoad = true;
+
+                try {
+                    secondSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
@@ -221,10 +237,10 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(!festivalListLoad && !exhibitionListLoad){
-                                    loopUI(query, cat3, 3);
-                                }
 
+                                loopUI(query, cat4, 3);
+
+                                thirdSemaphore.release();
                             }
 
                         });
@@ -239,7 +255,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
-**/
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
