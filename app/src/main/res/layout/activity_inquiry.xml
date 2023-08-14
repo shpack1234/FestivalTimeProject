@@ -1,50 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical">
-        <TextView
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/inquiry"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/before_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_before"
+                android:layout_marginStart="4dp"
+                android:onClick="customOnClick"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@android:color/transparent"
+                tools:ignore="SpeakableTextPresentCheck"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/my_page"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
+
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@color/gray"/>
+
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/before_btn"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:src="@drawable/ic_back_before"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="23dp"
-        android:onClick="customOnClick"
-        android:background="@android:color/transparent"
-        tools:ignore="SpeakableTextPresentCheck"/>
 
-    <Button
-        android:id="@+id/write_submitBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/write"
-        android:background="@android:color/transparent"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="320dp"/>
 
 
 
@@ -211,8 +223,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nevigation_background"
         android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/black"/>
-
-</RelativeLayout>
+        app:itemIconTint="@color/black"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>
