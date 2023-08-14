@@ -143,6 +143,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                         CalendarSetting settingDialog = (CalendarSetting) dialog;
                         showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
                         SelectDateView.setVisibility(View.INVISIBLE); //값 변경시 이전에 선택했던 일정view INVISIBLE 설정
+                        schedules.setVisibility(View.INVISIBLE);
                         setMonthView(); //재설정된 캘린더 view
                     }
                 });

@@ -73,7 +73,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         int dayNo = dateCalendar.get(Calendar.DAY_OF_MONTH);
         holder.dayText.setText(String.valueOf(dayNo));
 
-        // 날짜가 현재 날짜일 경우 텍스트 색상을 빨간색으로 변경
+        // 날짜가 현재 날짜일 경우 텍스트 색상 변경
         if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
             holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
             holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
@@ -101,7 +101,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                         if (previousSelectedPosition != -1) {
                             CalendarViewHolder previousHolder = (CalendarViewHolder) recyclerView.findViewHolderForAdapterPosition(previousSelectedPosition);
                             if (previousHolder != null) {
-                                previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
+                                if (CalendarUtil.isSameDate(dayList.get(previousSelectedPosition), Calendar.getInstance().getTime())) {
+                                } else {
+                                    previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
+                                }
                                 previousHolder.dayText.setBackgroundResource(0);
                             }
                         }
@@ -119,6 +122,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                         selectDateView.setText(selectedDateString);
                         selectDateView.setVisibility(View.VISIBLE);
                         schedules.setVisibility(View.VISIBLE);
+
+                        // 오늘 날짜가 아닌 다른 날짜를 선택한 경우, 오늘 날짜의 색과 배경을 초기화
+                        if (selectedYear != currentYear || selectedMonth != currentMonth || selectedCalendar.get(Calendar.DAY_OF_MONTH) != currentDay) {
+                            CalendarViewHolder todayHolder = (CalendarViewHolder) recyclerView.findViewHolderForAdapterPosition(dayList.indexOf(CalendarUtil.selectedDate.getTime()));
+                            if (todayHolder != null) {
+                                todayHolder.dayText.setBackgroundResource(0);
+                            }
+                        }
                     }
                 }
             }
