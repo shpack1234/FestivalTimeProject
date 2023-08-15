@@ -49,13 +49,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        android:scrollbarSize="8dp"
+        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@+id/main_search">
 
 
         <LinearLayout
             android:id="@+id/search_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -73,8 +75,8 @@
         android:background="@drawable/bottom_nevigation_background"
         app:itemIconTint="@color/black"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

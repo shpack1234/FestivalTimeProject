@@ -10,7 +10,9 @@
             android:id="@+id/search_image"
             android:layout_width="96dp"
             android:layout_height="74dp"
-            android:layout_margin="17dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/radius_corner"/>
 
 
@@ -19,7 +21,8 @@
             android:layout_marginStart="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:singleLine="false"
             android:maxLines="1"
             android:textSize="12sp"
