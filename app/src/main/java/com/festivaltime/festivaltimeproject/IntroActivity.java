@@ -10,10 +10,12 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import java.util.ArrayList;
 import java.util.Random;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class IntroActivity extends AppCompatActivity {
+    public static ArrayList<String> bannerFestivalList;
     private static final String PREFS_NAME = "MyPrefs";
     private static final String KEY_USER_ID = "userId";
 
