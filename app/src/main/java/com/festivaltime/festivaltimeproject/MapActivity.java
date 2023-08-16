@@ -26,15 +26,18 @@ import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.OpenAPIKeyAuthenticationResultListener {
 
+    private String[] areaName = {"서울", "인천", "대전", "대구", "광주", "부산", "울산", "세종", "경기도"
+            , "강원도", "충청북도", "충청남도", "경상북도", "경상남도", "전라북도", "전라남도", "제주도"};
     private MapView mapView;
-    private List<Pair<Double,Double>> coordinates=new ArrayList<>();
+    private List<Pair<Double, Double>> coordinates = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
         mapView = new MapView(this);
-        ViewGroup mapViewContainer=(ViewGroup)findViewById(R.id.map_view);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
         onMapViewInitialized(mapView);
 
@@ -62,10 +65,27 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     @Override
     public void onMapViewInitialized(MapView mapView) {
         mapView.setZoomLevel(11, true);
-        coordinates.add(new Pair<>(37.5665, 126.9780));
-        coordinates.add(new Pair<>(33.3949, 126.5614));
+        coordinates.add(new Pair<>(37.5665, 126.9780)); //서울 1
+        coordinates.add(new Pair<>(37.4562, 126.7052)); //인천 2
+        coordinates.add(new Pair<>(36.3504, 127.3845)); //대전 3
+        coordinates.add(new Pair<>(35.8714, 128.6014)); //대구 4
+        coordinates.add(new Pair<>(35.1595, 126.8526)); //광주 5
+        coordinates.add(new Pair<>(35.1795, 129.0756)); //부산 6
+        coordinates.add(new Pair<>(35.5383, 129.3113)); //울산 7
+        coordinates.add(new Pair<>(36.5040, 127.2494)); //세종 8
+        coordinates.add(new Pair<>(37.5671, 127.1902)); //경기도 31
+        coordinates.add(new Pair<>(37.5558, 128.2093)); //강원도 32
+        coordinates.add(new Pair<>(36.6424, 127.4890)); //충청북도 33
+        coordinates.add(new Pair<>(35.1603, 126.8247)); //충청남도 34
+        coordinates.add(new Pair<>(36.6640, 128.4342)); //경상북도 35
+        coordinates.add(new Pair<>(35.4606, 128.2132)); //경상남도 36
+        coordinates.add(new Pair<>(35.7175, 127.153)); //전라북도 37
+        coordinates.add(new Pair<>(34.8679, 126.991)); //전라남도 38
+        coordinates.add(new Pair<>(33.3949, 126.5614)); //제주도 39
 
-        MapPOIItem[] marker={new MapPOIItem(), new MapPOIItem()};
+        MapPOIItem[] marker = {new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()
+                , new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()
+                , new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()};
 
         marKingFestivalGroup(marker);
     }
@@ -138,8 +158,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private void marKingFestivalGroup(@NonNull MapPOIItem[] marker) {
         Bitmap originalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map_marking);
         Bitmap resizedMarkerBitmap = Bitmap.createScaledBitmap(originalMarkerBitmap, 200, 200, false);
-        for(int i=0; i<marker.length; i++) {
-            marker[i].setItemName("마커");
+        for (int i = 0; i < marker.length; i++) {
+            marker[i].setItemName(areaName[i]);
             marker[i].setTag(i);
             marker[i].setMapPoint(MapPoint.mapPointWithGeoCoord(coordinates.get(i).first, coordinates.get(i).second));
             marker[i].setMarkerType(MapPOIItem.MarkerType.CustomImage);
