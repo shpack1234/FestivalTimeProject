@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject.calendaract;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.Menu;
@@ -39,6 +40,7 @@ import java.util.Locale;
 public class CalendarPopupActivity extends Dialog {
     private CalendarCategoryDataBase categoryDataBase;
     protected Context mContext;
+    private String categorycolor=null;
     public EditText TitleText;
     final Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick, categoryButton;
     public DatePicker StartDatePicker, EndDatePicker;
@@ -122,6 +124,9 @@ public class CalendarPopupActivity extends Dialog {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
 
+                new LoadCategoryColorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, categorytxt);
+
+
                 if (title.isEmpty()) {
                     // 제목이 입력되지 않았을 때 토스트 메시지를 표시합니다.
                     Toast.makeText(mContext, "Title을 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -145,7 +150,7 @@ public class CalendarPopupActivity extends Dialog {
                             newSchedule.endDate = endDate;
                             newSchedule.startTime = startTime;
                             newSchedule.endTime = endTime;
-                            newSchedule.category = categorytxt;
+                            newSchedule.category = categorycolor;
 
                             // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
                             ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
@@ -324,7 +329,8 @@ public class CalendarPopupActivity extends Dialog {
             setupCategoryMenu(categories);
         }
     }
-    private void setupCategoryMenu (List < CalendarCategoryEntity > categories) {
+
+    private void setupCategoryMenu(List<CalendarCategoryEntity> categories) {
         // 팝업 메뉴를 생성하고 위치 지정
         PopupMenu popupMenu = new PopupMenu(mContext, categoryButton);
 
@@ -345,6 +351,7 @@ public class CalendarPopupActivity extends Dialog {
             public boolean onMenuItemClick(MenuItem item) {
                 // 선택한 메뉴 아이템의 이름을 가져와서 처리
                 String selectedCategory = item.getTitle().toString();
+
                 // 선택한 카테고리 이름을 버튼에 설정
                 categoryButton.setText(selectedCategory);
                 return true;
@@ -354,6 +361,45 @@ public class CalendarPopupActivity extends Dialog {
         // 팝업 메뉴 보이기
         popupMenu.show();
     }
+
+    private String setCategoryColor(List<CalendarCategoryEntity> categories, String text) {
+        String returnColor = null;
+        if ("축제".equals(text)) {
+            returnColor = "#ed5c55";
+        } else if ("휴가".equals(text)) {
+            returnColor = "#52c8ed";
+        } else {
+            for (CalendarCategoryEntity category : categories) {
+                if (text.equals(category.getName())) {
+                    returnColor = category.getColor();
+                    break; // 일치하는 카테고리를 찾았으면 루프 종료
+                }
+            }
+        }
+        return returnColor;
+    }
+
+    private class LoadCategoryColorTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String categorytxt = params[0];
+            // 데이터베이스 인스턴스 생성
+            CalendarCategoryDataBase categoryDataBase = CalendarCategoryDataBase.getInstance(mContext);
+
+            List<CalendarCategoryEntity> categories = categoryDataBase.categoryDao().getAllCategoryEntity();
+
+            // setCategoryColor 메서드 호출
+            return setCategoryColor(categories, categorytxt);
+        }
+
+        @Override
+        protected void onPostExecute(String categorycolor) {
+            // categorycolor 값을 멤버 변수에 저장
+            CalendarPopupActivity.this.categorycolor = categorycolor;
+        }
+    }
+
+
 
 
 }

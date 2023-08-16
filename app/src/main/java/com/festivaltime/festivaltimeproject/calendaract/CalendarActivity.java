@@ -229,6 +229,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     }
 
     // 화면을 업데이트하는 메서드
+    // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
@@ -243,24 +244,17 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             String title = schedule.title;
             String startTime = schedule.startTime;
             String endTime = schedule.endTime;
-            String categoryName = schedule.category;
+            String categoryColor = schedule.category;
 
+            if (categoryColor == null) {
+                // 오류시 비출 기본 색상 값 설정
+                categoryColor = "#000000";
+            }
+
+            scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
             titleTextView.setText(title);
             // 일정 데이터를 각 scheduleBox에 담는 작업
             timeTextView.setText(startTime + "  " + endTime);
-
-            if ("축제".equals(categoryName)) {
-                scheduleCategory.setColorFilter(Color.parseColor("#ed5c55"));
-            } else if ("휴가".equals(categoryName)) {
-                scheduleCategory.setColorFilter(Color.parseColor("#52c8ed"));
-            }
-
-            // 카테고리 이름으로 색상을 가져와서 설정
-            /*for (CalendarCategoryEntity category : categoryEntities) {
-                if (category.name.equals(categoryName)) {
-                    scheduleCategory.setColorFilter(Color.parseColor(category.color));
-                }
-            }*/
 
             // 각 scheduleBox를 scheduleContainer에 추가
             scheduleContainer.addView(scheduleBox);
@@ -275,6 +269,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             });
         }
     }
+
 
 
     // 스케줄을 삭제하는 메서드
