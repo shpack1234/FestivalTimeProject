@@ -6,6 +6,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -33,6 +35,8 @@ public class SearchScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchScreenActivity";
     private Executor executor;
+    private SearchView searchView;
+    private String query;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
     private ApiReader apiReader;
@@ -58,6 +62,31 @@ public class SearchScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
+
+        HashGetter.getHashKey(getApplicationContext());
+
+        searchView = findViewById(R.id.main_search_bar);
+        searchView.setOnTouchListener((v, event) -> {
+            searchView.setIconified(false);
+            searchView.performClick();
+            return true;
+        });
+        ImageButton searchoptionbutton = findViewById(R.id.detailButton);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
+                query = s;
+                performSearch(query);
+                navigateToSearchActivity(SearchScreenActivity.this, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -767,5 +796,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                     return "기타";
                 }
         }
+    }
+
+    private void performSearch(String query) {
+        System.out.println("검색어: " + query);
     }
 }
