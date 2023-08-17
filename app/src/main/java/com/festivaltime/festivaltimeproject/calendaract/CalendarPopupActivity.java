@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.Cale
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,7 +42,7 @@ import java.util.Locale;
 public class CalendarPopupActivity extends Dialog {
     private CalendarCategoryDataBase categoryDataBase;
     protected Context mContext;
-    private String categorycolor=null;
+    public String categorycolor = null;
     public EditText TitleText;
     final Button shutdownClick, addBtn, startdateClick, starttimeClick, enddateClick, endtimeClick, categoryButton;
     public DatePicker StartDatePicker, EndDatePicker;
@@ -120,12 +122,9 @@ public class CalendarPopupActivity extends Dialog {
                 String startTime = starttimeClick.getText().toString();
                 String endDate = enddateClick.getText().toString();
                 String endTime = endtimeClick.getText().toString();
-                String categorytxt = categoryButton.getText().toString();
+                String category = categoryButton.getText().toString();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
-
-                new LoadCategoryColorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, categorytxt);
-
 
                 if (title.isEmpty()) {
                     // 제목이 입력되지 않았을 때 토스트 메시지를 표시합니다.
@@ -138,32 +137,44 @@ public class CalendarPopupActivity extends Dialog {
                         if (enddate.after(startdate) || enddate.equals(startdate)) {
                             // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
 
-                            if (startTime == "00:00" && endTime == "00:00") {
+                            if (startTime.equals("00:00") && endTime.equals("00:00")) {
                                 startTime = "";
                                 endTime = "";
+
+                                // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
+                                CalendarEntity newSchedule = new CalendarEntity();
+                                newSchedule.title = title;
+                                newSchedule.startDate = startDate;
+                                newSchedule.endDate = endDate;
+                                newSchedule.startTime = startTime;
+                                newSchedule.endTime = endTime;
+
+                                new LoadCategoryColorTask(new CategoryColorCallback() {
+                                    @Override
+                                    public void onCategoryColorLoaded(String categoryColor) {
+                                        categorycolor = categoryColor;
+
+                                        Log.d("CategoryColorDebug", "Final Category Color: " + categorycolor);
+                                        newSchedule.category = categorycolor;
+
+                                        // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
+                                        ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                                        loader.forceLoad();
+
+                                        // 대화 상자 닫기
+                                        dismiss();
+                                    }
+                                }).
+
+                                        executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, category);
+                            } else {
+                                Toast.makeText(mContext, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                             }
-
-                            // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
-                            CalendarEntity newSchedule = new CalendarEntity();
-                            newSchedule.title = title;
-                            newSchedule.startDate = startDate;
-                            newSchedule.endDate = endDate;
-                            newSchedule.startTime = startTime;
-                            newSchedule.endTime = endTime;
-                            newSchedule.category = categorycolor;
-
-                            // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
-                            ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
-                            loader.forceLoad();
-
-                            // 대화 상자 닫기
-                            dismiss();
-                        } else {
-                            Toast.makeText(mContext, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         });
@@ -364,22 +375,45 @@ public class CalendarPopupActivity extends Dialog {
 
     private String setCategoryColor(List<CalendarCategoryEntity> categories, String text) {
         String returnColor = null;
-        if ("축제".equals(text)) {
+        if (text.equals("축제")) {
             returnColor = "#ed5c55";
-        } else if ("휴가".equals(text)) {
+        } else if (text.equals("휴가")) {
             returnColor = "#52c8ed";
         } else {
+            // 대소문자를 무시하고 비교
+            String lowercaseText = text.toLowerCase(Locale.getDefault());
             for (CalendarCategoryEntity category : categories) {
-                if (text.equals(category.getName())) {
-                    returnColor = category.getColor();
+                String lowercaseCategoryName = category.getName().toLowerCase(Locale.getDefault());
+                if (lowercaseText.equals(lowercaseCategoryName)) {
+                    returnColor = category.color;
                     break; // 일치하는 카테고리를 찾았으면 루프 종료
                 }
+            }
+            if (returnColor == null) {
+                // 일치하는 카테고리를 찾지 못한 경우 로그 출력
+                Log.d("CategoryColorDebug", "No matching category color found for: " + text);
             }
         }
         return returnColor;
     }
 
+    public interface CategoryColorCallback {
+        void onCategoryColorLoaded(String categoryColor);
+    }
+
     private class LoadCategoryColorTask extends AsyncTask<String, Void, String> {
+        private CategoryColorCallback callback;
+
+        public LoadCategoryColorTask(CategoryColorCallback callback) {
+            this.callback = callback;
+        }
+
+        private CalendarPopupActivity mActivity;
+
+        public LoadCategoryColorTask(CalendarPopupActivity activity) {
+            mActivity = activity;
+        }
+
         @Override
         protected String doInBackground(String... params) {
             String categorytxt = params[0];
@@ -394,12 +428,12 @@ public class CalendarPopupActivity extends Dialog {
 
         @Override
         protected void onPostExecute(String categorycolor) {
-            // categorycolor 값을 멤버 변수에 저장
-            CalendarPopupActivity.this.categorycolor = categorycolor;
+            if (callback != null) {
+                callback.onCategoryColorLoaded(categorycolor);
+            }
         }
+
     }
-
-
 
 
 }
