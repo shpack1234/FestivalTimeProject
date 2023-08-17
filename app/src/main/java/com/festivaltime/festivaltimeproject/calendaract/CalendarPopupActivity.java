@@ -140,37 +140,36 @@ public class CalendarPopupActivity extends Dialog {
                             if (startTime.equals("00:00") && endTime.equals("00:00")) {
                                 startTime = "";
                                 endTime = "";
-
-                                // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
-                                CalendarEntity newSchedule = new CalendarEntity();
-                                newSchedule.title = title;
-                                newSchedule.startDate = startDate;
-                                newSchedule.endDate = endDate;
-                                newSchedule.startTime = startTime;
-                                newSchedule.endTime = endTime;
-
-                                new LoadCategoryColorTask(new CategoryColorCallback() {
-                                    @Override
-                                    public void onCategoryColorLoaded(String categoryColor) {
-                                        categorycolor = categoryColor;
-
-                                        Log.d("CategoryColorDebug", "Final Category Color: " + categorycolor);
-                                        newSchedule.category = categorycolor;
-
-                                        // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
-                                        ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
-                                        loader.forceLoad();
-
-                                        // 대화 상자 닫기
-                                        dismiss();
-                                    }
-                                }).
-
-                                        executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, category);
-                            } else {
-                                Toast.makeText(mContext, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                             }
+
+                            // 사용자 입력으로 새로운 CalendarEntity 객체를 생성
+                            CalendarEntity newSchedule = new CalendarEntity();
+                            newSchedule.title = title;
+                            newSchedule.startDate = startDate;
+                            newSchedule.endDate = endDate;
+                            newSchedule.startTime = startTime;
+                            newSchedule.endTime = endTime;
+
+                            new LoadCategoryColorTask(new CategoryColorCallback() {
+                                @Override
+                                public void onCategoryColorLoaded(String categoryColor) {
+                                    categorycolor = categoryColor;
+                                    newSchedule.category = categorycolor;
+
+                                    // ScheduleLoader를 사용하여 새 일정을 데이터베이스에 추가
+                                    ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                                    loader.forceLoad();
+
+                                    // 대화 상자 닫기
+                                    dismiss();
+                                }
+                            }).
+
+                                    executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, category);
+                        } else {
+                            Toast.makeText(mContext, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                         }
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
