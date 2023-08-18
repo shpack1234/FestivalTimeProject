@@ -1,9 +1,11 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -11,17 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 //개인 캘린더 calendar recyclerview class
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
     ArrayList<Date> dayList;
     boolean showOtherMonths;
     private RecyclerView recyclerView;
+    private OnDateClickListener onDateClickListener;
     private int previousSelectedPosition = -1;
     private TextView selectDateView;
     private ScrollView schedules;
@@ -130,6 +136,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                                 todayHolder.dayText.setBackgroundResource(0);
                             }
                         }
+
+                        if (onDateClickListener != null) {
+                            onDateClickListener.onDateClick(selectedDate);
+                        }
                     }
                 }
             }
@@ -140,6 +150,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     }
 
 
+    public interface OnDateClickListener {
+        void onDateClick(Date selectedDate);
+    }
+
+    public void setOnDateClickListener(OnDateClickListener listener) {
+        this.onDateClickListener = listener;
+    }
+
     @Override
     public int getItemCount() {
         return dayList.size();
@@ -149,11 +167,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         //초기화
         TextView dayText;
         View parentView;
+        ImageView scheduleView;
 
         public CalendarViewHolder(@NonNull View itemView) {
             super(itemView);
             dayText = itemView.findViewById(R.id.calendar_cell_dayText);
             parentView = itemView.findViewById(R.id.calendar_cell_parentView);
+            scheduleView = itemView.findViewById(R.id.calendar_cell_schedule);
         }
     }
 

@@ -16,7 +16,7 @@
         android:textColor="#737373"/>
 
     <ImageView
-        android:id="@+id/category_box_category"
+        android:id="@+id/calendar_cell_schedule"
         android:layout_width="7dp"
         android:layout_height="7dp"
         android:layout_gravity="center|center"

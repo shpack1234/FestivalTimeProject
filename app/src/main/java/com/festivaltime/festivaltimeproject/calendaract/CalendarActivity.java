@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
+import static com.festivaltime.festivaltimeproject.calendaract.CalendarUtil.selectedDate;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Button;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,11 +41,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 //개인 캘린더 총괄 class
-public class CalendarActivity extends AppCompatActivity implements FetchScheduleTask.FetchScheduleTaskListener {
+public class CalendarActivity extends AppCompatActivity implements FetchScheduleTask.FetchScheduleTaskListener, CalendarAdapter.OnDateClickListener {
     private CalendarDao calendarDao;
     private boolean showOtherMonths = true; // 다른 달의 일자를 표시할지 여부를 저장 변수
     //현재 시간 가져오기 now, date, sdf
@@ -56,6 +60,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     public TextView SelectDateView, Year_text, monthText;
     public RecyclerView calendarrecycler; //캘린더 recyclerview, 일정 담는 recyclerview
     private Executor executor;
+    private ImageView schedule_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +87,10 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         SelectDateView.setText(sdf2.format(date));
 
         //현재 날짜 set
-        CalendarUtil.selectedDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance();
 
         //화면 설정
         setMonthView();
-        //setScheduleView();
 
         // CalendarDao 인스턴스 생성 (생략)
         calendarDao = CalendarDatabase.getInstance(this).calendarDao();
@@ -95,12 +99,21 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
         fetchScheduleTask.fetchSchedules(this);
 
+        //date recyclerview 설정
+        ArrayList<Date> dayList = daysInMonthArray();
+
+        // CalendarAdapter 객체 생성
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules);
+        adapter.setOnDateClickListener(this);
+        // RecyclerView에 어댑터 설정
+        calendarrecycler.setAdapter(adapter);
+
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //CalendarUtil DATE month 1달 이전으로 설정
-                CalendarUtil.selectedDate.add(Calendar.MONTH, -1);
+                selectedDate.add(Calendar.MONTH, -1);
                 //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
                 SelectDateView.setVisibility(View.INVISIBLE);
                 setMonthView();
@@ -112,7 +125,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             @Override
             public void onClick(View view) {
                 //CalendarUtil DATE month 1달 이후로 설정
-                CalendarUtil.selectedDate.add(Calendar.MONTH, 1);
+                selectedDate.add(Calendar.MONTH, 1);
                 //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
                 SelectDateView.setVisibility(View.INVISIBLE);
                 setMonthView();
@@ -204,6 +217,30 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         });
     }
 
+    @Override
+    public void onDateClick(Date selectedDate) {
+        // 클릭된 날짜에 대한 일정 업데이트 처리
+        updateUIForSelectedDate(selectedDate);
+    }
+
+    private void updateUIForSelectedDate(Date selectedDate) {
+        // 일정 화면 업데이트
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
+        fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
+            @Override
+            public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateUI(scheduleList);
+                    }
+                });
+            }
+        });
+    }
+
+
+
     // FetchScheduleTask에서 일정 데이터를 가져온 후, 캘린더 레이어에 업데이트하는 메서드
     @Override
     public void onFetchCompleted(List<CalendarEntity> scheduleList) {
@@ -214,7 +251,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     //calendar 화면 설정
     private void setMonthView() {
         //선택되어있는 달 저장
-        int month = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
+        int month = selectedDate.get(Calendar.MONTH) + 1;
         //해당 달 월>영어 텍스트뷰
         monthText.setText(Month_eng(month));
 
@@ -228,48 +265,69 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         calendarrecycler.setAdapter(adapter);
     }
 
-    // 화면을 업데이트하는 메서드
+    private boolean isDateInRange(Date selectedDate, Date startDate, Date endDate) {
+        return (selectedDate.compareTo(startDate) >= 0) && (selectedDate.compareTo(endDate) <= 0);
+    }
+
     // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
 
-        for (CalendarEntity schedule : scheduleList) {
-            View scheduleBox = getLayoutInflater().inflate(R.layout.schedule_box, null);
-            ImageView scheduleCategory = scheduleBox.findViewById(R.id.schedule_box_category);
-            TextView titleTextView = scheduleBox.findViewById(R.id.schedule_box_text);
-            TextView timeTextView = scheduleBox.findViewById(R.id.schedule_box_time);
-            ImageButton deleteButton = scheduleBox.findViewById(R.id.schedule_deleteButton);
+        SimpleDateFormat select_sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
-            String title = schedule.title;
-            String startTime = schedule.startTime;
-            String endTime = schedule.endTime;
-            String categoryColor = schedule.category;
+        try {
+            Date selectedDate = select_sdf.parse(SelectDateView.getText().toString());
 
-            if (categoryColor == null) {
-                // 오류시 비출 기본 색상 값 설정
-                categoryColor = "#000000";
-            }
+            int scheduleCount = 0;
 
-            scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
-            titleTextView.setText(title);
-            // 일정 데이터를 각 scheduleBox에 담는 작업
-            timeTextView.setText(startTime + "  " + endTime);
+            for (CalendarEntity schedule : scheduleList) {
+                Date startDate = select_sdf.parse(schedule.startDate);
+                Date endDate = select_sdf.parse(schedule.endDate);
+                //db확인용 log
+                Log.d("CalendarDatabase: DateLog", "startDate: " + startDate);
+                Log.d("CalendarDatabase: DateLog", "endDate: " + endDate);
 
-            // 각 scheduleBox를 scheduleContainer에 추가
-            scheduleContainer.addView(scheduleBox);
+                if (isDateInRange(selectedDate, startDate, endDate)) {
+                    View scheduleBox = getLayoutInflater().inflate(R.layout.schedule_box, null);
+                    ImageView scheduleCategory = scheduleBox.findViewById(R.id.schedule_box_category);
+                    TextView titleTextView = scheduleBox.findViewById(R.id.schedule_box_text);
+                    TextView timeTextView = scheduleBox.findViewById(R.id.schedule_box_time);
+                    ImageButton deleteButton = scheduleBox.findViewById(R.id.schedule_deleteButton);
 
-            // 삭제 버튼 클릭 리스너 등록
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭된 일정 데이터를 데이터베이스에서 삭제
-                    deleteSchedule(schedule);
+                    String title = schedule.title;
+                    String startTime = schedule.startTime;
+                    String endTime = schedule.endTime;
+                    String categoryColor = schedule.category;
+
+                    if (categoryColor == null) {
+                        // 오류시 비출 기본 색상 값 설정
+                        categoryColor = "#000000";
+                    }
+
+                    scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
+                    titleTextView.setText(title);
+                    // 일정 데이터를 각 scheduleBox에 담는 작업
+                    timeTextView.setText(startTime + "  " + endTime);
+
+                    scheduleCount++;
+                    // 각 scheduleBox를 scheduleContainer에 추가
+                    scheduleContainer.addView(scheduleBox);
+
+                    // 삭제 버튼 클릭 리스너 등록
+                    deleteButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // 클릭된 일정 데이터를 데이터베이스에서 삭제
+                            deleteSchedule(schedule);
+                        }
+                    });
                 }
-            });
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
-
 
 
     // 스케줄을 삭제하는 메서드
@@ -301,7 +359,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     private ArrayList<Date> daysInMonthArray() {
         ArrayList<Date> dayList = new ArrayList<>();
         //날짜 복사 후 변수 생성
-        Calendar monthCalendar = (Calendar) CalendarUtil.selectedDate.clone();
+        Calendar monthCalendar = (Calendar) selectedDate.clone();
         //1일로 set
         monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
 

@@ -6,6 +6,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
@@ -33,11 +35,13 @@ public class SearchScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchScreenActivity";
     private Executor executor;
+    private SearchView searchView;
+    private String query;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
-    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8= "";
+    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10 , cat11, cat12= "";
 
 
 
@@ -49,11 +53,40 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore fifthSemaphore = new Semaphore(0);
     private Semaphore sixthSemaphore = new Semaphore(0);
     private Semaphore seventhSemaphore = new Semaphore(0);
+    private Semaphore eightSemaphore = new Semaphore(0);
+    private Semaphore ninthSemaphore = new Semaphore(0);
+    private Semaphore tenthSemaphore = new Semaphore(0);
+    private Semaphore eleventhSemaphore = new Semaphore(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
+
+        HashGetter.getHashKey(getApplicationContext());
+
+        searchView = findViewById(R.id.main_search_bar);
+        searchView.setOnTouchListener((v, event) -> {
+            searchView.setIconified(false);
+            searchView.performClick();
+            return true;
+        });
+        ImageButton searchoptionbutton = findViewById(R.id.detailButton);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
+                query = s;
+                performSearch(query);
+                navigateToSearchActivity(SearchScreenActivity.this, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -194,11 +227,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                if(festivalList.size()>0) {
 
-                                loopUI(query, cat3, 3);
-
+                                    loopUI(query, cat3, 3);
+                                }
                                 fourthSemaphore.release();
-
                             }
 
                         });
@@ -228,7 +261,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
 
                 Log.d("response", response);
-                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat3); // 응답을 파싱하여 데이터를 저장
                 ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat4); // 응답을 파싱하여 데이터를 저장
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 executor.execute(new Runnable() {
@@ -240,9 +272,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                loopUI(query, cat4, 3);
-
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat4, 3);
+                                }
                                 thirdSemaphore.release();
                             }
 
@@ -283,8 +315,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                loopUI(query, cat5, 3);
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat5, 3);
+                                }
                                 fifthSemaphore.release();
                             }
 
@@ -326,8 +359,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                loopUI(query, cat6, 3);
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat6, 3);
+                                }
                                 sixthSemaphore.release();
 
                             }
@@ -370,8 +404,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                loopUI(query, cat7, 3);
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat7, 3);
+                                }
                                 seventhSemaphore.release();
 
                             }
@@ -381,8 +416,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
 
             @Override
             public void onError(String error) {
@@ -414,9 +447,10 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                loopUI(query, cat8, 3);
-
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat8, 3);
+                                }
+                                eightSemaphore.release();
 
                             }
 
@@ -433,6 +467,179 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
+
+        cat9 = "A02080800";
+        apiReader.searchKeyword(apiKey, query, cat9, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+
+
+                try {
+                    eightSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat9); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat9, 3);
+                                }
+                                ninthSemaphore.release();
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+        cat10 = "A02080900";
+        apiReader.searchKeyword(apiKey, query, cat10, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+
+
+                try {
+                    ninthSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat10); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat10, 3);
+                                }
+                                tenthSemaphore.release();
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+        cat11 = "A02081000";
+        apiReader.searchKeyword(apiKey, query, cat11, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+
+
+                try {
+                    tenthSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat11); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat11, 3);
+                                }
+                                eleventhSemaphore.release();
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+        cat12 = "A02081100";
+        apiReader.searchKeyword(apiKey, query, cat12, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+
+
+                try {
+                    eleventhSemaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat12); // 응답을 파싱하여 데이터를 저장
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(festivalList.size()>0) {
+                                    loopUI(query, cat12, 3);
+                                }
+
+                            }
+
+                        });
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+
 
 
 
@@ -555,7 +762,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
+                navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat);
             }
         });
     }
@@ -589,5 +796,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                     return "기타";
                 }
         }
+    }
+
+    private void performSearch(String query) {
+        System.out.println("검색어: " + query);
     }
 }

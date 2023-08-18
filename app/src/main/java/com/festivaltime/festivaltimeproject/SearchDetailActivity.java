@@ -70,10 +70,6 @@ public class SearchDetailActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         type = getIntent().getStringExtra("type");
-        String typeText = getTextToShow(type);
-        TextView titleTextView = findViewById(R.id.Entire_view_title);
-        titleTextView.setText(typeText);
-        
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -100,6 +96,10 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 // UI 갱신 코드
                                 LinearLayout festivalContainer = findViewById(R.id.festival_container);
                                 festivalContainer.removeAllViews();
+
+                                String textToShow = getTextToShow(type);
+                                TextView titleNameTextView = findViewById(R.id.Entire_view_title);
+                                titleNameTextView.setText(textToShow);
 
                                 for (HashMap<String, String> festivalInfo : festivalList) {
                                     View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
@@ -233,36 +233,6 @@ public class SearchDetailActivity extends AppCompatActivity {
 
     }
 
-    private String getTextToShow(String type) {
-        switch (type) {
-            case "A02080100":
-                return "전통공연";
-            case "A02080200":
-                return "연극";
-            case "A02080300":
-                return "뮤지컬";
-            case "A02080400":
-                return "오페라";
-            case "A02080500":
-                return "전시회";
-            case "A02080600":
-                return "박람회";
-            case "A02080800":
-                return "무용";
-            case "A02080900":
-                return "클래식음악회";
-            case "A02081000":
-                return "대중콘서트";
-            case "A02081100":
-                return "영화";
-            default:
-                if (!type.isEmpty() && type.startsWith("A0207")) {
-                    return "축제";
-                } else {
-                    return "기타";
-                }
-        }
-    }
 
     //loadMoreData 메소드
     private void loadMoreData() {
@@ -374,5 +344,36 @@ public class SearchDetailActivity extends AppCompatActivity {
                 isLoading = false; // 로딩 상태 해제
             }
         });
+    }
+
+    private String getTextToShow(String type) {
+        switch (type) {
+            case "A02080100":
+                return "전통공연";
+            case "A02080200":
+                return "연극";
+            case "A02080300":
+                return "뮤지컬";
+            case "A02080400":
+                return "오페라";
+            case "A02080500":
+                return "전시회";
+            case "A02080600":
+                return "박람회";
+            case "A02080800":
+                return "무용";
+            case "A02080900":
+                return "클래식음악회";
+            case "A02081000":
+                return "대중콘서트";
+            case "A02081100":
+                return "영화";
+            default:
+                if (!type.isEmpty() && type.startsWith("A0207")) {
+                    return "축제";
+                } else {
+                    return "기타";
+                }
+        }
     }
 }
