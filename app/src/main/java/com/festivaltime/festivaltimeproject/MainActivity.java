@@ -81,11 +81,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
         ViewPager2 banner = findViewById(R.id.main_festival_banner);  //배너
         int[] bannerImages = {R.drawable.image02, R.drawable.image02, R.drawable.image02};
 
@@ -126,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.action_home) {
