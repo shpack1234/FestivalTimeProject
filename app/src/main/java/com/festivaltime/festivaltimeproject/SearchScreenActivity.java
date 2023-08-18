@@ -182,7 +182,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onClick(View v) {
-                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, type);
+                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
                                     }
                                 });
 

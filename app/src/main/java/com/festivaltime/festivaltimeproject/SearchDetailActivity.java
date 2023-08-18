@@ -53,6 +53,7 @@ public class SearchDetailActivity extends AppCompatActivity {
     private String query;
     private String type;
     ScrollView Scroll_View;
+    private Object response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,144 +71,46 @@ public class SearchDetailActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         type = getIntent().getStringExtra("type");
-        String textToShow = getTextToShow(type);
-        TextView titleNameTextView = findViewById(R.id.Entire_view_title);
-        titleNameTextView.setText(textToShow);
+
 
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
-        apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d("response", response);
-                ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
-
-                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
-
-                // UI 갱신을 위한 작업을 executor를 사용하여 백그라운드 스레드에서 실행
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        festivalList.clear(); // 기존 데이터를 모두 제거
-                        festivalList.addAll(parsedFestivalList);
-
-                        // UI 갱신은 메인 스레드에서 실행
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // UI 갱신 코드
-                                LinearLayout festivalContainer = findViewById(R.id.festival_container);
-                                festivalContainer.removeAllViews();
 
 
-                                for (HashMap<String, String> festivalInfo : festivalList) {
-                                    View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
-                                    TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
-                                    TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                                    TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
-                                    ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
-                                    ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
+        if (!type.isEmpty() && type.startsWith("A0207")) {
+            // type이 "A0207"로 시작하는 경우
+            apiReader.searchKeyword2(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    handleApiResponse(response);
+                }
 
-                                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                            LinearLayout.LayoutParams.WRAP_CONTENT
-                                    );
-                                    layoutParams.setMargins(0, 0, 0, 40);
-                                    festivalInfoBox.setLayoutParams(layoutParams);
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+        } else {
+            // 그 외의 경우
+            apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    handleApiResponse(response);
+                }
 
-                                    String title = festivalInfo.get("title");
-                                    String location = festivalInfo.get("address");
-                                    String id = festivalInfo.get("contentid");
-                                    String repImage = festivalInfo.get("img");
-                                    titleTextView.setText(title);
-                                    titleTextView.setMaxEms(9);
-                                    locationTextView.setText(location);
-                                    idTextView.setText(id);
 
-                                    Log.d(TAG, "Rep Image URL: " + repImage);
-                                    if (repImage == null || repImage.isEmpty()) {
-                                        festivalRepImage.setImageResource(R.drawable.ic_image);
-                                    } else {
-                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
-                                    }
-                                    festivalContainer.addView(festivalInfoBox);
-
-                                    festivalInfoBox.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            // 클릭 시 contentid 값을 가져오는 작업 수행
-                                            String contentId = idTextView.getText().toString();
-                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                            navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
-                                        }
-                                    });
-
-                                    addButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Log.d("Button Listener", "addBtn");
-                                            executor.execute(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    String contentId = idTextView.getText().toString();
-                                                    loadedUser = userDao.getUserInfoById(userId);
-                                                    if (loadedUser != null) {
-                                                        if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                            Log.d("Festival Id", contentId);
-                                                            Log.d("Button Listener", "ID already exists in userFavoriteFestival");
-                                                        } else {
-                                                            Log.d("Festival Id", contentId);
-                                                            loadedUser.addUserFavoriteFestival(contentId);
-                                                            userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
-                                                        }
-                                                    } else {
-                                                        Log.e("No UserInfo", "You should get your information in MyPage");
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "API Error: " + error);
-            }
-        });
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+        }
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-
-        Scroll_View.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                if (!isLoading) {
-                    // 현재 스크롤 위치
-                    int scrollY = Scroll_View.getScrollY();
-                    // 현재 보여지는 영역의 높이
-                    int visibleHeight = Scroll_View.getHeight();
-                    // 스크롤 전체 영역의 높이
-                    int totalHeight = Scroll_View.getChildAt(0).getHeight();
-
-                    // 마지막에 도달했는지 체크
-                    if (scrollY + visibleHeight >= totalHeight && festivalList.size() % ITEMS_PER_PAGE == 0) {
-                        // 추가 데이터 로드
-                        loadMoreData();
-                    }
-                }
-            }
+            public void onClick(View v)
+            {   onBackPressed(); }
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -230,11 +133,108 @@ public class SearchDetailActivity extends AppCompatActivity {
                 return true;
             }
         });
+}
 
+    private void handleApiResponse(String response) {
 
+        Log.d("response", response);
+        ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
+
+        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+
+        // UI 갱신을 위한 작업을 executor를 사용하여 백그라운드 스레드에서 실행
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                festivalList.clear(); // 기존 데이터를 모두 제거
+                festivalList.addAll(parsedFestivalList);
+
+                // UI 갱신은 메인 스레드에서 실행
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI 갱신 코드
+                        LinearLayout festivalContainer = findViewById(R.id.festival_container);
+                        festivalContainer.removeAllViews();
+
+                        String textToShow = getTextToShow(type);
+                        TextView titleNameTextView = findViewById(R.id.Entire_view_title);
+                        titleNameTextView.setText(textToShow);
+
+                        for (HashMap<String, String> festivalInfo : festivalList) {
+                            View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                            TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
+                            TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
+                            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                            ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
+                            ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
+
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+                            layoutParams.setMargins(0, 0, 0, 40);
+                            festivalInfoBox.setLayoutParams(layoutParams);
+
+                            String title = festivalInfo.get("title");
+                            String location = festivalInfo.get("address");
+                            String id = festivalInfo.get("contentid");
+                            String repImage = festivalInfo.get("img");
+                            titleTextView.setText(title);
+                            titleTextView.setMaxEms(9);
+                            locationTextView.setText(location);
+                            idTextView.setText(id);
+
+                            Log.d(TAG, "Rep Image URL: " + repImage);
+                            if (repImage == null || repImage.isEmpty()) {
+                                festivalRepImage.setImageResource(R.drawable.ic_image);
+                            } else {
+                                //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                            }
+                            festivalContainer.addView(festivalInfoBox);
+
+                            festivalInfoBox.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // 클릭 시 contentid 값을 가져오는 작업 수행
+                                    String contentId = idTextView.getText().toString();
+                                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                    navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
+                                }
+                            });
+
+                            addButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Log.d("Button Listener", "addBtn");
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String contentId = idTextView.getText().toString();
+                                            loadedUser = userDao.getUserInfoById(userId);
+                                            if (loadedUser != null) {
+                                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                    Log.d("Festival Id", contentId);
+                                                    Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                } else {
+                                                    Log.d("Festival Id", contentId);
+                                                    loadedUser.addUserFavoriteFestival(contentId);
+                                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                }
+                                            } else {
+                                                Log.e("No UserInfo", "You should get your information in MyPage");
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
     }
-
-
     //loadMoreData 메소드
     private void loadMoreData() {
         isLoading = true; // 로딩 상태 설정
