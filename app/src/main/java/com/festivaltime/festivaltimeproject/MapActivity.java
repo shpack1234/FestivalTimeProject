@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.ViewGroup;
 
@@ -40,6 +41,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
         onMapViewInitialized(mapView);
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_map);
@@ -83,11 +86,14 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         coordinates.add(new Pair<>(34.8679, 126.991)); //전라남도 38
         coordinates.add(new Pair<>(33.3949, 126.5614)); //제주도 39
 
-        MapPOIItem[] marker = {new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()
-                , new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()
-                , new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem(), new MapPOIItem()};
+        MapPOIItem[] marker = new MapPOIItem[coordinates.size()];
+
+        for (int i = 0; i < marker.length; i++) {
+            marker[i] = new MapPOIItem();
+        }
 
         marKingFestivalGroup(marker);
+        mapView.setPOIItemEventListener(this); // 이벤트 리스너 등록
     }
 
     @Override
@@ -137,6 +143,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+        MapPoint selectedMarkerPoint=mapPOIItem.getMapPoint();
+        Log.d("MapActivity", "Selected Marker Point: " + selectedMarkerPoint.getMapPointGeoCoord());
+        mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 7, true);
+
 
     }
 
