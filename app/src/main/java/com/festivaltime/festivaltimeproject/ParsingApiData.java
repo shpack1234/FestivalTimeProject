@@ -175,6 +175,41 @@ public class ParsingApiData {
         }
     }
 
+    public static void parseXmlDataFromAreaBasedSync(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String mapx = getElementText(itemElement, "mapx");
+                    String mapy = getElementText(itemElement, "mapy");
+                    String contentid=getElementText(itemElement, "contentid");
+
+                    festivalInfo.put("title", title);
+                    festivalInfo.put("mapx", mapx);
+                    festivalInfo.put("mapy", mapy);
+                    festivalInfo.put("contentid", contentid);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<LinkedHashMap<String, String>> getFestivalList() {
         return festivalList;
     }

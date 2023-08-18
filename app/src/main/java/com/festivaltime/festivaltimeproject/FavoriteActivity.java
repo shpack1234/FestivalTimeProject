@@ -34,7 +34,7 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSing
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.festivaltime.festivaltimeproject.festivaldatabasepackage.*;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,7 +175,7 @@ public class FavoriteActivity extends AppCompatActivity {
             if (repImage == null || repImage.isEmpty()) {
                 festivalRepImage.setImageResource(R.drawable.ic_image);
             } else {
-                Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
             }
             festivalContainer.addView(favoriteInfoBox);
 

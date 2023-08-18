@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject.calendaract;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.media.Image;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchScheduleTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ import java.util.Locale;
 
 //개인 캘린더 calendar recyclerview class
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
+    private CalendarDao calendarDao;
     ArrayList<Date> dayList;
     boolean showOtherMonths;
     private RecyclerView recyclerView;
@@ -83,6 +88,17 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
             holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
             holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+        }
+
+        calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
+
+        //boolean hasSchedule = checkForSchedule(monthDate, holder.itemView.getContext(), calendarDao); // 일정이 있는 경우 true, 없는 경우 false로 변경
+        boolean hasSchedule = true; //임시로 true해놓기
+
+        if (hasSchedule) {
+            holder.scheduleView.setVisibility(View.VISIBLE);
+        } else {
+            holder.scheduleView.setVisibility(View.INVISIBLE);
         }
 
         // 날짜 클릭 이벤트
@@ -145,10 +161,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             }
         });
 
-
-
     }
 
+    // displayDate가 일정에 속하는지 확인하는 메소드
+    /*private boolean checkForSchedule(Date displayDate, Context context, CalendarDao calendarDao) {
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(context, calendarDao);
+        List<CalendarEntity> schedules = fetchScheduleTask.fetchSchedulesForDate(displayDate);
+
+        return !schedules.isEmpty();
+    }*/
 
     public interface OnDateClickListener {
         void onDateClick(Date selectedDate);

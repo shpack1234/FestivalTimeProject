@@ -1,0 +1,324 @@
+package com.festivaltime.festivaltimeproject.map;
+
+import static android.content.ContentValues.TAG;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
+import android.view.ViewGroup;
+
+import com.festivaltime.festivaltimeproject.ApiReader;
+import com.festivaltime.festivaltimeproject.ParsingApiData;
+import com.festivaltime.festivaltimeproject.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class MapActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.OpenAPIKeyAuthenticationResultListener {
+
+    private String[] areaNum = {"1", "2", "3", "4", "5", "6", "7", "8", "31"
+            , "32", "33", "34", "35", "36", "37", "38", "39"};
+    private MapView mapView;
+
+    private List<Pair<Double, Double>> areas = new ArrayList<>();
+
+    private List<Pair<String, String>> areasInfo = new ArrayList<>();
+
+    private ApiReader apiReader;
+    private String apiKey;
+    private Executor executor;
+
+    private List<Pair<Double, Double>> areaFestivals = new ArrayList<>();
+
+    private List<Pair<String, String>> areaFestivalInfo = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+
+        mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+        onMapViewInitialized(mapView);
+        executor = Executors.newSingleThreadExecutor();
+
+        apiKey = getResources().getString(R.string.api_key);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_map);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(MapActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                return false;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(MapActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(MapActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(MapActivity.this);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onMapViewInitialized(MapView mapView) {
+        mapView.removeAllPOIItems();
+        mapView.setZoomLevel(11, true);
+        areas.add(new Pair<>(37.5665, 126.9780)); //서울 1
+        areas.add(new Pair<>(37.4562, 126.7052)); //인천 2
+        areas.add(new Pair<>(36.3504, 127.3845)); //대전 3
+        areas.add(new Pair<>(35.8714, 128.6014)); //대구 4
+        areas.add(new Pair<>(35.1595, 126.8526)); //광주 5
+        areas.add(new Pair<>(35.1795, 129.0756)); //부산 6
+        areas.add(new Pair<>(35.5383, 129.3113)); //울산 7
+        areas.add(new Pair<>(36.5040, 127.2494)); //세종 8
+        areas.add(new Pair<>(37.5671, 127.1902)); //경기도 31
+        areas.add(new Pair<>(37.5558, 128.2093)); //강원도 32
+        areas.add(new Pair<>(36.6424, 127.4890)); //충청북도 33
+        areas.add(new Pair<>(35.1603, 126.8247)); //충청남도 34
+        areas.add(new Pair<>(36.6640, 128.4342)); //경상북도 35
+        areas.add(new Pair<>(35.4606, 128.2132)); //경상남도 36
+        areas.add(new Pair<>(35.7175, 127.153)); //전라북도 37
+        areas.add(new Pair<>(34.8679, 126.991)); //전라남도 38
+        areas.add(new Pair<>(33.3949, 126.5614)); //제주도 39
+
+        areasInfo.add(new Pair<>("서울", "1"));
+        areasInfo.add(new Pair<>("인천", "2"));
+        areasInfo.add(new Pair<>("대전", "3"));
+        areasInfo.add(new Pair<>("대구", "4"));
+        areasInfo.add(new Pair<>("광주", "5"));
+        areasInfo.add(new Pair<>("부산", "6"));
+        areasInfo.add(new Pair<>("울산", "7"));
+        areasInfo.add(new Pair<>("세종", "8"));
+        areasInfo.add(new Pair<>("경기도", "31"));
+        areasInfo.add(new Pair<>("강원도", "32"));
+        areasInfo.add(new Pair<>("충청북도", "33"));
+        areasInfo.add(new Pair<>("충청남도", "34"));
+        areasInfo.add(new Pair<>("경상북도", "35"));
+        areasInfo.add(new Pair<>("경상남도", "36"));
+        areasInfo.add(new Pair<>("전라북도", "37"));
+        areasInfo.add(new Pair<>("전라남도", "38"));
+        areasInfo.add(new Pair<>("제주도", "39"));
+
+        MapPOIItem[] marker = new MapPOIItem[areas.size()];
+
+        for (int i = 0; i < marker.length; i++) {
+            marker[i] = new MapPOIItem();
+        }
+
+        marKingFestivalGroup(marker, areas, areasInfo);
+        mapView.setPOIItemEventListener(this); // 이벤트 리스너 등록
+    }
+
+    @Override
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+    }
+
+    @Override
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onDaumMapOpenAPIKeyAuthenticationResult(MapView mapView, int i, String s) {
+
+    }
+
+    @Override
+    public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+        MapPoint selectedMarkerPoint = mapPOIItem.getMapPoint();
+        Log.d("MapActivity", "Selected Marker Point: " + selectedMarkerPoint.getMapPointGeoCoord());
+
+
+        // 축제 선택 시
+        if (mapPOIItem.getTag() > 100) {
+            mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://dapi.kakao.com")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            PlacesApi placesApi = retrofit.create(PlacesApi.class);
+
+            String restApiKey=getResources().getString(R.string.rest_api_key);
+            Call<ApiResponseModel> call = placesApi.searchPlaces(
+                    "맛집", selectedMarkerPoint.getMapPointGeoCoord().longitude,
+                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000, "117e462c5fa40e0dc33af107ca087840");
+
+            call.enqueue(new Callback<ApiResponseModel>() {
+                @Override
+                public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
+                    if (response.isSuccessful()) {
+                        ApiResponseModel apiResponse = response.body();
+                        List<PoiItem> places = apiResponse.getPlaces();
+
+                        for (PoiItem place : places) {
+                            MapPOIItem poiItem = new MapPOIItem();
+                            poiItem.setItemName(place.getName());
+                            poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(place.getY(), place.getX()));
+                            poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                            mapView.addPOIItem(poiItem);
+                        }
+                    } else {
+                        Log.e("API Error", "Response Code: " + response.code() + " - Message: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponseModel> call, Throwable t) {
+                    Log.e("Network Error", t.getMessage());
+                }
+            });
+
+
+        } else { //지역 선택 시
+            mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 5, true);
+
+            apiReader = new ApiReader();
+            String selectedAreaNum = String.valueOf(mapPOIItem.getTag());
+            apiReader.areaBasedSync(apiKey, selectedAreaNum, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromAreaBasedSync(response); // 응답을 파싱하여 데이터를 저장
+
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            areaFestivals.clear();
+                            areaFestivalInfo.clear();
+                            for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                                String title = festivalInfo.get("title");
+                                String mapx = festivalInfo.get("mapx");
+                                String mapy = festivalInfo.get("mapy");
+                                String contentid = festivalInfo.get("contentid");
+
+                                Log.d("title", title);
+                                Log.d("contentid", contentid);
+                                areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                                areaFestivalInfo.add(new Pair<>(title, contentid));
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MapPOIItem[] marker = new MapPOIItem[areaFestivals.size()];
+
+                                    for (int i = 0; i < marker.length; i++) {
+                                        marker[i] = new MapPOIItem();
+                                    }
+
+                                    marKingFestivalGroup(marker, areaFestivals, areaFestivalInfo);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
+
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
+
+    }
+
+    @Override
+    public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+
+    }
+
+    private void marKingFestivalGroup(@NonNull MapPOIItem[] marker, List<Pair<Double, Double>> location, List<Pair<String, String>> Info) {
+        for (int i = 0; i < marker.length; i++) {
+            Log.d("Tag", String.valueOf(Info.get(i).second));
+        }
+        Bitmap originalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map_marking);
+        Bitmap resizedMarkerBitmap = Bitmap.createScaledBitmap(originalMarkerBitmap, 50, 50, false);
+        for (int i = 0; i < marker.length; i++) {
+            marker[i].setItemName(Info.get(i).first);
+            Log.d("Tag", Info.get(i).second);
+            marker[i].setTag(Integer.parseInt(Info.get(i).second));
+            marker[i].setMapPoint(MapPoint.mapPointWithGeoCoord(location.get(i).first, location.get(i).second));
+            marker[i].setMarkerType(MapPOIItem.MarkerType.CustomImage);
+            marker[i].setCustomImageBitmap(resizedMarkerBitmap);
+            marker[i].setCustomImageAutoscale(false);
+            marker[i].setCustomImageAnchor(0.5f, 1.0f);
+            mapView.addPOIItem(marker[i]);
+        }
+    }
+
+}

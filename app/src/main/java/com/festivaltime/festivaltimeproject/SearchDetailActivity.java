@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,7 +130,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     if (repImage == null || repImage.isEmpty()) {
                                         festivalRepImage.setImageResource(R.drawable.ic_image);
                                     } else {
-                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
                                     }
                                     festivalContainer.addView(festivalInfoBox);
 
@@ -290,7 +290,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     if (repImage == null || repImage.isEmpty()) {
                                         festivalRepImage.setImageResource(R.drawable.ic_image);
                                     } else {
-                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
                                     }
                                     festivalContainer.addView(festivalInfoBox);
 
