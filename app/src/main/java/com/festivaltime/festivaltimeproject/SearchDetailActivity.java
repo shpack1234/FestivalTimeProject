@@ -70,6 +70,10 @@ public class SearchDetailActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         type = getIntent().getStringExtra("type");
+        String textToShow = getTextToShow(type);
+        TextView titleNameTextView = findViewById(R.id.Entire_view_title);
+        titleNameTextView.setText(textToShow);
+
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -97,9 +101,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 LinearLayout festivalContainer = findViewById(R.id.festival_container);
                                 festivalContainer.removeAllViews();
 
-                                String textToShow = getTextToShow(type);
-                                TextView titleNameTextView = findViewById(R.id.Entire_view_title);
-                                titleNameTextView.setText(textToShow);
 
                                 for (HashMap<String, String> festivalInfo : festivalList) {
                                     View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
