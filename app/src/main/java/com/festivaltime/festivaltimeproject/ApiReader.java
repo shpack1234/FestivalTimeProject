@@ -284,7 +284,7 @@ public class ApiReader {
 
     }
 
-    public void areaBasedSync(String serviceKey, String areaNum final ApiResponseListener listener){
+    public void areaBasedSync(String serviceKey, String areaNum, final ApiResponseListener listener){
         try {
             HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
                     .scheme("https")

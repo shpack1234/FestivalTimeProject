@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +157,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     if (repImage == null || repImage.isEmpty()) {
                                         searchImageButton.setImageResource(R.drawable.ic_image);
                                     } else {
-                                        Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
                                     }
                                     festivalImageNText.addView(festivalItemView);
 
@@ -739,7 +739,7 @@ public class SearchScreenActivity extends AppCompatActivity {
             if (repImage == null || repImage.isEmpty()) {
                 searchImageButton.setImageResource(R.drawable.ic_image);
             } else {
-                Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
             }
             festivalImageNText.addView(festivalItemView);
 

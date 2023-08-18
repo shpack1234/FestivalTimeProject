@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.festivaltime.festivaltimeproject.calendaract.CalendarActivity;
+import com.festivaltime.festivaltimeproject.map.MapActivity;
 
 public class navigateToSomeActivity {
     public static void navigateToSearchActivity(Activity thisActivity, String query) {
