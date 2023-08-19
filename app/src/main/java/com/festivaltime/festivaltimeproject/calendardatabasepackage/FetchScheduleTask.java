@@ -6,6 +6,7 @@ import android.view.View;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,17 +42,29 @@ public class FetchScheduleTask {
         List<CalendarEntity> allSchedules = calendarDao.getAllCalendarEntity();
         List<CalendarEntity> matchingSchedules = new ArrayList<>();
 
+        // date의 시간을 자정으로 설정
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.setTime(date);
+        dateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        dateCalendar.set(Calendar.MINUTE, 0);
+        dateCalendar.set(Calendar.SECOND, 0);
+        dateCalendar.set(Calendar.MILLISECOND, 0);
+
         for (CalendarEntity schedule : allSchedules) {
             Date startDate = convertStringToDate(schedule.startDate);
             Date endDate = convertStringToDate(schedule.endDate);
 
-            if (startDate != null && endDate != null && date.after(startDate) && date.before(endDate)) {
+            // 시간을 무시한 날짜 비교
+            if (startDate != null && endDate != null &&
+                    !dateCalendar.getTime().before(startDate) &&
+                    !dateCalendar.getTime().after(endDate)) {
                 matchingSchedules.add(schedule);
             }
         }
 
         return matchingSchedules;
     }
+
 
     // 문자열 형태의 날짜를 Date 객체로 변환하는 메소드
     private Date convertStringToDate(String dateString) {

@@ -92,14 +92,28 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
 
-        //boolean hasSchedule = checkForSchedule(monthDate, holder.itemView.getContext(), calendarDao); // 일정이 있는 경우 true, 없는 경우 false로 변경
-        boolean hasSchedule = true; //임시로 true해놓기
+        boolean hasSchedule = false;
+        final boolean hasScheduleFinal = hasSchedule;
+        calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
 
-        if (hasSchedule) {
-            holder.scheduleView.setVisibility(View.VISIBLE);
-        } else {
-            holder.scheduleView.setVisibility(View.INVISIBLE);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean innerHasSchedule = checkForSchedule(monthDate, holder.itemView.getContext(), calendarDao);
+                holder.itemView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (innerHasSchedule) {
+                            holder.scheduleView.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.scheduleView.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                });
+            }
+        }).start();
+
+
 
         // 날짜 클릭 이벤트
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -164,12 +178,18 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     }
 
     // displayDate가 일정에 속하는지 확인하는 메소드
-    /*private boolean checkForSchedule(Date displayDate, Context context, CalendarDao calendarDao) {
+    // checkForSchedule 메서드 내에서 calendarDao가 null인 경우 처리 추가
+    private boolean checkForSchedule(Date displayDate, Context context, CalendarDao calendarDao) {
+        if (calendarDao == null) {
+            return false; // 혹은 적절한 값으로 처리
+        }
+
         FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(context, calendarDao);
         List<CalendarEntity> schedules = fetchScheduleTask.fetchSchedulesForDate(displayDate);
 
         return !schedules.isEmpty();
-    }*/
+    }
+
 
     public interface OnDateClickListener {
         void onDateClick(Date selectedDate);
