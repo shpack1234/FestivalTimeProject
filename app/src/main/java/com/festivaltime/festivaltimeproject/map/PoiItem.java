@@ -1,19 +1,20 @@
 package com.festivaltime.festivaltimeproject.map;
 
 public class PoiItem {
-    private String name;
-    private double x; // 경도
-    private double y; // 위도
+
+    private String place_name;
+    private String x; // 경도
+    private String y; // 위도
 
     public String getName() {
-        return name;
+        return place_name;
     }
 
-    public double getX() {
+    public String getX() {
         return x;
     }
 
-    public double getY() {
+    public String getY() {
         return y;
     }
 }

@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -195,32 +197,40 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         if (mapPOIItem.getTag() > 100) {
             mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
 
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build();
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://dapi.kakao.com")
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             PlacesApi placesApi = retrofit.create(PlacesApi.class);
 
-            String restApiKey=getResources().getString(R.string.rest_api_key);
             Call<ApiResponseModel> call = placesApi.searchPlaces(
-                    "맛집", selectedMarkerPoint.getMapPointGeoCoord().longitude,
-                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000, "117e462c5fa40e0dc33af107ca087840");
+                    "음식점", selectedMarkerPoint.getMapPointGeoCoord().longitude,
+                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000);
 
             call.enqueue(new Callback<ApiResponseModel>() {
                 @Override
                 public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
                     if (response.isSuccessful()) {
                         ApiResponseModel apiResponse = response.body();
-                        List<PoiItem> places = apiResponse.getPlaces();
-
-                        for (PoiItem place : places) {
-                            MapPOIItem poiItem = new MapPOIItem();
-                            poiItem.setItemName(place.getName());
-                            poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(place.getY(), place.getX()));
-                            poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
-                            mapView.addPOIItem(poiItem);
+                        if (apiResponse != null) {
+                            Log.d("hello", "not null");
+                            List<PoiItem> places = apiResponse.getPlaces();
+                            int placesCount = places.size(); // 리스트의 크기를 가져옴
+                            Log.d("API Response", "Number of places: " + placesCount);
+                            showPlacesOnMap(places);
+                        } else {
+                            Log.e("API Error", "Response body is null");
                         }
+
                     } else {
                         Log.e("API Error", "Response Code: " + response.code() + " - Message: " + response.message());
                     }
@@ -285,6 +295,21 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 }
             });
         }
+    }
+
+    private void showPlacesOnMap(List<PoiItem> places) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (PoiItem place : places) {
+                    MapPOIItem poiItem = new MapPOIItem();
+                    poiItem.setItemName(place.getName());
+                    poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
+                    poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                    mapView.addPOIItem(poiItem);
+                }
+            }
+        });
     }
 
     @Override
