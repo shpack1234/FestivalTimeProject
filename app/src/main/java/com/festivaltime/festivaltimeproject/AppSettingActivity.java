@@ -7,9 +7,17 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -19,27 +27,72 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class AppSettingActivity extends AppCompatActivity {
 
     public ImageButton Back_Btn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_setting);
 
-        Back_Btn=findViewById(R.id.before_btn);
+        Back_Btn = findViewById(R.id.before_btn);
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {   onBackPressed(); }
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(AppSettingActivity.this)
-                        .setContentTitle(" 푸쉬 알림 테스트 ")
-                        .setContentText(" 우왕 알림이 떴나용? ")
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setWhen(System.currentTimeMillis())
-                        .setAutoCancel(true);
+        Switch push = findViewById(R.id.app_push_alarm);
 
+        push.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    String NOTIFICATION_CHANNEL_ID = "my_channel_id";
+                    int NOTIFICATION_ID = 1234;
+
+
+                    Intent notificationIntent = new Intent(AppSettingActivity.this, AppSettingActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(
+                            AppSettingActivity.this,
+                            0,
+                            notificationIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                    );
+
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(AppSettingActivity.this, NOTIFICATION_CHANNEL_ID)
+                                    .setContentTitle(" 푸쉬 알림 테스트 ")
+                                    .setContentText(" 우왕 알림이 떴나용? ")
+                                    .setSmallIcon(R.drawable.ic_favorite)
+                                    .setDefaults(Notification.DEFAULT_VIBRATE)
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setContentIntent(pendingIntent)
+                                    .setWhen(System.currentTimeMillis())
+                                    .setAutoCancel(true);
+
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        CharSequence channelName = "노티피케이션 채널";
+                        String description = "해당 채널에 대한 설명";
+                        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                        NotificationChannel channel = new NotificationChannel(
+                                NOTIFICATION_CHANNEL_ID,
+                                channelName,
+                                importance
+                        );
+                        channel.setDescription(description);
+
+                        NotificationManager customNotificationManager = getSystemService(NotificationManager.class);
+                        customNotificationManager.createNotificationChannel(channel);
+                    }
+
+                    notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                }
+            }
+        });
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리

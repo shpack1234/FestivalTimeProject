@@ -76,6 +76,7 @@
             android:layout_marginRight="20dp"
             android:switchMinWidth="50dp"
             android:switchPadding="10dp"
+            android:id="@+id/app_push_alarm"
             android:text="@string/alarm_push" />
 
         <Switch
