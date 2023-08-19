@@ -46,7 +46,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
 
-
+    // 카테고리 숫자 순서대로 나오도록 하는 변수들
     private Semaphore secondSemaphore = new Semaphore(0);
     private Semaphore thirdSemaphore = new Semaphore(0);
     private Semaphore fourthSemaphore = new Semaphore(0);

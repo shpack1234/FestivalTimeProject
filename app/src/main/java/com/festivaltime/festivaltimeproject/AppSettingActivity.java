@@ -6,11 +6,13 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,6 +30,16 @@ public class AppSettingActivity extends AppCompatActivity {
             public void onClick(View v)
             {   onBackPressed(); }
         });
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(AppSettingActivity.this)
+                        .setContentTitle(" 푸쉬 알림 테스트 ")
+                        .setContentText(" 우왕 알림이 떴나용? ")
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setWhen(System.currentTimeMillis())
+                        .setAutoCancel(true);
+
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
