@@ -28,7 +28,7 @@
             android:name=".ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".InquiryActivity"
+            android:name=".inquirydatabasepackage.InquiryActivity"
             android:exported="false" />
         <activity
             android:name=".AppSettingActivity"

@@ -1,7 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,11 +9,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.festivaltime.festivaltimeproject.inquirydatabasepackage.DatabaseHolder;
 
 public class InquiryPopupActivity extends Dialog {
 
-   public Button Back_Btn;
+    private Button Submit_Btn;
+    public EditText Edit_Text;
+    public Button Back_Btn;
+    public InquiryDao inquiryDao;
+    private String userInputText;
+
+    public String getUserInputText() {
+        return userInputText;
+    }
 
     public InquiryPopupActivity(@NonNull Context context) {
         super(context);
@@ -28,13 +37,38 @@ public class InquiryPopupActivity extends Dialog {
         setContentView(R.layout.activity_inquiry_popup);
 
         Back_Btn=findViewById(R.id.inquiry_popup_close_btn);
+        Submit_Btn=findViewById(R.id.submit_Btn);
+        Edit_Text = findViewById(R.id.editText);
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
+                Edit_Text.setText("");
+                dismiss();
+            }
+        });
+
+        Submit_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 EditText editText = findViewById(R.id.editText);
-                editText.setText("");
+                userInputText = editText.getText().toString();
+
+
+                // 데이터베이스에 저장
+                InquiryDatabase inquiryDatabase = DatabaseHolder.getAppDatabase(getContext());
+                InquiryDao inquiryDao = inquiryDatabase.inquiryDao();
+
+                InquiryEntity entity = new InquiryEntity(userInputText);
+                inquiryDao.insertInquiry(entity);
+
+                // TextView에 띄워주기
+                TextView inquiryText = findViewById(R.id.inquiry_text);
+                inquiryText.setText(userInputText);
+
+
+                // 팝업 닫기
                 dismiss();
             }
         });
@@ -48,6 +82,7 @@ public class InquiryPopupActivity extends Dialog {
         }
         return true;
     }
+
 
 }
 

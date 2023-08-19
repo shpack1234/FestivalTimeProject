@@ -4,7 +4,8 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,44 +55,21 @@
             android:layout_height="3dp"
             android:background="@color/gray"/>
 
-
-
-        <ScrollView
-            android:id="@+id/scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_navigation"
-            android:layout_below="@+id/line"
-            tools:ignore="UnknownId"
-            android:scrollbars="vertical"
-            android:scrollbarThumbVertical="@android:color/darker_gray"
-            android:fadeScrollbars="false"
-            android:scrollbarStyle="insideOverlay">
-
-            <LinearLayout
-                android:id="@+id/inquiry_container"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-
-            </LinearLayout>
-
-        </ScrollView>
-
-
-
-
-
-
-
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/inquiry_container"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_below="@+id/line"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="NotSibling" />
 
 
 
