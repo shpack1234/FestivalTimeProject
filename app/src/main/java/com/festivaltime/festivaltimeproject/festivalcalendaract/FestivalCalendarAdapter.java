@@ -14,18 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
-import com.festivaltime.festivaltimeproject.ParsingApiData;
-import com.festivaltime.festivaltimeproject.calendaract.CalendarUtil;
+import com.festivaltime.festivaltimeproject.FestivalDataTask;
 import com.festivaltime.festivaltimeproject.R;
-
-import org.json.JSONObject;
+import com.festivaltime.festivaltimeproject.calendaract.CalendarUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //축제 캘린더 calendar recyclerview class
 public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalendarAdapter.FestivalCalendarViewHolder> {
@@ -64,24 +60,8 @@ public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalend
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String todayDate = dateFormat.format(dateCalendar.getTime());
 
-        apiReader.FestivalN(apiKey, todayDate, new ApiReader.ApiResponseListener() {
-            @Override
-            public void onSuccess(String response) {
-                holder.festival_num.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("todayDate: ", todayDate);
-                        Log.d("totalCnt: ", response);
-                        holder.festival_num.setText(response);
-                    }
-                });
-            }
+        new FestivalDataTask(apiKey, todayDate, holder.festival_num).execute();
 
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "Error: " + error);
-            }
-        });
 
         if (displayMonth == currentMonth && displayYear == currentYear) {
         } else {

@@ -108,16 +108,22 @@ public class FestivalCalendarActivity extends AppCompatActivity {
 
         ArrayList<Date> dayList = daysInMonthArray();
         FestivalCalendarAdapter adapter = new FestivalCalendarAdapter(this, dayList);
-
-        if (adapter == null) {
-        } else {
-            adapter.updateData(dayList);
-            adapter.notifyDataSetChanged();
-        }
-
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);
+
+        // 기존에 설정된 어댑터가 있는지 확인
+        RecyclerView.Adapter currentAdapter = calendarrecycler.getAdapter();
+        if (currentAdapter == null) {
+            calendarrecycler.setAdapter(adapter);
+        } else {
+            // 기존 어댑터가 있다면 데이터만 업데이트하고 다시 표시
+            if (currentAdapter instanceof FestivalCalendarAdapter) {
+                FestivalCalendarAdapter festivalAdapter = (FestivalCalendarAdapter) currentAdapter;
+                festivalAdapter.updateData(dayList);
+                festivalAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
 
