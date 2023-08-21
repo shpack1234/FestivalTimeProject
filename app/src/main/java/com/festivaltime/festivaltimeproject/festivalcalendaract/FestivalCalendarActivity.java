@@ -100,6 +100,7 @@ public class FestivalCalendarActivity extends AppCompatActivity {
     }
 
 
+    // FestivalCalendarActivity 클래스의 setMonthView 메서드 수정
     private void setMonthView(){
         int month = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
         //년월 텍스트뷰
@@ -107,10 +108,18 @@ public class FestivalCalendarActivity extends AppCompatActivity {
 
         ArrayList<Date> dayList = daysInMonthArray();
         FestivalCalendarAdapter adapter = new FestivalCalendarAdapter(this, dayList);
+
+        if (adapter == null) {
+        } else {
+            adapter.updateData(dayList);
+            adapter.notifyDataSetChanged();
+        }
+
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);
     }
+
 
     private ArrayList<Date> daysInMonthArray(){
         ArrayList<Date> dayList = new ArrayList<>();

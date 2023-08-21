@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject.festivalcalendaract;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.calendaract.CalendarUtil;
 import com.festivaltime.festivaltimeproject.R;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,33 +61,31 @@ public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalend
         int displayMonth = dateCalendar.get(Calendar.MONTH) + 1;
         int displayYear = dateCalendar.get(Calendar.YEAR);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMDD");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String todayDate = dateFormat.format(dateCalendar.getTime());
 
-        /*apiReader.FestivalN(apiKey, todayDate, new ApiReader.ApiResponseListener() {
+        apiReader.FestivalN(apiKey, todayDate, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
-                Log.d("FestivalCount response: ", response);
-                Pattern pattern = Pattern.compile("<body>(.*?)</body>", Pattern.DOTALL);
-                Matcher matcher = pattern.matcher(response);
-
-                if(matcher.find()){
-                    String bodyCount = matcher.group(1);
-                    Log.d("-About body: ", bodyCount);
-
-                    holder.festival_num.setText(bodyCount);
-                }
+                holder.festival_num.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("todayDate: ", todayDate);
+                        Log.d("totalCnt: ", response);
+                        holder.festival_num.setText(response);
+                    }
+                });
             }
 
             @Override
             public void onError(String error) {
                 Log.e(TAG, "Error: " + error);
             }
-        });*/
+        });
 
         if (displayMonth == currentMonth && displayYear == currentYear) {
         } else {
-            holder.dayText.setVisibility(View.INVISIBLE);
+            holder.dayText.setTextColor(Color.parseColor("#D6D6D6"));
             holder.festival_num.setVisibility(View.INVISIBLE);
         }
 
@@ -103,6 +104,12 @@ public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalend
     public int getItemCount() {
         return dayList.size();
     }
+
+    // FestivalCalendarAdapter 클래스에 추가 메서드
+    public void updateData(ArrayList<Date> newDayList) {
+        this.dayList = newDayList;
+    }
+
 
     class FestivalCalendarViewHolder extends RecyclerView.ViewHolder {
         TextView dayText;
