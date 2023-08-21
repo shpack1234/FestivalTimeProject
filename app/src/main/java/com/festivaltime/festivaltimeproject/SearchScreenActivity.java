@@ -42,6 +42,8 @@ public class SearchScreenActivity extends AppCompatActivity {
     private ApiReader apiReader;
     private String type;
     private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10 , cat11, cat12= "";
+    
+
 
 
 
@@ -98,6 +100,7 @@ public class SearchScreenActivity extends AppCompatActivity {
         }
 
         String apiKey = getResources().getString(R.string.api_key);
+
 
 
         cat2 = "A0207";

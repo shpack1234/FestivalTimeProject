@@ -25,13 +25,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
-import com.smarteist.autoimageslider.SliderAnimations;
-import com.smarteist.autoimageslider.SliderView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private String query;
 
     private final int numberOfLayouts = 3;
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -202,8 +200,10 @@ public class MainActivity extends AppCompatActivity {
                 String bigCategoryText = bigcategory.getText().toString();
                 if (bigCategoryText.equals("축제")) {
                     getMenuInflater().inflate(R.menu.dialog_smallcategory01, popup.getMenu());
+                    BigCategory1();
                 } else if (bigCategoryText.equals("공연/행사")) {
                     getMenuInflater().inflate(R.menu.dialog_smallcategory02, popup.getMenu());
+                    BigCategory2();
                 }
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -459,5 +459,8 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
+
+    public boolean BigCategory1(){return true;}
+    public boolean BigCategory2(){return true;}
 
 }
