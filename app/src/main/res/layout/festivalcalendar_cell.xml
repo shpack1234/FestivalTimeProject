@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:id="@+id/festival_cell_parentView"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -14,11 +13,11 @@
         android:textSize="15sp" />
 
     <TextView
+        android:id="@+id/festival_cell_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_gravity="center"
-        android:text="축제 개수"
         android:textSize="10sp"/>
 
 </LinearLayout>

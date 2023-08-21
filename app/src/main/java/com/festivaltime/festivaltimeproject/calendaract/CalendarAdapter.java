@@ -92,10 +92,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
 
-        boolean hasSchedule = false;
-        final boolean hasScheduleFinal = hasSchedule;
-        calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
-
         new Thread(new Runnable() {
             @Override
             public void run() {

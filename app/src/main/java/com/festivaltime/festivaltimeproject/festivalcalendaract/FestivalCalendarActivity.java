@@ -106,7 +106,7 @@ public class FestivalCalendarActivity extends AppCompatActivity {
         monthText.setText(Month_eng(month));
 
         ArrayList<Date> dayList = daysInMonthArray();
-        FestivalCalendarAdapter adapter = new FestivalCalendarAdapter(dayList);
+        FestivalCalendarAdapter adapter = new FestivalCalendarAdapter(this, dayList);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7);
         calendarrecycler.setLayoutManager(manager);
         calendarrecycler.setAdapter(adapter);
