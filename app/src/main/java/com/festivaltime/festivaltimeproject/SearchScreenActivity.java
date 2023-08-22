@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SearchScreenActivity extends AppCompatActivity {
 
@@ -92,7 +94,20 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
+        //키워드 서치용 query
         String query = getIntent().getStringExtra("query");
+        //날짜 서치용 query
+        String datequery = null;
+
+        //날짜 서치인지 형태 확인
+        String regex = "\\d{4}\\d{2}\\d{2}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(query);
+
+        if(matcher.matches()){
+            datequery = query;
+        }
+
         type = getIntent().getStringExtra("type");
 
         if (type == null) {
@@ -643,9 +658,44 @@ public class SearchScreenActivity extends AppCompatActivity {
         });
 
 
+        //진행중
+        apiReader.Festivallit(apiKey, datequery, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                ArrayList<String> catlist = new ArrayList<>();
+                catlist.add("A0207"); catlist.add("A02080500");
+                catlist.add("A02080200"); catlist.add("A02080100");
+                catlist.add("A02080300"); catlist.add("A02080400");
+                catlist.add("A02080600"); catlist.add("A02080800");
+                catlist.add("A02080900"); catlist.add("A02081000");
+                catlist.add("A02081100");
 
 
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromFestival(response);
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(festivalList.size()>0) {
+                                    loopUI(query, catlist.get(0), 3);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
 
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
 
 
 

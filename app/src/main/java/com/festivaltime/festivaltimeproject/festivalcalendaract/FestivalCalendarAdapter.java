@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject.festivalcalendaract;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -17,6 +18,8 @@ import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.FestivalDataTask;
 import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.calendaract.CalendarUtil;
+import com.festivaltime.festivaltimeproject.navigateToSomeActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +78,7 @@ public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalend
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //클릭 기능 구현
+                navigateToSomeActivity.navigateToSearchActivity((Activity) context, todayDate);
             }
         });
     }

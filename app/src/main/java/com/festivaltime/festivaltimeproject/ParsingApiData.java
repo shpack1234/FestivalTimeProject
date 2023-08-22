@@ -118,8 +118,8 @@ public class ParsingApiData {
                     String address1 = getElementText(itemElement, "addr1");
                     String address2 = getElementText(itemElement, "addr2");
                     String img = getElementText(itemElement, "firstimage2");
-                    String overview=getElementText(itemElement, "overview");
-                    String contentid=getElementText(itemElement, "contentid");
+                    String overview = getElementText(itemElement, "overview");
+                    String contentid = getElementText(itemElement, "contentid");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("address1", address1);
@@ -155,8 +155,8 @@ public class ParsingApiData {
 
                     String title = getElementText(itemElement, "title");
                     String img = getElementText(itemElement, "firstimage2");
-                    String overview=getElementText(itemElement, "overview");
-                    String contentid=getElementText(itemElement, "contentid");
+                    String overview = getElementText(itemElement, "overview");
+                    String contentid = getElementText(itemElement, "contentid");
                     String cat3 = getElementText(itemElement, "cat3");
 
                     if (cat3Filter != null || cat3Filter.equals(cat3)) {
@@ -195,7 +195,7 @@ public class ParsingApiData {
                     String title = getElementText(itemElement, "title");
                     String mapx = getElementText(itemElement, "mapx");
                     String mapy = getElementText(itemElement, "mapy");
-                    String contentid=getElementText(itemElement, "contentid");
+                    String contentid = getElementText(itemElement, "contentid");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("mapx", mapx);
@@ -203,6 +203,47 @@ public class ParsingApiData {
                     festivalInfo.put("contentid", contentid);
 
                     festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //행사정보조회 피싱
+    public static void parseXmlDataFromFestival(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo_cat = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String mapx = getElementText(itemElement, "mapx");
+                    String mapy = getElementText(itemElement, "mapy");
+                    String contentid = getElementText(itemElement, "contentid");
+                    //분류위한 카테고리받아옴
+                    String cat2 = getElementText(itemElement, "cat2");
+
+                    if (cat2 == "A0207") {
+                        festivalInfo_cat.put("title", title);
+                        festivalInfo_cat.put("mapx", mapx);
+                        festivalInfo_cat.put("mapy", mapy);
+                        festivalInfo_cat.put("contentid", contentid);
+
+                        festivalList.add(festivalInfo_cat);
+                    } else {
+                    }
                 }
             }
         } catch (Exception e) {
