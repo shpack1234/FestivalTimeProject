@@ -11,14 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.festivaltime.festivaltimeproject.inquirydatabasepackage.DatabaseHolder;
+import com.festivaltime.festivaltimeproject.inquirydatabasepackage.InquiryDataBaseSingleton;
 
 public class InquiryPopupActivity extends Dialog {
 
     private Button Submit_Btn;
     public EditText Edit_Text;
     public Button Back_Btn;
-    public InquiryDao inquiryDao;
     private String userInputText;
 
     public String getUserInputText() {
@@ -56,12 +55,6 @@ public class InquiryPopupActivity extends Dialog {
                 userInputText = editText.getText().toString();
 
 
-                // 데이터베이스에 저장
-                InquiryDatabase inquiryDatabase = DatabaseHolder.getAppDatabase(getContext());
-                InquiryDao inquiryDao = inquiryDatabase.inquiryDao();
-
-                InquiryEntity entity = new InquiryEntity(userInputText);
-                inquiryDao.insertInquiry(entity);
 
                 // TextView에 띄워주기
                 TextView inquiryText = findViewById(R.id.inquiry_text);
