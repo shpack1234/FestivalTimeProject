@@ -1,4 +1,4 @@
-package com.festivaltime.festivaltimeproject;
+package com.festivaltime.festivaltimeproject.inquirydatabasepackage;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
