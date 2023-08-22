@@ -74,46 +74,48 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center|center"
-                        android:text="@string/festival_category"
+                        android:text="@string/festival_state"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center|center"
-                        android:text="@string/first_category"
-                        android:textSize="13sp" />
 
-                    <Button
-                        android:id="@+id/dialog_popup_category01"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="2"
-                        android:gravity="center|center"
-                        android:text="@string/everycategory"
-                        android:textSize="13sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center|center"
-                        android:text="@string/second_category"
-                        android:textSize="13sp" />
-
-                    <Button
-                        android:id="@+id/dialog_popup_category02"
+                    <ToggleButton
+                        android:id="@+id/completed"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
+                        android:background="@drawable/kwon_toggle_on"
                         android:gravity="center|center"
-                        android:text="@string/everycategory"
+                        android:textOff="@string/completed"
+                        android:textOn="@string/completed"
+                        android:textSize="13sp" />
+
+                    <ToggleButton
+                        android:id="@+id/Ongoing"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/Ongoing"
+                        android:textOn="@string/Ongoing"
+                        android:textSize="13sp" />
+
+                    <ToggleButton
+                        android:id="@+id/Upgoing"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/Upgoing"
+                        android:textOn="@string/Upgoing"
                         android:textSize="13sp" />
 
                 </LinearLayout>

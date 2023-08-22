@@ -35,12 +35,15 @@
     <!-- 상세 설정 팝업 string -->
     <string name="detail_setting">상세 설정</string>
     <string name="festival_category">축제 분류</string>
-    <string name="first_category">대분류</string>
     <string name="concert">공연/행사</string>
-    <string name="second_category">소분류</string>
     <string name="everycategory">모든 카테고리</string>
+    <string name="completed">종료됨</string>
+    <string name="Ongoing">진행중</string>
+    <string name="Upgoing">진행예정</string>
+    <string name="festival_state">축제 상태</string>
 
-    <string name="location">지역</string>
+
+<string name="location">지역</string>
     <string name="every_location">모든 지역</string>
     <string name="location_select">지역 선택</string>
 
