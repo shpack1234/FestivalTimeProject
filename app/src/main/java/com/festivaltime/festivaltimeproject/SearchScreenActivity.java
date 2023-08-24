@@ -20,8 +20,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -176,6 +178,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         searchImageButton.setImageResource(R.drawable.ic_image);
                                     } else {
                                         //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                        Glide
+                                                .with(SearchScreenActivity.this)
+                                                .load(repImage)
+                                                .placeholder(R.drawable.ic_image)
+                                                .into(searchImageButton);
                                     }
                                     festivalImageNText.addView(festivalItemView);
 
@@ -793,6 +800,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                 searchImageButton.setImageResource(R.drawable.ic_image);
             } else {
                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                Glide
+                        .with(SearchScreenActivity.this)
+                        .load(repImage)
+                        .transform(new CenterCrop(), new RoundedCorners(10))
+                        .placeholder(R.drawable.ic_image)
+                        .into(searchImageButton);
             }
             festivalImageNText.addView(festivalItemView);
 

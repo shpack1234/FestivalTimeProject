@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -21,10 +20,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +33,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class SearchDetailActivity extends AppCompatActivity {
 
@@ -191,6 +190,11 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                                Glide
+                                        .with(SearchDetailActivity.this)
+                                        .load(repImage)
+                                        .placeholder(R.drawable.ic_image)
+                                        .into(festivalRepImage);
                             }
                             festivalContainer.addView(festivalInfoBox);
 
