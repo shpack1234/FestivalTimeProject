@@ -14,7 +14,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
@@ -197,6 +199,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         if (mapPOIItem.getTag() > 100) {
             mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
 
+            /*
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -241,6 +244,15 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                     Log.e("Network Error", t.getMessage());
                 }
             });
+             */
+
+            View balloonView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+            TextView titleTextView = balloonView.findViewById(R.id.festival_detail_title);
+
+            titleTextView.setText(mapPOIItem.getItemName());
+
+            mapPOIItem.setCustomCalloutBalloon(balloonView);
+            mapView.selectPOIItem(mapPOIItem, false);
 
 
         } else { //지역 선택 시
