@@ -1,5 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -243,6 +245,7 @@ public class ParsingApiData {
 
                         festivalList.add(festivalInfo_cat);
                     } else {
+                        continue;
                     }
                 }
             }
