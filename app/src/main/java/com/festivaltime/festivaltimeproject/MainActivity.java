@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final int numberOfLayouts = 3;
 
+    private boolean isSeoulSelected = false;
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -177,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.seoul:
                                 location.setText("서울");
+                                isSeoulSelected = true;
                                 break;
                             case R.id.gyeonggi:
                                 location.setText("경기");
@@ -402,6 +405,8 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
+
+    public boolean isSeoulSelected() {return isSeoulSelected;}
 
 
 }

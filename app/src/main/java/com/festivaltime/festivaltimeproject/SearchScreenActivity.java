@@ -45,11 +45,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
-    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10 , cat11, cat12= "";
-    
-
-
-
+    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12 = "";
 
 
     // 카테고리 숫자 순서대로 나오도록 하는 변수들
@@ -63,6 +59,8 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore ninthSemaphore = new Semaphore(0);
     private Semaphore tenthSemaphore = new Semaphore(0);
     private Semaphore eleventhSemaphore = new Semaphore(0);
+
+    MainActivity main = new MainActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +96,9 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         //키워드 서치용 query
         String query = getIntent().getStringExtra("query");
+
+        String seoul = "서울";
+
         //날짜 서치용 query
         String datequery = null;
 
@@ -106,9 +107,11 @@ public class SearchScreenActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(query);
 
-        if(matcher.matches()){
+        if (matcher.matches()) {
             datequery = query;
         }
+
+
 
         type = getIntent().getStringExtra("type");
 
@@ -119,14 +122,19 @@ public class SearchScreenActivity extends AppCompatActivity {
         String apiKey = getResources().getString(R.string.api_key);
 
 
-
         cat2 = "A0207";
+
+        if (main.isSeoulSelected()) {
+            this.query = "서울";
+        } else {
+            this.query = getIntent().getStringExtra("query");
+        }
 
         apiReader = new ApiReader();
         apiReader.searchKeyword2(apiKey, query, cat2, new ApiReader.ApiResponseListener() {
+
             @Override
             public void onSuccess(String response) {
-
                 Log.d("response", response);
                 ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -141,83 +149,84 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                // UI 갱신 코드
-                                LinearLayout searchContainer = findViewById(R.id.search_container);
-                                searchContainer.removeAllViews();
+                                if (festivalList.size() > 0) {
+                                    // UI 갱신 코드
+                                    LinearLayout searchContainer = findViewById(R.id.search_container);
+                                    searchContainer.removeAllViews();
 
-                                View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
-                                GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                //GridLayout festivalImageNText = findViewById(R.id.festivalSearch_container3);
-                                festivalImageNText.removeAllViews();
-
-
-                                // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                String textToShow = getTextToShow(cat2);
-                                TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
-                                titleTextView.setText(textToShow);
+                                    View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
+                                    GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
+                                    //GridLayout festivalImageNText = findViewById(R.id.festivalSearch_container3);
+                                    festivalImageNText.removeAllViews();
 
 
-                                int maxItems = Math.min(festivalList.size(), 6);
+                                    // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
+                                    String textToShow = getTextToShow(cat2);
+                                    TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
+                                    titleTextView.setText(textToShow);
 
 
-                                for (int i = 0; i < maxItems; i++) {
-                                    HashMap<String, String> festivalInfo = festivalList.get(i);
-                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+                                    int maxItems = Math.min(festivalList.size(), 6);
 
-                                    String title = festivalInfo.get("title");
-                                    String id = festivalInfo.get("contentid");
-                                    String repImage = festivalInfo.get("img");
 
-                                    searchTextView.setText(title);
-                                    searchTextView.setMaxEms(8);
+                                    for (int i = 0; i < maxItems; i++) {
+                                        HashMap<String, String> festivalInfo = festivalList.get(i);
+                                        View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                        TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                        ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
-                                    Log.d(TAG, "Rep Image URL: " + repImage);
-                                    if (repImage == null || repImage.isEmpty()) {
-                                        searchImageButton.setImageResource(R.drawable.ic_image);
-                                    } else {
-                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                        Glide
-                                                .with(SearchScreenActivity.this)
-                                                .load(repImage)
-                                                .transform(new CenterCrop(), new RoundedCorners(30))
-                                                .placeholder(R.drawable.ic_image)
-                                                .into(searchImageButton);
+                                        String title = festivalInfo.get("title");
+                                        String id = festivalInfo.get("contentid");
+                                        String repImage = festivalInfo.get("img");
+
+                                        searchTextView.setText(title);
+                                        searchTextView.setMaxEms(8);
+
+                                        Log.d(TAG, "Rep Image URL: " + repImage);
+                                        if (repImage == null || repImage.isEmpty()) {
+                                            searchImageButton.setImageResource(R.drawable.ic_image);
+                                        } else {
+                                            //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                            Glide
+                                                    .with(SearchScreenActivity.this)
+                                                    .load(repImage)
+                                                    .transform(new CenterCrop(), new RoundedCorners(30))
+                                                    .placeholder(R.drawable.ic_image)
+                                                    .into(searchImageButton);
+                                        }
+                                        festivalImageNText.addView(festivalItemView);
+
+
+                                        festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                String contentId = id;
+                                                // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                                navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                            }
+                                        });
+
+
                                     }
-                                    festivalImageNText.addView(festivalItemView);
 
 
-                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                    searchContainer.addView(searchContainerView);
+
+                                    Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
+                                    detailSearchButton.setOnClickListener(new View.OnClickListener() {
+
                                         @Override
                                         public void onClick(View v) {
-                                            String contentId = id;
-                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                            navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
                                         }
                                     });
-
-
                                 }
-
-
-                                searchContainer.addView(searchContainerView);
-
-                                Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
-                                detailSearchButton.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
-                                    }
-                                });
-
-                                secondSemaphore.release();
                             }
 
-
                         });
+                        secondSemaphore.release();
                     }
+
                 });
 
 
@@ -253,7 +262,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
 
                                     loopUI(query, cat3, 3);
                                 }
@@ -298,7 +307,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat4, 3);
                                 }
                                 thirdSemaphore.release();
@@ -341,7 +350,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat5, 3);
                                 }
                                 fifthSemaphore.release();
@@ -352,7 +361,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                     }
                 });
             }
-
 
 
             @Override
@@ -385,7 +393,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat6, 3);
                                 }
                                 sixthSemaphore.release();
@@ -397,7 +405,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                     }
                 });
             }
-
 
 
             @Override
@@ -430,7 +437,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat7, 3);
                                 }
                                 seventhSemaphore.release();
@@ -473,7 +480,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat8, 3);
                                 }
                                 eightSemaphore.release();
@@ -485,7 +492,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                     }
                 });
             }
-
 
 
             @Override
@@ -518,7 +524,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat9, 3);
                                 }
                                 ninthSemaphore.release();
@@ -561,7 +567,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat10, 3);
                                 }
                                 tenthSemaphore.release();
@@ -604,7 +610,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat11, 3);
                                 }
                                 eleventhSemaphore.release();
@@ -647,7 +653,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, cat12, 3);
                                 }
 
@@ -671,11 +677,16 @@ public class SearchScreenActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
                 ArrayList<String> catlist = new ArrayList<>();
-                catlist.add("A0207"); catlist.add("A02080500");
-                catlist.add("A02080200"); catlist.add("A02080100");
-                catlist.add("A02080300"); catlist.add("A02080400");
-                catlist.add("A02080600"); catlist.add("A02080800");
-                catlist.add("A02080900"); catlist.add("A02081000");
+                catlist.add("A0207");
+                catlist.add("A02080500");
+                catlist.add("A02080200");
+                catlist.add("A02080100");
+                catlist.add("A02080300");
+                catlist.add("A02080400");
+                catlist.add("A02080600");
+                catlist.add("A02080800");
+                catlist.add("A02080900");
+                catlist.add("A02081000");
                 catlist.add("A02081100");
 
 
@@ -690,7 +701,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(festivalList.size()>0) {
+                                if (festivalList.size() > 0) {
                                     loopUI(query, catlist.get(0), 3);
                                 }
                             }
@@ -704,8 +715,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 Log.e(TAG, "API Error: " + error);
             }
         });
-
-
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
