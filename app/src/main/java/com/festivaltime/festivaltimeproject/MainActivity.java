@@ -403,7 +403,5 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("검색어: " + query);
     }
 
-    public boolean BigCategory1(){return true;}
-    public boolean BigCategory2(){return true;}
 
 }
