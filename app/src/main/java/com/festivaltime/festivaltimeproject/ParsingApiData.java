@@ -236,17 +236,21 @@ public class ParsingApiData {
                     String contentid = getElementText(itemElement, "contentid");
                     //분류위한 카테고리받아옴
                     String cat2 = getElementText(itemElement, "cat2");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
 
-                    if (cat2 == "A0207") {
-                        festivalInfo_cat.put("title", title);
-                        festivalInfo_cat.put("mapx", mapx);
-                        festivalInfo_cat.put("mapy", mapy);
-                        festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("title", title);
+                    festivalInfo_cat.put("mapx", mapx);
+                    festivalInfo_cat.put("mapy", mapy);
+                    festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("cat2", cat2);
+                    festivalInfo_cat.put("eventstartdate", startdate);
+                    festivalInfo_cat.put("eventenddate", enddate);
 
+                    if ("A0207".equals(cat2)) {
                         festivalList.add(festivalInfo_cat);
-                    } else {
-                        continue;
                     }
+
                 }
             }
         } catch (Exception e) {
