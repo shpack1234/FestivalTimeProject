@@ -1,4 +1,4 @@
-package com.festivaltime.festivaltimeproject.inquirydatabasepackage;
+package com.festivaltime.festivaltimeproject;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.festivaltime.festivaltimeproject.R;
-
-import com.festivaltime.festivaltimeproject.InquiryPopupActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class InquiryActivity extends AppCompatActivity {

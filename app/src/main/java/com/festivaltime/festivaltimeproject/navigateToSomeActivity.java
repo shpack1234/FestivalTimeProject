@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.festivaltime.festivaltimeproject.calendaract.CalendarActivity;
-import com.festivaltime.festivaltimeproject.inquirydatabasepackage.InquiryActivity;
 import com.festivaltime.festivaltimeproject.map.MapActivity;
 
 public class navigateToSomeActivity {

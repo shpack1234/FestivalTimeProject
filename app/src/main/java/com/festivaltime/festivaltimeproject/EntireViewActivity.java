@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class EntireViewActivity extends AppCompatActivity {
-
+    public ImageButton Back_Btn;
     private ApiReader apiReader;
 
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
@@ -36,6 +38,7 @@ public class EntireViewActivity extends AppCompatActivity {
         String contentId = getIntent().getStringExtra("contentid");
 
         String apiKey = getResources().getString(R.string.api_key);
+        Back_Btn=findViewById(R.id.before_btn);
         apiReader = new ApiReader();
         apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
             @Override
@@ -98,6 +101,12 @@ public class EntireViewActivity extends AppCompatActivity {
                 entireContent.setText(content);
             }
         }
+
+        Back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {   onBackPressed(); }
+        });
     }
 
 
