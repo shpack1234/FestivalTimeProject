@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject.map;
 
 import static android.content.ContentValues.TAG;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
@@ -12,16 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.SearchScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kakao.vectormap.mapwidget.component.GuiLayout;
+import com.kakao.vectormap.mapwidget.component.GuiText;
+import com.kakao.vectormap.mapwidget.component.Orientation;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -199,60 +208,41 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         if (mapPOIItem.getTag() > 100) {
             mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
 
-            /*
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(loggingInterceptor)
-                    .build();
+            // 여기에 커스텀 정보창을 생성하고 마커의 정보를 표시하는 로직을 추가하세요.
+            View popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://dapi.kakao.com")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            // 팝업 창 생성 및 설정
+            PopupWindow popupWindow = new PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+            );
 
-            PlacesApi placesApi = retrofit.create(PlacesApi.class);
-
-            Call<ApiResponseModel> call = placesApi.searchPlaces(
-                    "음식점", selectedMarkerPoint.getMapPointGeoCoord().longitude,
-                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000);
-
-            call.enqueue(new Callback<ApiResponseModel>() {
-                @Override
-                public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
-                    if (response.isSuccessful()) {
-                        ApiResponseModel apiResponse = response.body();
-                        if (apiResponse != null) {
-                            Log.d("hello", "not null");
-                            List<PoiItem> places = apiResponse.getPlaces();
-                            int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            Log.d("API Response", "Number of places: " + placesCount);
-                            showPlacesOnMap(places);
-                        } else {
-                            Log.e("API Error", "Response body is null");
-                        }
-
-                    } else {
-                        Log.e("API Error", "Response Code: " + response.code() + " - Message: " + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ApiResponseModel> call, Throwable t) {
-                    Log.e("Network Error", t.getMessage());
-                }
-            });
-             */
-
-            View balloonView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
-            TextView titleTextView = balloonView.findViewById(R.id.festival_detail_title);
-
+            TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
             titleTextView.setText(mapPOIItem.getItemName());
 
-            mapPOIItem.setCustomCalloutBalloon(balloonView);
-            mapView.selectPOIItem(mapPOIItem, false);
+            int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
+            int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
+            int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
+
+            Log.d("height", String.valueOf(yOffset));
+
+            popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
+
+
+            // 팝업 창 내부의 버튼 등의 UI 요소에 대한 동작 처리
+            Button detailButton = popupView.findViewById(R.id.festival_detail_button);
+            detailButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 팝업 닫기
+                    int contentId = mapPOIItem.getTag();
+                    navigateToDetailFestivalActivity(MapActivity.this, String.valueOf(contentId));
+                }
+            });
 
 
         } else { //지역 선택 시
