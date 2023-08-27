@@ -1,15 +1,22 @@
 package com.festivaltime.festivaltimeproject.map;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 public class ApiResponseModel {
-    private List<PoiItem> places;
+    private List<PoiItem> documents;
 
     public ApiResponseModel(List<PoiItem> places) {
-        this.places = places;
+        this.documents = documents;
     }
 
-    public List<PoiItem> getPlaces() {
-        return this.places;
+    public List<PoiItem> getDocuments() {
+        return documents;
+    }
+
+    public String getJsonString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

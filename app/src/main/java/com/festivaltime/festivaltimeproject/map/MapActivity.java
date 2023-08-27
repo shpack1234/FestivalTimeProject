@@ -28,6 +28,7 @@ import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.SearchScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.kakao.vectormap.mapwidget.component.GuiLayout;
 import com.kakao.vectormap.mapwidget.component.GuiText;
 import com.kakao.vectormap.mapwidget.component.Orientation;
@@ -35,6 +36,8 @@ import com.kakao.vectormap.mapwidget.component.Orientation;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,12 +209,68 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
         // 축제 선택 시
         if (mapPOIItem.getTag() > 100) {
-            mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://dapi.kakao.com")
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            PlacesApi placesApi = retrofit.create(PlacesApi.class);
+
+            Call<ApiResponseModel> call = placesApi.searchPlaces(
+                    "음식점", selectedMarkerPoint.getMapPointGeoCoord().longitude,
+                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000);
+
+            call.enqueue(new Callback<ApiResponseModel>() {
+                @Override
+                public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
+                    if (response.isSuccessful()) {
+                        ApiResponseModel apiResponse = response.body();
+                        Gson gson=new Gson();
+
+                        ApiResponseModel restApiData=gson.fromJson(apiResponse.getJsonString(), ApiResponseModel.class);
+
+                        if (restApiData != null) {
+                            Log.d("hello", "not null");
+                            List<PoiItem> places = restApiData.getDocuments();
+                            int placesCount = places.size(); // 리스트의 크기를 가져옴
+                            Log.d("API Response", "Number of places: " + placesCount);
+                            showPlacesOnMap(places);
+                        } else {
+                            Log.e("API Error", "Response body is null");
+                        }
+
+                    } else {
+                        Log.e("API Error", "Response Code: " + response.code() + " - Message: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponseModel> call, Throwable t) {
+                    Log.e("Network Error", t.getMessage());
+                }
+            });
 
             mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 1, true);
 
-            // 여기에 커스텀 정보창을 생성하고 마커의 정보를 표시하는 로직을 추가하세요.
-            View popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+
+            View popupView;
+
+            //음식점
+            if(mapPOIItem.getTag()==101) {
+                popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+            }
+            else {
+                popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+            }
+
 
             // 팝업 창 생성 및 설정
             PopupWindow popupWindow = new PopupWindow(
@@ -227,8 +286,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
             int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
             int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
-
-            Log.d("height", String.valueOf(yOffset));
 
             popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
 
@@ -305,7 +362,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             public void run() {
                 for (PoiItem place : places) {
                     MapPOIItem poiItem = new MapPOIItem();
-                    poiItem.setItemName(place.getName());
+                    poiItem.setTag(101);
+                    poiItem.setItemName(place.getPlaceName());
                     poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
                     poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
                     mapView.addPOIItem(poiItem);
