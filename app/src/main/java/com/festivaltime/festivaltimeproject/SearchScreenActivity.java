@@ -165,7 +165,6 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                         View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
                                         GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                        //GridLayout festivalImageNText = findViewById(R.id.festivalSearch_container3);
                                         festivalImageNText.removeAllViews();
 
 
@@ -173,6 +172,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         String textToShow = getTextToShow(cat2);
                                         TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                         titleTextView.setText(textToShow);
+
+                                        // 축제 건수 띄우는 텍스트
+                                        String progessToShow = "(" + festivalList.size() + "건)";
+                                        TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
+                                        progressTextView.setText(progessToShow);
 
 
                                         int maxItems = Math.min(festivalList.size(), 6);
@@ -848,6 +852,10 @@ public class SearchScreenActivity extends AppCompatActivity {
         String textToShow = getTextToShow(cat);
         TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
         titleTextView.setText(textToShow);
+
+        String progessToShow = "(" + festivalList.size() + "건)";
+        TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
+        progressTextView.setText(progessToShow);
 
 
         int loopItems = Math.min(festivalList.size(), count);
