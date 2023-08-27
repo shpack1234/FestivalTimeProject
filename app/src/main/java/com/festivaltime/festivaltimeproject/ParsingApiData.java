@@ -213,7 +213,7 @@ public class ParsingApiData {
     }
 
     //행사정보조회 피싱
-    public static void parseXmlDataFromFestival(String xmlData) {
+    public static void parseXmlDataFromFestivalA(String xmlData) {
         festivalList.clear();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -236,6 +236,7 @@ public class ParsingApiData {
                     String contentid = getElementText(itemElement, "contentid");
                     //분류위한 카테고리받아옴
                     String cat2 = getElementText(itemElement, "cat2");
+                    String cat3 = getElementText(itemElement, "cat3");
                     String startdate = getElementText(itemElement, "eventstartdate");
                     String enddate = getElementText(itemElement, "eventenddate");
 
@@ -244,13 +245,59 @@ public class ParsingApiData {
                     festivalInfo_cat.put("mapy", mapy);
                     festivalInfo_cat.put("contentid", contentid);
                     festivalInfo_cat.put("cat2", cat2);
+                    festivalInfo_cat.put("cat3", cat3);
                     festivalInfo_cat.put("eventstartdate", startdate);
                     festivalInfo_cat.put("eventenddate", enddate);
 
                     if ("A0207".equals(cat2)) {
                         festivalList.add(festivalInfo_cat);
                     }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void parseXmlDataFromFestival(String xmlData, String cat3Filter) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo_cat = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String mapx = getElementText(itemElement, "mapx");
+                    String mapy = getElementText(itemElement, "mapy");
+                    String contentid = getElementText(itemElement, "contentid");
+                    //분류위한 카테고리받아옴
+                    String cat2 = getElementText(itemElement, "cat2");
+                    String cat3 = getElementText(itemElement, "cat3");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
+
+                    festivalInfo_cat.put("title", title);
+                    festivalInfo_cat.put("mapx", mapx);
+                    festivalInfo_cat.put("mapy", mapy);
+                    festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("cat2", cat2);
+                    festivalInfo_cat.put("cat3", cat3);
+                    festivalInfo_cat.put("eventstartdate", startdate);
+                    festivalInfo_cat.put("eventenddate", enddate);
+
+                    if (cat3Filter.equals(cat3)) {
+                        festivalList.add(festivalInfo_cat);
+                    }
                 }
             }
         } catch (Exception e) {

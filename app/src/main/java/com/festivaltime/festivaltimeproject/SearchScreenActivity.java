@@ -97,22 +97,10 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         //키워드 서치용 query
         String query = getIntent().getStringExtra("query");
+        //날짜 서치용 boolean
+        Boolean searchFestival = false;
 
         String seoul = "서울";
-
-        ArrayList<String> catlist = new ArrayList<>();
-        catlist.add("A0207");
-        catlist.add("A02080500");
-        catlist.add("A02080200");
-        catlist.add("A02080100");
-        catlist.add("A02080300");
-        catlist.add("A02080400");
-        catlist.add("A02080600");
-        catlist.add("A02080800");
-        catlist.add("A02080900");
-        catlist.add("A02081000");
-        catlist.add("A02081100");
-
 
         type = getIntent().getStringExtra("type");
 
@@ -124,6 +112,16 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
         cat2 = "A0207";
+        cat3 = "A02080500";
+        cat4 = "A02080200";
+        cat5 = "A02080100";
+        cat6 = "A02080300";
+        cat7 = "A02080400";
+        cat8 = "A02080600";
+        cat9 = "A02080800";
+        cat10 = "A02080900";
+        cat11 = "A02081000";
+        cat12 = "A02081100";
 
         if (main.isSeoulSelected()) {
             this.query = "서울";
@@ -138,6 +136,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         apiReader = new ApiReader();
 
+        //키워드 서치
         if (!matcher.matches()) {
             Log.d("match", "date match fail");
             apiReader.searchKeyword2(apiKey, query, cat2, new ApiReader.ApiResponseListener() {
@@ -251,7 +250,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat3 = "A02080500";
             apiReader.searchKeyword(apiKey, query, cat3, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -295,8 +293,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-
-            cat4 = "A02080200";
             apiReader.searchKeyword(apiKey, query, cat4, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -339,7 +335,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat5 = "A02080100";
             apiReader.searchKeyword(apiKey, query, cat5, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -382,7 +377,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat6 = "A02080300";
             apiReader.searchKeyword(apiKey, query, cat6, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -426,7 +420,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat7 = "A02080400";
             apiReader.searchKeyword(apiKey, query, cat7, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -469,7 +462,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat8 = "A02080600";
             apiReader.searchKeyword(apiKey, query, cat8, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -513,7 +505,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat9 = "A02080800";
             apiReader.searchKeyword(apiKey, query, cat9, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -556,7 +547,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat10 = "A02080900";
             apiReader.searchKeyword(apiKey, query, cat10, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -599,7 +589,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat11 = "A02081000";
             apiReader.searchKeyword(apiKey, query, cat11, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -642,7 +631,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
             });
 
-            cat12 = "A02081100";
             apiReader.searchKeyword(apiKey, query, cat12, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
@@ -686,11 +674,10 @@ public class SearchScreenActivity extends AppCompatActivity {
         } else {
             Log.d("match", "date match success");
 
-            //진행중
-            /*apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    ParsingApiData.parseXmlDataFromFestival(response);
+                    ParsingApiData.parseXmlDataFromFestivalA(response);
                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                     executor.execute(new Runnable() {
                         @Override
@@ -778,7 +765,421 @@ public class SearchScreenActivity extends AppCompatActivity {
                 public void onError(String error) {
                     Log.e(TAG, "API Error: " + error);
                 }
-            });*/
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    try {
+                        thirdSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat3);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+
+                                        loopUI(query, cat3, 3);
+                                    }
+                                    fourthSemaphore.release();
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        secondSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat4);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat4, 3);
+                                    }
+                                    thirdSemaphore.release();
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        fourthSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat5);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat5, 3);
+                                    }
+                                    fifthSemaphore.release();
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        fifthSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat6);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat6, 3);
+                                    }
+                                    sixthSemaphore.release();
+                                }
+                            });
+                        }
+                    });
+                }
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        sixthSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat7);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat7, 3);
+                                    }
+                                    seventhSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        seventhSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat8);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat8, 3);
+                                    }
+                                    eightSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        eightSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat9);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat9, 3);
+                                    }
+                                    ninthSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        ninthSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat10);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat10, 3);
+                                    }
+                                    tenthSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        tenthSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat11);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat11, 3);
+                                    }
+                                    eleventhSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+
+
+                    try {
+                        eleventhSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat12);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat12, 3);
+                                    }
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
