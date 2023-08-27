@@ -161,4 +161,9 @@
     <string name="search_festival">축제</string>
     <string name="search_showAll">전체보기</string>
 
+    <!--축제 전체보기-->
+    <string name="address">주소</string>
+    <string name="summary">개요</string>
+    <string name="period">기간:</string>
+
 </resources>
