@@ -59,6 +59,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore ninthSemaphore = new Semaphore(0);
     private Semaphore tenthSemaphore = new Semaphore(0);
     private Semaphore eleventhSemaphore = new Semaphore(0);
+    private Semaphore FestiSemaphore = new Semaphore(0);
 
     MainActivity main = new MainActivity();
 
@@ -99,12 +100,6 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         String seoul = "서울";
 
-
-        //날짜 서치인지 형태 확인
-        String regex = "\\d{4}\\d{2}\\d{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(query);
-
         ArrayList<String> catlist = new ArrayList<>();
         catlist.add("A0207");
         catlist.add("A02080500");
@@ -135,6 +130,11 @@ public class SearchScreenActivity extends AppCompatActivity {
         } else {
             this.query = getIntent().getStringExtra("query");
         }
+
+        //날짜 서치인지 형태 확인
+        String regex = "\\d{4}\\d{2}\\d{2}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(query);
 
         apiReader = new ApiReader();
 
@@ -683,7 +683,7 @@ public class SearchScreenActivity extends AppCompatActivity {
             Log.d("match", "date match success");
 
             //진행중
-            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+            /*apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
                     ParsingApiData.parseXmlDataFromFestival(response);
@@ -765,7 +765,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 }
 
                             });
-                            secondSemaphore.release();
+                            FestiSemaphore.release();
                         }
                     });
                 }
@@ -774,7 +774,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                 public void onError(String error) {
                     Log.e(TAG, "API Error: " + error);
                 }
-            });
+            });*/
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
