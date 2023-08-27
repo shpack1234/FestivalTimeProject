@@ -813,7 +813,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
                     try {
-                        secondSemaphore.acquire();
+                        FestiSemaphore.acquire();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
