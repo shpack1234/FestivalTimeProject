@@ -45,7 +45,7 @@ public class SearchScreenActivity extends AppCompatActivity {
     private List<HashMap<String, String>> parsedFestivalList = new ArrayList<>();
     private ApiReader apiReader;
     private String type;
-    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12 = "";
+    private String cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12 = "", cat13, cat14;
 
 
     // 카테고리 숫자 순서대로 나오도록 하는 변수들
@@ -59,7 +59,8 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore ninthSemaphore = new Semaphore(0);
     private Semaphore tenthSemaphore = new Semaphore(0);
     private Semaphore eleventhSemaphore = new Semaphore(0);
-    private Semaphore FestiSemaphore = new Semaphore(0);
+    private Semaphore twelveSemaphore = new Semaphore(0);
+    private Semaphore thirteenSemaphore = new Semaphore(0);
 
     MainActivity main = new MainActivity();
 
@@ -122,6 +123,8 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat10 = "A02080900";
         cat11 = "A02081000";
         cat12 = "A02081100";
+        cat13 = "A02081200";
+        cat14 = "A02081300";
 
         if (main.isSeoulSelected()) {
             this.query = "서울";
@@ -756,7 +759,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 }
 
                             });
-                            FestiSemaphore.release();
+                            secondSemaphore.release();
                         }
                     });
                 }
@@ -813,7 +816,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
                     try {
-                        FestiSemaphore.acquire();
+                        secondSemaphore.acquire();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -1166,7 +1169,84 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     if (festivalList.size() > 0) {
                                         loopUI(query, cat12, 3);
                                     }
+                                    thirteenSemaphore.release();
+                                }
 
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    try {
+                        twelveSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat13);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat13, 3);
+                                    }
+                                    thirteenSemaphore.release();
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+            apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    try {
+                        thirteenSemaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("response", response);
+                    ParsingApiData.parseXmlDataFromFestival(response, cat14);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        loopUI(query, cat14, 3);
+                                    }
                                 }
 
                             });
@@ -1334,6 +1414,10 @@ public class SearchScreenActivity extends AppCompatActivity {
                 return "대중콘서트";
             case "A02081100":
                 return "영화";
+            case "A02081200":
+                return "스포츠";
+            case "A02081300":
+                return "기타";
             default:
                 if (!type.isEmpty() && type.startsWith("A0207")) {
                     return "축제";
