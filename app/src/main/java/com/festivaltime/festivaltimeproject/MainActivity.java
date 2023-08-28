@@ -8,6 +8,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int numberOfLayouts = 3;
 
-    private boolean isSeoulSelected = false;
+    private String locationSelect;
+
+
 
 
 
@@ -179,52 +182,67 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.seoul:
                                 location.setText("서울");
-                                isSeoulSelected = true;
+                                locationSelect = "서울";
                                 break;
                             case R.id.gyeonggi:
                                 location.setText("경기");
+                                locationSelect = "경기";
                                 break;
                             case R.id.incheon:
                                 location.setText("인천");
+                                locationSelect = "인천";
                                 break;
                             case R.id.gangwon:
                                 location.setText("강원");
+                                locationSelect = "강원";
                                 break;
                             case R.id.jeju:
                                 location.setText("제주");
+                                locationSelect = "제주";
                                 break;
                             case R.id.daejeon:
                                 location.setText("대전");
+                                locationSelect = "대전";
                                 break;
                             case R.id.chungbuk:
                                 location.setText("충북");
+                                locationSelect = "충북";
                                 break;
                             case R.id.chungnam_sejong:
                                 location.setText("충남/세종");
+                                locationSelect = "충남/세종";
                                 break;
                             case R.id.busan:
                                 location.setText("부산");
+                                locationSelect = "부산";
                                 break;
                             case R.id.ulsan:
                                 location.setText("울산");
+                                locationSelect = "울산";
                                 break;
                             case R.id.gyeongnam:
                                 location.setText("경남");
+                                locationSelect = "경남";
                                 break;
                             case R.id.daegu:
                                 location.setText("대구");
+                                locationSelect = "대구";
                                 break;
                             case R.id.gyeongbuk:
                                 location.setText("경북");
+                                locationSelect = "경북";
                                 break;
                             case R.id.gwangju:
                                 location.setText("광주");
+                                locationSelect = "광주";
                                 break;
                             case R.id.jeonnam:
                                 location.setText("전남");
+                                locationSelect = "전남";
                                 break;
                             case R.id.jeonju_jeonbuk:
                                 location.setText("전주/전북");
+                                locationSelect = "전주/전북";
                                 break;
                         }
                         return false;
@@ -391,6 +409,25 @@ public class MainActivity extends AppCompatActivity {
 
                         // 대화 상자 닫기
                         alertDialog.dismiss();
+
+                        // SearchScreen으로 상세 검색 설정값 전송
+                        Intent queryIntent = new Intent(MainActivity.this, SearchScreenActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("startdate", startdate);
+                        bundle.putString("enddate", enddate);
+
+                        if(locationSelect != null && !locationSelect.isEmpty()){
+                            bundle.putString("location", locationSelect);
+                            queryIntent.putExtras(bundle);
+                            navigateToSearchActivity(MainActivity.this, query, queryIntent);
+
+
+                        }else{
+                            Toast.makeText(MainActivity.this, "위치가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     } else {
                         Toast.makeText(MainActivity.this, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                     }
@@ -405,8 +442,6 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
-
-    public boolean isSeoulSelected() {return isSeoulSelected;}
 
 
 }

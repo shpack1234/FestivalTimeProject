@@ -111,6 +111,17 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         String apiKey = getResources().getString(R.string.api_key);
 
+        Bundle extras = getIntent().getExtras();
+
+        if(extras!=null){
+            String startDate = extras.getString("startdate");
+            String endDate = extras.getString("enddate");
+
+            String selectedLocation = extras.getString("location");
+
+            // {0/0/0] 형태로 ,,,,했음
+            String queryFormat = "[" + selectedLocation + "/" + startDate + "/" + endDate + "]";
+        }
 
         cat2 = "A0207";
         cat3 = "A02080500";
@@ -126,11 +137,6 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat13 = "A02081200";
         cat14 = "A02081300";
 
-        if (main.isSeoulSelected()) {
-            this.query = "서울";
-        } else {
-            this.query = getIntent().getStringExtra("query");
-        }
 
         //날짜 서치인지 형태 확인
         String regex = "\\d{4}\\d{2}\\d{2}";
