@@ -21,6 +21,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class EntireViewActivity extends AppCompatActivity {
     public ImageButton Back_Btn;
     private ApiReader apiReader;
@@ -94,32 +99,45 @@ public class EntireViewActivity extends AppCompatActivity {
             }
         });
 
-
-        String selectdata;
-        apiReader = new ApiReader();
-        // 'festivallit' 메소드를 사용하여 eventStartDate와 eventEndDate 값을 가져옵니다.
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         apiReader.Festivallit(apiKey, selectDate, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
-                // 응답을 파싱하여 eventStartDate와 eventEndDate 값을 가져옵니다.
-                ParsingApiData.parseXmlDataFromFestivalA(response);
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromFestival(response, ""); // 파싱 메소드 호출
 
-                // festivalList에서 필요한 정보를 가져옵니다.
-                for (HashMap<String, String> festivalInfo : festivalList) {
-                    TextView startDateTextView=findViewById(R.id.start_date);
-                    TextView endDataTextView=findViewById(R.id.end_date);
-                    String eventStartDate = festivalInfo.get("eventstartdate");
-                    String eventEndDate = festivalInfo.get("eventenddate");
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        festivalList.clear();
+                        festivalList.addAll(parsedFestivalList);
+                        for (HashMap<String, String> festivalInfo : festivalList) {
+                            TextView startDateTextView=findViewById(R.id.start_date);
+                            TextView endDateTextView=findViewById(R.id.end_date);
+                            String eventStartDate = festivalInfo.get("eventStartDate");
+                            String eventEndDate = festivalInfo.get("eventEndDate");
 
-                    // 'start_date'와 'end_date' 텍스트뷰에 값을 설정합니다.
-                    startDateTextView.setText(eventStartDate);
-                    endDataTextView.setText(eventEndDate);
-                }
+                            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+                            try {
+                                Date startDate = inputFormat.parse(eventStartDate);
+                                Date endDate = inputFormat.parse(eventEndDate);
+
+                                startDateTextView.setText(sdf.format(startDate));
+                                endDateTextView.setText(sdf.format(endDate));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             }
 
             @Override
             public void onError(String error) {
-                // 오류 처리 코드를 추가할 수 있습니다.
             }
         });
 
