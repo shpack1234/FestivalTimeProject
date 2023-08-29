@@ -95,7 +95,7 @@ public class EntireViewActivity extends AppCompatActivity {
         });
 
 
-        String selectdata
+        String selectdata;
         apiReader = new ApiReader();
         // 'festivallit' 메소드를 사용하여 eventStartDate와 eventEndDate 값을 가져옵니다.
         apiReader.Festivallit(apiKey, selectDate, new ApiReader.ApiResponseListener() {

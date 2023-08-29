@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                         if(locationSelect != null && !locationSelect.isEmpty()){
                             bundle.putString("location", locationSelect);
                             queryIntent.putExtras(bundle);
-                            navigateToSearchActivity(MainActivity.this, query, queryIntent);
+                            //navigateToSearchActivity(MainActivity.this, query, queryIntent);
 
 
                         }else{
