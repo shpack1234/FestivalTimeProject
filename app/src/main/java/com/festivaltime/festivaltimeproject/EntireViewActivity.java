@@ -25,7 +25,9 @@ public class EntireViewActivity extends AppCompatActivity {
     public ImageButton Back_Btn;
     private ApiReader apiReader;
 
+
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
+    private String selectDate;
 
 
     @Override
@@ -33,12 +35,11 @@ public class EntireViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entire_view);
 
-        final TextView title=(TextView)findViewById(R.id.festival_title);
+        Back_Btn=findViewById(R.id.before_btn);
 
         String contentId = getIntent().getStringExtra("contentid");
 
         String apiKey = getResources().getString(R.string.api_key);
-        Back_Btn=findViewById(R.id.before_btn);
         apiReader = new ApiReader();
         apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
             @Override
@@ -92,6 +93,36 @@ public class EntireViewActivity extends AppCompatActivity {
 
             }
         });
+
+
+        String selectdata
+        apiReader = new ApiReader();
+        // 'festivallit' 메소드를 사용하여 eventStartDate와 eventEndDate 값을 가져옵니다.
+        apiReader.Festivallit(apiKey, selectDate, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                // 응답을 파싱하여 eventStartDate와 eventEndDate 값을 가져옵니다.
+                ParsingApiData.parseXmlDataFromFestivalA(response);
+
+                // festivalList에서 필요한 정보를 가져옵니다.
+                for (HashMap<String, String> festivalInfo : festivalList) {
+                    TextView startDateTextView=findViewById(R.id.start_date);
+                    TextView endDataTextView=findViewById(R.id.end_date);
+                    String eventStartDate = festivalInfo.get("eventstartdate");
+                    String eventEndDate = festivalInfo.get("eventenddate");
+
+                    // 'start_date'와 'end_date' 텍스트뷰에 값을 설정합니다.
+                    startDateTextView.setText(eventStartDate);
+                    endDataTextView.setText(eventEndDate);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                // 오류 처리 코드를 추가할 수 있습니다.
+            }
+        });
+
 
         Intent intent = getIntent();
         if(intent != null) {

@@ -18,18 +18,18 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/before_btn"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
-                    android:src="@drawable/ic_back_before"
                     android:layout_marginStart="4dp"
-                    android:onClick="customOnClick"
                     android:background="@android:color/transparent"
-                    tools:ignore="SpeakableTextPresentCheck"/>
+                    android:onClick="customOnClick"
+                    android:src="@drawable/ic_back_before"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/festival_title"
@@ -42,10 +42,11 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:background="@color/gray"/>
+                android:background="@color/gray" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -70,8 +71,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"
-                    android:layout_marginTop="180dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="180dp"
                     android:layout_marginEnd="4dp"
                     android:orientation="horizontal">
 
@@ -90,10 +91,10 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
                             android:layout_weight="1"
-                            android:layout_marginTop="20dp">
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/period"
@@ -114,9 +115,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:textSize="16sp"
                                     android:textColor="@color/black"
-                                    android:textStyle="bold"/>
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -126,19 +127,19 @@
                                     <TextView
                                         android:layout_width="16dp"
                                         android:layout_height="wrap_content"
+                                        android:gravity="center"
                                         android:text="~"
-                                        android:textSize="16sp"
                                         android:textColor="@color/black"
-                                        android:textStyle="bold"
-                                        android:gravity="center"/>
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/end_date"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="16sp"
                                         android:textColor="@color/black"
-                                        android:textStyle="bold"/>
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -155,19 +156,19 @@
                             <ImageButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_bookmark"
                                 android:layout_marginBottom="0dp"
-                                android:layout_weight="1"/>
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_bookmark" />
 
                             <ImageButton
                                 android:id="@+id/festival_addButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_weight="1"
                                 android:background="@android:color/transparent"
-                                android:src="@drawable/plus"
-                                android:layout_weight="1"/>
+                                android:src="@drawable/plus" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -194,14 +195,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/address"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/festival_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp" />
 
                 </LinearLayout>
 
@@ -217,19 +218,49 @@
                         android:layout_height="wrap_content"
                         android:text="@string/summary"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/festival_overview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp" />
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="9dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/festival_review"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/review_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:text="(0건)"/>
+
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
