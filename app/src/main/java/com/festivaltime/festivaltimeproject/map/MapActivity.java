@@ -10,6 +10,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,10 +21,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.festivaltime.festivaltimeproject.ApiReader;
+import com.festivaltime.festivaltimeproject.EntireViewActivity;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.SearchScreenActivity;
@@ -38,6 +43,7 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +73,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private ApiReader apiReader;
     private String apiKey;
     private Executor executor;
+    private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     private List<Pair<Double, Double>> areaFestivals = new ArrayList<>();
 
@@ -269,37 +276,72 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             }
             else {
                 popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+                String contentId=String.valueOf(mapPOIItem.getTag());
+                apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromdetailIntro(response); // 응답을 파싱하여 데이터를 저장
+
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                        runOnUiThread(new Runnable() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void run() { //UI 추가 부분
+                                festivalList.clear(); // 기존 데이터를 모두 제거
+                                festivalList.addAll(parsedFestivalList);
+                                for (HashMap<String, String> festivalInfo : festivalList) {
+
+                                    String location = festivalInfo.get("eventplace");
+                                    String eventstartdate=festivalInfo.get("eventstartdate");
+                                    String eventenddate=festivalInfo.get("eventenddate");
+                                    String eventStart=eventstartdate.substring(0,4)+"."+eventstartdate.substring(4,6)+"."+eventstartdate.substring(6);
+                                    String eventEnd=eventenddate.substring(0,4)+"."+eventenddate.substring(4,6)+"."+eventenddate.substring(6);
+
+                                    // 팝업 창 생성 및 설정
+                                    PopupWindow popupWindow = new PopupWindow(
+                                            popupView,
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            true
+                                    );
+
+                                    TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
+                                    TextView festivalLoc=popupView.findViewById(R.id.festival_location);
+                                    TextView festivalPer=popupView.findViewById(R.id.festival_period);
+                                    titleTextView.setText(mapPOIItem.getItemName());
+                                    festivalLoc.setText(location);
+                                    festivalPer.setText(eventStart+" ~ "+ eventEnd);
+
+                                    int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
+                                    int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
+                                    int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
+
+                                    popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
+
+
+                                    // 팝업 창 내부의 버튼 등의 UI 요소에 대한 동작 처리
+                                    Button detailButton = popupView.findViewById(R.id.festival_detail_button);
+                                    detailButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            int contentId = mapPOIItem.getTag();
+                                            navigateToDetailFestivalActivity(MapActivity.this, String.valueOf(contentId));
+                                        }
+                                    });
+
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
             }
-
-
-            // 팝업 창 생성 및 설정
-            PopupWindow popupWindow = new PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    true
-            );
-
-            TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
-            titleTextView.setText(mapPOIItem.getItemName());
-
-            int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
-            int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
-            int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
-
-            popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
-
-
-            // 팝업 창 내부의 버튼 등의 UI 요소에 대한 동작 처리
-            Button detailButton = popupView.findViewById(R.id.festival_detail_button);
-            detailButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 팝업 닫기
-                    int contentId = mapPOIItem.getTag();
-                    navigateToDetailFestivalActivity(MapActivity.this, String.valueOf(contentId));
-                }
-            });
 
 
         } else { //지역 선택 시

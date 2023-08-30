@@ -305,6 +305,39 @@ public class ParsingApiData {
         }
     }
 
+    public static void parseXmlDataFromdetailIntro(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String eventstartdate = getElementText(itemElement, "eventstartdate");
+                    String eventenddate = getElementText(itemElement, "eventenddate");
+                    String eventplace = getElementText(itemElement, "eventplace");
+
+                    festivalInfo.put("eventstartdate", eventstartdate);
+                    festivalInfo.put("eventenddate", eventenddate);
+                    festivalInfo.put("eventplace", eventplace);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<LinkedHashMap<String, String>> getFestivalList() {
         return festivalList;
     }
