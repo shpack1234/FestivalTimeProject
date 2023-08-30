@@ -231,7 +231,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                     public void onClick(View v) {
                                                         String contentId = id;
                                                         // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                        navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                                                        navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId,cat2);
                                                     }
                                                 });
 
@@ -1391,7 +1391,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         String contentId = id;
                         // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                        navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId);
+                        navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId,cat);
                     }
                 });
 

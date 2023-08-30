@@ -32,8 +32,6 @@ public class EntireViewActivity extends AppCompatActivity {
 
 
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
-    private String selectDate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +97,20 @@ public class EntireViewActivity extends AppCompatActivity {
             }
         });
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        apiReader.Festivallit(apiKey, selectDate, new ApiReader.ApiResponseListener() {
+        String query=getIntent().getStringExtra("query");
+
+        apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+            String type=getIntent().getStringExtra("type");
             @Override
             public void onSuccess(String response) {
                 Log.d("response", response);
-                ParsingApiData.parseXmlDataFromFestival(response, ""); // 파싱 메소드 호출
+                if(type.equals("A0207"))
+                {
+                    ParsingApiData.parseXmlDataFromFestivalA(response);
+                }
+                else{
+                    ParsingApiData.parseXmlDataFromFestival(response,type);
+                }
 
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
@@ -113,21 +119,25 @@ public class EntireViewActivity extends AppCompatActivity {
                     public void run() {
                         festivalList.clear();
                         festivalList.addAll(parsedFestivalList);
-                        for (HashMap<String, String> festivalInfo : festivalList) {
-                            TextView startDateTextView=findViewById(R.id.start_date);
-                            TextView endDateTextView=findViewById(R.id.end_date);
-                            String eventStartDate = festivalInfo.get("eventStartDate");
-                            String eventEndDate = festivalInfo.get("eventEndDate");
-
+                        for (HashMap<String, String> festivalInfo_cat : festivalList) {
                             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                             SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+                            String eventStartDate = festivalInfo_cat.get("eventStartDate");
+                            String eventEndDate = festivalInfo_cat.get("eventEndDate");
 
                             try {
                                 Date startDate = inputFormat.parse(eventStartDate);
                                 Date endDate = inputFormat.parse(eventEndDate);
 
-                                startDateTextView.setText(sdf.format(startDate));
-                                endDateTextView.setText(sdf.format(endDate));
+                                String formattedStartDate = outputFormat.format(startDate);
+                                String formattedEndDate = outputFormat.format(endDate);
+
+                                TextView startDateTextView = findViewById(R.id.start_date);
+                                TextView endDateTextView = findViewById(R.id.end_date);
+
+                                startDateTextView.setText(formattedStartDate);
+                                endDateTextView.setText(formattedEndDate);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
