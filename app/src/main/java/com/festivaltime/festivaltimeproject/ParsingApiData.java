@@ -1,7 +1,5 @@
 package com.festivaltime.festivaltimeproject;
 
-import android.util.Log;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -170,6 +168,66 @@ public class ParsingApiData {
 
                         festivalList.add(festivalInfo);
                     }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseXmlDataFromSearchFestival(String xmlData, String cat2Filter, String cat3Filter) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String img = getElementText(itemElement, "firstimage2");
+                    String overview = getElementText(itemElement, "overview");
+                    String contentid = getElementText(itemElement, "contentid");
+                    String areacode = getElementText(itemElement, "areacode");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
+                    String cat2 = getElementText(itemElement, "cat2");
+                    String cat3 = getElementText(itemElement, "cat3");
+
+
+                    if (cat3Filter != null || cat3Filter.equals(cat3)) {
+                        festivalInfo.put("title", title);
+                        festivalInfo.put("img", img);
+                        festivalInfo.put("overview", overview);
+                        festivalInfo.put("contentid", contentid);
+                        festivalInfo.put("areacode", areacode);
+                        festivalInfo.put("eventstartdate", startdate);
+                        festivalInfo.put("eventenddate", enddate);
+                        festivalInfo.put("cat3", cat3);
+
+                        festivalList.add(festivalInfo);
+                    }
+                    if (cat2Filter != null || cat2Filter.equals(cat2)) {
+                        festivalInfo.put("title", title);
+                        festivalInfo.put("img", img);
+                        festivalInfo.put("overview", overview);
+                        festivalInfo.put("contentid", contentid);
+                        festivalInfo.put("areacode", areacode);
+                        festivalInfo.put("eventstartdate", startdate);
+                        festivalInfo.put("eventenddate", enddate);
+                        festivalInfo.put("cat2", cat2);
+
+                        festivalList.add(festivalInfo);
+                    }
+
                 }
             }
         } catch (Exception e) {

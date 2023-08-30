@@ -17,7 +17,6 @@ public class navigateToSomeActivity {
     public static void navigateToSearchActivity(Activity thisActivity, String query, Intent intent) {
         intent.putExtra("query", query);
         thisActivity.startActivity(intent);
-        thisActivity.overridePendingTransition(0,0);
     }
 
     public static void navigateToMainActivity(Activity thisActivity) {

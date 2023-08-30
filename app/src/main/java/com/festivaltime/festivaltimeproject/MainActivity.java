@@ -182,67 +182,67 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.seoul:
                                 location.setText("서울");
-                                locationSelect = "서울";
+                                locationSelect = "1";
                                 break;
                             case R.id.gyeonggi:
                                 location.setText("경기");
-                                locationSelect = "경기";
+                                locationSelect = "31";
                                 break;
                             case R.id.incheon:
                                 location.setText("인천");
-                                locationSelect = "인천";
+                                locationSelect = "2";
                                 break;
                             case R.id.gangwon:
                                 location.setText("강원");
-                                locationSelect = "강원";
+                                locationSelect = "32";
                                 break;
                             case R.id.jeju:
                                 location.setText("제주");
-                                locationSelect = "제주";
+                                locationSelect = "39";
                                 break;
                             case R.id.daejeon:
                                 location.setText("대전");
-                                locationSelect = "대전";
+                                locationSelect = "3";
                                 break;
                             case R.id.chungbuk:
                                 location.setText("충북");
-                                locationSelect = "충북";
+                                locationSelect = "33";
                                 break;
                             case R.id.chungnam_sejong:
                                 location.setText("충남/세종");
-                                locationSelect = "충남/세종";
+                                locationSelect = "34";
                                 break;
                             case R.id.busan:
                                 location.setText("부산");
-                                locationSelect = "부산";
+                                locationSelect = "6";
                                 break;
                             case R.id.ulsan:
                                 location.setText("울산");
-                                locationSelect = "울산";
+                                locationSelect = "7";
                                 break;
                             case R.id.gyeongnam:
                                 location.setText("경남");
-                                locationSelect = "경남";
+                                locationSelect = "36";
                                 break;
                             case R.id.daegu:
                                 location.setText("대구");
-                                locationSelect = "대구";
+                                locationSelect = "4";
                                 break;
                             case R.id.gyeongbuk:
                                 location.setText("경북");
-                                locationSelect = "경북";
+                                locationSelect = "35";
                                 break;
                             case R.id.gwangju:
                                 location.setText("광주");
-                                locationSelect = "광주";
+                                locationSelect = "5";
                                 break;
                             case R.id.jeonnam:
                                 location.setText("전남");
-                                locationSelect = "전남";
+                                locationSelect = "38";
                                 break;
                             case R.id.jeonju_jeonbuk:
                                 location.setText("전주/전북");
-                                locationSelect = "전주/전북";
+                                locationSelect = "37";
                                 break;
                         }
                         return false;
