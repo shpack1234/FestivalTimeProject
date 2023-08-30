@@ -240,6 +240,44 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 }
                             });
 
+
+                            /*addButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Log.d("Button Action", "Add about Festival to Calendar");
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //키워드 서치 날짜 미포함으로 전체 주석처리해놓음.
+                                            String startDate = (festival eventstartdate).getText().toString();
+                                            String endDate = (festival eventstartdate).getText().toString();
+                                            String startTime = "";
+                                            String endTime = "";
+                                            String category = "축제";
+
+                                            loadedUser = userDao.getUserInfoById(userId);
+                                            if (loadedUser != null) {
+                                                //이미 추가된지 여부 확인 추가예정
+                                                CalendarEntity newSchedule = new CalendarEntity();
+                                                newSchedule.title = title;
+                                                newSchedule.startDate = startDate;
+                                                newSchedule.endDate = endDate;
+                                                newSchedule.startTime = startTime;
+                                                newSchedule.endTime = endTime;
+                                                newSchedule.category = category;
+
+                                                ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
+                                                loader.forceLoad();
+
+                                            } else {
+                                                Log.e("No UserInfo", "You should get your information in MyPage");
+                                            }
+                                        }
+                                    });
+                                }
+                            });*/
+
+
                             Scroll_View.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                                 @Override
                                 public void onScrollChanged() {
