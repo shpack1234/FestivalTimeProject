@@ -82,6 +82,15 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
+    public static void navigateToDetailFestivalActivity(Activity thisActivity, String contentId,String type) {
+        Intent intent = new Intent(thisActivity, EntireViewActivity.class);
+        intent.putExtra("contentid", contentId);
+        intent.putExtra("type",type);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
+
     public static void navigateToPrivacyActivity(Activity thisActivity, String userId) {
         Intent intent = new Intent(thisActivity, PrivacyActivity.class);
         intent.putExtra("userId", userId);
