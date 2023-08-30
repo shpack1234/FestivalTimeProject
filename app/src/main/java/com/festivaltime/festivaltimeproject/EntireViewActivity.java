@@ -97,20 +97,12 @@ public class EntireViewActivity extends AppCompatActivity {
             }
         });
 
-        String query=getIntent().getStringExtra("query");
 
-        apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
-            String type=getIntent().getStringExtra("type");
+        apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Log.d("response", response);
-                if(type.equals("A0207"))
-                {
-                    ParsingApiData.parseXmlDataFromFestivalA(response);
-                }
-                else{
-                    ParsingApiData.parseXmlDataFromFestival(response,type);
-                }
+                ParsingApiData.parseXmlDataFromdetailIntro(response);
 
                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
                 Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
@@ -120,13 +112,13 @@ public class EntireViewActivity extends AppCompatActivity {
                         festivalList.clear();
                         festivalList.addAll(parsedFestivalList);
                         for (HashMap<String, String> festivalInfo_cat : festivalList) {
-                            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-
-                            String eventStartDate = festivalInfo_cat.get("eventStartDate");
-                            String eventEndDate = festivalInfo_cat.get("eventEndDate");
+                            String eventStartDate = festivalInfo_cat.get("eventstartdate");
+                            String eventEndDate = festivalInfo_cat.get("eventenddate");
 
                             try {
+                                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
                                 Date startDate = inputFormat.parse(eventStartDate);
                                 Date endDate = inputFormat.parse(eventEndDate);
 
@@ -141,6 +133,7 @@ public class EntireViewActivity extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+
                         }
                     }
                 });
