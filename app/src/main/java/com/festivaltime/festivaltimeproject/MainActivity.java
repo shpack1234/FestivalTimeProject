@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
@@ -10,6 +11,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,24 +30,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
-    private String query;
+    private String query, detailInfo;
+    private ApiReader apiReader;
+    private Executor executor;
+    private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     private final int numberOfLayouts = 3;
 
     private String locationSelect;
-
-
-
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -97,28 +107,104 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
 
         for (int imageRes : vacationImages) {
-            View sliderItemView=getLayoutInflater().inflate(R.layout.slider_item, null);
-            ImageView imageView=sliderItemView.findViewById(R.id.image_view);
+            View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
+            ImageView imageView = sliderItemView.findViewById(R.id.image_view);
 
             imageView.setImageResource(imageRes);
             vacationFestival.addView(sliderItemView);
         }
 
-        String[] mainFestivalArea={"부산", "서울", "경주", "김해", "인천"};
-        for(int area=0; area<5; area++) {
-            LinearLayout mainFestivalContainerGroup=findViewById(R.id.main_festival_container_group);
-            LinearLayout mainfestivalContainer= (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
-            TextView areaName=mainfestivalContainer.findViewById(R.id.main_festival_area_title);
-            for(int i=0; i<5; i++) {
-                View festivalBox=getLayoutInflater().inflate(R.layout.festival_info_box, null);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                layoutParams.setMargins(0, 0, 0, 40);
-                festivalBox.setLayoutParams(layoutParams);
-                mainfestivalContainer.addView(festivalBox);
+        executor = new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                new Thread(command).start();
             }
+        };
+
+        apiReader = new ApiReader();
+        String apiKey = getResources().getString(R.string.api_key);
+
+        String[] mainFestivalArea = {"서울", "인천", "대구", "부산", "제주도"};
+        String[] mainFestivalAreaCode = {"1", "2", "4", "6", "39"};
+
+        for (int area = 0; area < 5; area++) {
+            LinearLayout mainFestivalContainerGroup = findViewById(R.id.main_festival_container_group);
+            LinearLayout mainfestivalContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
+            TextView areaName = mainfestivalContainer.findViewById(R.id.main_festival_area_title);
+
+            festivalList.clear();
+            apiReader.searchLocation(apiKey, mainFestivalAreaCode[area], new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("main response", response);
+                    ParsingApiData.parseXmlDataFromDetail2(response);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                    festivalList.addAll(parsedFestivalList);
+
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0){
+                                        int maxItems = Math.min(festivalList.size(), 5);
+
+                                        for (int i = 0; i < maxItems; i++) {
+                                            HashMap<String, String> festivalInfo = festivalList.get(i);
+
+                                            View festivalBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                                            TextView titleTextView = festivalBox.findViewById(R.id.festival_title);
+                                            TextView locationTextView = festivalBox.findViewById(R.id.festival_location);
+                                            TextView overviewTextView = festivalBox.findViewById(R.id.festival_overview);
+                                            ImageButton searchImageButton = festivalBox.findViewById(R.id.festival_rep_image);
+
+                                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                            );
+
+                                            layoutParams.setMargins(0, 0, 0, 40);
+                                            festivalBox.setLayoutParams(layoutParams);
+
+                                            String title = festivalInfo.get("title");
+                                            String id = festivalInfo.get("contentid");
+                                            String address1 = festivalInfo.get("addr1");
+                                            String repImage = festivalInfo.get("img");
+                                            String overview = FestivalDetail(apiKey, id);
+
+                                            titleTextView.setText(title);
+                                            locationTextView.setText(address1);
+                                            overviewTextView.setText(overview);
+
+                                            if (repImage == null || repImage.isEmpty()) {
+                                                searchImageButton.setImageResource(R.drawable.ic_image);
+                                            } else {
+                                                Glide
+                                                        .with(MainActivity.this)
+                                                        .load(repImage)
+                                                        .transform(new CenterCrop(), new RoundedCorners(30))
+                                                        .placeholder(R.drawable.ic_image)
+                                                        .into(searchImageButton);
+                                            }
+                                            mainfestivalContainer.addView(festivalBox);
+
+                                        }
+
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+
             areaName.setText(mainFestivalArea[area]);
             mainFestivalContainerGroup.addView(mainfestivalContainer);
         }
@@ -147,6 +233,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private String FestivalDetail(String ApiKey, String contentID) {
+        apiReader = new ApiReader();
+        apiReader.FestivalInfo2(ApiKey, contentID, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                ParsingApiData.parseXmlDataFromDetailInfo2(response);
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+
+                detailInfo = firstMap.get("infotext");
+                Log.d("Festival Infotext: ", detailInfo);
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "API Error: " + error);
+            }
+        });
+
+        return detailInfo;
+    }
+
     private void showPopupDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -164,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
         TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
-
 
 
         location.setOnClickListener(new View.OnClickListener() {
@@ -417,13 +524,13 @@ public class MainActivity extends AppCompatActivity {
                         bundle.putString("startdate", startdate);
                         bundle.putString("enddate", enddate);
 
-                        if(locationSelect != null && !locationSelect.isEmpty()){
+                        if (locationSelect != null && !locationSelect.isEmpty()) {
                             bundle.putString("location", locationSelect);
                             queryIntent.putExtras(bundle);
                             //navigateToSearchActivity(MainActivity.this, query, queryIntent);
 
 
-                        }else{
+                        } else {
                             Toast.makeText(MainActivity.this, "위치가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show();
                         }
 

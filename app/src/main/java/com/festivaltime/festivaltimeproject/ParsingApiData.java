@@ -136,6 +136,121 @@ public class ParsingApiData {
         }
     }
 
+    //지역기반
+    public static void parseXmlDataFromDetail2(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String address1 = getElementText(itemElement, "addr1");
+                    String address2 = getElementText(itemElement, "addr2");
+                    String img = getElementText(itemElement, "firstimage");
+                    String contentid = getElementText(itemElement, "contentid");
+
+                    festivalInfo.put("title", title);
+                    festivalInfo.put("address1", address1);
+                    festivalInfo.put("address2", address2);
+                    festivalInfo.put("img", img);
+                    festivalInfo.put("contentid", contentid);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //축제 상세정보 불러옴
+    public static void parseXmlDataFromDetailInfo(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String tel = getElementText(itemElement, "sponsor1tel");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
+                    String playtime = getElementText(itemElement, "playtime");
+                    String place = getElementText(itemElement, "eventplace");
+                    String usetime = getElementText(itemElement, "usetimefestival");//입장 가격
+                    String contentid = getElementText(itemElement, "contentid");
+
+                    festivalInfo.put("sponsor1tel", tel);
+                    festivalInfo.put("eventstartdate", startdate);
+                    festivalInfo.put("eventstartdate", enddate);
+                    festivalInfo.put("playtime", playtime);
+                    festivalInfo.put("eventplace", place);
+                    festivalInfo.put("usetimefestival", usetime);
+                    festivalInfo.put("contentid", contentid);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //축제 상세정보2 불러옴
+    public static void parseXmlDataFromDetailInfo2(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo = new LinkedHashMap<>();
+
+                    String serialnum = getElementText(itemElement, "serialnum");
+                    String infotext = getElementText(itemElement, "infotext");
+                    String contentid = getElementText(itemElement, "contentid");
+
+                    festivalInfo.put("serialnum", serialnum);
+                    festivalInfo.put("infotext", infotext);
+                    festivalInfo.put("contentid", contentid);
+
+                    festivalList.add(festivalInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void parseXmlDataFromCategoryCode(String xmlData, String cat3Filter) {
         festivalList.clear();
         try {

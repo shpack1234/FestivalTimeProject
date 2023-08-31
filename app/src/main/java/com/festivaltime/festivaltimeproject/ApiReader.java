@@ -293,6 +293,90 @@ public class ApiReader {
         }
     }
 
+    //상세정보(이용시간 등) 검색
+    public void FestivalInfo(String serviceKey, String contentID, final ApiResponseListener listener){
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B551011")
+                    .addPathSegment("KorService1")
+                    .addPathSegment("detailIntro1")
+                    .addQueryParameter("MobileOS", "AND")
+                    .addQueryParameter("MobileApp", "FestivalTime")
+                    .addQueryParameter("contentId", contentID)
+                    .addQueryParameter("contentTypeId", "15")
+                    .addQueryParameter("serviceKey", serviceKey);
+            String url = urlBuilder.build().toString();
+            Log.d("Location search url: ", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+        }
+    }
+
+    //상세정보 검색
+    public void FestivalInfo2(String serviceKey, String contentID, final ApiResponseListener listener){
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B551011")
+                    .addPathSegment("KorService1")
+                    .addPathSegment("detailIntro1")
+                    .addQueryParameter("MobileOS", "AND")
+                    .addQueryParameter("MobileApp", "FestivalTime")
+                    .addQueryParameter("contentId", contentID)
+                    .addQueryParameter("contentTypeId", "15")
+                    .addQueryParameter("serviceKey", serviceKey);
+            String url = urlBuilder.build().toString();
+            Log.d("Location search url: ", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+        }
+    }
+
     //행사정보조회 목록별
     public void Festivallit(String serviceKey, String selectDate, final ApiResponseListener listener){
         try {

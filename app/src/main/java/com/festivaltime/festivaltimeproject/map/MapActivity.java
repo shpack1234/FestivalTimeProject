@@ -34,9 +34,6 @@ import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.SearchScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
-import com.kakao.vectormap.mapwidget.component.GuiLayout;
-import com.kakao.vectormap.mapwidget.component.GuiText;
-import com.kakao.vectormap.mapwidget.component.Orientation;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
