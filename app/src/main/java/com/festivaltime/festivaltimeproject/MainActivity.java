@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private String query, detailInfo;
     private ApiReader apiReader;
     private Executor executor;
-    private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     private final int numberOfLayouts = 3;
 
@@ -127,81 +126,22 @@ public class MainActivity extends AppCompatActivity {
         String[] mainFestivalArea = {"서울", "인천", "대구", "부산", "제주도"};
         String[] mainFestivalAreaCode = {"1", "2", "4", "6", "39"};
 
+
         for (int area = 0; area < 5; area++) {
+            List<HashMap<String, String>> festivalList = new ArrayList<>();
             LinearLayout mainFestivalContainerGroup = findViewById(R.id.main_festival_container_group);
             LinearLayout mainfestivalContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
             TextView areaName = mainfestivalContainer.findViewById(R.id.main_festival_area_title);
 
-            festivalList.clear();
             apiReader.searchLocation(apiKey, mainFestivalAreaCode[area], new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("main response", response);
-                    ParsingApiData.parseXmlDataFromDetail2(response);
-                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-
-                    festivalList.addAll(parsedFestivalList);
-
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (festivalList.size() > 0){
-                                        int maxItems = Math.min(festivalList.size(), 5);
-
-                                        for (int i = 0; i < maxItems; i++) {
-                                            HashMap<String, String> festivalInfo = festivalList.get(i);
-
-                                            View festivalBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
-                                            TextView titleTextView = festivalBox.findViewById(R.id.festival_title);
-                                            TextView locationTextView = festivalBox.findViewById(R.id.festival_location);
-                                            TextView overviewTextView = festivalBox.findViewById(R.id.festival_overview);
-                                            ImageButton searchImageButton = festivalBox.findViewById(R.id.festival_rep_image);
-
-                                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                                            );
-
-                                            layoutParams.setMargins(0, 0, 0, 40);
-                                            festivalBox.setLayoutParams(layoutParams);
-
-                                            String title = festivalInfo.get("title");
-                                            String id = festivalInfo.get("contentid");
-                                            String address1 = festivalInfo.get("addr1");
-                                            String repImage = festivalInfo.get("img");
-                                            String overview = FestivalDetail(apiKey, id);
-
-                                            titleTextView.setText(title);
-                                            locationTextView.setText(address1);
-                                            overviewTextView.setText(overview);
-
-                                            if (repImage == null || repImage.isEmpty()) {
-                                                searchImageButton.setImageResource(R.drawable.ic_image);
-                                            } else {
-                                                Glide
-                                                        .with(MainActivity.this)
-                                                        .load(repImage)
-                                                        .transform(new CenterCrop(), new RoundedCorners(30))
-                                                        .placeholder(R.drawable.ic_image)
-                                                        .into(searchImageButton);
-                                            }
-                                            mainfestivalContainer.addView(festivalBox);
-
-                                        }
-
-                                    }
-                                }
-                            });
-                        }
-                    });
+                    parsingData(mainfestivalContainer, apiKey, response, festivalList);
                 }
 
                 @Override
                 public void onError(String error) {
-
+                    Log.e(TAG, "API Error: " + error);
                 }
             });
 
@@ -231,6 +171,70 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void parsingData (LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList){
+        Log.d("main response", response);
+        ParsingApiData.parseXmlDataFromDetail2(response);
+        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+        festivalList.clear();
+        festivalList.addAll(parsedFestivalList);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (festivalList.size() > 0){
+                            int maxItems = Math.min(festivalList.size(), 5);
+
+                            for (int i = 0; i < maxItems; i++) {
+                                HashMap<String, String> festivalInfo = festivalList.get(i);
+
+                                View festivalBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
+                                TextView titleTextView = festivalBox.findViewById(R.id.festival_title);
+                                TextView locationTextView = festivalBox.findViewById(R.id.festival_location);
+                                TextView overviewTextView = festivalBox.findViewById(R.id.festival_overview);
+                                ImageButton searchImageButton = festivalBox.findViewById(R.id.festival_rep_image);
+
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT
+                                );
+
+                                layoutParams.setMargins(0, 0, 0, 40);
+                                festivalBox.setLayoutParams(layoutParams);
+
+                                String title = festivalInfo.get("title");
+                                String id = festivalInfo.get("contentid");
+                                String address1 = festivalInfo.get("addr1");
+                                String repImage = festivalInfo.get("img");
+                                //String overview = FestivalDetail(apiKey, id);
+
+                                titleTextView.setText(title);
+                                locationTextView.setText(address1);
+                                //overviewTextView.setText(overview);
+
+                                if (repImage == null || repImage.isEmpty()) {
+                                    searchImageButton.setImageResource(R.drawable.ic_image);
+                                } else {
+                                    Glide
+                                            .with(MainActivity.this)
+                                            .load(repImage)
+                                            .transform(new CenterCrop(), new RoundedCorners(30))
+                                            .placeholder(R.drawable.ic_image)
+                                            .into(searchImageButton);
+                                }
+                                mainfestivalContainer.addView(festivalBox);
+
+                            }
+
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private String FestivalDetail(String ApiKey, String contentID) {
@@ -525,8 +529,8 @@ public class MainActivity extends AppCompatActivity {
                         bundle.putString("enddate", enddate);
 
                         if (locationSelect != null && !locationSelect.isEmpty()) {
-                            bundle.putString("location", locationSelect);
-                            DataHolder.getInstance().setBundle(bundle);
+                            //bundle.putString("location", locationSelect);
+                            //DataHolder.getInstance().setBundle(bundle);
                             //navigateToSearchActivity(MainActivity.this, query, queryIntent);
 
 
