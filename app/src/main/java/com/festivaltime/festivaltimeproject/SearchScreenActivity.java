@@ -99,7 +99,7 @@ public class SearchScreenActivity extends AppCompatActivity {
         //키워드 서치용 query
         String query = getIntent().getStringExtra("query");
         //날짜 서치용 boolean
-        Boolean searchFestival = false;
+        //Boolean searchFestival = false;
 
         String seoul = "서울";
 
@@ -111,7 +111,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         String apiKey = getResources().getString(R.string.api_key);
 
-        Bundle extras = getIntent().getExtras();
+        Bundle bundle = DataHolder.getInstance().getBundle();
 
 
         cat2 = "A0207";
@@ -136,10 +136,10 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         apiReader = new ApiReader();
 
-        if (extras != null) {
-            String startDate = extras.getString("startdate");
-            String endDate = extras.getString("enddate");
-            String selectedLocation = extras.getString("location");
+        if (bundle != null) {
+            String startDate = bundle.getString("startdate");
+            String endDate = bundle.getString("enddate");
+            String selectedLocation = bundle.getString("location");
 
             // {0/0/0] 형태로 ,,,,했음
             String[] queryArray = new String[3];
@@ -149,7 +149,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
             String queryFormat = String.join("/", queryArray);  // 결과: "selectedLocation/startDate/endDate"
 
-            apiReader.searchFestival(apiKey, selectedLocation, startDate, endDate, new ApiReader.ApiResponseListener() {
+            apiReader.searchFestival(apiKey, queryArray[0], queryArray[1], queryArray[2], new ApiReader.ApiResponseListener() {
 
                 @Override
                 public void onSuccess(String response) {

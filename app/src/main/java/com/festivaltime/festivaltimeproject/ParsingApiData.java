@@ -318,7 +318,7 @@ public class ParsingApiData {
                     String cat3 = getElementText(itemElement, "cat3");
 
 
-                    if (cat3Filter != null || cat3Filter.equals(cat3)) {
+                    if (cat2Filter != null && cat2Filter.equals("A0207")) {
                         festivalInfo.put("title", title);
                         festivalInfo.put("img", img);
                         festivalInfo.put("overview", overview);
@@ -330,7 +330,7 @@ public class ParsingApiData {
 
                         festivalList.add(festivalInfo);
                     }
-                    if (cat2Filter != null || cat2Filter.equals(cat2)) {
+                    if (cat3Filter != null && cat3Filter.equals(cat3)) {
                         festivalInfo.put("title", title);
                         festivalInfo.put("img", img);
                         festivalInfo.put("overview", overview);

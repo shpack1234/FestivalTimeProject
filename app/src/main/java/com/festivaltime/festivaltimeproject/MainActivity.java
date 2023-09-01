@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (locationSelect != null && !locationSelect.isEmpty()) {
                             bundle.putString("location", locationSelect);
-                            queryIntent.putExtras(bundle);
+                            DataHolder.getInstance().setBundle(bundle);
                             //navigateToSearchActivity(MainActivity.this, query, queryIntent);
 
 
