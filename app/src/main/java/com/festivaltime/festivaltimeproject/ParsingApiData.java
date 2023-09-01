@@ -407,6 +407,7 @@ public class ParsingApiData {
                     String mapx = getElementText(itemElement, "mapx");
                     String mapy = getElementText(itemElement, "mapy");
                     String contentid = getElementText(itemElement, "contentid");
+                    String img = getElementText(itemElement, "firstimage");
                     //분류위한 카테고리받아옴
                     String cat2 = getElementText(itemElement, "cat2");
                     String cat3 = getElementText(itemElement, "cat3");
@@ -417,6 +418,7 @@ public class ParsingApiData {
                     festivalInfo_cat.put("mapx", mapx);
                     festivalInfo_cat.put("mapy", mapy);
                     festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("img", img);
                     festivalInfo_cat.put("cat2", cat2);
                     festivalInfo_cat.put("cat3", cat3);
                     festivalInfo_cat.put("eventstartdate", startdate);
@@ -453,6 +455,7 @@ public class ParsingApiData {
                     String mapx = getElementText(itemElement, "mapx");
                     String mapy = getElementText(itemElement, "mapy");
                     String contentid = getElementText(itemElement, "contentid");
+                    String img = getElementText(itemElement, "firstimage");
                     //분류위한 카테고리받아옴
                     String cat2 = getElementText(itemElement, "cat2");
                     String cat3 = getElementText(itemElement, "cat3");
@@ -463,6 +466,7 @@ public class ParsingApiData {
                     festivalInfo_cat.put("mapx", mapx);
                     festivalInfo_cat.put("mapy", mapy);
                     festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("img", img);
                     festivalInfo_cat.put("cat2", cat2);
                     festivalInfo_cat.put("cat3", cat3);
                     festivalInfo_cat.put("eventstartdate", startdate);

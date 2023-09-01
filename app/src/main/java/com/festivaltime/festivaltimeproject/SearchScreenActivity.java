@@ -835,9 +835,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
                                             titleTextView.setText(textToShow);
 
+                                            String progessToShow = "(" + festivalList.size() + "건)";
+                                            TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
+                                            progressTextView.setText(progessToShow);
 
                                             int maxItems = Math.min(festivalList.size(), 6);
-
 
                                             for (int i = 0; i < maxItems; i++) {
                                                 HashMap<String, String> festivalInfo = festivalList.get(i);
@@ -904,7 +906,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String response) {
                         try {
-                            thirdSemaphore.acquire();
+                            secondSemaphore.acquire();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -925,7 +927,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                             loopUI(query, cat3, 3);
                                         }
-                                        fourthSemaphore.release();
+                                        thirdSemaphore.release();
                                     }
 
                                 });
@@ -943,10 +945,8 @@ public class SearchScreenActivity extends AppCompatActivity {
                 apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
                     @Override
                     public void onSuccess(String response) {
-
-
                         try {
-                            secondSemaphore.acquire();
+                            thirdSemaphore.acquire();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -966,7 +966,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         if (festivalList.size() > 0) {
                                             loopUI(query, cat4, 3);
                                         }
-                                        thirdSemaphore.release();
+                                        fourthSemaphore.release();
                                     }
 
                                 });
@@ -985,8 +985,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                 apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
                     @Override
                     public void onSuccess(String response) {
-
-
                         try {
                             fourthSemaphore.acquire();
                         } catch (InterruptedException e) {
