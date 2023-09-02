@@ -529,8 +529,8 @@ public class MainActivity extends AppCompatActivity {
                         bundle.putString("enddate", enddate);
 
                         if (locationSelect != null && !locationSelect.isEmpty()) {
-                            //bundle.putString("location", locationSelect);
-                            //DataHolder.getInstance().setBundle(bundle);
+                            bundle.putString("location", locationSelect);
+                            DataHolder.getInstance().setBundle(bundle);
                             //navigateToSearchActivity(MainActivity.this, query, queryIntent);
 
 
