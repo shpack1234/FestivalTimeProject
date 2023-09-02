@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -29,12 +30,18 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSing
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 //import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
@@ -56,7 +63,6 @@ public class SearchDetailActivity extends AppCompatActivity {
     private String query;
     private String type;
     ScrollView Scroll_View;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +79,6 @@ public class SearchDetailActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         type = getIntent().getStringExtra("type");
-
-
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -139,6 +143,8 @@ public class SearchDetailActivity extends AppCompatActivity {
 
     }
 
+
+
     private void handleApiResponse(String response) {
 
         Log.d("response", response);
@@ -172,7 +178,8 @@ public class SearchDetailActivity extends AppCompatActivity {
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
                             TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
-                            ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
+                            ImageButton calendaraddButton=festivalInfoBox.findViewById(R.id.calendar_addButton);
+                            ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
 
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -186,7 +193,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             titleTextView.setText(title);
-                            titleTextView.setMaxEms(9);
                             locationTextView.setText(location);
                             idTextView.setText(id);
 
@@ -202,6 +208,59 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         .placeholder(R.drawable.ic_image)
                                         .into(festivalRepImage);
                             }
+                            apiReader.detailIntro(apiKey, id, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    // ApiReader에서 가져온 데이터를 ParsingApiData를 사용하여 파싱
+                                    ParsingApiData.parseXmlDataFromdetailIntro(response);
+
+                                    // 축제의 시작일과 종료일 가져오기
+                                    List<LinkedHashMap<String, String>> detailIntroList = ParsingApiData.getFestivalList();
+                                    if (!detailIntroList.isEmpty()) {
+                                        LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
+
+                                        String startDateStr = introInfo.get("eventstartdate");
+                                        String endDateStr = introInfo.get("eventenddate");
+
+                                        // 날짜 문자열을 Date 객체로 변환
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+
+                                        Date startDate = null;
+                                        Date endDate = null;
+                                        Date currentDate = new Date(); // 현재 날짜 가져오기
+
+                                        try {
+                                            startDate = dateFormat.parse(startDateStr);
+                                            endDate = dateFormat.parse(endDateStr);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        // 축제의 상태를 판단하여 텍스트뷰에 설정
+                                        TextView stateTextView = festivalInfoBox.findViewById(R.id.festival_state);
+                                        if (startDate != null && endDate != null) {
+                                            if (currentDate.before(startDate)) {
+                                                // 현재 날짜가 시작일 이전인 경우
+                                                stateTextView.setText("진행예정");
+                                                stateTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light)); // 주황색으로 설정
+                                            } else if (currentDate.after(endDate)) {
+                                                // 현재 날짜가 종료일 이후인 경우
+                                                stateTextView.setText("종료됨");
+                                                stateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray)); // 회색으로 설정
+                                            } else {
+                                                // 현재 날짜가 시작일과 종료일 사이에 있는 경우
+                                                stateTextView.setText("진행중");
+                                                stateTextView.setTextColor(getResources().getColor(android.R.color.holo_green_light)); // 초록색으로 설정
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.e(TAG, "API Error: " + error);
+                                }
+                            });
                             festivalContainer.addView(festivalInfoBox);
 
                             festivalInfoBox.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +273,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 }
                             });
 
-                            addButton.setOnClickListener(new View.OnClickListener() {
+                            favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Listener", "addBtn");
@@ -241,7 +300,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             });
 
 
-                            /*addButton.setOnClickListener(new View.OnClickListener() {
+                            /*calendaraddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Action", "Add about Festival to Calendar");
@@ -366,14 +425,14 @@ public class SearchDetailActivity extends AppCompatActivity {
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
                             TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
-                            ImageButton addButton = festivalInfoBox.findViewById(R.id.festival_addButton);
+                            ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
+                            ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
 
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             titleTextView.setText(title);
-                            titleTextView.setMaxEms(9);
                             locationTextView.setText(location);
                             idTextView.setText(id);
 
@@ -408,7 +467,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
                             });
-                            addButton.setOnClickListener(new View.OnClickListener() {
+                            favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Listener", "addBtn");

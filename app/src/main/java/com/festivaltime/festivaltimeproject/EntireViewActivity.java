@@ -111,9 +111,9 @@ public class EntireViewActivity extends AppCompatActivity {
                     public void run() {
                         festivalList.clear();
                         festivalList.addAll(parsedFestivalList);
-                        for (HashMap<String, String> festivalInfo_cat : festivalList) {
-                            String eventStartDate = festivalInfo_cat.get("eventstartdate");
-                            String eventEndDate = festivalInfo_cat.get("eventenddate");
+                        for (HashMap<String, String> festivalInfo : festivalList) {
+                            String eventStartDate = festivalInfo.get("eventstartdate");
+                            String eventEndDate = festivalInfo.get("eventenddate");
 
                             try {
                                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
