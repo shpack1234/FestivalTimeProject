@@ -14,33 +14,24 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.festivaltime.festivaltimeproject.ApiReader;
-import com.festivaltime.festivaltimeproject.EntireViewActivity;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
-import com.festivaltime.festivaltimeproject.SearchScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
-
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +61,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private ApiReader apiReader;
     private String apiKey;
     private Executor executor;
+
+    String selectedFestivalName;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
 
     private List<Pair<Double, Double>> areaFestivals = new ArrayList<>();
@@ -210,7 +203,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         MapPoint selectedMarkerPoint = mapPOIItem.getMapPoint();
         Log.d("MapActivity", "Selected Marker Point: " + selectedMarkerPoint.getMapPointGeoCoord());
 
-
         // 축제 선택 시
         if (mapPOIItem.getTag() > 100) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -269,9 +261,32 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
             //음식점
             if(mapPOIItem.getTag()==101) {
-                popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+                popupView = getLayoutInflater().inflate(R.layout.etc_callout_balloon, null);
+
+                // 팝업 창 생성 및 설정
+                PopupWindow popupWindow = new PopupWindow(
+                        popupView,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true
+                );
+
+                TextView titleTextView = popupView.findViewById(R.id.etc_detail_title);
+                TextView etcNearFestival=popupView.findViewById(R.id.etc_near_festival);
+                TextView etcLoc=popupView.findViewById(R.id.etc_location);
+                String[] etcInfo=mapPOIItem.getItemName().split(",");
+                titleTextView.setText(etcInfo[0]);
+                etcNearFestival.setText("근처 축제   "+selectedFestivalName);
+                etcLoc.setText("위치   "+etcInfo[1]);
+
+                int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
+                int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
+                int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
+
+                popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
             }
             else {
+                selectedFestivalName=mapPOIItem.getItemName();
                 popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
                 String contentId=String.valueOf(mapPOIItem.getTag());
                 apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
@@ -402,7 +417,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 for (PoiItem place : places) {
                     MapPOIItem poiItem = new MapPOIItem();
                     poiItem.setTag(101);
-                    poiItem.setItemName(place.getPlaceName());
+                    poiItem.setItemName(place.getPlaceName()+","+place.getAddressName());
                     poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
                     poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
                     mapView.addPOIItem(poiItem);
