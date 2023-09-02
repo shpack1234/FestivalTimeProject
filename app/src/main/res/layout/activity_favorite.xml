@@ -20,7 +20,13 @@
             android:orientation="vertical"
             android:layout_marginTop="80dp">
 
-
+            <TextView
+                android:id="@+id/no_info_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
