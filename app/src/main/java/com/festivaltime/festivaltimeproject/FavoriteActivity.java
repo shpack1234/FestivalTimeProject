@@ -36,6 +36,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.festivaltime.festivaltimeproject.festivaldatabasepackage.*;
 //import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -79,6 +81,8 @@ public class FavoriteActivity extends AppCompatActivity {
                 loadedUser = userDao.getUserInfoById(userId);
                 if (loadedUser == null) {
                     Log.e("Err", "No UserInfo");
+                    TextView textView=findViewById(R.id.no_info_msg);
+                    textView.setText("로그인 후 이용 가능합니다.");
                 } else {
                     List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
                     for (String festivalId : favoriteFestivals) {
