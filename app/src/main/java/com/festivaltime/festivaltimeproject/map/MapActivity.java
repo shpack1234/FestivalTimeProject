@@ -283,7 +283,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
                 int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
 
-                popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
+                popupWindow.showAtLocation(mapView, Gravity.TOP, 0, yOffset + 80);
             }
             else {
                 selectedFestivalName=mapPOIItem.getItemName();
@@ -330,7 +330,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
                                     int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
 
-                                    popupWindow.showAtLocation(mapView, Gravity.BOTTOM, 0, yOffset + 80);
+                                    popupWindow.showAtLocation(mapView, Gravity.TOP, 0, 0);
 
 
                                     // 팝업 창 내부의 버튼 등의 UI 요소에 대한 동작 처리
