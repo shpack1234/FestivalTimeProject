@@ -50,6 +50,8 @@ import java.util.concurrent.Semaphore;
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
     private String query, detailInfo;
+    public Date date;
+    public SimpleDateFormat sdf;
     private ApiReader apiReader;
     private Executor executor;
 
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         HashGetter.getHashKey(getApplicationContext());
+        apiReader = new ApiReader();
+        String apiKey = getResources().getString(R.string.api_key);
+
 
         searchView = findViewById(R.id.main_search_bar);
         searchView.setOnTouchListener((v, event) -> {
@@ -104,13 +109,64 @@ public class MainActivity extends AppCompatActivity {
 
         int[] vacationImages = {R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example};
 
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy MM dd");
+        Date date = new Date();
+        String todaydate = sdf2.format(date);
+
         LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
 
-        for (int imageRes : vacationImages) {
+        for (int images = 0; images < 5; images++) {
+            List<HashMap<String, String>> festivalList = new ArrayList<>();
             View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
             ImageView imageView = sliderItemView.findViewById(R.id.image_view);
 
-            imageView.setImageResource(imageRes);
+            int finalImages = images;
+            apiReader.Festivallit(apiKey, todaydate, new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("main response", response);
+                    ParsingApiData.parseXmlDataFromSearchKeyword(response);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            festivalList.clear();
+                            festivalList.addAll(parsedFestivalList);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (festivalList.size() > 0) {
+                                        HashMap<String, String> festivalInfo = festivalList.get(finalImages);
+
+                                        String title = festivalInfo.get("title");
+                                        String id = festivalInfo.get("contentid");
+                                        String repImage = festivalInfo.get("img");
+
+                                        if (repImage == null || repImage.isEmpty()) {
+                                            imageView.setImageResource(R.drawable.first_image_example);
+                                        } else {
+                                            Glide
+                                                    .with(MainActivity.this)
+                                                    .load(repImage)
+                                                    .transform(new CenterCrop(), new RoundedCorners(30))
+                                                    .placeholder(R.drawable.first_image_example)
+                                                    .into(imageView);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
             vacationFestival.addView(sliderItemView);
         }
 
@@ -121,8 +177,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        apiReader = new ApiReader();
-        String apiKey = getResources().getString(R.string.api_key);
 
         String[] mainFestivalArea = {"서울", "인천", "부산", "제주도"};
         String[] mainFestivalAreaCode = {"1", "2", "6", "39"};
@@ -174,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void parsingData (LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList){
+    private void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
         Log.d("main response", response);
         ParsingApiData.parseXmlDataFromDetail2(response);
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -186,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (festivalList.size() > 0){
+                        if (festivalList.size() > 0) {
                             int maxItems = Math.min(festivalList.size(), 5);
 
                             for (int i = 0; i < maxItems; i++) {
