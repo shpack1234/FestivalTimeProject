@@ -44,6 +44,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Semaphore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -123,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
         apiReader = new ApiReader();
         String apiKey = getResources().getString(R.string.api_key);
 
-        String[] mainFestivalArea = {"서울", "인천", "대구", "부산", "제주도"};
-        String[] mainFestivalAreaCode = {"1", "2", "4", "6", "39"};
+        String[] mainFestivalArea = {"서울", "인천", "부산", "제주도"};
+        String[] mainFestivalAreaCode = {"1", "2", "6", "39"};
 
 
-        for (int area = 0; area < 5; area++) {
+        for (int area = 0; area < 4; area++) {
             List<HashMap<String, String>> festivalList = new ArrayList<>();
             LinearLayout mainFestivalContainerGroup = findViewById(R.id.main_festival_container_group);
             LinearLayout mainfestivalContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
@@ -177,12 +178,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("main response", response);
         ParsingApiData.parseXmlDataFromDetail2(response);
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-
-        festivalList.clear();
-        festivalList.addAll(parsedFestivalList);
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                festivalList.clear();
+                festivalList.addAll(parsedFestivalList);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
