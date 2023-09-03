@@ -262,6 +262,7 @@ public class ApiReader {
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("listYN", "Y")
+                    .addQueryParameter("numOfRows", "100000")
                     .addQueryParameter("contentTypeId", "15")
                     .addQueryParameter("areaCode", areacode)
                     .addQueryParameter("serviceKey", serviceKey);
@@ -389,6 +390,7 @@ public class ApiReader {
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("listYN", "Y")
+                    .addQueryParameter("numOfRows", "100000")
                     .addQueryParameter("eventStartDate", selectDate)
                     .addQueryParameter("eventEndDate", selectDate)
                     .addQueryParameter("serviceKey", serviceKey);
@@ -494,6 +496,7 @@ public class ApiReader {
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("areaCode", areacode)
+                    .addQueryParameter("numOfRows", "100000")
                     .addQueryParameter("eventStartDate", startdate)
                     .addQueryParameter("eventEndDate", enddate)
                     .addQueryParameter("serviceKey", serviceKey);

@@ -103,6 +103,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                             holder.scheduleView.setVisibility(View.VISIBLE);
                         } else {
                             holder.scheduleView.setVisibility(View.INVISIBLE);
+                            selectDateView.setTextColor(Color.TRANSPARENT);
                         }
                     }
                 });
