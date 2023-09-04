@@ -44,7 +44,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Semaphore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private final int numberOfLayouts = 3;
 
     private String locationSelect;
+
+    private String formattedStartDate;
+    private String formattedEndDate;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -499,6 +501,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int month, int day) {
                         startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+
+                        formattedStartDate = String.format("%04d%02d%02d", year, month + 1, day);
                     }
                 });
 
@@ -525,6 +529,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int month, int day) {
                         enddateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+
+                        formattedEndDate = String.format("%04d%02d%02d", year, month + 1, day);
                     }
                 });
 
@@ -557,6 +563,7 @@ public class MainActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String startdate = startdateClick.getText().toString();
                 String starttime = starttimeClick.getText().toString();
                 String enddate = enddateClick.getText().toString();
@@ -579,8 +586,8 @@ public class MainActivity extends AppCompatActivity {
                         Intent queryIntent = new Intent(MainActivity.this, SearchScreenActivity.class);
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("startdate", startdate);
-                        bundle.putString("enddate", enddate);
+                        bundle.putString("startdate", formattedStartDate);
+                        bundle.putString("enddate", formattedEndDate);
 
                         if (locationSelect != null && !locationSelect.isEmpty()) {
                             bundle.putString("location", locationSelect);

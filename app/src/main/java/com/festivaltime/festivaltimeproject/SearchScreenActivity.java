@@ -49,6 +49,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
 
     // 카테고리 숫자 순서대로 나오도록 하는 변수들
+    private Semaphore firstSemaphore = new Semaphore(0);
     private Semaphore secondSemaphore = new Semaphore(0);
     private Semaphore thirdSemaphore = new Semaphore(0);
     private Semaphore fourthSemaphore = new Semaphore(0);
@@ -61,6 +62,8 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore eleventhSemaphore = new Semaphore(0);
     private Semaphore twelveSemaphore = new Semaphore(0);
     private Semaphore thirteenSemaphore = new Semaphore(0);
+
+
 
     MainActivity main = new MainActivity();
 
@@ -136,6 +139,9 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         apiReader = new ApiReader();
 
+        firstSemaphore.release();
+
+
         if (bundle != null) {
             String startDate = bundle.getString("startdate");
             String endDate = bundle.getString("enddate");
@@ -147,6 +153,10 @@ public class SearchScreenActivity extends AppCompatActivity {
             queryArray[1] = startDate;
             queryArray[2] = endDate;
 
+            Log.d("queries: ", queryArray[0]);
+            Log.d("queries: ", queryArray[1]);
+            Log.d("queries: ", queryArray[2]);
+
             String queryFormat = String.join("/", queryArray);  // 결과: "selectedLocation/startDate/endDate"
 
 
@@ -154,7 +164,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(String response) {
-                    List<LinkedHashMap<String, String>> festivalResults = ParsingApiData.parseXmlDataFromSearchFestival2(response, cat2, null);
+                    List<LinkedHashMap<String, String>> festivalResults = ParsingApiData.parseXmlDataFromSearchFestival2(response);
 
                     for (LinkedHashMap<String, String> result : festivalResults) {
                         String contentId = result.get("contentid");
@@ -295,6 +305,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                         Log.d("response", response);
                         ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
                         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                        try {
+                            firstSemaphore.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                         executor.execute(new Runnable() {
                             @Override

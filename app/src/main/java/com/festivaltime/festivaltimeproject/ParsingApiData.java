@@ -397,7 +397,7 @@ public class ParsingApiData {
         }
     }
 
-    public static List<LinkedHashMap<String, String>> parseXmlDataFromSearchFestival2(String xmlData, String cat2Filter, String cat3Filter) {
+    public static List<LinkedHashMap<String, String>> parseXmlDataFromSearchFestival2(String xmlData) {
         List<LinkedHashMap<String, String>> resultList = new ArrayList<>();
         resultList.clear();
         try {
@@ -426,6 +426,7 @@ public class ParsingApiData {
                     String cat3 = getElementText(itemElement, "cat3");
 
 
+                    /**
                     if (cat2Filter != null && cat2Filter.equals("A0207")) {
                         festivalInfo.put("title", title);
                         festivalInfo.put("img", img);
@@ -450,6 +451,17 @@ public class ParsingApiData {
 
                         resultList.add(festivalInfo);
                     }
+                     **/
+
+                    festivalInfo.put("title", title);
+                    festivalInfo.put("img", img);
+                    festivalInfo.put("overview", overview);
+                    festivalInfo.put("contentid", contentid);
+                    festivalInfo.put("areacode", areacode);
+                    festivalInfo.put("eventstartdate", startdate);
+                    festivalInfo.put("eventenddate", enddate);
+
+                    resultList.add(festivalInfo);
 
                 }
             }
