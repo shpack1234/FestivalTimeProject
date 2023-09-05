@@ -72,7 +72,7 @@
     <!--캘린더 string-->
     <string name="festival">축제</string>
     <string name="vacation">휴가</string>
-    <string name="cheerup_text">축제까지 얼마안남았어요! 화이팅!</string>
+    <string name="cheerup_text">오늘도 화이팅!</string>
     <string name="cal_setting">캘린더 설정</string>
     <string name="add_button">추가하기</string>
     <string name="finish">완료</string>

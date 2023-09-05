@@ -60,7 +60,6 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     public TextView SelectDateView, Year_text, monthText;
     public RecyclerView calendarrecycler; //캘린더 recyclerview, 일정 담는 recyclerview
     private Executor executor;
-    private ImageView schedule_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

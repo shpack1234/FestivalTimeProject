@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -25,6 +26,10 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,13 +52,14 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class SearchDetailActivity extends AppCompatActivity {
 
+    private CalendarDatabase calendarDatabase;
     public ImageButton Back_Btn;
     private ApiReader apiReader;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private UserDataBase db;
     private UserDao userDao;
     private UserEntity loadedUser;
-    private String userId;
+    private String userId, CompareStartDate, CompareEndDate;
     private Executor executor;
 
     private boolean isLoading = false;
@@ -63,6 +69,7 @@ public class SearchDetailActivity extends AppCompatActivity {
     private String query;
     private String type;
     ScrollView Scroll_View;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +89,12 @@ public class SearchDetailActivity extends AppCompatActivity {
         query = getIntent().getStringExtra("query");
         apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
+
+        CompareStartDate = "";
+        CompareEndDate = "";
+
+        calendarDatabase = CalendarDatabase.getInstance(this);
+
         if (!type.isEmpty() && type.startsWith("A0207")) {
             // type이 "A0207"로 시작하는 경우
             apiReader.searchKeyword2(apiKey, query, type, new ApiReader.ApiResponseListener() {
@@ -102,15 +115,14 @@ public class SearchDetailActivity extends AppCompatActivity {
                 public void onSuccess(String response) {
                     handleApiResponse(response);
                 }
-                
+
                 @Override
                 public void onError(String error) {
                     Log.e(TAG, "API Error: " + error);
                 }
             });
         }
-        
-        
+
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +154,6 @@ public class SearchDetailActivity extends AppCompatActivity {
 
 
     }
-
 
 
     private void handleApiResponse(String response) {
@@ -178,7 +189,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
                             TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
-                            ImageButton calendaraddButton=festivalInfoBox.findViewById(R.id.calendar_addButton);
+                            ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
                             ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
 
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -221,6 +232,8 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                                         String startDateStr = introInfo.get("eventstartdate");
                                         String endDateStr = introInfo.get("eventenddate");
+                                        CompareStartDate = startDateStr;
+                                        CompareEndDate = endDateStr;
 
                                         // 날짜 문자열을 Date 객체로 변환
                                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
@@ -303,30 +316,60 @@ public class SearchDetailActivity extends AppCompatActivity {
                             /*calendaraddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Log.d("Button Action", "Add about Festival to Calendar");
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            //키워드 서치 날짜 미포함으로 전체 주석처리해놓음.
-                                            String startDate = (festival eventstartdate).getText().toString();
-                                            String endDate = (festival eventstartdate).getText().toString();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                            SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                                            Date currentDate = new Date();
+                                            String currentDateStr = sdf.format(currentDate);
+
+                                            Log.d("startdate: ", CompareStartDate);
+                                            Log.d("enddate: ", CompareEndDate);
+
+                                            // 키워드 서치 날짜 미포함으로 전체 주석처리해놓음.
                                             String startTime = "";
                                             String endTime = "";
-                                            String category = "축제";
 
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
-                                                //이미 추가된지 여부 확인 추가예정
-                                                CalendarEntity newSchedule = new CalendarEntity();
-                                                newSchedule.title = title;
-                                                newSchedule.startDate = startDate;
-                                                newSchedule.endDate = endDate;
-                                                newSchedule.startTime = startTime;
-                                                newSchedule.endTime = endTime;
-                                                newSchedule.category = category;
+                                                // 이미 추가된지 여부 확인 추가예정
+                                                try {
+                                                    Date compareDate = sdf.parse(CompareEndDate);
+                                                    Date current = sdf.parse(currentDateStr);
 
-                                                ScheduleLoader loader = new ScheduleLoader(getContext(), newSchedule, calendarDatabase.calendarDao());
-                                                loader.forceLoad();
+                                                    if (current.compareTo(compareDate) <= 0) {
+                                                        Log.d("Button Action", "Add about Festival to Calendar");
+
+                                                        Date originalStartDate = sdf.parse(CompareStartDate);
+                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                        Date originalEndDate = sdf.parse(CompareEndDate);
+                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+
+                                                        Log.d("formattedStartDate: ", formattedStartDate);
+                                                        Log.d("formattedEndDate: ", formattedEndDate);
+
+                                                        CalendarEntity newSchedule = new CalendarEntity();
+                                                        newSchedule.title = title;
+                                                        newSchedule.startDate = formattedStartDate;
+                                                        newSchedule.endDate = formattedEndDate;
+                                                        newSchedule.startTime = startTime;
+                                                        newSchedule.endTime = endTime;
+                                                        newSchedule.category = "#ed5c55";
+
+                                                        ScheduleLoader loader = new ScheduleLoader(SearchDetailActivity.this, newSchedule, calendarDatabase.calendarDao());
+                                                        loader.forceLoad();
+                                                    } else {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
 
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
@@ -335,6 +378,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     });
                                 }
                             });*/
+
 
 
                             Scroll_View.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {

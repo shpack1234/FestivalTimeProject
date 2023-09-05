@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             apiReader.Festivallit(apiKey, todaydate, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("main response", response);
+                    //Log.d("main response", response);
                     ParsingApiData.parseXmlDataFromSearchKeyword(response);
                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
 
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
-        Log.d("main response", response);
+        //Log.d("main response", response);
         ParsingApiData.parseXmlDataFromDetail2(response);
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
         executor.execute(new Runnable() {
@@ -284,6 +285,15 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 mainfestivalContainer.addView(festivalBox);
 
+                                festivalBox.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // 클릭 시 contentid 값을 가져오는 작업 수행
+                                        String contentId = id;
+                                        // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                        navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                    }
+                                });
                             }
 
                         }
@@ -303,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
 
                 detailInfo = firstMap.get("infotext");
-                Log.d("Festival Infotext: ", detailInfo);
+                //Log.d("Festival Infotext: ", detailInfo);
             }
 
             @Override
