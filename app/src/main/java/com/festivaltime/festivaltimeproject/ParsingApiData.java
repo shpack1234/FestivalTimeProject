@@ -118,6 +118,7 @@ public class ParsingApiData {
                     String img = getElementText(itemElement, "firstimage2");
                     String overview = getElementText(itemElement, "overview");
                     String contentid = getElementText(itemElement, "contentid");
+                    String address=getElementText(itemElement,"addr1");
                     String areacode = getElementText(itemElement, "areacode");
                     String cat2 = getElementText(itemElement, "cat2");
                     String cat3 = getElementText(itemElement, "cat3");
@@ -130,6 +131,7 @@ public class ParsingApiData {
                         festivalInfo.put("overview", overview);
                         festivalInfo.put("contentid", contentid);
                         festivalInfo.put("areacode", areacode);
+                        festivalInfo.put("addr1",address);
                         festivalInfo.put("cat2", cat2);
                         festivalInfo.put("cat3", cat3);
 

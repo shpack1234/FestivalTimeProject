@@ -104,12 +104,4 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
-
-    public static void navigateToEntireViewActivity(Activity thisActivity, String query, String type) {
-        Intent intent = new Intent(thisActivity, EntireViewActivity.class);
-        intent.putExtra("type", type);
-        intent.putExtra("query", query);
-        thisActivity.startActivity(intent);
-        thisActivity.overridePendingTransition(0,0);
-    }
 }
