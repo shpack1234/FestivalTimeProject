@@ -138,7 +138,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         apiReader = new ApiReader();
 
-        //firstSemaphore.release();
+        firstSemaphore.release();
 
 
         if (bundle != null) {
@@ -299,7 +299,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         }
 
-        if (query != null && bundle.isEmpty()) {
+        if (query != null ) {
             Matcher matcher = pattern.matcher(query);
 
             //키워드 서치
