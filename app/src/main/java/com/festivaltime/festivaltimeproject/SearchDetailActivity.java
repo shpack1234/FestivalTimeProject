@@ -61,7 +61,9 @@ public class SearchDetailActivity extends AppCompatActivity {
     private UserDataBase db;
     private UserDao userDao;
     private UserEntity loadedUser;
-    private String userId, CompareStartDate, CompareEndDate;
+    private String userId;
+    private static String CompareStartDate;
+    private static String CompareEndDate;
     private Executor executor;
 
     private boolean isLoading = false;
@@ -129,6 +131,9 @@ public class SearchDetailActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(String response) {
                     List<LinkedHashMap<String, String>> festivalResults = ParsingApiData.parseXmlDataFromSearchFestival2(response);
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy MM dd");
+                    Date date = new Date();
+                    String todayDate = sdf2.format(date);
                     if (!type.isEmpty() && type.startsWith("A0207")) {
                         // type이 "A0207"로 시작하는 경우
                         apiReader.searchKeyword2(apiKey, todayDate, type, new ApiReader.ApiResponseListener() {
@@ -328,8 +333,8 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                                         String startDateStr = introInfo.get("eventstartdate");
                                         String endDateStr = introInfo.get("eventenddate");
-                                        CompareStartDate = startDateStr;
-                                        CompareEndDate = endDateStr;
+                                        SearchDetailActivity.CompareStartDate = startDateStr;
+                                        SearchDetailActivity.CompareEndDate = endDateStr;
 
                                         // 날짜 문자열을 Date 객체로 변환
                                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
@@ -423,7 +428,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                             Log.d("startdate: ", CompareStartDate);
                                             Log.d("enddate: ", CompareEndDate);
 
-                                            // 키워드 서치 날짜 미포함으로 전체 주석처리해놓음.
                                             String startTime = "";
                                             String endTime = "";
 

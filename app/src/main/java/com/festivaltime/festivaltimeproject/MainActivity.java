@@ -10,7 +10,10 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +37,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
@@ -58,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
     private final int numberOfLayouts = 3;
 
     private String locationSelect;
-
+    private CalendarDatabase calendarDatabase;
+    private UserEntity loadedUser;
+    private String userId;
+    private UserDataBase db;
+    private UserDao userDao;
+    private static String CompareStartDate;
+    private static String CompareEndDate;
     private String formattedStartDate;
     private String formattedEndDate;
 
@@ -73,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
         apiReader = new ApiReader();
         String apiKey = getResources().getString(R.string.api_key);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("userId", null);
+
+
+        db = UserDataBaseSingleton.getInstance(getApplicationContext());
+        userDao = db.userDao();
 
         searchView = findViewById(R.id.main_search_bar);
         searchView.setOnTouchListener((v, event) -> {
@@ -255,6 +277,8 @@ public class MainActivity extends AppCompatActivity {
                                 TextView locationTextView = festivalBox.findViewById(R.id.festival_location);
                                 TextView overviewTextView = festivalBox.findViewById(R.id.festival_overview);
                                 ImageButton searchImageButton = festivalBox.findViewById(R.id.festival_rep_image);
+                                //ImageButton calendaraddButton = festivalBox.findViewById(R.id.calendar_addButton);
+                                //ImageButton favoriteaddButton = festivalBox.findViewById(R.id.favorite_addButton);
 
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -284,6 +308,29 @@ public class MainActivity extends AppCompatActivity {
                                             .placeholder(R.drawable.ic_image)
                                             .into(searchImageButton);
                                 }
+
+                                /*apiReader.detailIntro(apiKey, id, new ApiReader.ApiResponseListener() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        ParsingApiData.parseXmlDataFromdetailIntro(response);
+
+                                        // 축제의 시작일과 종료일 가져오기
+                                        List<LinkedHashMap<String, String>> detailIntroList = ParsingApiData.getFestivalList();
+                                        if (!detailIntroList.isEmpty()) {
+                                            LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
+
+                                            String startDateStr = introInfo.get("eventstartdate");
+                                            String endDateStr = introInfo.get("eventenddate");
+                                            MainActivity.CompareStartDate = startDateStr;
+                                            MainActivity.CompareEndDate = endDateStr;
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(ContentValues.TAG, "API Error: " + error);
+                                    }
+                                });*/
                                 mainfestivalContainer.addView(festivalBox);
 
                                 festivalBox.setOnClickListener(new View.OnClickListener() {
@@ -295,6 +342,97 @@ public class MainActivity extends AppCompatActivity {
                                         navigateToDetailFestivalActivity(MainActivity.this, contentId);
                                     }
                                 });
+
+                                /*favoriteaddButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.d("Button Listener", "addBtn");
+                                        executor.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                String contentId = id;
+                                                loadedUser = userDao.getUserInfoById(userId);
+                                                if (loadedUser != null) {
+                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                        Log.d("Festival Id", contentId);
+                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                    } else {
+                                                        Log.d("Festival Id", contentId);
+                                                        loadedUser.addUserFavoriteFestival(contentId);
+                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                    }
+                                                } else {
+                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                }
+                                            }
+                                        });
+                                    }
+                                });*/
+
+                                /*calendaraddButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        executor.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                                SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                                                Date currentDate = new Date();
+                                                String currentDateStr = sdf.format(currentDate);
+
+                                                Log.d("startdate: ", CompareStartDate);
+                                                Log.d("enddate: ", CompareEndDate);
+
+                                                String startTime = "";
+                                                String endTime = "";
+
+                                                loadedUser = userDao.getUserInfoById(userId);
+                                                if (loadedUser != null) {
+                                                    // 이미 추가된지 여부 확인 추가예정
+                                                    try {
+                                                        Date compareDate = sdf.parse(CompareEndDate);
+                                                        Date current = sdf.parse(currentDateStr);
+
+                                                        if (current.compareTo(compareDate) <= 0) {
+                                                            Log.d("Button Action", "Add about Festival to Calendar");
+
+                                                            Date originalStartDate = sdf.parse(CompareStartDate);
+                                                            String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                            Date originalEndDate = sdf.parse(CompareEndDate);
+                                                            String formattedEndDate = targetDateFormat.format(originalEndDate);
+
+                                                            Log.d("formattedStartDate: ", formattedStartDate);
+                                                            Log.d("formattedEndDate: ", formattedEndDate);
+
+                                                            CalendarEntity newSchedule = new CalendarEntity();
+                                                            newSchedule.title = title;
+                                                            newSchedule.startDate = formattedStartDate;
+                                                            newSchedule.endDate = formattedEndDate;
+                                                            newSchedule.startTime = startTime;
+                                                            newSchedule.endTime = endTime;
+                                                            newSchedule.category = "#ed5c55";
+
+                                                            ScheduleLoader loader = new ScheduleLoader(MainActivity.this, newSchedule, calendarDatabase.calendarDao());
+                                                            loader.forceLoad();
+                                                        } else {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                } else {
+                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                }
+                                            }
+                                        });
+                                    }
+                                });*/
                             }
 
                         }
