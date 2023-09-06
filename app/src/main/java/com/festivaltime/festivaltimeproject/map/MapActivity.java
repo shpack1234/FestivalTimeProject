@@ -6,6 +6,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SearchView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
+import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -63,6 +65,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     private List<Pair<String, String>> areasInfo = new ArrayList<>();
 
+    private String query;
     private ApiReader apiReader;
     private String apiKey;
     private Executor executor;
@@ -98,18 +101,42 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         apiKey = getResources().getString(R.string.api_key);
 
         searchBarLayout = findViewById(R.id.map_search);
-        searchEditText = findViewById(R.id.map_search_bar);
         searchButton = findViewById(R.id.detailButton);
 
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.map_search_fade_in);
         fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.map_search_fade_out);
 
         ImageButton mapResetButton=findViewById(R.id.map_reset_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String query = searchEditText.getQuery().toString();
 
+        searchEditText = findViewById(R.id.map_search_bar);
+        searchEditText.setOnTouchListener((v, event) -> {
+            searchEditText.setIconified(false);
+            searchEditText.performClick();
+            return true;
+        });
+
+        //상세 검색 버튼
+        
+        //ImageButton searchoptionbutton = findViewById(R.id.detailButton);
+        /*
+         searchoptionbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupDialog();
+            }
+        });
+        */
+        searchEditText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
+                query = s;
+                showSearchedFestival(mapView, query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
             }
         });
 
@@ -147,8 +174,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     public void onMapViewInitialized(MapView mapView) {
         isFestivalVisible=false;
 
+        MapPoint centerPoint=MapPoint.mapPointWithGeoCoord(36.5, 127.5);
+
         mapView.removeAllPOIItems();
-        mapView.setZoomLevel(11, true);
+        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,true);
         areas.add(new Pair<>(37.5665, 126.9780)); //서울 1
         areas.add(new Pair<>(37.4562, 126.7052)); //인천 2
         areas.add(new Pair<>(36.3504, 127.3845)); //대전 3
@@ -202,7 +231,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int zoomLevel) {
-        if (zoomLevel >= 8 && isFestivalVisible==true) {
+        if (zoomLevel >= 10 && isFestivalVisible==true) {
             mapView.removeAllPOIItems();
             onMapViewInitialized(mapView);
         }
@@ -461,6 +490,62 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 }
             });
         }
+    }
+
+    private void showSearchedFestival(MapView mapView, String query) {
+        mapView.removeAllPOIItems();
+
+
+        MapPoint centerPoint=MapPoint.mapPointWithGeoCoord(36.5, 127.5);
+        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,true);
+
+        apiReader=new ApiReader();
+        apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
+
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        areaFestivals.clear();
+                        areaFestivalInfo.clear();
+                        for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                            String title = festivalInfo.get("title");
+                            String mapx = festivalInfo.get("mapx");
+                            String mapy = festivalInfo.get("mapy");
+                            String contentid = festivalInfo.get("contentid");
+
+                            Log.d("title", title);
+                            Log.d("contentid", contentid);
+                            areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                            areaFestivalInfo.add(new Pair<>(title, contentid));
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MapPOIItem[] marker = new MapPOIItem[areaFestivals.size()];
+
+                                for (int i = 0; i < marker.length; i++) {
+                                    marker[i] = new MapPOIItem();
+                                }
+
+                                marKingFestivalGroup(marker, areaFestivals, areaFestivalInfo);
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     private void showPlacesOnMap(List<PoiItem> places) {
