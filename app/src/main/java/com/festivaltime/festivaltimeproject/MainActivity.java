@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             searchView.performClick();
             return true;
         });
+
         ImageButton searchoptionbutton = findViewById(R.id.detailButton);
         searchoptionbutton.setOnClickListener(new View.OnClickListener() {
             @Override

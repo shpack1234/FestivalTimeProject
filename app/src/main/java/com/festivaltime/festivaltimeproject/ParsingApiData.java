@@ -39,12 +39,16 @@ public class ParsingApiData {
                     String tel = getElementText(itemElement, "tel");
                     String img = getElementText(itemElement, "firstimage");
                     String contentid = getElementText(itemElement, "contentid");
+                    String mapx=getElementText(itemElement, "mapx");
+                    String mapy=getElementText(itemElement, "mapy");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("address", address);
                     festivalInfo.put("tel", tel);
                     festivalInfo.put("img", img);
                     festivalInfo.put("contentid", contentid);
+                    festivalInfo.put("mapx", mapx);
+                    festivalInfo.put("mapy", mapy);
 
                     festivalList.add(festivalInfo);
                 }
