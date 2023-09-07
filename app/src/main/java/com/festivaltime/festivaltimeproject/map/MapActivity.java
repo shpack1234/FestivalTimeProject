@@ -177,7 +177,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         MapPoint centerPoint=MapPoint.mapPointWithGeoCoord(36.5, 127.5);
 
         mapView.removeAllPOIItems();
-        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,true);
+        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,false);
         areas.add(new Pair<>(37.5665, 126.9780)); //서울 1
         areas.add(new Pair<>(37.4562, 126.7052)); //인천 2
         areas.add(new Pair<>(36.3504, 127.3845)); //대전 3
@@ -286,6 +286,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
         // 축제 선택 시
         if (mapPOIItem.getTag() > 100) {
+            isFestivalVisible=true;
+
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -493,6 +495,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     }
 
     private void showSearchedFestival(MapView mapView, String query) {
+        isFestivalVisible=false;
         mapView.removeAllPOIItems();
 
 

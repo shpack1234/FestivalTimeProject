@@ -73,8 +73,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
-
-
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {

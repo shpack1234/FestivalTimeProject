@@ -33,6 +33,8 @@ public class MyPageActivity extends AppCompatActivity {
 
     private UserEntity loadedUser;
 
+    boolean userExist=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,23 +76,26 @@ public class MyPageActivity extends AppCompatActivity {
 
                 if (loadedUser!=null) {
                     userId = loadedUser.getUserId();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            View blurLayout=findViewById(R.id.blur_layout);
+                            blurLayout.setVisibility(View.GONE);
+                            userExist=true;
+                        }
+                    });
                 } else {
                     userId = null;
                 }
-
-                // UI 업데이트 등 필요한 작업 수행
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI 업데이트 등의 코드 작성
-                    }
-                });
             }
         });
 
     }
     public void customOnClick(View v) {
-        navigateToBadgeActivity(MyPageActivity.this);
+        if(userExist) {
+            navigateToBadgeActivity(MyPageActivity.this);
+        }
     }
 
     public void InquiryOnClick(View v){navigateToInquiryActivity(MyPageActivity.this); }

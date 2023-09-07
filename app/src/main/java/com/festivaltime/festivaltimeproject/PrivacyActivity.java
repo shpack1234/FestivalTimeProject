@@ -121,6 +121,7 @@ public class PrivacyActivity extends AppCompatActivity {
                 });
 
                 finish();
+                navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
             }
         });
     }
