@@ -153,142 +153,145 @@ public class SearchScreenActivity extends AppCompatActivity {
             queryArray[2] = endDate;
 
             /**
-            Log.d("queries: ", queryArray[0]);
-            Log.d("queries: ", queryArray[1]);
-            Log.d("queries: ", queryArray[2]);
+             Log.d("queries: ", queryArray[0]);
+             Log.d("queries: ", queryArray[1]);
+             Log.d("queries: ", queryArray[2]);
              **/
 
             String queryFormat = String.join("/", queryArray);  // 결과: "selectedLocation/startDate/endDate"
 
 
-            apiReader.searchFestival(apiKey, queryArray[0], queryArray[1], queryArray[2], new ApiReader.ApiResponseListener() {
+            apiReader.searchKeyword2(apiKey, queryArray[0], query, cat2, new ApiReader.ApiResponseListener() {
 
                 @Override
                 public void onSuccess(String response) {
-                    List<LinkedHashMap<String, String>> festivalResults = ParsingApiData.parseXmlDataFromSearchFestival2(response);
+                    ParsingApiData.parseXmlDataFromSearchKeyword3(response, cat2, null);
+                    List<LinkedHashMap<String, String>> keywordResults = ParsingApiData.getFestivalList();
 
+                    for (LinkedHashMap<String, String> result : keywordResults) {
+                        String contentId = result.get("contentid");
 
-                    apiReader.searchKeyword2(apiKey, queryArray[0], query, cat2, new ApiReader.ApiResponseListener() {
-                        @Override
-                        public void onSuccess(String response) {
-                            Log.d("response", response);
-                            ParsingApiData.parseXmlDataFromSearchKeyword3(response, cat2, null); // 응답을 파싱하여 데이터를 저장
-                            List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        apiReader.FestivalInfo2(apiKey, contentId, new ApiReader.ApiResponseListener() {
+                            @Override
+                            public void onSuccess(String response) {
+                                Log.d("response", response);
+                                ParsingApiData.parseXmlDataFromDetailInfo(response); // 응답을 파싱하여 데이터를 저장
+                                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
 
-                            executor.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    festivalList.clear(); // 기존 데이터를 모두 제거
+                                executor.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        festivalList.clear(); // 기존 데이터를 모두 제거
 
-                                    for (LinkedHashMap<String, String> item : festivalResults) {
-                                        for (LinkedHashMap<String, String> parsedItem : parsedFestivalList) {
-                                            String title = item.get("title");
-                                            if (title != null && title.contains(query) && item.equals(parsedItem)) {
-                                                // title 값에 query가 포함되어 있고, item과 parsedItem이 같다면
-                                                festivalList.add(item); // festivalList에 추가
+                                        for (LinkedHashMap<String, String> item : keywordResults) {
+                                            for (LinkedHashMap<String, String> parsedItem : parsedFestivalList) {
+                                                String title = item.get("title");
+                                                String repImage = item.get("img");
+
+                                                String startdate = parsedItem.get("startdate");
+                                                String enddate = parsedItem.get("enddate");
+                                                if (title != null && title.contains(query) && item.equals(parsedItem) && startdate.equals(queryArray[1]) && enddate.equals(queryArray[2])) {
+                                                    // title 값에 query가 포함되어 있고, item과 parsedItem이 같다면
+                                                    festivalList.add(item); // festivalList에 추가
+                                                }
                                             }
                                         }
-                                    }
 
-                                    // UI 갱신은 메인 스레드에서 실행
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (festivalList.size() > 0) {
-                                                // UI 갱신 코드
-                                                LinearLayout searchContainer = findViewById(R.id.search_container);
-                                                searchContainer.removeAllViews();
+                                        // UI 갱신은 메인 스레드에서 실행
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (festivalList.size() > 0) {
+                                                    // UI 갱신 코드
+                                                    LinearLayout searchContainer = findViewById(R.id.search_container);
+                                                    searchContainer.removeAllViews();
 
-                                                View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
-                                                GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                                festivalImageNText.removeAllViews();
-
-
-                                                // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                                String textToShow = getTextToShow(cat2);
-                                                TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
-                                                titleTextView.setText(textToShow);
-
-                                                // 축제 건수 띄우는 텍스트
-                                                String progessToShow = "(" + festivalList.size() + "건)";
-                                                TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
-                                                progressTextView.setText(progessToShow);
+                                                    View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
+                                                    GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
+                                                    festivalImageNText.removeAllViews();
 
 
-                                                int maxItems = Math.min(festivalList.size(), 6);
+                                                    // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
+                                                    String textToShow = getTextToShow(cat2);
+                                                    TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
+                                                    titleTextView.setText(textToShow);
+
+                                                    // 축제 건수 띄우는 텍스트
+                                                    String progessToShow = "(" + festivalList.size() + "건)";
+                                                    TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
+                                                    progressTextView.setText(progessToShow);
 
 
-                                                for (int i = 0; i < maxItems; i++) {
-                                                    HashMap<String, String> festivalInfo = festivalList.get(i);
-                                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+                                                    int maxItems = Math.min(festivalList.size(), 6);
 
-                                                    String title = festivalInfo.get("title");
-                                                    String id = festivalInfo.get("contentid");
-                                                    String repImage = festivalInfo.get("img");
-                                                    /**
-                                                    Log.d("cat2: ", festivalInfo.get("cat2"));
-                                                    Log.d("startdate: ", festivalInfo.get("eventstartdate"));
-                                                    Log.d("enddate: ", festivalInfo.get("eventenddate"));
-                                                     **/
 
-                                                    searchTextView.setText(title);
-                                                    searchTextView.setMaxEms(8);
+                                                    for (int i = 0; i < maxItems; i++) {
+                                                        HashMap<String, String> festivalInfo = festivalList.get(i);
+                                                        View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                                        TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                                        ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
-                                                    Log.d(TAG, "Rep Image URL: " + repImage);
-                                                    if (repImage == null || repImage.isEmpty()) {
-                                                        searchImageButton.setImageResource(R.drawable.ic_image);
-                                                    } else {
-                                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                                        Glide
-                                                                .with(SearchScreenActivity.this)
-                                                                .load(repImage)
-                                                                .transform(new CenterCrop(), new RoundedCorners(30))
-                                                                .placeholder(R.drawable.ic_image)
-                                                                .into(searchImageButton);
+                                                        String title = festivalInfo.get("title");
+                                                        String id = festivalInfo.get("contentid");
+                                                        String repImage = festivalInfo.get("img");
+
+                                                        searchTextView.setText(title);
+                                                        searchTextView.setMaxEms(8);
+
+                                                        Log.d(TAG, "Rep Image URL: " + repImage);
+                                                        if (repImage == null || repImage.isEmpty()) {
+                                                            searchImageButton.setImageResource(R.drawable.ic_image);
+                                                        } else {
+                                                            //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                                            Glide
+                                                                    .with(SearchScreenActivity.this)
+                                                                    .load(repImage)
+                                                                    .transform(new CenterCrop(), new RoundedCorners(30))
+                                                                    .placeholder(R.drawable.ic_image)
+                                                                    .into(searchImageButton);
+                                                        }
+                                                        festivalImageNText.addView(festivalItemView);
+
+
+                                                        festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                String contentId = id;
+                                                                // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                                                navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId, cat2);
+                                                            }
+                                                        });
+
+
                                                     }
-                                                    festivalImageNText.addView(festivalItemView);
 
 
-                                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                                    searchContainer.addView(searchContainerView);
+
+                                                    Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
+                                                    detailSearchButton.setOnClickListener(new View.OnClickListener() {
+
                                                         @Override
                                                         public void onClick(View v) {
-                                                            String contentId = id;
-                                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId, cat2);
+                                                            navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
                                                         }
                                                     });
-
-
                                                 }
-
-
-                                                searchContainer.addView(searchContainerView);
-
-                                                Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
-                                                detailSearchButton.setOnClickListener(new View.OnClickListener() {
-
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
-                                                    }
-                                                });
                                             }
-                                        }
 
-                                    });
-                                }
+                                        });
+                                    }
 
-                            });
-                        }
+                                });
+                            }
 
-                        @Override
-                        public void onError(String error) {
-                            Log.e(TAG, "API Error: " + error);
-                        }
-                    });
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG, "API Error: " + error);
+                            }
+                        });
 
+                    }
                 }
 
 
