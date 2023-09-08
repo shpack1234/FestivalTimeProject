@@ -423,6 +423,52 @@ public class ApiReader {
         }
     }
 
+    //행사정보조회 목록별(지역기반)
+    public void FestivallitLoc(String serviceKey, String selectDate, String areacode, final ApiResponseListener listener){
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B551011")
+                    .addPathSegment("KorService1")
+                    .addPathSegment("searchFestival1")
+                    .addQueryParameter("MobileOS", "AND")
+                    .addQueryParameter("MobileApp", "FestivalTime")
+                    .addQueryParameter("listYN", "Y")
+                    .addQueryParameter("arrange", "O")
+                    .addQueryParameter("areaCode", areacode)
+                    .addQueryParameter("numOfRows", "100000")
+                    .addQueryParameter("eventStartDate", selectDate)
+                    .addQueryParameter("eventEndDate", selectDate)
+                    .addQueryParameter("serviceKey", serviceKey);
+            String url = urlBuilder.build().toString();
+            Log.d("FestivalN url: ", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+        }
+    }
+
     //행사정보조회 목록별
     public void Festivallit(String serviceKey, String selectDate, final ApiResponseListener listener){
         try {

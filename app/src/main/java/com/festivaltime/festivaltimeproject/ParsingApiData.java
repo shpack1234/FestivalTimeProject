@@ -257,7 +257,11 @@ public class ParsingApiData {
                     String address2 = getElementText(itemElement, "addr2");
                     String img = getElementText(itemElement, "firstimage");
                     String contentid = getElementText(itemElement, "contentid");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
 
+                    festivalInfo.put("eventstartdate", startdate);
+                    festivalInfo.put("eventenddate", enddate);
                     festivalInfo.put("title", title);
                     festivalInfo.put("address1", address1);
                     festivalInfo.put("address2", address2);

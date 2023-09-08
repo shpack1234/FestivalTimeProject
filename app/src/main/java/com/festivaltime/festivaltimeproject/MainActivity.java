@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout mainfestivalContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
             TextView areaName = mainfestivalContainer.findViewById(R.id.main_festival_area_title);
 
-            apiReader.searchLocation(apiKey, mainFestivalAreaCode[area], new ApiReader.ApiResponseListener() {
+            apiReader.FestivallitLoc(apiKey, todaydate, mainFestivalAreaCode[area], new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
                     parsingData(mainfestivalContainer, apiKey, response, festivalList);
@@ -277,8 +277,9 @@ public class MainActivity extends AppCompatActivity {
                                 TextView locationTextView = festivalBox.findViewById(R.id.festival_location);
                                 TextView overviewTextView = festivalBox.findViewById(R.id.festival_overview);
                                 ImageButton searchImageButton = festivalBox.findViewById(R.id.festival_rep_image);
-                                //ImageButton calendaraddButton = festivalBox.findViewById(R.id.calendar_addButton);
-                                //ImageButton favoriteaddButton = festivalBox.findViewById(R.id.favorite_addButton);
+                                ImageButton calendaraddButton = festivalBox.findViewById(R.id.calendar_addButton);
+                                ImageButton favoriteaddButton = festivalBox.findViewById(R.id.favorite_addButton);
+                                TextView stateTextView = festivalBox.findViewById(R.id.festival_state);
 
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -293,10 +294,44 @@ public class MainActivity extends AppCompatActivity {
                                 String address1 = festivalInfo.get("addr1");
                                 String repImage = festivalInfo.get("img");
                                 //String overview = FestivalDetail(apiKey, id);
+                                String startDateStr = festivalInfo.get("eventstartdate");
+                                String endDateStr = festivalInfo.get("eventenddate");
+
+                                MainActivity.CompareStartDate = startDateStr;
+                                MainActivity.CompareEndDate = endDateStr;
+
+                                // 날짜 문자열을 Date 객체로 변환
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+
+                                Date startDate = null;
+                                Date endDate = null;
+                                Date currentDate = new Date(); // 현재 날짜 가져오기
+
+                                try {
+                                    startDate = dateFormat.parse(startDateStr);
+                                    endDate = dateFormat.parse(endDateStr);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
                                 titleTextView.setText(title);
                                 locationTextView.setText(address1);
                                 //overviewTextView.setText(overview);
+                                if (startDate != null && endDate != null) {
+                                    if (currentDate.before(startDate)) {
+                                        // 현재 날짜가 시작일 이전인 경우
+                                        stateTextView.setText("진행예정");
+                                        stateTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light)); // 주황색으로 설정
+                                    } else if (currentDate.after(endDate)) {
+                                        // 현재 날짜가 종료일 이후인 경우
+                                        stateTextView.setText("종료됨");
+                                        stateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray)); // 회색으로 설정
+                                    } else {
+                                        // 현재 날짜가 시작일과 종료일 사이에 있는 경우
+                                        stateTextView.setText("진행중");
+                                        stateTextView.setTextColor(getResources().getColor(android.R.color.holo_green_light)); // 초록색으로 설정
+                                    }
+                                }
 
                                 if (repImage == null || repImage.isEmpty()) {
                                     searchImageButton.setImageResource(R.drawable.ic_image);
@@ -308,29 +343,6 @@ public class MainActivity extends AppCompatActivity {
                                             .placeholder(R.drawable.ic_image)
                                             .into(searchImageButton);
                                 }
-
-                                /*apiReader.detailIntro(apiKey, id, new ApiReader.ApiResponseListener() {
-                                    @Override
-                                    public void onSuccess(String response) {
-                                        ParsingApiData.parseXmlDataFromdetailIntro(response);
-
-                                        // 축제의 시작일과 종료일 가져오기
-                                        List<LinkedHashMap<String, String>> detailIntroList = ParsingApiData.getFestivalList();
-                                        if (!detailIntroList.isEmpty()) {
-                                            LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
-
-                                            String startDateStr = introInfo.get("eventstartdate");
-                                            String endDateStr = introInfo.get("eventenddate");
-                                            MainActivity.CompareStartDate = startDateStr;
-                                            MainActivity.CompareEndDate = endDateStr;
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        Log.e(ContentValues.TAG, "API Error: " + error);
-                                    }
-                                });*/
                                 mainfestivalContainer.addView(festivalBox);
 
                                 festivalBox.setOnClickListener(new View.OnClickListener() {
@@ -343,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                /*favoriteaddButton.setOnClickListener(new View.OnClickListener() {
+                                favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         Log.d("Button Listener", "addBtn");
@@ -367,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
-                                });*/
+                                });
 
                                 /*calendaraddButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
