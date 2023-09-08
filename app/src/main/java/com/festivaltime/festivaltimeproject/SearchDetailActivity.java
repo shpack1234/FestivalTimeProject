@@ -403,6 +403,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                                 } else {
                                                     Log.d("Festival Id", contentId);
                                                     loadedUser.addUserFavoriteFestival(contentId);
@@ -410,6 +417,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -666,6 +679,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                                 } else {
                                                     Log.d("Festival Id", contentId);
                                                     loadedUser.addUserFavoriteFestival(contentId);
@@ -673,6 +693,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -918,6 +944,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                                 } else {
                                                     Log.d("Festival Id", contentId);
                                                     loadedUser.addUserFavoriteFestival(contentId);
@@ -925,6 +958,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -1135,7 +1174,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Log.d("Button Listener", "addBtn");
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
@@ -1143,15 +1181,24 @@ public class SearchDetailActivity extends AppCompatActivity {
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                    Log.d("Festival Id", contentId);
-                                                    Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                                 } else {
-                                                    Log.d("Festival Id", contentId);
                                                     loadedUser.addUserFavoriteFestival(contentId);
                                                     userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                 }
                                             } else {
-                                                Log.e("No UserInfo", "You should get your information in MyPage");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
                                         }
                                     });
