@@ -152,9 +152,11 @@ public class SearchScreenActivity extends AppCompatActivity {
             queryArray[1] = startDate;
             queryArray[2] = endDate;
 
+            /**
             Log.d("queries: ", queryArray[0]);
             Log.d("queries: ", queryArray[1]);
             Log.d("queries: ", queryArray[2]);
+             **/
 
             String queryFormat = String.join("/", queryArray);  // 결과: "selectedLocation/startDate/endDate"
 
@@ -299,7 +301,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         }
 
-        if (query != null ) {
+        if (query != null && bundle == null) {
             Matcher matcher = pattern.matcher(query);
 
             //키워드 서치
