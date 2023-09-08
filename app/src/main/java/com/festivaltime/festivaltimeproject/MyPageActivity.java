@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,8 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.w3c.dom.Text;
 
 public class MyPageActivity extends AppCompatActivity {
 
@@ -82,6 +85,13 @@ public class MyPageActivity extends AppCompatActivity {
                         public void run() {
                             View blurLayout=findViewById(R.id.blur_layout);
                             blurLayout.setVisibility(View.GONE);
+
+                            TextView userNickname=findViewById(R.id.user_nickname);
+                            TextView userIdText=findViewById(R.id.user_id);
+
+                            userNickname.setText(loadedUser.getUserName());
+                            userIdText.setText("#"+userId);
+
                             userExist=true;
                         }
                     });
