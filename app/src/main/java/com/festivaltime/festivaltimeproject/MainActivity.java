@@ -14,9 +14,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +38,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
@@ -77,13 +85,33 @@ public class MainActivity extends AppCompatActivity {
     private static String CompareEndDate;
     private String formattedStartDate;
     private String formattedEndDate;
+    private TextView textview;
+    private TextView textview2;
 
 
-    @SuppressLint("ClickableViewAccessibility")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //색 넣음
+        textview=findViewById(R.id.text_view);
+        String text = textview.getText().toString();
+        SpannableString spannableString = new SpannableString(text);
+        int startIndex = text.indexOf("HOT!");
+        int endIndex = startIndex + "HOT!".length();
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6666")), startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textview.setText(spannableString);
+        textview2 = findViewById(R.id.text_view2);
+        String text2 = textview2.getText().toString();
+        SpannableString spannableString2 = new SpannableString(text2);
+        int startIndex2 = text2.indexOf("휴가");
+        int endIndex2 = startIndex2 + "휴가".length();
+        spannableString2.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6666")), startIndex2, endIndex2, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textview2.setText(spannableString2);
+
+
 
         HashGetter.getHashKey(getApplicationContext());
         apiReader = new ApiReader();
@@ -251,8 +279,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
+
+
 
     private void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
         //Log.d("main response", response);
