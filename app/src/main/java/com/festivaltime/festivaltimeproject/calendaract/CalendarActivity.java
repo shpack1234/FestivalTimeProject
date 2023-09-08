@@ -151,82 +151,80 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         calendarrecycler.setAdapter(adapter);
 
         //이전 달 버튼
-        if (userExist) {
-            prevBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //CalendarUtil DATE month 1달 이전으로 설정
-                    selectedDate.add(Calendar.MONTH, -1);
-                    //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
-                    SelectDateView.setVisibility(View.INVISIBLE);
-                    setMonthView();
-                }
-            });
+        prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //CalendarUtil DATE month 1달 이전으로 설정
+                selectedDate.add(Calendar.MONTH, -1);
+                //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
+                SelectDateView.setVisibility(View.INVISIBLE);
+                setMonthView();
+            }
+        });
 
-            //다음 달 버튼
-            nextBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //CalendarUtil DATE month 1달 이후로 설정
-                    selectedDate.add(Calendar.MONTH, 1);
-                    //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
-                    SelectDateView.setVisibility(View.INVISIBLE);
-                    setMonthView();
-                }
-            });
+        //다음 달 버튼
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //CalendarUtil DATE month 1달 이후로 설정
+                selectedDate.add(Calendar.MONTH, 1);
+                //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
+                SelectDateView.setVisibility(View.INVISIBLE);
+                setMonthView();
+            }
+        });
 
-            //캘린더 설정 (설정한 카테고리만 비추기, 카테고리 추가)
-            cal_setting.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //CalendarSetting dialog 띄움, 다른달 표시 변수 전송
-                    CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths, CalendarActivity.this);
-                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 실행
-                        //오류발견: 완료버튼이 아닌 다른화면 선택시 자동 dismiss되어 설정 추가되는 현상> 추후 수정 예정
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            CalendarSetting settingDialog = (CalendarSetting) dialog;
-                            showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
-                            SelectDateView.setVisibility(View.INVISIBLE); //값 변경시 이전에 선택했던 일정view INVISIBLE 설정
-                            schedules.setVisibility(View.INVISIBLE);
-                            setMonthView(); //재설정된 캘린더 view
-                        }
-                    });
-                    dialog.show();
-                }
-            });
+        //캘린더 설정 (설정한 카테고리만 비추기, 카테고리 추가)
+        cal_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //CalendarSetting dialog 띄움, 다른달 표시 변수 전송
+                CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths, CalendarActivity.this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 실행
+                    //오류발견: 완료버튼이 아닌 다른화면 선택시 자동 dismiss되어 설정 추가되는 현상> 추후 수정 예정
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        CalendarSetting settingDialog = (CalendarSetting) dialog;
+                        showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
+                        SelectDateView.setVisibility(View.INVISIBLE); //값 변경시 이전에 선택했던 일정view INVISIBLE 설정
+                        schedules.setVisibility(View.INVISIBLE);
+                        setMonthView(); //재설정된 캘린더 view
+                    }
+                });
+                dialog.show();
+            }
+        });
 
 
-            // 날짜 추가하기 버튼 클릭시 popup창 연결
-            add_Btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Popup_btn = new CalendarPopupActivity(CalendarActivity.this);
-                    // 선택한 날짜 popup 전송 후 startdate, enddate default 값으로 설정
-                    Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
-                    Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
+        // 날짜 추가하기 버튼 클릭시 popup창 연결
+        add_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Popup_btn = new CalendarPopupActivity(CalendarActivity.this);
+                // 선택한 날짜 popup 전송 후 startdate, enddate default 값으로 설정
+                Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
+                Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
 
-                    Popup_btn.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
-                            fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
-                                @Override
-                                public void onFetchCompleted(List<CalendarEntity> scheduleList) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            updateUI(scheduleList);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                    Popup_btn.show();
-                }
-            });
-        }
+                Popup_btn.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
+                        fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
+                            @Override
+                            public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateUI(scheduleList);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                Popup_btn.show();
+            }
+        });
 
         //festival cal로 이동
         festi_cal.setOnClickListener(new View.OnClickListener() {
