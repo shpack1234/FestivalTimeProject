@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView textview;
     private TextView textview2;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +103,6 @@ public class MainActivity extends AppCompatActivity {
         int endIndex = startIndex + "HOT!".length();
         spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6666")), startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         textview.setText(spannableString);
-        textview2 = findViewById(R.id.text_view2);
-        String text2 = textview2.getText().toString();
-        SpannableString spannableString2 = new SpannableString(text2);
-        int startIndex2 = text2.indexOf("휴가");
-        int endIndex2 = startIndex2 + "휴가".length();
-        spannableString2.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6666")), startIndex2, endIndex2, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textview2.setText(spannableString2);
-
-
 
         HashGetter.getHashKey(getApplicationContext());
         apiReader = new ApiReader();
@@ -511,6 +502,10 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
+        //진행상황 버튼
+        ToggleButton completedToggle = findViewById(R.id.completed);
+        ToggleButton ongoingToggle = findViewById(R.id.Ongoing);
+        ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
         // 시작 날짜 선택 버튼
         Button startdateClick = dialogView.findViewById(R.id.dialog_popup_start_date);
         Button starttimeClick = dialogView.findViewById(R.id.dialog_popup_start_time);
@@ -608,6 +603,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.show();
             }
         });
+
 
         startdateClick.setOnClickListener(new View.OnClickListener() {
             @Override

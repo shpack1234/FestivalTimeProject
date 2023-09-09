@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="5dp">
 
     <!-- 타이틀바 -->
     <LinearLayout
@@ -32,17 +33,18 @@
             android:gravity="center"
             android:text="@string/detail_setting"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/dialog_popup_add_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginRight="4dp"
             android:background="#00000000"
             android:gravity="center"
             android:text="@string/short_add"
-            android:textColor="@color/black"
+            android:textColor="@color/selected_color"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -55,7 +57,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="3dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -81,7 +83,7 @@
                         android:layout_weight="2"
                         android:gravity="center|center"
                         android:text="@string/festival_state"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
 
 
@@ -90,7 +92,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:background="@drawable/toggle_background"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
                         android:gravity="center|center"
                         android:textOff="@string/completed"
                         android:textOn="@string/completed"
@@ -101,7 +105,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:background="@drawable/toggle_background"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
                         android:gravity="center|center"
                         android:textOff="@string/Ongoing"
                         android:textOn="@string/Ongoing"
@@ -112,7 +118,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:background="@drawable/toggle_background"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
                         android:gravity="center|center"
                         android:textOff="@string/Upgoing"
                         android:textOn="@string/Upgoing"
@@ -123,13 +131,13 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3px"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:background="#CFCFCF" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="45dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -138,7 +146,7 @@
                         android:layout_weight="2"
                         android:gravity="center|center"
                         android:text="@string/location"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <View
                         android:layout_width="0dp"
@@ -149,8 +157,9 @@
                     <Button
                         android:id="@+id/dialog_popup_location"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="40dp"
                         android:layout_weight="4"
+                        android:background="@drawable/button_style"
                         android:gravity="center|center"
                         android:text="@string/location_select"
                         android:textSize="13sp" />
@@ -170,13 +179,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="3px"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:background="#CFCFCF" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:orientation="horizontal">
 
             <TextView
@@ -185,7 +194,7 @@
                 android:layout_weight="2"
                 android:gravity="center|center"
                 android:text="@string/date"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -198,18 +207,22 @@
             <Button
                 android:id="@+id/dialog_popup_start_date"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:gravity="center|center"
+                android:background="@drawable/button_style"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_start_time"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1.5"
                 android:gravity="center|center"
+                android:background="@drawable/button_style"
+
                 android:text="@string/default_time"
                 android:textSize="13sp" />
 
@@ -241,6 +254,7 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             android:gravity="right"
+            android:layout_marginTop="4dp"
             android:orientation="vertical">
 
             <TimePicker
@@ -254,7 +268,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:orientation="horizontal">
 
             <View
@@ -273,18 +287,21 @@
             <Button
                 android:id="@+id/dialog_popup_end_date"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:gravity="center|center"
+                android:background="@drawable/button_style"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
             <Button
                 android:id="@+id/dialog_popup_end_time"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
                 android:layout_weight="1.5"
                 android:gravity="center|center"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/button_style"
                 android:text="@string/default_time"
                 android:textSize="13sp" />
 
