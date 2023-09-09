@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/popup_style"
     android:layout_margin="5dp">
 
     <!-- 타이틀바 -->
@@ -57,7 +58,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -69,6 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
+                android:layout_margin="3dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -81,6 +83,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
+                        android:textColor="@color/black"
                         android:gravity="center|center"
                         android:text="@string/festival_state"
                         android:textSize="14sp" />
@@ -145,6 +148,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center|center"
+                        android:textColor="@color/black"
                         android:text="@string/location"
                         android:textSize="14sp" />
 
@@ -159,6 +163,7 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="4"
+                        android:textColor="@color/dark_gray"
                         android:background="@drawable/button_style"
                         android:gravity="center|center"
                         android:text="@string/location_select"
@@ -192,6 +197,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:textColor="@color/black"
                 android:gravity="center|center"
                 android:text="@string/date"
                 android:textSize="14sp" />
@@ -202,6 +208,7 @@
                 android:layout_weight="1"
                 android:gravity="center|center"
                 android:text="@string/start"
+                android:textColor="@color/darker_gray"
                 android:textSize="13sp" />
 
             <Button
@@ -210,6 +217,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="2"
                 android:gravity="center|center"
+                android:textColor="@color/dark_gray"
                 android:background="@drawable/button_style"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
@@ -218,11 +226,11 @@
                 android:id="@+id/dialog_popup_start_time"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1.5"
                 android:gravity="center|center"
                 android:background="@drawable/button_style"
-
+                android:textColor="@color/dark_gray"
                 android:text="@string/default_time"
                 android:textSize="13sp" />
 
@@ -281,6 +289,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|center"
+                android:textColor="@color/darker_gray"
                 android:text="@string/end"
                 android:textSize="13sp" />
 
@@ -289,6 +298,7 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="2"
+                android:textColor="@color/dark_gray"
                 android:gravity="center|center"
                 android:background="@drawable/button_style"
                 android:text="@string/default_date"
@@ -300,7 +310,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1.5"
                 android:gravity="center|center"
-                android:layout_marginStart="5dp"
+                android:textColor="@color/dark_gray"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/button_style"
                 android:text="@string/default_time"
                 android:textSize="13sp" />

@@ -10,12 +10,14 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -25,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -90,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView textview;
     private TextView textview2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //색 넣음
         textview=findViewById(R.id.text_view);
         String text = textview.getText().toString();
@@ -497,7 +500,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPopupDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,R.style.custom_popup);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
@@ -518,7 +521,8 @@ public class MainActivity extends AppCompatActivity {
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
 
-
+        Dialog dialog =dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -737,6 +741,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dialogBuilder.setView(dialogView);
 
+
         AlertDialog alertDialog = dialogBuilder.create();
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -796,10 +801,8 @@ public class MainActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
-
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }
-
 
 }

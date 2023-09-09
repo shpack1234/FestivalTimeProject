@@ -4,4 +4,8 @@
         <item name="android:windowEnterAnimation">@anim/open_pop</item>
         <item name="android:windowExitAnimation">@anim/close_pop</item>
     </style>
+
+    <style name="custom_popup" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/popup_style</item>
+    </style>
 </resources>
