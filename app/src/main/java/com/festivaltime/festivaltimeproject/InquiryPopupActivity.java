@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +36,16 @@ public class InquiryPopupActivity extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry_popup);
+
+        //상태바 아이콘 어둡게
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+        // 상태 바 배경 투명 색상 설정
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
 
         Back_Btn=findViewById(R.id.inquiry_popup_close_btn);
         Submit_Btn=findViewById(R.id.submit_Btn);
