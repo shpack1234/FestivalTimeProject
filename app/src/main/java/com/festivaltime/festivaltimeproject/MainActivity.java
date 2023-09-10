@@ -46,12 +46,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
@@ -87,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     private String userId;
     private UserDataBase db;
     private UserDao userDao;
-    private static String CompareStartDate;
-    private static String CompareEndDate;
     private String formattedStartDate;
     private String formattedEndDate;
     private TextView textview;
@@ -331,9 +331,6 @@ public class MainActivity extends AppCompatActivity {
                                 String startDateStr = festivalInfo.get("eventstartdate");
                                 String endDateStr = festivalInfo.get("eventenddate");
 
-                                MainActivity.CompareStartDate = startDateStr;
-                                MainActivity.CompareEndDate = endDateStr;
-
                                 // 날짜 문자열을 Date 객체로 변환
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
@@ -415,27 +412,29 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                /*calendaraddButton.setOnClickListener(new View.OnClickListener() {
+                                calendaraddButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         executor.execute(new Runnable() {
                                             @Override
                                             public void run() {
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                                                SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-                                                Date currentDate = new Date();
-                                                String currentDateStr = sdf.format(currentDate);
+                                                try {
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                                                    Date currentDate = new Date();
+                                                    String currentDateStr = sdf.format(currentDate);
 
-                                                Log.d("startdate: ", CompareStartDate);
-                                                Log.d("enddate: ", CompareEndDate);
+                                                    String CompareStartDate = startDateStr;
+                                                    String CompareEndDate = endDateStr;
 
-                                                String startTime = "";
-                                                String endTime = "";
+                                                    Log.d("startdate: ", CompareStartDate);
+                                                    Log.d("enddate: ", CompareEndDate);
 
-                                                loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null) {
-                                                    // 이미 추가된지 여부 확인 추가예정
-                                                    try {
+                                                    String startTime = "";
+                                                    String endTime = "";
+
+                                                    loadedUser = userDao.getUserInfoById(userId);
+                                                    if (loadedUser != null) {
                                                         Date compareDate = sdf.parse(CompareEndDate);
                                                         Date current = sdf.parse(currentDateStr);
 
@@ -450,6 +449,13 @@ public class MainActivity extends AppCompatActivity {
                                                             Log.d("formattedStartDate: ", formattedStartDate);
                                                             Log.d("formattedEndDate: ", formattedEndDate);
 
+                                                            // 데이터베이스 초기화
+                                                            CalendarDatabase calendarDatabase = Room.databaseBuilder(getApplicationContext(),
+                                                                    CalendarDatabase.class, "calendar-database").build();
+
+                                                            // DAO 가져오기
+                                                            CalendarDao calendarDao = calendarDatabase.calendarDao();
+
                                                             CalendarEntity newSchedule = new CalendarEntity();
                                                             newSchedule.title = title;
                                                             newSchedule.startDate = formattedStartDate;
@@ -457,8 +463,9 @@ public class MainActivity extends AppCompatActivity {
                                                             newSchedule.startTime = startTime;
                                                             newSchedule.endTime = endTime;
                                                             newSchedule.category = "#ed5c55";
+                                                            newSchedule.contentid = id;
 
-                                                            ScheduleLoader loader = new ScheduleLoader(MainActivity.this, newSchedule, calendarDatabase.calendarDao());
+                                                            ScheduleLoader loader = new ScheduleLoader(MainActivity.this, newSchedule, calendarDao);
                                                             loader.forceLoad();
                                                         } else {
                                                             runOnUiThread(new Runnable() {
@@ -468,17 +475,16 @@ public class MainActivity extends AppCompatActivity {
                                                                 }
                                                             });
                                                         }
-                                                    } catch (ParseException e) {
-                                                        e.printStackTrace();
+                                                    } else {
+                                                        Log.e("No UserInfo", "You should get your information in MyPage");
                                                     }
-
-                                                } else {
-                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
                                                 }
                                             }
                                         });
                                     }
-                                });*/
+                                });
                             }
 
                         }

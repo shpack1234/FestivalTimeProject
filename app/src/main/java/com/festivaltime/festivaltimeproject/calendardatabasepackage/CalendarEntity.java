@@ -27,18 +27,23 @@ public class CalendarEntity {
     @ColumnInfo(name = "schedule_category")
     public String category;
 
+    //축제에서 받아온 일정이면 id추가
+    @ColumnInfo(name = "festival_id")
+    public String contentid;
+
     // 생성자
     public CalendarEntity() {
         // Room에 필요한 빈 생성자
     }
 
-    public CalendarEntity(String title, String startDate, String endDate, String startTime, String endTime, String category) {
+    public CalendarEntity(String title, String startDate, String endDate, String startTime, String endTime, String category, String contentid) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
+        this.contentid = contentid;
     }
 
     // Getter와 Setter (필요한 경우)

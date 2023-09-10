@@ -149,6 +149,7 @@ public class CalendarPopupActivity extends Dialog {
                             newSchedule.endDate = endDate;
                             newSchedule.startTime = startTime;
                             newSchedule.endTime = endTime;
+                            newSchedule.contentid = "";
 
                             new LoadCategoryColorTask(new CategoryColorCallback() {
                                 @Override
