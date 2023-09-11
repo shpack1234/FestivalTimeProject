@@ -13,48 +13,67 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
             android:layout_marginTop="35dp"
             android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <!--현재년도-->
             <TextView
                 android:id="@+id/festivalcalendar_yeartext"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
-            <!--응원문구-->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"/>
+
             <TextView
                 android:id="@+id/festivalcalendar_CheerupText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="35dp"
+                android:layout_weight="8"
                 android:gravity="right|center"
                 android:text="@string/festi_cal"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="280dp"
-            android:layout_marginTop="20dp">
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"/>
 
             <Button
                 android:id="@+id/festivalcalendar_nomal_cal_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:background="#00ff0000"
                 android:gravity="right|center"
                 android:drawableStart="@drawable/ic_cal_festi"
+                android:drawableEnd="@drawable/ic_cal_nxtbtn"
                 android:text="@string/normal_cal"
                 android:textColor="@color/black"
-                android:textSize="13sp"
-                android:drawableEnd="@drawable/ic_cal_nxtbtn"/>
+                android:textSize="13sp"/>
 
         </LinearLayout>
 
@@ -78,14 +97,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:textAlignment="center"
+                android:gravity="center|center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/festivalcalendar_next_btn"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:src="@drawable/ic_cal_nxtbtn"
