@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:background="#F5F5F5"
+    android:background="@drawable/popup_style"
     android:orientation="vertical">
 
     <!-- 타이틀바 -->
     <LinearLayout
+        android:background="#FFF7F7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -43,14 +44,14 @@
         <Button
             android:id="@+id/calendar_popup_add_finish_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
             android:padding="16dp"
             android:text="@string/short_add"
-            android:textColor="@color/black"
+            android:textColor="@color/selected_color"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -58,6 +59,7 @@
 
     <!-- 일정 제목 -->
     <LinearLayout
+        android:background="#FFF7F7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
