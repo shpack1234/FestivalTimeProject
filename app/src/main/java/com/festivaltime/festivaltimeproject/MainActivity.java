@@ -421,15 +421,15 @@ public class MainActivity extends AppCompatActivity {
                                             public void run() {
                                                 try {
                                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                                                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                                                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.M.d", Locale.getDefault());
                                                     Date currentDate = new Date();
                                                     String currentDateStr = sdf.format(currentDate);
 
                                                     String CompareStartDate = startDateStr;
                                                     String CompareEndDate = endDateStr;
 
-                                                    Log.d("startdate: ", CompareStartDate);
-                                                    Log.d("enddate: ", CompareEndDate);
+                                                    Log.d("startdate: ", "Start Date: " + CompareStartDate);
+                                                    Log.d("enddate: ", "End Date: " + CompareEndDate);
 
                                                     String startTime = "";
                                                     String endTime = "";
@@ -447,8 +447,8 @@ public class MainActivity extends AppCompatActivity {
                                                             Date originalEndDate = sdf.parse(CompareEndDate);
                                                             String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                            Log.d("formattedStartDate: ", formattedStartDate);
-                                                            Log.d("formattedEndDate: ", formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
                                                             // 데이터베이스 초기화
                                                             CalendarDatabase calendarDatabase = Room.databaseBuilder(getApplicationContext(),
