@@ -181,35 +181,43 @@ public class SearchScreenActivity extends AppCompatActivity {
                     List<LinkedHashMap<String, String>> keywordResults = ParsingApiData.getFestivalList();
 
                     CountDownLatch latch = new CountDownLatch(keywordResults.size());
-
-                    for (LinkedHashMap<String, String> result : keywordResults) {
-
-                        apiReader.FestivalInfo2(apiKey, result.get("contentid"), new ApiReader.ApiResponseListener() {
+                        apiReader.FestivallitLoc(apiKey, queryArray[1], queryArray[2], queryArray[0], new ApiReader.ApiResponseListener() {
                             @Override
                             public void onSuccess(String response) {
+                                Log.d("response", response);
+                                ParsingApiData.parseXmlDataFromDetail2(response); // 응답을 파싱하여 데이터를 저장
+                                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
                                 executor.execute(new Runnable() {
                                     @Override
                                     public void run() {
 
                                         festivalList.clear(); // 기존 데이터를 모두 제거
 
-                                        Log.d("response", response);
-                                        ParsingApiData.parseXmlDataFromDetailInfo(response); // 응답을 파싱하여 데이터를 저장
-                                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                        for(LinkedHashMap<String, String> Item : keywordResults) {
+                                            for (LinkedHashMap<String, String> parsedItem : parsedFestivalList) {
+                                                if (Item.get("title") != null &&
+                                                        parsedItem.get("title").contains(query) &&
+                                                        Item.get("eventstartdate").equals(queryArray[1]) &&
+                                                        Item.get("eventenddate").equals(queryArray[2])) {
 
-                                        for(LinkedHashMap<String, String> parsedItem : parsedFestivalList) {
-                                            if (result.get("title") != null &&
-                                                    result.get("title").contains(query) &&
-                                                    parsedItem.get("eventstartdate").equals(queryArray[1]) &&
-                                                    parsedItem.get("eventenddate").equals(queryArray[2])) {
+                                                    // result에서 필요한 값들을 가져와서 새로운 LinkedHashMap에 넣습니다.
+                                                    LinkedHashMap<String, String> newItem = new LinkedHashMap<>();
 
-                                                festivalList.add(parsedItem); // 조건에 맞는 아이템들만 리스트에 넣음
+                                                    newItem.put("title", Item.get("title"));
+                                                    newItem.put("firstimage2", Item.get("firstimage2"));
+                                                    newItem.put("cat2", Item.get("cat2"));
 
+                                                    // "contentid"는 이미 parsedItem에 있으므로 별도로 가져옵니다.
+                                                    newItem.put("contentid", parsedItem.get("contentid"));
+
+                                                    // 조건에 맞는 아이템들만 리스트에 넣음
+                                                    festivalList.add(newItem);
+
+                                                }
                                             }
                                         }
-                                        latch.countDown();
 
-                                        if (latch.getCount() == 0) {
                                             // 모든 FestivalInfo2 응답이 끝났을ㄸ ㅐ
                                             // UI 갱신은 메인 스레드에서 실행
                                             runOnUiThread(new Runnable() {
@@ -294,7 +302,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                 }
 
                                             });
-                                        }
+
                                     }
 
 
@@ -310,7 +318,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                     });
 
-                }
+
             }
 
 
