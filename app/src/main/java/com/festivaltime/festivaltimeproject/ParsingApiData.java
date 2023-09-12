@@ -39,8 +39,8 @@ public class ParsingApiData {
                     String tel = getElementText(itemElement, "tel");
                     String img = getElementText(itemElement, "firstimage");
                     String contentid = getElementText(itemElement, "contentid");
-                    String mapx=getElementText(itemElement, "mapx");
-                    String mapy=getElementText(itemElement, "mapy");
+                    String mapx = getElementText(itemElement, "mapx");
+                    String mapy = getElementText(itemElement, "mapy");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("address", address);
@@ -122,7 +122,7 @@ public class ParsingApiData {
                     String img = getElementText(itemElement, "firstimage2");
                     String overview = getElementText(itemElement, "overview");
                     String contentid = getElementText(itemElement, "contentid");
-                    String address=getElementText(itemElement,"addr1");
+                    String address = getElementText(itemElement, "addr1");
                     String areacode = getElementText(itemElement, "areacode");
                     String cat2 = getElementText(itemElement, "cat2");
                     String cat3 = getElementText(itemElement, "cat3");
@@ -135,7 +135,7 @@ public class ParsingApiData {
                         festivalInfo.put("overview", overview);
                         festivalInfo.put("contentid", contentid);
                         festivalInfo.put("areacode", areacode);
-                        festivalInfo.put("addr1",address);
+                        festivalInfo.put("addr1", address);
                         festivalInfo.put("cat2", cat2);
                         festivalInfo.put("cat3", cat3);
 
@@ -482,30 +482,30 @@ public class ParsingApiData {
 
 
                     /**
-                    if (cat2Filter != null && cat2Filter.equals("A0207")) {
-                        festivalInfo.put("title", title);
-                        festivalInfo.put("img", img);
-                        festivalInfo.put("overview", overview);
-                        festivalInfo.put("contentid", contentid);
-                        festivalInfo.put("areacode", areacode);
-                        festivalInfo.put("eventstartdate", startdate);
-                        festivalInfo.put("eventenddate", enddate);
-                        festivalInfo.put("cat3", cat3);
+                     if (cat2Filter != null && cat2Filter.equals("A0207")) {
+                     festivalInfo.put("title", title);
+                     festivalInfo.put("img", img);
+                     festivalInfo.put("overview", overview);
+                     festivalInfo.put("contentid", contentid);
+                     festivalInfo.put("areacode", areacode);
+                     festivalInfo.put("eventstartdate", startdate);
+                     festivalInfo.put("eventenddate", enddate);
+                     festivalInfo.put("cat3", cat3);
 
-                        resultList.add(festivalInfo);
-                    }
-                    if (cat3Filter != null && cat3Filter.equals(cat3)) {
-                        festivalInfo.put("title", title);
-                        festivalInfo.put("img", img);
-                        festivalInfo.put("overview", overview);
-                        festivalInfo.put("contentid", contentid);
-                        festivalInfo.put("areacode", areacode);
-                        festivalInfo.put("eventstartdate", startdate);
-                        festivalInfo.put("eventenddate", enddate);
-                        festivalInfo.put("cat2", cat2);
+                     resultList.add(festivalInfo);
+                     }
+                     if (cat3Filter != null && cat3Filter.equals(cat3)) {
+                     festivalInfo.put("title", title);
+                     festivalInfo.put("img", img);
+                     festivalInfo.put("overview", overview);
+                     festivalInfo.put("contentid", contentid);
+                     festivalInfo.put("areacode", areacode);
+                     festivalInfo.put("eventstartdate", startdate);
+                     festivalInfo.put("eventenddate", enddate);
+                     festivalInfo.put("cat2", cat2);
 
-                        resultList.add(festivalInfo);
-                    }
+                     resultList.add(festivalInfo);
+                     }
                      **/
 
                     festivalInfo.put("title", title);
@@ -653,6 +653,47 @@ public class ParsingApiData {
                     if (cat3Filter.equals(cat3)) {
                         festivalList.add(festivalInfo_cat);
                     }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseXmlDataFromFestival(String xmlData) {
+        festivalList.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> festivalInfo_cat = new LinkedHashMap<>();
+
+                    String title = getElementText(itemElement, "title");
+                    String mapx = getElementText(itemElement, "mapx");
+                    String mapy = getElementText(itemElement, "mapy");
+                    String contentid = getElementText(itemElement, "contentid");
+                    String img = getElementText(itemElement, "firstimage");
+                    String startdate = getElementText(itemElement, "eventstartdate");
+                    String enddate = getElementText(itemElement, "eventenddate");
+
+                    festivalInfo_cat.put("title", title);
+                    festivalInfo_cat.put("mapx", mapx);
+                    festivalInfo_cat.put("mapy", mapy);
+                    festivalInfo_cat.put("contentid", contentid);
+                    festivalInfo_cat.put("img", img);
+                    festivalInfo_cat.put("eventstartdate", startdate);
+                    festivalInfo_cat.put("eventenddate", enddate);
+
+                    festivalList.add(festivalInfo_cat);
                 }
             }
         } catch (Exception e) {
