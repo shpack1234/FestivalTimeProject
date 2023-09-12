@@ -437,7 +437,7 @@ public class ApiReader {
                     .addQueryParameter("listYN", "Y")
                     .addQueryParameter("arrange", "O")
                     .addQueryParameter("areaCode", areacode)
-                    .addQueryParameter("numOfRows", "100000")
+                    .addQueryParameter("numOfRows", "10000000")
                     .addQueryParameter("eventStartDate", selectDate)
                     .addQueryParameter("eventEndDate", selectDate)
                     .addQueryParameter("serviceKey", serviceKey);
