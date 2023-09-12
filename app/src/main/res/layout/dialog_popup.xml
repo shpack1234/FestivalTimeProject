@@ -22,8 +22,8 @@
             android:gravity="center"
             android:onClick="mOnClose"
             android:padding="16dp"
-            android:text="@string/dismiss_popup"
-            android:textColor="@color/black"
+            android:text="초기화"
+            android:textColor="@color/dark_gray"
             android:textSize="13sp" />
 
         <TextView

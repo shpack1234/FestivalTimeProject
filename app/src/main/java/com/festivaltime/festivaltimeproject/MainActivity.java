@@ -83,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
 
     private final int numberOfLayouts = 3;
 
-    private String locationSelect;
     private CalendarDatabase calendarDatabase;
     private UserEntity loadedUser;
     private String userId;
     private UserDataBase db;
     private UserDao userDao;
+
+    private String locationSelect;
     private String formattedStartDate;
     private String formattedEndDate;
     private TextView textview;

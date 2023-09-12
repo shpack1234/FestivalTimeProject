@@ -9,32 +9,46 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToSearchActivity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
+import com.festivaltime.festivaltimeproject.DataHolder;
 import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
+import com.festivaltime.festivaltimeproject.SearchScreenActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
@@ -42,10 +56,15 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -88,6 +107,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private Animation fadeOutAnimation;
     private Animation fadeInAnimation;
 
+    private String locationSelect;
+    private String formattedStartDate;
+    private String formattedEndDate;
+
     boolean isFestivalVisible;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,15 +152,13 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
         //상세 검색 버튼
         
-        //ImageButton searchoptionbutton = findViewById(R.id.detailButton);
-        /*
+        ImageButton searchoptionbutton = findViewById(R.id.detailButton);
          searchoptionbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupDialog();
             }
         });
-        */
         searchEditText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
@@ -614,6 +635,309 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             marker[i].setCustomImageAnchor(0.5f, 1.0f);
             mapView.addPOIItem(marker[i]);
         }
+    }
+
+    private void showPopupDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,R.style.custom_popup);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_popup, null);
+        Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
+        Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
+        //진행상황 버튼
+        ToggleButton completedToggle = findViewById(R.id.completed);
+        ToggleButton ongoingToggle = findViewById(R.id.Ongoing);
+        ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
+        // 시작 날짜 선택 버튼
+        Button startdateClick = dialogView.findViewById(R.id.dialog_popup_start_date);
+        Button starttimeClick = dialogView.findViewById(R.id.dialog_popup_start_time);
+        Button enddateClick = dialogView.findViewById(R.id.dialog_popup_end_date);
+        Button endtimeClick = dialogView.findViewById(R.id.dialog_popup_end_time);
+        Button location = dialogView.findViewById(R.id.dialog_popup_location);
+
+        DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
+        TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
+        DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
+        TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
+
+        Dialog dialog =dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+
+                getMenuInflater().inflate(R.menu.dialog_region, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.every_region:
+                                location.setText("모든 지역");
+                                break;
+                            case R.id.seoul:
+                                location.setText("서울");
+                                locationSelect = "1";
+                                break;
+                            case R.id.gyeonggi:
+                                location.setText("경기");
+                                locationSelect = "31";
+                                break;
+                            case R.id.incheon:
+                                location.setText("인천");
+                                locationSelect = "2";
+                                break;
+                            case R.id.gangwon:
+                                location.setText("강원");
+                                locationSelect = "32";
+                                break;
+                            case R.id.jeju:
+                                location.setText("제주");
+                                locationSelect = "39";
+                                break;
+                            case R.id.daejeon:
+                                location.setText("대전");
+                                locationSelect = "3";
+                                break;
+                            case R.id.chungbuk:
+                                location.setText("충북");
+                                locationSelect = "33";
+                                break;
+                            case R.id.chungnam_sejong:
+                                location.setText("충남/세종");
+                                locationSelect = "34";
+                                break;
+                            case R.id.busan:
+                                location.setText("부산");
+                                locationSelect = "6";
+                                break;
+                            case R.id.ulsan:
+                                location.setText("울산");
+                                locationSelect = "7";
+                                break;
+                            case R.id.gyeongnam:
+                                location.setText("경남");
+                                locationSelect = "36";
+                                break;
+                            case R.id.daegu:
+                                location.setText("대구");
+                                locationSelect = "4";
+                                break;
+                            case R.id.gyeongbuk:
+                                location.setText("경북");
+                                locationSelect = "35";
+                                break;
+                            case R.id.gwangju:
+                                location.setText("광주");
+                                locationSelect = "5";
+                                break;
+                            case R.id.jeonnam:
+                                location.setText("전남");
+                                locationSelect = "38";
+                                break;
+                            case R.id.jeonju_jeonbuk:
+                                location.setText("전주/전북");
+                                locationSelect = "37";
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
+
+
+        startdateClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // StartDatePicker의 가시성을 토글
+                switch (StartDatePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        StartDatePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        StartDatePicker.setVisibility(View.VISIBLE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        starttimeClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // StartTimePicker의 가시성을 토글
+                switch (StartTimePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        StartTimePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        StartTimePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        enddateClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EndDatePicker의 가시성을 토글
+                switch (EndDatePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        EndDatePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        EndDatePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        endtimeClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EndTimePicker의 가시성을 토글
+                switch (EndTimePicker.getVisibility()) {
+                    case View.VISIBLE:
+                        EndTimePicker.setVisibility(View.GONE);
+                        break;
+                    case View.GONE:
+                    default:
+                        EndTimePicker.setVisibility(View.VISIBLE);
+                        StartDatePicker.setVisibility(View.GONE);
+                        StartTimePicker.setVisibility(View.GONE);
+                        EndDatePicker.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        //시작 시간-날짜 변화시
+        StartDatePicker.init(StartDatePicker.getYear(), StartDatePicker.getMonth(), StartDatePicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int month, int day) {
+                        startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+
+                        formattedStartDate = String.format("%04d%02d%02d", year, month + 1, day);
+                    }
+                });
+
+
+        //시작 시간-시간 변화시
+        StartTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if (hourOfDay < 10 && minute < 10) {
+                    starttimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
+                } else if (minute < 10) {
+                    starttimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
+                } else if (hourOfDay < 10) {
+                    starttimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
+                } else {
+                    starttimeClick.setText(String.format("%d:%d", hourOfDay, minute));
+                }
+            }
+        });
+
+        //end 시간-날짜 변화시
+        EndDatePicker.init(EndDatePicker.getYear(), EndDatePicker.getMonth(), EndDatePicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int month, int day) {
+                        enddateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+
+                        formattedEndDate = String.format("%04d%02d%02d", year, month + 1, day);
+                    }
+                });
+
+        //end 시간-시간 변화시
+        EndTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if (hourOfDay < 10 && minute < 10) {
+                    endtimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
+                } else if (minute < 10) {
+                    endtimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
+                } else if (hourOfDay < 10) {
+                    endtimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
+                } else {
+                    endtimeClick.setText(String.format("%d:%d", hourOfDay, minute));
+                }
+            }
+        });
+        dialogBuilder.setView(dialogView);
+
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 취소 버튼을 눌렀을 때 실행할 코드 작성
+                alertDialog.dismiss(); // 팝업 대화상자 닫기
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String startdate = startdateClick.getText().toString();
+                String starttime = starttimeClick.getText().toString();
+                String enddate = enddateClick.getText().toString();
+                String endtime = endtimeClick.getText().toString();
+
+                // 시작 및 종료 날짜-시간 문자열을 적절한 형식으로 변환
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+                try {
+                    Date startDate = sdf.parse(startdate + " " + starttime);
+                    Date endDate = sdf.parse(enddate + " " + endtime);
+
+                    if (endDate.after(startDate)) {
+                        // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
+                        // 여기에 추가 동작 수행
+
+                        // 대화 상자 닫기
+                        alertDialog.dismiss();
+
+                        // SearchScreen으로 상세 검색 설정값 전송
+                        Intent queryIntent = new Intent(MapActivity.this, SearchScreenActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("startdate", formattedStartDate);
+                        bundle.putString("enddate", formattedEndDate);
+
+                        if (locationSelect != null && !locationSelect.isEmpty()) {
+                            bundle.putString("location", locationSelect);
+                            DataHolder.getInstance().setBundle(bundle);
+                            //navigateToSearchActivity(MainActivity.this, query, queryIntent);
+
+
+                        } else {
+                            Toast.makeText(MapActivity.this, "위치가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    } else {
+                        Toast.makeText(MapActivity.this, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        alertDialog.show();
     }
 
 }
