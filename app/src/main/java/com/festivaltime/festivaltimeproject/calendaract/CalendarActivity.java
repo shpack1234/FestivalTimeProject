@@ -20,7 +20,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -195,6 +198,8 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             public void onClick(View v) {
                 //CalendarSetting dialog 띄움, 다른달 표시 변수 전송
                 CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths, CalendarActivity.this);
+                // 팝업 창 배경을 투명으로 설정
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 실행
                     //오류발견: 완료버튼이 아닌 다른화면 선택시 자동 dismiss되어 설정 추가되는 현상> 추후 수정 예정
                     @Override
