@@ -56,6 +56,9 @@ public class EntireViewActivity extends AppCompatActivity {
     private UserDataBase db;
     private UserDao userDao;
     private UserEntity loadedUser;
+    private CalendarDao calendarDao;
+    private CalendarEntity calendarEntity;
+    private CalendarDatabase calendarDatabase;
     private String userId;
 
 
@@ -84,6 +87,8 @@ public class EntireViewActivity extends AppCompatActivity {
 
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
+        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+        calendarDao = calendarDatabase.calendarDao();
 
         String contentId = getIntent().getStringExtra("contentid");
 
@@ -248,24 +253,21 @@ public class EntireViewActivity extends AppCompatActivity {
                                                         Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
                                                         Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
-                                                        // 데이터베이스 초기화
-                                                        CalendarDatabase calendarDatabase = Room.databaseBuilder(getApplicationContext(),
-                                                                CalendarDatabase.class, "calendar-database").build();
+                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                        calendarDao = calendarDatabase.calendarDao();
 
-                                                        // DAO 가져오기
-                                                        CalendarDao calendarDao = calendarDatabase.calendarDao();
+                                                        // CalendarEntity 생성
+                                                        CalendarEntity event = new CalendarEntity();
+                                                        event.title = title;
+                                                        event.startDate = formattedStartDate;
+                                                        event.endDate = formattedEndDate;
+                                                        event.startTime = startTime;
+                                                        event.endTime = endTime;
+                                                        event.category = "#ed5c55";
+                                                        event.contentid = id;
 
-                                                        CalendarEntity newSchedule = new CalendarEntity();
-                                                        newSchedule.title = title;
-                                                        newSchedule.startDate = formattedStartDate;
-                                                        newSchedule.endDate = formattedEndDate;
-                                                        newSchedule.startTime = startTime;
-                                                        newSchedule.endTime = endTime;
-                                                        newSchedule.category = "#ed5c55";
-                                                        newSchedule.contentid = id;
-
-                                                        ScheduleLoader loader = new ScheduleLoader(EntireViewActivity.this, newSchedule, calendarDao);
-                                                        loader.forceLoad();
+                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                        calendarDao.InsertSchedule(event);
                                                     } else {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
