@@ -54,8 +54,14 @@ public class CalendarPopupActivity extends Dialog {
 
     public CalendarPopupActivity(@NonNull Context context) {
         super(context);
+
         //팝업 애니메이션 위한 윈도우
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        this.getWindow().setBackgroundDrawableResource(android.R.color.transparent); // 팝업창 배경을 투명하게 설정
+        this.setContentView(R.layout.activity_calendar_popup); // 팝업창 레이아웃 설정
+        this.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT); // 팝업창 크기 설정
+        this.getWindow().setGravity(Gravity.BOTTOM); // 팝업창 위치 설정
 
         setContentView(R.layout.activity_calendar_popup);
         this.mContext = context;
