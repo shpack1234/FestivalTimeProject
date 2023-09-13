@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         //색 넣음
-        textview=findViewById(R.id.text_view);
+        textview = findViewById(R.id.text_view);
         String text = textview.getText().toString();
         SpannableString spannableString = new SpannableString(text);
         int startIndex = text.indexOf("HOT!");
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
         int[] vacationImages = {R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example};
 
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy MM dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         String todaydate = sdf2.format(date);
 
@@ -178,14 +178,14 @@ public class MainActivity extends AppCompatActivity {
         for (int images = 0; images < 5; images++) {
             List<HashMap<String, String>> festivalList = new ArrayList<>();
             View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
-            ImageView imageView = sliderItemView.findViewById(R.id.image_view);
+            ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
 
             int finalImages = images;
             apiReader.Festivallit(apiKey, todaydate, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
                     //Log.d("main response", response);
-                    ParsingApiData.parseXmlDataFromSearchKeyword(response);
+                    ParsingApiData.parseXmlDataFromFestival(response);
                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
 
                     executor.execute(new Runnable() {
@@ -200,20 +200,27 @@ public class MainActivity extends AppCompatActivity {
                                     if (festivalList.size() > 0) {
                                         HashMap<String, String> festivalInfo = festivalList.get(finalImages);
 
-                                        String title = festivalInfo.get("title");
                                         String id = festivalInfo.get("contentid");
                                         String repImage = festivalInfo.get("img");
 
                                         if (repImage == null || repImage.isEmpty()) {
-                                            imageView.setImageResource(R.drawable.first_image_example);
+                                            imageButton.setImageResource(R.drawable.first_image_example);
                                         } else {
                                             Glide
                                                     .with(MainActivity.this)
                                                     .load(repImage)
                                                     .transform(new CenterCrop(), new RoundedCorners(30))
                                                     .placeholder(R.drawable.first_image_example)
-                                                    .into(imageView);
+                                                    .into(imageButton);
                                         }
+
+                                        imageButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                String contentId = id;
+                                                navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                            }
+                                        });
                                     }
                                 }
                             });
@@ -238,8 +245,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        String[] mainFestivalArea = {"서울", "인천", "부산", "제주도"};
-        String[] mainFestivalAreaCode = {"1", "2", "6", "39"};
+        String[] mainFestivalArea = {"서울", "경기도", "부산", "전라북도"};
+        String[] mainFestivalAreaCode = {"1", "31", "6", "37"};
 
 
         for (int area = 0; area < 4; area++) {
@@ -288,7 +295,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
         //Log.d("main response", response);
         ParsingApiData.parseXmlDataFromDetail2(response);
@@ -303,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if (festivalList.size() > 0) {
                             int maxItems = Math.min(festivalList.size(), 5);
-
                             for (int i = 0; i < maxItems; i++) {
                                 HashMap<String, String> festivalInfo = festivalList.get(i);
 
@@ -355,9 +360,6 @@ public class MainActivity extends AppCompatActivity {
                                         stateTextView.setText("진행예정");
                                         stateTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light)); // 주황색으로 설정
                                     } else if (currentDate.after(endDate)) {
-                                        // 현재 날짜가 종료일 이후인 경우
-                                        stateTextView.setText("종료됨");
-                                        stateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray)); // 회색으로 설정
                                     } else {
                                         // 현재 날짜가 시작일과 종료일 사이에 있는 경우
                                         stateTextView.setText("진행중");
@@ -421,15 +423,15 @@ public class MainActivity extends AppCompatActivity {
                                             public void run() {
                                                 try {
                                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                                                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                                                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.M.d", Locale.getDefault());
                                                     Date currentDate = new Date();
                                                     String currentDateStr = sdf.format(currentDate);
 
                                                     String CompareStartDate = startDateStr;
                                                     String CompareEndDate = endDateStr;
 
-                                                    Log.d("startdate: ", CompareStartDate);
-                                                    Log.d("enddate: ", CompareEndDate);
+                                                    Log.d("startdate: ", "Start Date: " + CompareStartDate);
+                                                    Log.d("enddate: ", "End Date: " + CompareEndDate);
 
                                                     String startTime = "";
                                                     String endTime = "";
@@ -447,8 +449,8 @@ public class MainActivity extends AppCompatActivity {
                                                             Date originalEndDate = sdf.parse(CompareEndDate);
                                                             String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                            Log.d("formattedStartDate: ", formattedStartDate);
-                                                            Log.d("formattedEndDate: ", formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
                                                             // 데이터베이스 초기화
                                                             CalendarDatabase calendarDatabase = Room.databaseBuilder(getApplicationContext(),
@@ -518,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPopupDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,R.style.custom_popup);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.custom_popup);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
@@ -539,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
         TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
 
-        Dialog dialog =dialogBuilder.create();
+        Dialog dialog = dialogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -819,6 +821,7 @@ public class MainActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
+
     private void performSearch(String query) {
         System.out.println("검색어: " + query);
     }

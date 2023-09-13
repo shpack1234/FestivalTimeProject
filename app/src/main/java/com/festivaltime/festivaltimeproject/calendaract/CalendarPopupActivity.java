@@ -125,6 +125,7 @@ public class CalendarPopupActivity extends Dialog {
             public void onClick(View v) {
                 String title = TitleText.getText().toString();
                 String startDate = startdateClick.getText().toString();
+                Log.d("startdate", startDate);
                 String startTime = starttimeClick.getText().toString();
                 String endDate = enddateClick.getText().toString();
                 String endTime = endtimeClick.getText().toString();

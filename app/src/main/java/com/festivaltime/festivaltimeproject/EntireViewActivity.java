@@ -2,6 +2,12 @@ package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +20,22 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +109,7 @@ public class EntireViewActivity extends AppCompatActivity {
                             ImageView festivalFirstImage = findViewById(R.id.festival_firstimage);
                             TextView overviewText = findViewById(R.id.festival_overview);
                             ImageButton favoriteaddButton = findViewById(R.id.favorite_addButton);
+                            ImageButton calendaraddButton = findViewById(R.id.calendar_addButton);
 
                             String title = festivalInfo.get("title");
                             String address1 = festivalInfo.get("address1");
@@ -103,6 +117,8 @@ public class EntireViewActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String firstImage = festivalInfo.get("img");
                             String overview = festivalInfo.get("overview");
+                            final String[] finalstartDate = {null};
+                            final String[] finalendDate = {null};
 
                             Log.d("imgUrl", firstImage);
                             if (firstImage == null || firstImage.isEmpty()) {
@@ -146,6 +162,129 @@ public class EntireViewActivity extends AppCompatActivity {
                                     });
                                 }
                             });
+
+                            apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    Log.d("response", response);
+                                    ParsingApiData.parseXmlDataFromdetailIntro(response);
+
+                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                    Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            festivalList.clear();
+                                            festivalList.addAll(parsedFestivalList);
+                                            for (HashMap<String, String> festivalInfo : festivalList) {
+                                                String eventStartDate = festivalInfo.get("eventstartdate");
+                                                String eventEndDate = festivalInfo.get("eventenddate");
+                                                finalstartDate[0] = festivalInfo.get("eventstartdate");
+                                                finalendDate[0] = festivalInfo.get("eventenddate");
+
+                                                try {
+                                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                                    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+                                                    Date startDate = inputFormat.parse(eventStartDate);
+                                                    Date endDate = inputFormat.parse(eventEndDate);
+
+                                                    String formattedStartDate = outputFormat.format(startDate);
+                                                    String formattedEndDate = outputFormat.format(endDate);
+
+                                                    TextView startDateTextView = findViewById(R.id.start_date);
+                                                    TextView endDateTextView = findViewById(R.id.end_date);
+
+                                                    startDateTextView.setText(formattedStartDate);
+                                                    endDateTextView.setText(formattedEndDate);
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                }
+                            });
+
+                            calendaraddButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                                SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.M.d", Locale.getDefault());
+                                                Date currentDate = new Date();
+                                                String currentDateStr = sdf.format(currentDate);
+
+                                                String CompareStartDate = finalstartDate[0];
+                                                String CompareEndDate = finalendDate[0];
+
+                                                Log.d("startdate: ", "Start Date: " + CompareStartDate);
+                                                Log.d("enddate: ", "End Date: " + CompareEndDate);
+
+                                                String startTime = "";
+                                                String endTime = "";
+
+                                                loadedUser = userDao.getUserInfoById(userId);
+                                                if (loadedUser != null) {
+                                                    Date compareDate = sdf.parse(CompareEndDate);
+                                                    Date current = sdf.parse(currentDateStr);
+
+                                                    if (current.compareTo(compareDate) <= 0) {
+                                                        Log.d("Button Action", "Add about Festival to Calendar");
+
+                                                        Date originalStartDate = sdf.parse(CompareStartDate);
+                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                        Date originalEndDate = sdf.parse(CompareEndDate);
+                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+
+                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+
+                                                        // 데이터베이스 초기화
+                                                        CalendarDatabase calendarDatabase = Room.databaseBuilder(getApplicationContext(),
+                                                                CalendarDatabase.class, "calendar-database").build();
+
+                                                        // DAO 가져오기
+                                                        CalendarDao calendarDao = calendarDatabase.calendarDao();
+
+                                                        CalendarEntity newSchedule = new CalendarEntity();
+                                                        newSchedule.title = title;
+                                                        newSchedule.startDate = formattedStartDate;
+                                                        newSchedule.endDate = formattedEndDate;
+                                                        newSchedule.startTime = startTime;
+                                                        newSchedule.endTime = endTime;
+                                                        newSchedule.category = "#ed5c55";
+                                                        newSchedule.contentid = id;
+
+                                                        ScheduleLoader loader = new ScheduleLoader(EntireViewActivity.this, newSchedule, calendarDao);
+                                                        loader.forceLoad();
+                                                    } else {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+                                                } else {
+                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
                         }
                     }
                 });
@@ -154,53 +293,6 @@ public class EntireViewActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
 
-            }
-        });
-
-
-        apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d("response", response);
-                ParsingApiData.parseXmlDataFromdetailIntro(response);
-
-                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        festivalList.clear();
-                        festivalList.addAll(parsedFestivalList);
-                        for (HashMap<String, String> festivalInfo : festivalList) {
-                            String eventStartDate = festivalInfo.get("eventstartdate");
-                            String eventEndDate = festivalInfo.get("eventenddate");
-
-                            try {
-                                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-
-                                Date startDate = inputFormat.parse(eventStartDate);
-                                Date endDate = inputFormat.parse(eventEndDate);
-
-                                String formattedStartDate = outputFormat.format(startDate);
-                                String formattedEndDate = outputFormat.format(endDate);
-
-                                TextView startDateTextView = findViewById(R.id.start_date);
-                                TextView endDateTextView = findViewById(R.id.end_date);
-
-                                startDateTextView.setText(formattedStartDate);
-                                endDateTextView.setText(formattedEndDate);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String error) {
             }
         });
 
@@ -218,6 +310,27 @@ public class EntireViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {   onBackPressed(); }
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(EntireViewActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(EntireViewActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(EntireViewActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(EntireViewActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(EntireViewActivity.this);
+                return true;
+            }
         });
     }
 

@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -170,6 +171,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                 selectedDate.add(Calendar.MONTH, -1);
                 //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
                 SelectDateView.setVisibility(View.INVISIBLE);
+                schedules.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -182,6 +184,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                 selectedDate.add(Calendar.MONTH, 1);
                 //달 변경시 이전에 선택했던 일정view INVISIBLE 설정
                 SelectDateView.setVisibility(View.INVISIBLE);
+                schedules.setVisibility(View.INVISIBLE);
                 setMonthView();
             }
         });
@@ -324,6 +327,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
     // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
+        setMonthView();
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
 
@@ -359,9 +363,15 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                     }
 
                     scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
-                    titleTextView.setText(title);
-                    // 일정 데이터를 각 scheduleBox에 담는 작업
-                    timeTextView.setText(startTime + "  " + endTime);
+                    titleTextView.setText(title); // 일정 데이터를 각 scheduleBox에 담는 작업
+
+                    //시작날짜-시간, 종료날짜-시간 분류예정
+                    /*if (selectedDate==startDate){
+                        timeTextView.setText(startTime);
+                    }
+                    else if (selectedDate==endDate){
+                        timeTextView.setText(endTime);
+                    }*/
 
                     scheduleCount++;
                     // 각 scheduleBox를 scheduleContainer에 추가
@@ -371,8 +381,26 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            final Boolean[] check = {false};
+                            new AlertDialog.Builder(CalendarActivity.this)
+                                    .setTitle("일정 삭제")
+                                    .setMessage("일정을 삭제하시겠습니까?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // 확인시 처리 로직
+                                            Toast.makeText(CalendarActivity.this, "일정을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                                            deleteSchedule(schedule);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                        }
+                                    })
+                                    .show();
                             // 클릭된 일정 데이터를 데이터베이스에서 삭제
-                            deleteSchedule(schedule);
+                            /*if (check[0]) {
+                                deleteSchedule(schedule);
+                            }*/
                         }
                     });
                 }

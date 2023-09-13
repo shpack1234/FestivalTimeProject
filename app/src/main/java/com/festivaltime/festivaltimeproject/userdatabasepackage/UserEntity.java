@@ -18,6 +18,7 @@ public class UserEntity {
     private String userName;
     private String userBirth;
     private String userGender;
+    private String password;
     private ArrayList<String> userFavoriteFestival;
 
     public int getId() {
@@ -62,6 +63,14 @@ public class UserEntity {
 
     public ArrayList<String> getUserFavoriteFestival() {
         return userFavoriteFestival;
+    }
+
+    public void setPassword(String password) {
+        this.password=password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setUserFavoriteFestival(ArrayList<String> userFavoriteFestival) {
