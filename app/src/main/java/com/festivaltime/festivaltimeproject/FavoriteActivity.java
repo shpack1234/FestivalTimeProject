@@ -98,13 +98,14 @@ public class FavoriteActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
+        TextView textView=findViewById(R.id.no_info_msg);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 loadedUser = userDao.getUserInfoById(userId);
-                if (loadedUser == null) {
+                if (loadedUser == null || loadedUser.getIsLogin()==false) {
                     Log.e("Err", "No UserInfo");
-                    TextView textView=findViewById(R.id.no_info_msg);
                     textView.setText("로그인 후 이용 가능합니다.");
                 } else {
                     List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
@@ -202,7 +203,6 @@ public class FavoriteActivity extends AppCompatActivity {
             locationTextView.setText(location);
             idTextView.setText(overview);
 
-            Log.d(TAG, "Rep Image URL: " + repImage);
             if (repImage == null || repImage.isEmpty()) {
                 festivalRepImage.setImageResource(R.drawable.ic_image);
             } else {
@@ -264,7 +264,7 @@ public class FavoriteActivity extends AppCompatActivity {
                                 String endTime = "";
 
                                 loadedUser = userDao.getUserInfoById(userId);
-                                if (loadedUser != null) {
+                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                     Date compareDate = sdf.parse(CompareEndDate);
                                     Date current = sdf.parse(currentDateStr);
 
@@ -322,7 +322,7 @@ public class FavoriteActivity extends AppCompatActivity {
                         public void run() {
                             String contentId = id;
                             loadedUser = userDao.getUserInfoById(userId);
-                            if (loadedUser != null) {
+                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                     loadedUser.deleteUserFavoriteFestival(contentId);
                                     userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트

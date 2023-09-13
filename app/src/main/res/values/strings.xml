@@ -43,7 +43,7 @@
     <string name="festival_state">축제 상태</string>
 
 
-<string name="location">지역</string>
+    <string name="location">지역</string>
     <string name="every_location">모든 지역</string>
     <string name="location_select">지역 선택</string>
 
@@ -118,7 +118,7 @@
     <string name="my_badge">MY 뱃지</string>
     <string name="nickname">NICKNAME</string>
     <string name="my_id">ID:#ad36f5</string>
-    <string name="personal_information">회원가입/개인 정보 변경</string>
+    <string name="personal_information">계정 설정/로그인</string>
     <string name="password_change">비밀번호 변경</string>
     <string name="setting">설정</string>
     <string name="privacy_security">개인정보 보호 및 보호</string>
@@ -168,5 +168,6 @@
     <string name="festival_review">리뷰</string>
 
     <string name="login_message">로그인 후에 이용 가능합니다.</string>
+
 
 </resources>

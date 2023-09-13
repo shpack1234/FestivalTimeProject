@@ -6,6 +6,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToInquiryActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToLoginActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
@@ -17,6 +18,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +40,9 @@ public class MyPageActivity extends AppCompatActivity {
 
     private UserEntity loadedUser;
 
-    boolean userExist=false;
+    private boolean isLogin;
+
+    boolean userExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,43 +93,66 @@ public class MyPageActivity extends AppCompatActivity {
             public void run() {
                 loadedUser = userDao.getUserInfoById(userId);
 
-                if (loadedUser!=null) {
-                    userId = loadedUser.getUserId();
+                if (loadedUser != null) {
+                    if (loadedUser.getIsLogin()) {
+                        userId = loadedUser.getUserId();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            View blurLayout=findViewById(R.id.blur_layout);
-                            blurLayout.setVisibility(View.GONE);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                View blurLayout = findViewById(R.id.blur_layout);
+                                blurLayout.setVisibility(View.GONE);
 
-                            TextView userNickname=findViewById(R.id.user_nickname);
-                            TextView userIdText=findViewById(R.id.user_id);
+                                TextView userNickname = findViewById(R.id.user_nickname);
+                                TextView userIdText = findViewById(R.id.user_id);
 
-                            userNickname.setText(loadedUser.getUserName());
-                            userIdText.setText("#"+userId);
+                                userNickname.setText(loadedUser.getUserName());
+                                userIdText.setText("#" + userId);
 
-                            userExist=true;
-                        }
-                    });
-                } else {
-                    userId = null;
+                                userExist = true;
+                                isLogin = true;
+                            }
+                        });
+                    } else {
+                        userExist = true;
+                        isLogin = false;
+                    }
                 }
             }
         });
 
     }
+
     public void customOnClick(View v) {
-        if(userExist) {
+        if (userExist) {
             navigateToBadgeActivity(MyPageActivity.this);
         }
     }
 
-    public void InquiryOnClick(View v){navigateToInquiryActivity(MyPageActivity.this); }
-    public void PrivacyOnClick(View v) {
-        navigateToPrivacyActivity(MyPageActivity.this, userId);
+    public void InquiryOnClick(View v) {
+        navigateToInquiryActivity(MyPageActivity.this);
     }
 
-    public void settingOnClick(View v) { navigateToAppSettingActivity(MyPageActivity.this);}
+    public void PrivacyOnClick(View v) {
+        Log.d("st", String.valueOf(isLogin) + String.valueOf(userExist));
 
-    public void changePWOnClick(View v) { navigateToChangePasswordActivity(MyPageActivity.this);}
+
+        if (userExist) {
+            if (!isLogin) {
+                navigateToLoginActivity(MyPageActivity.this, userId);
+            } else {
+                navigateToPrivacyActivity(MyPageActivity.this, null);
+            }
+        } else {
+            navigateToPrivacyActivity(MyPageActivity.this, null);
+        }
+    }
+
+    public void settingOnClick(View v) {
+        navigateToAppSettingActivity(MyPageActivity.this);
+    }
+
+    public void changePWOnClick(View v) {
+        navigateToChangePasswordActivity(MyPageActivity.this);
+    }
 }

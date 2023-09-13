@@ -2,6 +2,7 @@ package com.festivaltime.festivaltimeproject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.festivaltime.festivaltimeproject.calendaract.CalendarActivity;
 import com.festivaltime.festivaltimeproject.map.MapActivity;
@@ -101,6 +102,13 @@ public class navigateToSomeActivity {
         Intent intent = new Intent(thisActivity, SearchDetailActivity.class);
         intent.putExtra("type", type);
         intent.putExtra("query", query);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
+    public static void navigateToLoginActivity(Activity thisActivity, String userId) {
+        Intent intent = new Intent(thisActivity, LoginActivity.class);
+        intent.putExtra("userId", userId);
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }

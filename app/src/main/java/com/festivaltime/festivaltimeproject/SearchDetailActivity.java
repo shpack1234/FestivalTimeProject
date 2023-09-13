@@ -413,7 +413,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null) {
+                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
@@ -466,7 +466,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null) {
+                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                     Date compareDate = sdf.parse(CompareEndDate);
                                                     Date current = sdf.parse(currentDateStr);
 
@@ -697,7 +697,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null) {
+                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
@@ -750,7 +750,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null) {
+                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                     Date compareDate = sdf.parse(CompareEndDate);
                                                     Date current = sdf.parse(currentDateStr);
 
@@ -970,7 +970,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null) {
+                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     Log.d("Festival Id", contentId);
                                                     Log.d("Button Listener", "ID already exists in userFavoriteFestival");
@@ -1023,7 +1023,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null) {
+                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                     Date compareDate = sdf.parse(CompareEndDate);
                                                     Date current = sdf.parse(currentDateStr);
 
@@ -1214,7 +1214,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null) {
+                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
                                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                                     runOnUiThread(new Runnable() {
                                                         @Override

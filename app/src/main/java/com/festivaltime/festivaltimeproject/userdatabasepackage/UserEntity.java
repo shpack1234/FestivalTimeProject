@@ -20,6 +20,7 @@ public class UserEntity {
     private String userGender;
     private String password;
     private ArrayList<String> userFavoriteFestival;
+    private boolean isLogin;
 
     public int getId() {
         return id;
@@ -71,6 +72,14 @@ public class UserEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setIsLogin(boolean isLogin) {
+        this.isLogin=isLogin;
+    }
+
+    public boolean getIsLogin() {
+        return isLogin;
     }
 
     public void setUserFavoriteFestival(ArrayList<String> userFavoriteFestival) {

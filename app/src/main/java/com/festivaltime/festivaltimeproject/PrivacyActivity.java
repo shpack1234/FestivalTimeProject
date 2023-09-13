@@ -27,12 +27,10 @@ public class PrivacyActivity extends AppCompatActivity {
     private String name;
     private String birth;
     private String gender;
+    private Executor executor = Executors.newSingleThreadExecutor();
     private UserDataBase db;
     private UserDao userDao;
-    private Executor executor = Executors.newSingleThreadExecutor();
-
     private UserEntity loadedUser;
-
     private String userId;
 
     @Override
@@ -63,6 +61,8 @@ public class PrivacyActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.privacy_savebutton);
         EditText password=findViewById(R.id.privacy_password);
         EditText passwordConfirm=findViewById(R.id.privacy_password_confirm);
+        Button logoutButton=findViewById(R.id.login_logout);
+
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -94,6 +94,22 @@ public class PrivacyActivity extends AppCompatActivity {
                                 radioButtonFemale.setChecked(true);
                             }
 
+                            logoutButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    loadedUser.setIsLogin(false);
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            userDao.insertOrUpdate(loadedUser);
+                                        }
+                                    });
+                                    finish();
+                                    navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
+                                }
+                            });
+                        } else {
+                            logoutButton.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -129,6 +145,7 @@ public class PrivacyActivity extends AppCompatActivity {
                         userEntity.setUserId(userId);
                         userEntity.setUserFavoriteFestival(new ArrayList<>());
                         userEntity.setPassword(passwordText);
+                        userEntity.setIsLogin(true);
                     } else {
                         // 기존 사용자
                         userEntity = loadedUser;
