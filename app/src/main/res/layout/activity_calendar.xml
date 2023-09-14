@@ -143,7 +143,7 @@
                         android:layout_weight="1"
                         android:text="@string/sun"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/red"
                         android:textSize="13sp" />
 
                     <TextView
@@ -197,7 +197,7 @@
                         android:layout_weight="1"
                         android:text="@string/sat"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/purple_700"
                         android:textSize="13sp" />
 
                 </LinearLayout>

@@ -35,6 +35,7 @@ public class FestivalCalendarActivity extends AppCompatActivity {
     TextView monthText, Year_text;
     Button move_cal_btn;
     RecyclerView calendarrecycler;
+    private int selectedPosition = -1; // 선택된 날짜의 위치를 기억할 변수'
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
