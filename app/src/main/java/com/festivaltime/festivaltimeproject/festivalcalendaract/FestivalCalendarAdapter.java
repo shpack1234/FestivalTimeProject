@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festivaltime.festivaltimeproject.ApiReader;
@@ -55,11 +56,28 @@ public class FestivalCalendarAdapter extends RecyclerView.Adapter<FestivalCalend
         String apiKey = context.getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
 
+        int currentDay = CalendarUtil.selectedDate.get(Calendar.DAY_OF_MONTH);
         int currentMonth = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
         int currentYear = CalendarUtil.selectedDate.get(Calendar.YEAR);
 
+        int displayDay = dateCalendar.get(Calendar.DAY_OF_MONTH);
         int displayMonth = dateCalendar.get(Calendar.MONTH) + 1;
         int displayYear = dateCalendar.get(Calendar.YEAR);
+
+
+        // 날짜가 현재 날짜일 경우 텍스트 색상 변경
+        if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_color));
+        }
+
+        // 토요일일 경우 파란색 텍스트 적용
+        if (dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && displayMonth==currentMonth) {
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.purple_700));
+        }
+        // 일요일일 경우 빨간색 텍스트 적용
+        else if (dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && displayMonth==currentMonth) {
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String todayDate = dateFormat.format(dateCalendar.getTime());

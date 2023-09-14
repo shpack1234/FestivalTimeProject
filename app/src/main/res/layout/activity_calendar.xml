@@ -152,7 +152,7 @@
                         android:layout_weight="1"
                         android:text="@string/mon"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="13sp" />
 
                     <TextView
@@ -161,7 +161,7 @@
                         android:layout_weight="1"
                         android:text="@string/tue"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="13sp" />
 
                     <TextView
@@ -170,7 +170,7 @@
                         android:layout_weight="1"
                         android:text="@string/wed"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="13sp" />
 
                     <TextView
@@ -179,7 +179,7 @@
                         android:layout_weight="1"
                         android:text="@string/thu"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="13sp" />
 
                     <TextView
@@ -188,7 +188,7 @@
                         android:layout_weight="1"
                         android:text="@string/fri"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="13sp" />
 
                     <TextView
@@ -265,8 +265,8 @@
                         android:layout_marginTop="10dp"
                         android:gravity="left|center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="15sp"
-                        android:textColor="#737373"
+                        android:textSize="17sp"
+                        android:textColor="@color/intro_color"
                         android:visibility="invisible" />
 
                     <ScrollView

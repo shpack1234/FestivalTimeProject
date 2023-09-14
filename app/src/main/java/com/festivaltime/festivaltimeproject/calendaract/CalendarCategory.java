@@ -4,9 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +36,16 @@ public class CalendarCategory extends Dialog {
         super(context);
         setContentView(R.layout.activity_calendar_category);
         this.mContext = context;
+
+        // 팝업 테두리 바깥 영역을 흰색 반투명으로 설정
+        Window window = getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams. MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#80FFFFFF"))); // 흰색 반투명 설정
+        }
+
+        // 바깥 화면을 터치해도 팝업 창이 닫히지 않도록 설정
+        setCanceledOnTouchOutside(false);
 
         txtText = findViewById(R.id.calendar_category_new_category);
         close_btn = findViewById(R.id.calendar_category_close_btn);

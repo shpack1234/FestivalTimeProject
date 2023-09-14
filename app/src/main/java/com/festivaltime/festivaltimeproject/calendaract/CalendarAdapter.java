@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festivaltime.festivaltimeproject.R;
@@ -73,7 +74,17 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         if (displayMonth == currentMonth && displayYear == currentYear) {
             holder.parentView.setVisibility(View.VISIBLE);
         } else {
-            holder.dayText.setTextColor(Color.parseColor("#D6D6D6"));
+            //토요일 연한 파란색
+            if(dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+                holder.dayText.setTextColor(Color.parseColor("#C2CFFF"));
+            }
+            //일요일 연한 빨간색
+            else if(dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+                holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.faint_red));
+            }
+            else {
+                holder.dayText.setTextColor(Color.parseColor("#D6D6D6"));
+            }
             if (showOtherMonths) {
                 holder.parentView.setVisibility(View.VISIBLE);
             } else {
@@ -81,13 +92,23 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             }
         }
 
+        //선택 안했을 시 본래의 색
+        // 토요일일 경우 파란색 텍스트 적용
+        if (dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && displayMonth==currentMonth) {
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.purple_700));
+        }
+        // 일요일일 경우 빨간색 텍스트 적용
+        else if (dateCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && displayMonth==currentMonth) {
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+        }
+
         int dayNo = dateCalendar.get(Calendar.DAY_OF_MONTH);
         holder.dayText.setText(String.valueOf(dayNo));
 
         // 날짜가 현재 날짜일 경우 텍스트 색상 변경
         if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
-            holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
-            holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_color));
+            holder.dayText.setBackgroundResource(R.drawable.ic_cal_today_select);
         }
 
         calendarDao = CalendarDatabase.getInstance(holder.itemView.getContext()).calendarDao();
@@ -134,15 +155,33 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                             if (previousHolder != null) {
                                 if (CalendarUtil.isSameDate(dayList.get(previousSelectedPosition), Calendar.getInstance().getTime())) {
                                 } else {
-                                    previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
+                                    // 이전에 눌렸던 날짜의 요일을 가져옴
+                                    int previousDayOfWeek = CalendarUtil.getDayOfWeek(dayList.get(previousSelectedPosition));
+                                    //토요일 파란색
+                                    if (previousDayOfWeek == Calendar.SATURDAY) {
+                                        previousHolder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.purple_700));
+                                    }
+                                    // 일요일일 경우 빨간색 텍스트 적용
+                                    else if (previousDayOfWeek == Calendar.SUNDAY) {
+                                        previousHolder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+                                    }
+                                    else{
+                                        previousHolder.dayText.setTextColor(Color.parseColor("#737373"));
+                                    }
                                 }
                                 previousHolder.dayText.setBackgroundResource(0);
                             }
                         }
 
                         // 현재 클릭한 날짜의 텍스트 색상과 배경 리소스를 설정
-                        holder.dayText.setTextColor(Color.parseColor("#5E9DF1"));
-                        holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+                        if (displayYear == currentYear && displayMonth == currentMonth && displayDay == currentDay) {
+                            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_color));
+                            holder.dayText.setBackgroundResource(R.drawable.ic_cal_today_select);
+                        }
+                        else{
+                            holder.dayText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.selected_color));
+                            holder.dayText.setBackgroundResource(R.drawable.ic_cal_select);
+                        }
 
                         // 이전에 클릭한 날짜의 위치 업데이트
                         previousSelectedPosition = adapterPosition;
