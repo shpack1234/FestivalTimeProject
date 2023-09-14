@@ -514,7 +514,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                             runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
-                                                                    Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             });
                                                         }
@@ -522,7 +522,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                                     }

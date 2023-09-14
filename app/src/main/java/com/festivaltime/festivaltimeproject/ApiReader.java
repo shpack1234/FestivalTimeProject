@@ -389,7 +389,7 @@ public class ApiReader {
                     .host("apis.data.go.kr")
                     .addPathSegment("B551011")
                     .addPathSegment("KorService1")
-                    .addPathSegment("detailIntro1")
+                    .addPathSegment("detailInfo1")
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("contentId", contentID)

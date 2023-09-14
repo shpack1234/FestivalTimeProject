@@ -239,45 +239,59 @@ public class EntireViewActivity extends AppCompatActivity {
 
                                                 loadedUser = userDao.getUserInfoById(userId);
                                                 if (loadedUser != null) {
-                                                    Date compareDate = sdf.parse(CompareEndDate);
-                                                    Date current = sdf.parse(currentDateStr);
+                                                    if (loadedUser.getIsLogin()) {
+                                                        Date compareDate = sdf.parse(CompareEndDate);
+                                                        Date current = sdf.parse(currentDateStr);
 
-                                                    if (current.compareTo(compareDate) <= 0) {
-                                                        Log.d("Button Action", "Add about Festival to Calendar");
+                                                        if (current.compareTo(compareDate) <= 0) {
+                                                            Log.d("Button Action", "Add about Festival to Calendar");
 
-                                                        Date originalStartDate = sdf.parse(CompareStartDate);
-                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                        Date originalEndDate = sdf.parse(CompareEndDate);
-                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+                                                            Date originalStartDate = sdf.parse(CompareStartDate);
+                                                            String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                            Date originalEndDate = sdf.parse(CompareEndDate);
+                                                            String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
-                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                        calendarDao = calendarDatabase.calendarDao();
+                                                            calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                            calendarDao = calendarDatabase.calendarDao();
 
-                                                        // CalendarEntity 생성
-                                                        CalendarEntity event = new CalendarEntity();
-                                                        event.title = title;
-                                                        event.startDate = formattedStartDate;
-                                                        event.endDate = formattedEndDate;
-                                                        event.startTime = startTime;
-                                                        event.endTime = endTime;
-                                                        event.category = "#ed5c55";
-                                                        event.contentid = id;
+                                                            // CalendarEntity 생성
+                                                            CalendarEntity event = new CalendarEntity();
+                                                            event.title = title;
+                                                            event.startDate = formattedStartDate;
+                                                            event.endDate = formattedEndDate;
+                                                            event.startTime = startTime;
+                                                            event.endTime = endTime;
+                                                            event.category = "#ed5c55";
+                                                            event.contentid = id;
 
-                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                        calendarDao.InsertSchedule(event);
+                                                            // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                            calendarDao.InsertSchedule(event);
+                                                        } else {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
                                                     } else {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                                     }
                                                 } else {
-                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
