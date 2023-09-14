@@ -29,7 +29,7 @@ public class AddFT extends Dialog {
     final Button shutdownClick, addBtn, startdateClick, enddateClick;
     public DatePicker StartDatePicker, EndDatePicker;
 
-    public AddFT(@NonNull Context context, String title, String contentID) {
+    public AddFT(@NonNull Context context, String title, String contentID, String startdate, String enddate) {
         super(context);
         setContentView(R.layout.activity_addft_pop);
 
@@ -39,6 +39,28 @@ public class AddFT extends Dialog {
         StartDatePicker = findViewById(R.id.addcalendar_StartDatePicker);
         enddateClick = findViewById(R.id.addcalendar_end_date);
         EndDatePicker = findViewById(R.id.addcalendar_EndDatePicker);
+
+        startdateClick.setText(startdate);
+        enddateClick.setText(enddate);
+
+        // 시작 날짜와 종료 날짜의 최소 및 최대 날짜 설정
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.M.d", Locale.getDefault()); // 날짜 형식 변경
+        Date minDate, maxDate;
+
+        try {
+            minDate = sdf.parse(startdate);
+            maxDate = sdf.parse(enddate);
+
+            // 시작 날짜로부터 종료 날짜까지의 범위 설정
+            StartDatePicker.setMinDate(minDate.getTime());
+            StartDatePicker.setMaxDate(maxDate.getTime());
+
+            // 종료 날짜로부터 시작 날짜까지의 범위 설정
+            EndDatePicker.setMinDate(minDate.getTime());
+            EndDatePicker.setMaxDate(maxDate.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         shutdownClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,41 +73,63 @@ public class AddFT extends Dialog {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String startDate = startdateClick.getText().toString();
+                /*String startDate = startdateClick.getText().toString();
                 String endDate = enddateClick.getText().toString();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
                 try {
-                    Date startdate = sdf.parse(startDate);
-                    Date enddate = sdf.parse(endDate);
+                    Date originalStartDate = sdf2.parse(startDate);
+                    Date originalEndDate = sdf2.parse(endDate);
 
-                    if (enddate.after(startdate) || enddate.equals(startdate)) {
-                        // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
-                        calendarDatabase = CalendarDatabase.getInstance(context);
-                        calendarDao = calendarDatabase.calendarDao();
+                    // 일수 계산 위해 밀리초로 날짜 변환
+                    long startDateMillis = originalStartDate.getTime();
+                    long endDateMillis = originalEndDate.getTime();
 
-                        // CalendarEntity 생성
-                        CalendarEntity event = new CalendarEntity();
-                        event.title = title;
-                        event.startDate = startdateClick.getText().toString();
-                        event.endDate = enddateClick.getText().toString();
-                        event.startTime = "";
-                        event.endTime = "";
-                        event.category = "#ed5c55";
-                        event.contentid = contentID;
+                    // 두 날짜 사이의 일 수 계산
+                    long daysBetween = (endDateMillis - startDateMillis) / (1000 * 60 * 60 * 24);
 
-                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                        calendarDao.InsertSchedule(event);
-                        dismiss();
+                    // 14일(2주) 이상인 경우 날짜 제한
+                    if (daysBetween >= 14) {
+                        Toast.makeText(getContext(), "일정은 2주까지 설정할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        try {
+                            Date fixedstartdate = sdf.parse(startDate);
+                            Date fixedenddate = sdf.parse(endDate);
 
-                    } else {
-                        Toast.makeText(context, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
+                            if (fixedenddate.after(fixedstartdate) || fixedenddate.equals(fixedstartdate)) {
+                                // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
+                                calendarDatabase = CalendarDatabase.getInstance(context);
+                                calendarDao = calendarDatabase.calendarDao();
+
+                                // CalendarEntity 생성
+                                CalendarEntity event = new CalendarEntity();
+                                event.title = title;
+                                event.startDate = startdateClick.getText().toString();
+                                event.endDate = enddateClick.getText().toString();
+                                event.startTime = "";
+                                event.endTime = "";
+                                event.category = "#ed5c55";
+                                event.contentid = contentID;
+
+                                // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                calendarDao.InsertSchedule(event);
+                                dismiss();
+
+                            } else {
+                                Toast.makeText(context, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    throw new RuntimeException(e);
+                }*/
+                dismiss();
             }
         });
 

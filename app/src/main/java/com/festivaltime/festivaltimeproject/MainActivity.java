@@ -11,6 +11,7 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.festivaltime.festivaltimeproject.calendaract.CalendarCategory;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
@@ -383,9 +385,10 @@ public class MainActivity extends AppCompatActivity {
 
                                         String detailInfo = firstMap.get("infotext");
                                         //문자열길이 일정수 넘어가면 ...형태로 표시
-                                        if (detailInfo.length() > 50) {
+                                        if (detailInfo != null && detailInfo.length() > 50) {
                                             detailInfo = detailInfo.substring(0, 50) + "...";
                                         }
+
 
                                         //html 형태 변환하여 setText
                                         if (detailInfo != null) {
@@ -489,26 +492,41 @@ public class MainActivity extends AppCompatActivity {
 
                                                                     // 14일(2주) 이상인 경우 팝업
                                                                     if (daysBetween >= 14) {
+                                                                        runOnUiThread(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                AddFT dialog = new AddFT(MainActivity.this, title, id, CompareStartDate, CompareEndDate);
+                                                                                dialog.show();
+
+                                                                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                                                    @Override
+                                                                                    public void onDismiss(DialogInterface dialog) {
+                                                                                        // 팝업이 닫힐 때 실행할 코드 작성 부분
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    } else {
+
+                                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+
+                                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                                        calendarDao = calendarDatabase.calendarDao();
+
+                                                                        // CalendarEntity 생성
+                                                                        CalendarEntity event = new CalendarEntity();
+                                                                        event.title = title;
+                                                                        event.startDate = formattedStartDate;
+                                                                        event.endDate = formattedEndDate;
+                                                                        event.startTime = startTime;
+                                                                        event.endTime = endTime;
+                                                                        event.category = "#ed5c55";
+                                                                        event.contentid = id;
+
+                                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                                        calendarDao.InsertSchedule(event);
                                                                     }
-
-                                                                    Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                                    Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
-
-                                                                    calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                                    calendarDao = calendarDatabase.calendarDao();
-
-                                                                    // CalendarEntity 생성
-                                                                    CalendarEntity event = new CalendarEntity();
-                                                                    event.title = title;
-                                                                    event.startDate = formattedStartDate;
-                                                                    event.endDate = formattedEndDate;
-                                                                    event.startTime = startTime;
-                                                                    event.endTime = endTime;
-                                                                    event.category = "#ed5c55";
-                                                                    event.contentid = id;
-
-                                                                    // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                                    calendarDao.InsertSchedule(event);
                                                                 } else {
                                                                     runOnUiThread(new Runnable() {
                                                                         @Override
@@ -533,10 +551,12 @@ public class MainActivity extends AppCompatActivity {
                                                                 }
                                                             });
                                                         }
+
                                                     }
                                                 } catch (ParseException e) {
                                                     e.printStackTrace();
                                                 }
+
                                             }
                                         });
                                     }
