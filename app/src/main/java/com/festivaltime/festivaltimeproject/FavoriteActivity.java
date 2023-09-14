@@ -98,50 +98,56 @@ public class FavoriteActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
-        TextView textView=findViewById(R.id.no_info_msg);
+        TextView textView = findViewById(R.id.no_info_msg);
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 loadedUser = userDao.getUserInfoById(userId);
-                if (loadedUser == null || loadedUser.getIsLogin()==false) {
+                if (loadedUser == null || loadedUser.getIsLogin() == false) {
                     Log.e("Err", "No UserInfo");
                     textView.setText("로그인 후 이용 가능합니다.");
                 } else {
                     List<String> favoriteFestivals = loadedUser.getUserFavoriteFestival();
-                    for (String festivalId : favoriteFestivals) {
-                        Log.d("Favorite Festival", festivalId);
-                    }
+                    
+                    //찜 축제 없음
+                    if (favoriteFestivals.size() == 0) {
+                        textView.setText("찜 축제를 추가하고 원하는 축제를 편하게 찾아보세요!");
+                    } else {   //찜 축제 있음
+                        for (String festivalId : favoriteFestivals) {
+                            Log.d("Favorite Festival", festivalId);
+                        }
 
-                    List<LinkedHashMap<String, String>> parsedFestivalList = new ArrayList<>();
+                        List<LinkedHashMap<String, String>> parsedFestivalList = new ArrayList<>();
 
-                    for (String contentId : loadedUser.getUserFavoriteFestival()) {
-                        apiReader = new ApiReader();
-                        apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
-                            @Override
-                            public void onSuccess(String response) {
-                                ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
-                                List<LinkedHashMap<String, String>> festivalList = ParsingApiData.getFestivalList();
-                                synchronized (parsedFestivalList) {
-                                    parsedFestivalList.addAll(festivalList);
+                        for (String contentId : loadedUser.getUserFavoriteFestival()) {
+                            apiReader = new ApiReader();
+                            apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
+                                    List<LinkedHashMap<String, String>> festivalList = ParsingApiData.getFestivalList();
+                                    synchronized (parsedFestivalList) {
+                                        parsedFestivalList.addAll(festivalList);
+                                    }
+
+                                    // 모든 API 응답 처리가 완료된 후에 UI를 업데이트
+                                    if (parsedFestivalList.size() == favoriteFestivals.size()) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateUI(parsedFestivalList);
+                                            }
+                                        });
+                                    }
                                 }
 
-                                // 모든 API 응답 처리가 완료된 후에 UI를 업데이트
-                                if (parsedFestivalList.size() == favoriteFestivals.size()) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            updateUI(parsedFestivalList);
-                                        }
-                                    });
+                                @Override
+                                public void onError(String error) {
+
                                 }
-                            }
-
-                            @Override
-                            public void onError(String error) {
-
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
@@ -196,7 +202,7 @@ public class FavoriteActivity extends AppCompatActivity {
             String location = festivalInfo.get("address");
             String id = festivalInfo.get("contentid");
             String repImage = festivalInfo.get("img");
-            String overview=festivalInfo.get("overview");
+            String overview = festivalInfo.get("overview");
             final String[] finalstartDate = {null};
             final String[] finalendDate = {null};
             titleTextView.setText(title);
@@ -264,7 +270,7 @@ public class FavoriteActivity extends AppCompatActivity {
                                 String endTime = "";
 
                                 loadedUser = userDao.getUserInfoById(userId);
-                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
+                                if (loadedUser != null || loadedUser.getIsLogin() == false) {
                                     Date compareDate = sdf.parse(CompareEndDate);
                                     Date current = sdf.parse(currentDateStr);
 
@@ -322,7 +328,7 @@ public class FavoriteActivity extends AppCompatActivity {
                         public void run() {
                             String contentId = id;
                             loadedUser = userDao.getUserInfoById(userId);
-                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
+                            if (loadedUser != null || loadedUser.getIsLogin() == false) {
                                 if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
                                     loadedUser.deleteUserFavoriteFestival(contentId);
                                     userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트

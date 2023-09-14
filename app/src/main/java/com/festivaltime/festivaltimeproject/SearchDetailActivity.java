@@ -219,11 +219,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                 }
             }
             //달력 검색인 경우
-            else{
-                Log.d("match","date match success");
-                if (!type.isEmpty() && type.startsWith("A0207")){
-                    apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener(){
-                        public void onSuccess(String response) {  handleApiResponse3(response);     }
+            else {
+                Log.d("match", "date match success");
+                if (!type.isEmpty() && type.startsWith("A0207")) {
+                    apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                        public void onSuccess(String response) {
+                            handleApiResponse3(response);
+                        }
 
                         @Override
                         public void onError(String error) {
@@ -231,8 +233,10 @@ public class SearchDetailActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener(){
-                        public void onSuccess(String response) {  handleApiResponse3(response);     }
+                    apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                        public void onSuccess(String response) {
+                            handleApiResponse3(response);
+                        }
 
                         @Override
                         public void onError(String error) {
@@ -279,7 +283,7 @@ public class SearchDetailActivity extends AppCompatActivity {
         if (!type.isEmpty() && type.startsWith("A0207")) {
             ParsingApiData.parseXmlDataFromFestivalA(response);
         } else {
-            ParsingApiData.parseXmlDataFromFestival(response,type);
+            ParsingApiData.parseXmlDataFromFestival(response, type);
         }// 응답을 파싱하여 데이터를 저장
 
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -413,21 +417,30 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                    Log.d("Festival Id", contentId);
-                                                    Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                            if (loadedUser != null) {
+                                                if (loadedUser.getIsLogin()) {
+                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                        Log.d("Festival Id", contentId);
+                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        Log.d("Festival Id", contentId);
+                                                        loadedUser.addUserFavoriteFestival(contentId);
+                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                    }
+                                                } else {
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-
-                                                } else {
-                                                    Log.d("Festival Id", contentId);
-                                                    loadedUser.addUserFavoriteFestival(contentId);
-                                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
@@ -466,36 +479,45 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                    Date compareDate = sdf.parse(CompareEndDate);
-                                                    Date current = sdf.parse(currentDateStr);
+                                                if (loadedUser != null) {
+                                                    if (loadedUser.getIsLogin()) {
+                                                        Date compareDate = sdf.parse(CompareEndDate);
+                                                        Date current = sdf.parse(currentDateStr);
 
-                                                    if (current.compareTo(compareDate) <= 0) {
-                                                        Log.d("Button Action", "Add about Festival to Calendar");
+                                                        if (current.compareTo(compareDate) <= 0) {
+                                                            Log.d("Button Action", "Add about Festival to Calendar");
 
-                                                        Date originalStartDate = sdf.parse(CompareStartDate);
-                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                        Date originalEndDate = sdf.parse(CompareEndDate);
-                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+                                                            Date originalStartDate = sdf.parse(CompareStartDate);
+                                                            String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                            Date originalEndDate = sdf.parse(CompareEndDate);
+                                                            String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
-                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                        calendarDao = calendarDatabase.calendarDao();
+                                                            calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                            calendarDao = calendarDatabase.calendarDao();
 
-                                                        // CalendarEntity 생성
-                                                        CalendarEntity event = new CalendarEntity();
-                                                        event.title = title;
-                                                        event.startDate = formattedStartDate;
-                                                        event.endDate = formattedEndDate;
-                                                        event.startTime = startTime;
-                                                        event.endTime = endTime;
-                                                        event.category = "#ed5c55";
-                                                        event.contentid = id;
+                                                            // CalendarEntity 생성
+                                                            CalendarEntity event = new CalendarEntity();
+                                                            event.title = title;
+                                                            event.startDate = formattedStartDate;
+                                                            event.endDate = formattedEndDate;
+                                                            event.startTime = startTime;
+                                                            event.endTime = endTime;
+                                                            event.category = "#ed5c55";
+                                                            event.contentid = id;
 
-                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                        calendarDao.InsertSchedule(event);
+                                                            // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                            calendarDao.InsertSchedule(event);
+                                                        } else {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
                                                     } else {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
@@ -505,7 +527,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                         });
                                                     }
                                                 } else {
-                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
@@ -697,21 +724,30 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                    Log.d("Festival Id", contentId);
-                                                    Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                            if (loadedUser != null) {
+                                                if (loadedUser.getIsLogin()) {
+                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                        Log.d("Festival Id", contentId);
+                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        Log.d("Festival Id", contentId);
+                                                        loadedUser.addUserFavoriteFestival(contentId);
+                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                    }
+                                                } else {
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-
-                                                } else {
-                                                    Log.d("Festival Id", contentId);
-                                                    loadedUser.addUserFavoriteFestival(contentId);
-                                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
@@ -750,36 +786,45 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                    Date compareDate = sdf.parse(CompareEndDate);
-                                                    Date current = sdf.parse(currentDateStr);
+                                                if (loadedUser != null) {
+                                                    if (loadedUser.getIsLogin()) {
+                                                        Date compareDate = sdf.parse(CompareEndDate);
+                                                        Date current = sdf.parse(currentDateStr);
 
-                                                    if (current.compareTo(compareDate) <= 0) {
-                                                        Log.d("Button Action", "Add about Festival to Calendar");
+                                                        if (current.compareTo(compareDate) <= 0) {
+                                                            Log.d("Button Action", "Add about Festival to Calendar");
 
-                                                        Date originalStartDate = sdf.parse(CompareStartDate);
-                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                        Date originalEndDate = sdf.parse(CompareEndDate);
-                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+                                                            Date originalStartDate = sdf.parse(CompareStartDate);
+                                                            String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                            Date originalEndDate = sdf.parse(CompareEndDate);
+                                                            String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
-                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                        calendarDao = calendarDatabase.calendarDao();
+                                                            calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                            calendarDao = calendarDatabase.calendarDao();
 
-                                                        // CalendarEntity 생성
-                                                        CalendarEntity event = new CalendarEntity();
-                                                        event.title = title;
-                                                        event.startDate = formattedStartDate;
-                                                        event.endDate = formattedEndDate;
-                                                        event.startTime = startTime;
-                                                        event.endTime = endTime;
-                                                        event.category = "#ed5c55";
-                                                        event.contentid = id;
+                                                            // CalendarEntity 생성
+                                                            CalendarEntity event = new CalendarEntity();
+                                                            event.title = title;
+                                                            event.startDate = formattedStartDate;
+                                                            event.endDate = formattedEndDate;
+                                                            event.startTime = startTime;
+                                                            event.endTime = endTime;
+                                                            event.category = "#ed5c55";
+                                                            event.contentid = id;
 
-                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                        calendarDao.InsertSchedule(event);
+                                                            // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                            calendarDao.InsertSchedule(event);
+                                                        } else {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
                                                     } else {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
@@ -789,7 +834,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                         });
                                                     }
                                                 } else {
-                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
@@ -970,21 +1020,30 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                    Log.d("Festival Id", contentId);
-                                                    Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                            if (loadedUser != null) {
+                                                if (loadedUser.getIsLogin()) {
+                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                        Log.d("Festival Id", contentId);
+                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        Log.d("Festival Id", contentId);
+                                                        loadedUser.addUserFavoriteFestival(contentId);
+                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                    }
+                                                } else {
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-
-                                                } else {
-                                                    Log.d("Festival Id", contentId);
-                                                    loadedUser.addUserFavoriteFestival(contentId);
-                                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                 }
                                             } else {
                                                 Log.e("No UserInfo", "You should get your information in MyPage");
@@ -1023,36 +1082,45 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
-                                                if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                    Date compareDate = sdf.parse(CompareEndDate);
-                                                    Date current = sdf.parse(currentDateStr);
+                                                if (loadedUser != null) {
+                                                    if (loadedUser.getIsLogin()) {
+                                                        Date compareDate = sdf.parse(CompareEndDate);
+                                                        Date current = sdf.parse(currentDateStr);
 
-                                                    if (current.compareTo(compareDate) <= 0) {
-                                                        Log.d("Button Action", "Add about Festival to Calendar");
+                                                        if (current.compareTo(compareDate) <= 0) {
+                                                            Log.d("Button Action", "Add about Festival to Calendar");
 
-                                                        Date originalStartDate = sdf.parse(CompareStartDate);
-                                                        String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                        Date originalEndDate = sdf.parse(CompareEndDate);
-                                                        String formattedEndDate = targetDateFormat.format(originalEndDate);
+                                                            Date originalStartDate = sdf.parse(CompareStartDate);
+                                                            String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                            Date originalEndDate = sdf.parse(CompareEndDate);
+                                                            String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+                                                            Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                            Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
 
-                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                        calendarDao = calendarDatabase.calendarDao();
+                                                            calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                            calendarDao = calendarDatabase.calendarDao();
 
-                                                        // CalendarEntity 생성
-                                                        CalendarEntity event = new CalendarEntity();
-                                                        event.title = title;
-                                                        event.startDate = formattedStartDate;
-                                                        event.endDate = formattedEndDate;
-                                                        event.startTime = startTime;
-                                                        event.endTime = endTime;
-                                                        event.category = "#ed5c55";
-                                                        event.contentid = id;
+                                                            // CalendarEntity 생성
+                                                            CalendarEntity event = new CalendarEntity();
+                                                            event.title = title;
+                                                            event.startDate = formattedStartDate;
+                                                            event.endDate = formattedEndDate;
+                                                            event.startTime = startTime;
+                                                            event.endTime = endTime;
+                                                            event.category = "#ed5c55";
+                                                            event.contentid = id;
 
-                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                        calendarDao.InsertSchedule(event);
+                                                            // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                            calendarDao.InsertSchedule(event);
+                                                        } else {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
                                                     } else {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
@@ -1062,7 +1130,12 @@ public class SearchDetailActivity extends AppCompatActivity {
                                                         });
                                                     }
                                                 } else {
-                                                    Log.e("No UserInfo", "You should get your information in MyPage");
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
@@ -1214,20 +1287,33 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         public void run() {
                                             String contentId = idTextView.getText().toString();
                                             loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null || loadedUser.getIsLogin()==false) {
-                                                if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                            if (loadedUser != null) {
+                                                if (loadedUser.getIsLogin()) {
+                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
+                                                        Log.d("Festival Id", contentId);
+                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        Log.d("Festival Id", contentId);
+                                                        loadedUser.addUserFavoriteFestival(contentId);
+                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
+                                                    }
+                                                } else {
                                                     runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-
-                                                } else {
-                                                    loadedUser.addUserFavoriteFestival(contentId);
-                                                    userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
                                                 }
                                             } else {
+                                                Log.e("No UserInfo", "You should get your information in MyPage");
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {

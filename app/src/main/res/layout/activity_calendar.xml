@@ -79,6 +79,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/calendar_box"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 

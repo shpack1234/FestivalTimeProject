@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,6 +81,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     private String userId;
     private UserDataBase db;
     boolean userExist = false;
+    private FrameLayout calendarBox;
 
 
     @Override
@@ -103,24 +105,40 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
+        calendarBox = findViewById(R.id.calendar_box);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 loadedUser = userDao.getUserInfoById(userId);
-
+                //Log.d("st", String.valueOf(loadedUser.getIsLogin()) + String.valueOf(loadedUser != null));
                 if (loadedUser != null) {
-                    userId = loadedUser.getUserId();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            View blurLayout = findViewById(R.id.blur_layout);
-                            blurLayout.setVisibility(View.GONE);
-                            userExist = true;
+                    if (loadedUser.getIsLogin()) {
+                        userId = loadedUser.getUserId();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                View blurLayout = findViewById(R.id.blur_layout);
+                                blurLayout.setVisibility(View.GONE);
+                                for (int i = 0; i < calendarBox.getChildCount(); i++) {
+                                    View child = calendarBox.getChildAt(i);
+                                    child.setClickable(true);
+                                }
+                                userExist = true;
+                            }
+                        });
+                    } else {
+                        Log.d("count", String.valueOf(calendarBox.getChildCount()));
+                        for (int i = 0; i < calendarBox.getChildCount(); i++) {
+                            View child = calendarBox.getChildAt(i);
+                            child.setClickable(false);
                         }
-                    });
+                    }
                 } else {
-                    userId = null;
+                    for (int i = 0; i < calendarBox.getChildCount(); i++) {
+                        View child = calendarBox.getChildAt(i);
+                        child.setClickable(false);
+                    }
                 }
             }
         });

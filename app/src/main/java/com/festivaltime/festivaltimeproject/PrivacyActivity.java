@@ -139,7 +139,6 @@ public class PrivacyActivity extends AppCompatActivity {
 
                     UserEntity userEntity;
                     if (loadedUser == null) {
-                        Log.d("loadUser", "null");
                         // 신규 사용자
                         userEntity = new UserEntity();
                         userEntity.setUserId(userId);
