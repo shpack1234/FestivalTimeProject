@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -40,6 +43,10 @@ public class AddFT extends Dialog {
         enddateClick = findViewById(R.id.addcalendar_end_date);
         EndDatePicker = findViewById(R.id.addcalendar_EndDatePicker);
 
+        setCancelable(true);
+        setCanceledOnTouchOutside(true);
+
+
         startdateClick.setText(startdate);
         enddateClick.setText(enddate);
 
@@ -73,64 +80,47 @@ public class AddFT extends Dialog {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*String startDate = startdateClick.getText().toString();
+                String startDate = startdateClick.getText().toString();
                 String endDate = enddateClick.getText().toString();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
                 try {
-                    Date originalStartDate = sdf2.parse(startDate);
-                    Date originalEndDate = sdf2.parse(endDate);
+                    Date fixedStartDate = sdf.parse(startDate);
+                    Date fixedEndDate = sdf.parse(endDate);
 
-                    // 일수 계산 위해 밀리초로 날짜 변환
-                    long startDateMillis = originalStartDate.getTime();
-                    long endDateMillis = originalEndDate.getTime();
+                    long daysBetween = getDaysBetween(fixedStartDate, fixedEndDate);
 
-                    // 두 날짜 사이의 일 수 계산
-                    long daysBetween = (endDateMillis - startDateMillis) / (1000 * 60 * 60 * 24);
-
-                    // 14일(2주) 이상인 경우 날짜 제한
-                    if (daysBetween >= 14) {
+                    if (daysBetween > 14) {
                         Toast.makeText(getContext(), "일정은 2주까지 설정할 수 있습니다.", Toast.LENGTH_SHORT).show();
-                    }else{
-                        try {
-                            Date fixedstartdate = sdf.parse(startDate);
-                            Date fixedenddate = sdf.parse(endDate);
+                    } else if (fixedEndDate.after(fixedStartDate) || fixedEndDate.equals(fixedStartDate)) {
+                        // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
+                        calendarDatabase = CalendarDatabase.getInstance(context);
+                        calendarDao = calendarDatabase.calendarDao();
 
-                            if (fixedenddate.after(fixedstartdate) || fixedenddate.equals(fixedstartdate)) {
-                                // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
-                                calendarDatabase = CalendarDatabase.getInstance(context);
-                                calendarDao = calendarDatabase.calendarDao();
+                        // CalendarEntity 생성
+                        CalendarEntity event = new CalendarEntity();
+                        event.title = title;
+                        event.startDate = startdateClick.getText().toString();
+                        event.endDate = enddateClick.getText().toString();
+                        event.startTime = "";
+                        event.endTime = "";
+                        event.category = "#ed5c55";
+                        event.contentid = contentID;
 
-                                // CalendarEntity 생성
-                                CalendarEntity event = new CalendarEntity();
-                                event.title = title;
-                                event.startDate = startdateClick.getText().toString();
-                                event.endDate = enddateClick.getText().toString();
-                                event.startTime = "";
-                                event.endTime = "";
-                                event.category = "#ed5c55";
-                                event.contentid = contentID;
+                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                        new InsertScheduleTask().execute(event);
 
-                                // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                calendarDao.InsertSchedule(event);
-                                dismiss();
-
-                            } else {
-                                Toast.makeText(context, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                    } else {
+                        Toast.makeText(context, "기간을 확인해주세요", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }*/
-                dismiss();
+                    e.printStackTrace();
+                }
             }
+
+
         });
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -182,4 +172,26 @@ public class AddFT extends Dialog {
                     }
                 });
     }
+
+    // AsyncTask를 사용하여 데이터베이스 작업을 비동기적으로 수행
+    private class InsertScheduleTask extends AsyncTask<CalendarEntity, Void, Void> {
+        @Override
+        protected Void doInBackground(CalendarEntity... params) {
+            calendarDao.InsertSchedule(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dismiss(); // 작업 완료 후 다이얼로그 닫기
+        }
+    }
+
+    // 두 날짜 사이의 일 수를 계산하는 함수
+    private long getDaysBetween(Date startDate, Date endDate) {
+        long startMillis = startDate.getTime();
+        long endMillis = endDate.getTime();
+        return (endMillis - startMillis) / (1000 * 60 * 60 * 24);
+    }
+
 }

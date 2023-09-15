@@ -20,14 +20,14 @@
             android:id="@+id/addcalendar_close"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
             android:padding="16dp"
             android:text="@string/dismiss_popup"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="10sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -37,21 +37,20 @@
             android:gravity="center"
             android:text="@string/add_day"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <!-- 일정 추가 버튼 -->
         <Button
             android:id="@+id/addcalendar_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="#00000000"
             android:gravity="center"
             android:onClick="mOnClose"
-            android:padding="16dp"
             android:text="@string/short_add"
             android:textColor="@color/selected_color"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 
@@ -106,7 +105,7 @@
 
                 <DatePicker
                     android:id="@+id/addcalendar_StartDatePicker"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:calendarViewShown="false"
                     android:datePickerMode="spinner"
@@ -149,7 +148,7 @@
 
                 <DatePicker
                     android:id="@+id/addcalendar_EndDatePicker"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:calendarViewShown="false"
                     android:datePickerMode="spinner"

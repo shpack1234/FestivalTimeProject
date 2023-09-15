@@ -14,6 +14,9 @@ public interface CalendarDao {
     @Query("SELECT * FROM calendarentity")
     List<CalendarEntity> getAllCalendarEntity();
 
+    @Query("SELECT festival_id FROM calendarentity")
+    List<String> getAllContentIds();
+
     @Insert
     void InsertSchedule(CalendarEntity schedule);
 

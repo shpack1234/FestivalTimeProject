@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+
 @Entity(tableName = "calendarentity")
 public class CalendarEntity {
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +37,7 @@ public class CalendarEntity {
     public CalendarEntity() {
         // Room에 필요한 빈 생성자
     }
+
 
     public CalendarEntity(String title, String startDate, String endDate, String startTime, String endTime, String category, String contentid) {
         this.title = title;

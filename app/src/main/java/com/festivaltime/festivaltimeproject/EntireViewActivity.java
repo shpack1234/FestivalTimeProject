@@ -79,7 +79,7 @@ public class EntireViewActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        Back_Btn=findViewById(R.id.before_btn);
+        Back_Btn = findViewById(R.id.before_btn);
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -239,80 +239,92 @@ public class EntireViewActivity extends AppCompatActivity {
                                                 String endTime = "";
 
                                                 loadedUser = userDao.getUserInfoById(userId);
+                                                calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                calendarDao = calendarDatabase.calendarDao();
                                                 if (loadedUser != null) {
                                                     if (loadedUser.getIsLogin()) {
-                                                        Date compareDate = sdf.parse(CompareEndDate);
-                                                        Date current = sdf.parse(currentDateStr);
+                                                        if (calendarDao.getAllContentIds().contains(id)) {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                    Log.d("Button Listener", "Festival already exists in Calendar");
+                                                                }
+                                                            });
+                                                        } else {
+                                                            Date compareDate = sdf.parse(CompareEndDate);
+                                                            Date current = sdf.parse(currentDateStr);
 
-                                                        //날짜없으면 추가안되도록 설정
-                                                        if (CompareStartDate != null && CompareEndDate != null) {
-                                                            if (current.compareTo(compareDate) <= 0) {
-                                                                Log.d("Button Action", "Add about Festival to Calendar");
+                                                            //날짜없으면 추가안되도록 설정
+                                                            if (CompareStartDate != null && CompareEndDate != null) {
+                                                                if (current.compareTo(compareDate) <= 0) {
+                                                                    Log.d("Button Action", "Add about Festival to Calendar");
 
-                                                                Date originalStartDate = sdf.parse(CompareStartDate);
-                                                                String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                                Date originalEndDate = sdf.parse(CompareEndDate);
-                                                                String formattedEndDate = targetDateFormat.format(originalEndDate);
+                                                                    Date originalStartDate = sdf.parse(CompareStartDate);
+                                                                    String formattedStartDate = targetDateFormat.format(originalStartDate);
+                                                                    Date originalEndDate = sdf.parse(CompareEndDate);
+                                                                    String formattedEndDate = targetDateFormat.format(originalEndDate);
 
-                                                                // 일수 계산 위해 밀리초로 날짜 변환
-                                                                long startDateMillis = originalStartDate.getTime();
-                                                                long endDateMillis = originalEndDate.getTime();
+                                                                    // 일수 계산 위해 밀리초로 날짜 변환
+                                                                    long startDateMillis = originalStartDate.getTime();
+                                                                    long endDateMillis = originalEndDate.getTime();
 
-                                                                // 두 날짜 사이의 일 수 계산
-                                                                long daysBetween = (endDateMillis - startDateMillis) / (1000 * 60 * 60 * 24);
+                                                                    // 두 날짜 사이의 일 수 계산
+                                                                    long daysBetween = (endDateMillis - startDateMillis) / (1000 * 60 * 60 * 24);
 
-                                                                // 14일(2주) 이상인 경우 팝업
-                                                                if (daysBetween >= 14) {
+                                                                    // 14일(2주) 이상인 경우 팝업
+                                                                    if (daysBetween >= 14) {
+                                                                        runOnUiThread(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                AddFT dialog = new AddFT(EntireViewActivity.this, title, id, formattedStartDate, formattedEndDate);
+                                                                                dialog.show();
+
+                                                                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                                                    @Override
+                                                                                    public void onDismiss(DialogInterface dialog) {
+                                                                                        // 팝업이 닫힐 때 실행할 코드 작성 부분
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    } else {
+
+                                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
+                                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
+
+                                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
+                                                                        calendarDao = calendarDatabase.calendarDao();
+
+                                                                        // CalendarEntity 생성
+                                                                        CalendarEntity event = new CalendarEntity();
+                                                                        event.title = title;
+                                                                        event.startDate = formattedStartDate;
+                                                                        event.endDate = formattedEndDate;
+                                                                        event.startTime = startTime;
+                                                                        event.endTime = endTime;
+                                                                        event.category = "#ed5c55";
+                                                                        event.contentid = id;
+
+                                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
+                                                                        calendarDao.InsertSchedule(event);
+                                                                    }
+                                                                } else {
                                                                     runOnUiThread(new Runnable() {
                                                                         @Override
                                                                         public void run() {
-                                                                            AddFT dialog = new AddFT(EntireViewActivity.this, title, id, CompareStartDate, CompareEndDate);
-                                                                            dialog.show();
-
-                                                                            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                                                                @Override
-                                                                                public void onDismiss(DialogInterface dialog) {
-                                                                                    // 팝업이 닫힐 때 실행할 코드 작성 부분
-                                                                                }
-                                                                            });
+                                                                            Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     });
-                                                                } else {
-
-                                                                    Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                                    Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
-
-                                                                    calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                                    calendarDao = calendarDatabase.calendarDao();
-
-                                                                    // CalendarEntity 생성
-                                                                    CalendarEntity event = new CalendarEntity();
-                                                                    event.title = title;
-                                                                    event.startDate = formattedStartDate;
-                                                                    event.endDate = formattedEndDate;
-                                                                    event.startTime = startTime;
-                                                                    event.endTime = endTime;
-                                                                    event.category = "#ed5c55";
-                                                                    event.contentid = id;
-
-                                                                    // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                                    calendarDao.InsertSchedule(event);
                                                                 }
                                                             } else {
                                                                 runOnUiThread(new Runnable() {
                                                                     @Override
                                                                     public void run() {
-                                                                        Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
+                                                                        Toast.makeText(getApplicationContext(), "축제날짜를 확인해주세요", Toast.LENGTH_SHORT).show();
                                                                     }
                                                                 });
                                                             }
-                                                        } else {
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    Toast.makeText(getApplicationContext(), "축제날짜를 확인해주세요", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
                                                         }
                                                     } else {
                                                         runOnUiThread(new Runnable() {
@@ -346,9 +358,9 @@ public class EntireViewActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if(intent != null) {
+        if (intent != null) {
             String content = intent.getStringExtra("content");
-            if(content != null){
+            if (content != null) {
                 TextView entireContent = findViewById(R.id.festival_title);
                 entireContent.setText(content);
             }
@@ -356,8 +368,9 @@ public class EntireViewActivity extends AppCompatActivity {
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {   onBackPressed(); }
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
