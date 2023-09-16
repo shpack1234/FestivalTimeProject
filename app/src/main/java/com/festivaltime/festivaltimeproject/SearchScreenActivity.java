@@ -184,11 +184,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 public void run() {
 
                                     LinearLayout searchContainer = findViewById(R.id.search_container);
-                                    //searchContainer.removeAllViews();
+                                    searchContainer.removeAllViews();
 
                                     View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
                                     GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                    //festivalImageNText.removeAllViews();
+                                    festivalImageNText.removeAllViews();
 
                                     String textToShow = getTextToShow(cat2);
                                     TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
@@ -215,15 +215,14 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                                     parsedItem.get("eventstartdate").equals(queryArray[1]) &&
                                                                     parsedItem.get("eventenddate").equals(queryArray[2])) {
 
-                                                                // result에서 필요한 값들을 가져와서 새로운 LinkedHashMap에 넣습니다.
+                                                                // result에서 필요한 값들을 가져와서 새로운 LinkedHashMap에 넣음
                                                                 LinkedHashMap<String, String> newItem = new LinkedHashMap<>();
 
                                                                 newItem.put("title", result.get("title"));
                                                                 newItem.put("firstimage2", result.get("firstimage2"));
                                                                 newItem.put("cat2", result.get("cat2"));
-
-                                                                // "contentid"는 이미 parsedItem에 있으므로 별도로 가져옵니다.
-                                                                newItem.putAll(parsedItem);
+                                                                newItem.put("contentid", parsedItem.get("contentid"));
+                                                                newItem.putAll(result);
 
                                                                 // 조건에 맞는 아이템들만 리스트에 넣음
                                                                 festivalList.add(newItem);
@@ -239,16 +238,15 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                                 public void run() {
                                                                     if (!festivalList.isEmpty()) {
                                                                         /**
-                                                                        LinearLayout searchContainer = findViewById(R.id.search_container);
-                                                                        //searchContainer.removeAllViews();
+                                                                         LinearLayout searchContainer = findViewById(R.id.search_container);
+                                                                         //searchContainer.removeAllViews();
 
-                                                                        View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
-                                                                        GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                                                        //festivalImageNText.removeAllViews(); **/
-
-                                                                        String textToShow = getTextToShow(cat2);
-                                                                        TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
-                                                                        titleTextView.setText(textToShow);
+                                                                         View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
+                                                                         GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
+                                                                         //festivalImageNText.removeAllViews();
+                                                                         String textToShow = getTextToShow(cat2);
+                                                                         TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
+                                                                         titleTextView.setText(textToShow); **/
 
                                                                         int maxItems = Math.min(festivalList.size(), 6);
 
@@ -267,14 +265,14 @@ public class SearchScreenActivity extends AppCompatActivity {
                                                                              repImage);**/
 
                                                                             Glide.with(SearchScreenActivity.this)
-                                                                                    .load(festivalInfo.get(
-                                                                                            "firstimage2"))
-                                                                                    .transform(new CenterCrop(),
-                                                                                            new RoundedCorners(30))
+                                                                                    .load(festivalInfo.get("firstimage2"))
+                                                                                    .transform(new CenterCrop(), new RoundedCorners(30))
                                                                                     .placeholder(R.drawable.ic_image)
                                                                                     .into(searchImageButton);
 
                                                                             festivalImageNText.addView(festivalItemView);
+
+                                                                            searchContainer.addView(searchContainerView);
 
 
                                                                             festivalItemView.setOnClickListener(
