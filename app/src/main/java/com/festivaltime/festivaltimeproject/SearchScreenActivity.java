@@ -875,6 +875,88 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         if (festivalList.size() > 0) {
                                             loopUI(query, cat12, 3);
                                         }
+                                        twelveSemaphore.release();
+                                    }
+
+                                });
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "API Error: " + error);
+                    }
+                });
+
+                apiReader.searchKeyword(apiKey, query, cat13, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+
+
+                        try {
+                            twelveSemaphore.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat13); // 응답을 파싱하여 데이터를 저장
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                festivalList.clear();
+                                festivalList.addAll(parsedFestivalList);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (festivalList.size() > 0) {
+                                            loopUI(query, cat13, 3);
+                                        }
+                                        thirteenSemaphore.release();
+                                    }
+
+                                });
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "API Error: " + error);
+                    }
+                });
+
+                apiReader.searchKeyword(apiKey, query, cat14, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+
+
+                        try {
+                            thirteenSemaphore.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromSearchKeyword(response, null, cat14); // 응답을 파싱하여 데이터를 저장
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                festivalList.clear();
+                                festivalList.addAll(parsedFestivalList);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (festivalList.size() > 0) {
+                                            loopUI(query, cat14, 3);
+                                        }
 
                                     }
 
@@ -889,6 +971,8 @@ public class SearchScreenActivity extends AppCompatActivity {
                         Log.e(TAG, "API Error: " + error);
                     }
                 });
+
+
             } else {
                 Log.d("match", "date match success");
 
