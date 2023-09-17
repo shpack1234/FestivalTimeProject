@@ -350,7 +350,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
     // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
-        setMonthView();
+        //setMonthView();
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
 

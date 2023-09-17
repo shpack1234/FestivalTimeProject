@@ -176,8 +176,28 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
 
+        CalendarDatabase database = CalendarDatabase.getInstance(MainActivity.this);
+        CalendarDao calendarDao = database.calendarDao();
+        String category = "#52c8ed"; //휴가 db가져오기위한 category text
+
         List<HashMap<String, String>> holidaylist = new ArrayList<>();
-        apiReader.holiday(apiKey, year, month, new ApiReader.ApiResponseListener() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<CalendarEntity> calendarEntities = calendarDao.getCalendarEntitiesByCategory(category);
+
+                holidaylist.clear();
+                // 데이터 추출 및 holidaylist에 추가
+                for (CalendarEntity entity : calendarEntities) {
+                    HashMap<String, String> holidayInfo = new HashMap<>();
+                    holidayInfo.put("dateName", "휴가");
+                    holidayInfo.put("locdate", entity.startDate);
+                    holidaylist.add(holidayInfo);
+                }
+            }
+        }).start();
+        apiReader.holiday(apiKey, year, month, new ApiReader.ApiResponseListener() { //api로 국경일 불러옴
             @Override
             public void onSuccess(String response) {
                 ParsingApiData.parseXmlDataFromHoliday(response);
@@ -186,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        holidaylist.clear();
                         holidaylist.addAll(parsedHolidayList);
 
                         runOnUiThread(new Runnable() {
