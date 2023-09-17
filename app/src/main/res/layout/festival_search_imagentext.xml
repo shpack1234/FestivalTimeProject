@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:id="@+id/search_imagentext">
 
-
         <ImageButton
             android:id="@+id/search_image"
             android:layout_width="96dp"
@@ -32,7 +31,4 @@
             android:maxLines="1"
             android:textSize="12sp"
             android:textColor="@color/black"/>
-
-
-
 </LinearLayout>
