@@ -43,7 +43,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.festivaltime.festivaltimeproject.calendaract.CalendarCategory;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
@@ -52,8 +51,6 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -435,9 +432,16 @@ public class MainActivity extends AppCompatActivity {
                                         ParsingApiData.parseXmlDataFromDetailInfo2(response);
                                         //Log.d("festivalinfo response: ", response);
                                         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                                        LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+                                        LinkedHashMap<String, String> firstMap = null;
+                                        if (!parsedFestivalList.isEmpty()) {
+                                            firstMap = parsedFestivalList.get(0);
+                                            String detailInfo = firstMap.get("infotext");
+                                        } else {
+                                            // Handle the case where the list is empty
+                                        }
 
-                                        String detailInfo = firstMap.get("infotext");
+
+
                                         //문자열길이 일정수 넘어가면 ...형태로 표시
                                         if (detailInfo != null && detailInfo.length() > 40) {
                                             detailInfo = detailInfo.substring(0, 40) + "...";
