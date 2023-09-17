@@ -121,7 +121,20 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
                 dialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        //화면 바로 적용 위한 코드 작성 부분
+                        FetchCategoryTask fetchCategoryTask = new FetchCategoryTask(mContext, categoryDao);
+                        fetchCategoryTask.fetchCategories(new FetchCategoryTask.FetchCategoryTaskListener() {
+                            @Override
+                            public void onFetchCompleted(List<CalendarCategoryEntity> categoryList) {
+                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 카테고리를 가져온 후 UI 업데이트 코드를 실행
+                                        updateUI();
+                                    }
+                                });
+                            }
+                        });
+
                     }
                 });
             }

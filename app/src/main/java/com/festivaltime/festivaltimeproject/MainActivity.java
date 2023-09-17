@@ -170,69 +170,107 @@ public class MainActivity extends AppCompatActivity {
         Date date = new Date();
         String todaydate = sdf2.format(date);
 
+        // 날짜 문자열에서 년도와 월 추출
+        String year = todaydate.substring(0, 4);
+        String month = todaydate.substring(4, 6);
+
         LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
 
-        for (int images = 0; images < 5; images++) {
-            List<HashMap<String, String>> festivalList = new ArrayList<>();
-            View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
-            ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
+        List<HashMap<String, String>> holidaylist = new ArrayList<>();
+        apiReader.holiday(apiKey, year, month, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                ParsingApiData.parseXmlDataFromHoliday(response);
+                List<LinkedHashMap<String, String>> parsedHolidayList = ParsingApiData.getHolidayList();
 
-            int finalImages = images;
-            apiReader.Festivallit(apiKey, todaydate, new ApiReader.ApiResponseListener() {
-                @Override
-                public void onSuccess(String response) {
-                    //Log.d("main response", response);
-                    ParsingApiData.parseXmlDataFromFestival(response);
-                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        holidaylist.clear();
+                        holidaylist.addAll(parsedHolidayList);
 
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            festivalList.clear();
-                            festivalList.addAll(parsedFestivalList);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (holidaylist.size()>0){
+                                    int maxItems = Math.min(holidaylist.size(), 5);
+                                    for (int i=0; i<maxItems; i++){
+                                        List<HashMap<String, String>> festivalList = new ArrayList<>();
+                                        View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
+                                        ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
+                                        int finalImages = i;
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (festivalList.size() > 0) {
-                                        HashMap<String, String> festivalInfo = festivalList.get(finalImages);
+                                        HashMap<String, String> holidayInfo = holidaylist.get(i);
 
-                                        String id = festivalInfo.get("contentid");
-                                        String repImage = festivalInfo.get("img");
+                                        String name = holidayInfo.get("dateName");
+                                        String date = holidayInfo.get("locdate");
 
-                                        if (repImage == null || repImage.isEmpty()) {
-                                            imageButton.setImageResource(R.drawable.first_image_example);
-                                        } else {
-                                            Glide
-                                                    .with(MainActivity.this)
-                                                    .load(repImage)
-                                                    .transform(new CenterCrop(), new RoundedCorners(30))
-                                                    .placeholder(R.drawable.first_image_example)
-                                                    .into(imageButton);
-                                        }
+                                        Log.d("holiday name", name);
+                                        Log.d("holiday date", date);
 
-                                        imageButton.setOnClickListener(new View.OnClickListener() {
+                                        apiReader.Festivallit(apiKey, date, new ApiReader.ApiResponseListener() {
                                             @Override
-                                            public void onClick(View v) {
-                                                String contentId = id;
-                                                navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                            public void onSuccess(String response) {
+                                                //Log.d("main response", response);
+                                                ParsingApiData.parseXmlDataFromFestival(response);
+                                                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                                                executor.execute(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        festivalList.clear();
+                                                        festivalList.addAll(parsedFestivalList);
+
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                if (festivalList.size() > 0) {
+                                                                    HashMap<String, String> festivalInfo = festivalList.get(finalImages);
+
+                                                                    String id = festivalInfo.get("contentid");
+                                                                    String repImage = festivalInfo.get("img");
+
+                                                                    if (repImage == null || repImage.isEmpty()) {
+                                                                        imageButton.setImageResource(R.drawable.first_image_example);
+                                                                    } else {
+                                                                        Glide.with(MainActivity.this).load(repImage).transform(new CenterCrop(), new RoundedCorners(30)).placeholder(R.drawable.first_image_example).into(imageButton);
+                                                                    }
+
+                                                                    imageButton.setOnClickListener(new View.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(View v) {
+                                                                            String contentId = id;
+                                                                            navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                });
+
+                                            }
+
+                                            @Override
+                                            public void onError(String error) {
+                                                Log.e(TAG, "API Error: " + error);
                                             }
                                         });
+                                        vacationFestival.addView(sliderItemView);
                                     }
                                 }
-                            });
-                        }
-                    });
 
-                }
+                            }
+                        });
+                    }
+                });
+            }
 
-                @Override
-                public void onError(String error) {
-                    Log.e(TAG, "API Error: " + error);
-                }
-            });
-            vacationFestival.addView(sliderItemView);
-        }
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Holiday API Error: " + error);
+            }
+        });
 
         executor = new Executor() {
             @Override
@@ -240,7 +278,6 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(command).start();
             }
         };
-
 
         String[] mainFestivalArea = {"서울", "경기도", "부산", "전라북도"};
         String[] mainFestivalAreaCode = {"1", "31", "6", "37"};
@@ -271,7 +308,9 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
+        bottomNavigationView.setOnItemSelectedListener(item ->
+
+        {
             if (item.getItemId() == R.id.action_home) {
                 navigateToMainActivity(MainActivity.this);
                 return true;
@@ -318,10 +357,7 @@ public class MainActivity extends AppCompatActivity {
                                 ImageButton favoriteaddButton = festivalBox.findViewById(R.id.favorite_addButton);
                                 TextView stateTextView = festivalBox.findViewById(R.id.festival_state);
 
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                        LinearLayout.LayoutParams.MATCH_PARENT,
-                                        LinearLayout.LayoutParams.WRAP_CONTENT
-                                );
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                                 layoutParams.setMargins(0, 0, 0, 40);
                                 festivalBox.setLayoutParams(layoutParams);
@@ -329,6 +365,10 @@ public class MainActivity extends AppCompatActivity {
                                 String title = festivalInfo.get("title");
                                 String id = festivalInfo.get("contentid");
                                 String address1 = festivalInfo.get("address1");
+                                //문자열길이 일정수 넘어가면 ...형태로 표시
+                                if (address1 != null && address1.length() > 20) {
+                                    address1 = address1.substring(0, 20) + "...";
+                                }
                                 String repImage = festivalInfo.get("img");
                                 String startDateStr = festivalInfo.get("eventstartdate");
                                 String endDateStr = festivalInfo.get("eventenddate");
@@ -367,12 +407,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (repImage == null || repImage.isEmpty()) {
                                     searchImageButton.setImageResource(R.drawable.ic_image);
                                 } else {
-                                    Glide
-                                            .with(MainActivity.this)
-                                            .load(repImage)
-                                            .transform(new CenterCrop(), new RoundedCorners(30))
-                                            .placeholder(R.drawable.ic_image)
-                                            .into(searchImageButton);
+                                    Glide.with(MainActivity.this).load(repImage).transform(new CenterCrop(), new RoundedCorners(30)).placeholder(R.drawable.ic_image).into(searchImageButton);
                                 }
 
                                 apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
@@ -769,15 +804,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //시작 시간-날짜 변화시
-        StartDatePicker.init(StartDatePicker.getYear(), StartDatePicker.getMonth(), StartDatePicker.getDayOfMonth(),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int month, int day) {
-                        startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+        StartDatePicker.init(StartDatePicker.getYear(), StartDatePicker.getMonth(), StartDatePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int month, int day) {
+                startdateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
 
-                        formattedStartDate = String.format("%04d%02d%02d", year, month + 1, day);
-                    }
-                });
+                formattedStartDate = String.format("%04d%02d%02d", year, month + 1, day);
+            }
+        });
 
 
         //시작 시간-시간 변화시
@@ -797,15 +831,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //end 시간-날짜 변화시
-        EndDatePicker.init(EndDatePicker.getYear(), EndDatePicker.getMonth(), EndDatePicker.getDayOfMonth(),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int month, int day) {
-                        enddateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
+        EndDatePicker.init(EndDatePicker.getYear(), EndDatePicker.getMonth(), EndDatePicker.getDayOfMonth(), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int month, int day) {
+                enddateClick.setText(String.format("%d.%d.%d", year, month + 1, day));
 
-                        formattedEndDate = String.format("%04d%02d%02d", year, month + 1, day);
-                    }
-                });
+                formattedEndDate = String.format("%04d%02d%02d", year, month + 1, day);
+            }
+        });
 
         //end 시간-시간 변화시
         EndTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {

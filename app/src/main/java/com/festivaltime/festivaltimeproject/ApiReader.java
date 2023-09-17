@@ -832,4 +832,44 @@ public class ApiReader {
         }
 
     }
+
+    //휴가 한국천문연구원API
+    public void holiday(String serviceKey, String Solyear, String SolMonth, final ApiResponseListener listener) {
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B090041")
+                    .addPathSegment("openapi")
+                    .addPathSegment("service")
+                    .addPathSegment("SpcdeInfoService")
+                    .addPathSegment("getHoliDeInfo")
+                    .addQueryParameter("serviceKey", serviceKey)
+                    .addQueryParameter("solYear", Solyear)
+                    .addQueryParameter("solMonth", SolMonth);
+            String url = urlBuilder.build().toString();
+            Log.d("url", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+        }
+    }
 }

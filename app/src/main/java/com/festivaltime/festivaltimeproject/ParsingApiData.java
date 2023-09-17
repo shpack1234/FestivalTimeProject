@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class ParsingApiData {
     private static List<LinkedHashMap<String, String>> festivalList = new ArrayList<>();
+    private static List<LinkedHashMap<String, String>> holidaylist = new ArrayList<>();
 
     public static void parseXmlDataFromSearchKeyword(String xmlData) {
         festivalList.clear();
@@ -734,8 +735,43 @@ public class ParsingApiData {
         }
     }
 
+    public static void parseXmlDataFromHoliday(String xmlData) {
+        holidaylist.clear();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(is);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList itemList = rootElement.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element itemElement = (Element) itemNode;
+                    LinkedHashMap<String, String> holidayInfo = new LinkedHashMap<>();
+
+                    String dateName = getElementText(itemElement, "dateName");
+                    String locdate = getElementText(itemElement, "locdate");
+
+                    holidayInfo.put("dateName", dateName);
+                    holidayInfo.put("locdate", locdate);
+
+                    holidaylist.add(holidayInfo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<LinkedHashMap<String, String>> getFestivalList() {
         return festivalList;
+    }
+
+    public static List<LinkedHashMap<String, String>> getHolidayList() {
+        return holidaylist;
     }
 
     private static String getElementText(Element element, String tagName) {

@@ -31,17 +31,6 @@
             android:gravity="left|center"
             android:textSize="13sp" />
 
-        <Switch
-            android:id="@+id/category_box_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:checked="false"
-            android:layout_gravity="center"
-            android:thumb="@drawable/shape_switch_thumb"
-            android:track="@drawable/selector_switch"
-            app:switchMinWidth="5dp"/>
-
         <ImageButton
             android:id="@+id/category_deleteButton"
             android:layout_width="0dp"
