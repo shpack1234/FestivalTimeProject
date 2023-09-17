@@ -5,24 +5,93 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
+    private UserDataBase db;
+    private UserDao userDao;
+    private String userId;
+
+    private UserEntity loadedUser;
+
+    private boolean isLogin;
+
+    boolean userExist = false;
+
     public ImageButton Back_Btn;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString("userId", null);
+
+        db = UserDataBaseSingleton.getInstance(getApplicationContext());
+        userDao = db.userDao();
+
+        EditText currentPW = findViewById(R.id.currentPW);
+        EditText changePW = findViewById(R.id.changePW);
+        EditText checkPW = findViewById(R.id.checkPW);
+        Button changeBtn = findViewById(R.id.change_button);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                loadedUser = userDao.getUserInfoById(userId);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        changeBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (currentPW.getText().toString().equals(loadedUser.getPassword())) {
+                                    if (changePW.getText().toString().equals(checkPW.getText().toString())) {
+                                        loadedUser.setPassword(changePW.getText().toString());
+                                        executor.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                userDao.insertOrUpdate(loadedUser);
+                                            }
+                                        });
+                                        finish();
+                                    } else {
+                                        checkPW.setError("비밀번호가 일치하지 않습니다.");
+                                    }
+                                } else {
+                                    currentPW.setError("잘못 된 비밀번호 입니다.");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
 
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -34,12 +103,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        Back_Btn=findViewById(R.id.before_btn);
+        Back_Btn = findViewById(R.id.before_btn);
 
         Back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {   onBackPressed(); }
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
 

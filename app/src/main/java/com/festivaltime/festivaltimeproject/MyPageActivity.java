@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -153,6 +154,25 @@ public class MyPageActivity extends AppCompatActivity {
     }
 
     public void changePWOnClick(View v) {
-        navigateToChangePasswordActivity(MyPageActivity.this);
+        if (userExist) {
+            if (!isLogin) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                navigateToChangePasswordActivity(MyPageActivity.this);
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 }
