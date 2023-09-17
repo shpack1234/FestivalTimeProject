@@ -18,9 +18,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.BaseKeyListener;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,6 +72,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private CalendarDatabase calendarDatabase;
     private String userId;
     private Executor executor;
+    private Button Back_Btn;
 
     List<LinkedHashMap<String, String>> festivalList;
 
@@ -87,7 +90,10 @@ public class FavoriteActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
         String apiKey = getResources().getString(R.string.api_key);
+
+        Back_Btn=findViewById(R.id.before_btn);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("userId", null);
@@ -154,6 +160,12 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
+        Back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);  //하단 바 navigate 처리
         bottomNavigationView.setSelectedItemId(R.id.action_favorite);

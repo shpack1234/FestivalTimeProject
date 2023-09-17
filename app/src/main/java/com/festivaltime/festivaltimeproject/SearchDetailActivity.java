@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
@@ -310,7 +312,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                            TextView overviewTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
                             ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
                             ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
@@ -324,21 +326,23 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
+                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                            if (location != null && location.length() > 20) {
+                                location = location.substring(0, 20) + "...";
+                            }
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             String startDateStr = festivalInfo.get("eventstartdate");
                             String endDateStr = festivalInfo.get("eventenddate");
                             titleTextView.setText(title);
                             locationTextView.setText(location);
-                            idTextView.setText(id);
 
                             Log.d(TAG, "Rep Image URL: " + repImage);
                             if (repImage == null || repImage.isEmpty()) {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
-                                Glide
-                                        .with(SearchDetailActivity.this)
+                                Glide.with(SearchDetailActivity.this)
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
@@ -397,13 +401,46 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     Log.e(TAG, "API Error: " + error);
                                 }
                             });
+                            apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    ParsingApiData.parseXmlDataFromDetailInfo2(response);
+                                    //Log.d("festivalinfo response: ", response);
+                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+
+                                    String detailInfo = firstMap.get("infotext");
+                                    //문자열길이 일정수 넘어가면 ...형태로 표시
+                                    if (detailInfo != null && detailInfo.length() > 40) {
+                                        detailInfo = detailInfo.substring(0, 40) + "...";
+                                    }
+
+
+                                    //html 형태 변환하여 setText
+                                    if (detailInfo != null) {
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                        } else {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo));
+                                        }
+                                    } else {
+                                        // detailInfo가 null인 경우에 대한 처리 추가
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.e(MotionEffect.TAG, "API Error: " + error);
+                                }
+                            });
+
                             festivalContainer.addView(festivalInfoBox);
 
                             festivalInfoBox.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     // 클릭 시 contentid 값을 가져오는 작업 수행
-                                    String contentId = idTextView.getText().toString();
+                                    String contentId = id;
                                     // 가져온 contentid 값을 사용하여 원하는 작업을 수행
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
@@ -416,7 +453,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            String contentId = idTextView.getText().toString();
+                                            String contentId = id;
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
                                                 if (loadedUser.getIsLogin()) {
@@ -658,7 +695,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                            TextView overviewTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
                             ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
                             ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
@@ -678,7 +715,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             final String[] finalendDate = {null};
                             titleTextView.setText(title);
                             locationTextView.setText(location);
-                            idTextView.setText(id);
 
                             Log.d(TAG, "Rep Image URL: " + repImage);
                             if (repImage == null || repImage.isEmpty()) {
@@ -747,13 +783,47 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     Log.e(TAG, "API Error: " + error);
                                 }
                             });
+
+                            apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    ParsingApiData.parseXmlDataFromDetailInfo2(response);
+                                    //Log.d("festivalinfo response: ", response);
+                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+
+                                    String detailInfo = firstMap.get("infotext");
+                                    //문자열길이 일정수 넘어가면 ...형태로 표시
+                                    if (detailInfo != null && detailInfo.length() > 40) {
+                                        detailInfo = detailInfo.substring(0, 40) + "...";
+                                    }
+
+
+                                    //html 형태 변환하여 setText
+                                    if (detailInfo != null) {
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                        } else {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo));
+                                        }
+                                    } else {
+                                        // detailInfo가 null인 경우에 대한 처리 추가
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.e(MotionEffect.TAG, "API Error: " + error);
+                                }
+                            });
+
                             festivalContainer.addView(festivalInfoBox);
 
                             festivalInfoBox.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     // 클릭 시 contentid 값을 가져오는 작업 수행
-                                    String contentId = idTextView.getText().toString();
+                                    String contentId = id;
                                     // 가져온 contentid 값을 사용하여 원하는 작업을 수행
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
@@ -766,7 +836,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            String contentId = idTextView.getText().toString();
+                                            String contentId = id;
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
                                                 if (loadedUser.getIsLogin()) {
@@ -997,7 +1067,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                            TextView overviewTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
                             ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
                             ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
@@ -1017,7 +1087,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             final String[] finalendDate = {null};
                             titleTextView.setText(title);
                             locationTextView.setText(location);
-                            idTextView.setText(id);
 
                             Log.d(TAG, "Rep Image URL: " + repImage);
                             if (repImage == null || repImage.isEmpty()) {
@@ -1086,13 +1155,46 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     Log.e(TAG, "API Error: " + error);
                                 }
                             });
+
+                            apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    ParsingApiData.parseXmlDataFromDetailInfo2(response);
+                                    //Log.d("festivalinfo response: ", response);
+                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+
+                                    String detailInfo = firstMap.get("infotext");
+                                    //문자열길이 일정수 넘어가면 ...형태로 표시
+                                    if (detailInfo != null && detailInfo.length() > 40) {
+                                        detailInfo = detailInfo.substring(0, 40) + "...";
+                                    }
+
+
+                                    //html 형태 변환하여 setText
+                                    if (detailInfo != null) {
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                        } else {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo));
+                                        }
+                                    } else {
+                                        // detailInfo가 null인 경우에 대한 처리 추가
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.e(MotionEffect.TAG, "API Error: " + error);
+                                }
+                            });
                             festivalContainer.addView(festivalInfoBox);
 
                             festivalInfoBox.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     // 클릭 시 contentid 값을 가져오는 작업 수행
-                                    String contentId = idTextView.getText().toString();
+                                    String contentId = id;
                                     // 가져온 contentid 값을 사용하여 원하는 작업을 수행
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
@@ -1105,7 +1207,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            String contentId = idTextView.getText().toString();
+                                            String contentId = id;
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
                                                 if (loadedUser.getIsLogin()) {
@@ -1365,7 +1467,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                            TextView idTextView = festivalInfoBox.findViewById(R.id.festival_overview);
+                            TextView overviewTextView = festivalInfoBox.findViewById(R.id.festival_overview);
                             ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
                             ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
                             ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
@@ -1378,7 +1480,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             final String[] finalendDate = {null};
                             titleTextView.setText(title);
                             locationTextView.setText(location);
-                            idTextView.setText(id);
+
 
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -1454,6 +1556,39 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     Log.e(TAG, "API Error: " + error);
                                 }
                             });
+
+                            apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    ParsingApiData.parseXmlDataFromDetailInfo2(response);
+                                    //Log.d("festivalinfo response: ", response);
+                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+
+                                    String detailInfo = firstMap.get("infotext");
+                                    //문자열길이 일정수 넘어가면 ...형태로 표시
+                                    if (detailInfo != null && detailInfo.length() > 40) {
+                                        detailInfo = detailInfo.substring(0, 40) + "...";
+                                    }
+
+
+                                    //html 형태 변환하여 setText
+                                    if (detailInfo != null) {
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                        } else {
+                                            overviewTextView.setText(Html.fromHtml(detailInfo));
+                                        }
+                                    } else {
+                                        // detailInfo가 null인 경우에 대한 처리 추가
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.e(MotionEffect.TAG, "API Error: " + error);
+                                }
+                            });
                             festivalList.add(festivalInfo);
                             festivalContainer.addView(festivalInfoBox);
 
@@ -1461,7 +1596,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     // 클릭 시 contentid 값을 가져오는 작업 수행
-                                    String contentId = idTextView.getText().toString();
+                                    String contentId = id;
                                     // 가져온 contentid 값을 사용하여 원하는 작업을 수행
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
@@ -1472,7 +1607,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            String contentId = idTextView.getText().toString();
+                                            String contentId = id;
                                             loadedUser = userDao.getUserInfoById(userId);
                                             if (loadedUser != null) {
                                                 if (loadedUser.getIsLogin()) {

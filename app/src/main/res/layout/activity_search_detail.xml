@@ -15,7 +15,7 @@
             android:id="@+id/Entire_view_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="23dp"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -33,7 +33,7 @@
         android:layout_height="42dp"
         android:src="@drawable/ic_back_before"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="17dp"
         android:onClick="customOnClick"
         android:background="@android:color/transparent"
         tools:ignore="SpeakableTextPresentCheck"/>

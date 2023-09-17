@@ -230,7 +230,7 @@
                         android:layout_weight="1"
                         android:background="#00ff0000"
                         android:text="@string/cal_setting"
-                        android:textColor="@color/black"
+                        android:textColor="@color/purple_700"
                         android:textSize="13sp" />
 
                     <View
