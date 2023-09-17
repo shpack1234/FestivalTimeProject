@@ -33,10 +33,8 @@
         android:id="@+id/before_btn"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:src="@drawable/ic_back_before"
         android:layout_marginStart="4dp"
         android:layout_marginTop="17dp"
-        android:onClick="customOnClick"
         android:background="@android:color/transparent"
         tools:ignore="SpeakableTextPresentCheck"/>
 
@@ -50,20 +48,35 @@
 
         <LinearLayout
             android:id="@+id/festival_container"
-            android:layout_width="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="80dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/no_info_msg"
+            <LinearLayout
+                android:id="@+id/festival_container1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_gravity="center"/>
+                android:orientation="vertical"
+                android:layout_marginTop="80dp">
+
+                <TextView
+                    android:id="@+id/no_info_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
 
         </LinearLayout>
+
+
+
 
     </ScrollView>
 

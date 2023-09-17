@@ -72,10 +72,10 @@ public class FavoriteActivity extends AppCompatActivity {
     private CalendarDatabase calendarDatabase;
     private String userId;
     private Executor executor;
-    private Button Back_Btn;
 
     List<LinkedHashMap<String, String>> festivalList;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +93,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
         String apiKey = getResources().getString(R.string.api_key);
 
-        Back_Btn=findViewById(R.id.before_btn);
-
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("userId", null);
 
@@ -105,6 +103,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
         TextView textView = findViewById(R.id.no_info_msg);
 
         AsyncTask.execute(new Runnable() {
@@ -157,13 +156,6 @@ public class FavoriteActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }
-        });
-
-        Back_Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
             }
         });
 
