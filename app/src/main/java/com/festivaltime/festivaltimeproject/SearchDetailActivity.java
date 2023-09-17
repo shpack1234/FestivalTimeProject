@@ -337,7 +337,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             titleTextView.setText(title);
                             locationTextView.setText(location);
 
-                            Log.d(TAG, "Rep Image URL: " + repImage);
                             if (repImage == null || repImage.isEmpty()) {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);
                             } else {

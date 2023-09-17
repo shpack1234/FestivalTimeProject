@@ -34,6 +34,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
@@ -218,6 +221,11 @@ public class FavoriteActivity extends AppCompatActivity {
                 festivalRepImage.setImageResource(R.drawable.ic_image);
             } else {
                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
+                Glide.with(FavoriteActivity.this)
+                        .load(repImage)
+                        .transform(new CenterCrop(), new RoundedCorners(30))
+                        .placeholder(R.drawable.ic_image)
+                        .into(festivalRepImage);
             }
             festivalContainer.addView(favoriteInfoBox);
 
