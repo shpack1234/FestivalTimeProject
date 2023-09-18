@@ -227,17 +227,6 @@ public class FavoriteActivity extends AppCompatActivity {
                         .placeholder(R.drawable.ic_image)
                         .into(festivalRepImage);
             }
-            festivalContainer.addView(favoriteInfoBox);
-
-            favoriteInfoBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 클릭 시 contentid 값을 가져오는 작업 수행
-                    String contentId = idTextView.getText().toString();
-                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                    navigateToDetailFestivalActivity(FavoriteActivity.this, contentId);
-                }
-            });
 
             apiReader.detailIntro(apiKey, id, new ApiReader.ApiResponseListener() {
                 @Override
@@ -253,11 +242,38 @@ public class FavoriteActivity extends AppCompatActivity {
                         finalstartDate[0] = introInfo.get("eventstartdate");
                         finalendDate[0] = introInfo.get("eventenddate");
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LinearLayout festivalContainer = findViewById(R.id.festival_container);
+                            festivalContainer.removeAllViews();
+
+                            for (LinkedHashMap<String, String> festivalInfo : festivalList) {   //API 파싱한 데이터를 해시맵 리스트에 저장한 뒤 불러옴
+                                View favoriteInfoBox = getLayoutInflater().inflate(R.layout.favorite_info_box, null);
+                                TextView locationTextView = favoriteInfoBox.findViewById(R.id.festival_location);
+                                String location = festivalInfo.get("eventplace");
+                                locationTextView.setText(location);
+                            }
+                        }
+                    });
+
                 }
 
                 @Override
                 public void onError(String error) {
                     Log.e(TAG, "API Error: " + error);
+                }
+            });
+
+            festivalContainer.addView(favoriteInfoBox);
+
+            favoriteInfoBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 클릭 시 contentid 값을 가져오는 작업 수행
+                    String contentId = id;
+                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                    navigateToDetailFestivalActivity(FavoriteActivity.this, contentId);
                 }
             });
 
