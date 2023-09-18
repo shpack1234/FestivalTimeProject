@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         Button loginButton = findViewById(R.id.login_button);
+        Button signupButton=findViewById(R.id.login_sign_up);
         EditText userName = findViewById(R.id.login_nickname);
         EditText userPassword = findViewById(R.id.login_password);
 
@@ -51,6 +53,17 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        signupButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(loadedUser==null) {
+                                    navigateToSomeActivity.navigateToPrivacyActivity(LoginActivity.this, null);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "이미 회원 가입한 기기 입니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
                         loginButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -65,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                     navigateToSomeActivity.navigateToMainActivity(LoginActivity.this);
                                 } else if (loadedUser.getUserName().equals(userName.getText().toString())) {
-                                    userName.setError("해당 닉네임이 존재하지 않습니다.");
+                                    userName.setError("해당 닉네임이 존재 하지 않습니다.");
                                 } else {
                                     userPassword.setError("잘못된 비밀번호입니다.");
                                 }
@@ -75,5 +88,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void customOnClick(View view) {
+        finish();
     }
 }

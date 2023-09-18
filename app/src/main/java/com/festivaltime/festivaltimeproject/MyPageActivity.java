@@ -134,7 +134,7 @@ public class MyPageActivity extends AppCompatActivity {
         navigateToInquiryActivity(MyPageActivity.this);
     }
 
-    public void PrivacyOnClick(View v) {
+    public void LoginOnClick(View v) {
         Log.d("st", String.valueOf(isLogin) + String.valueOf(userExist));
 
 
@@ -145,7 +145,7 @@ public class MyPageActivity extends AppCompatActivity {
                 navigateToPrivacyActivity(MyPageActivity.this, null);
             }
         } else {
-            navigateToPrivacyActivity(MyPageActivity.this, null);
+            navigateToLoginActivity(MyPageActivity.this, null);
         }
     }
 
