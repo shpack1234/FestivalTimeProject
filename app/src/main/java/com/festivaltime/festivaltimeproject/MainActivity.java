@@ -208,9 +208,9 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (holidaylist.size()>0){
+                                if (holidaylist.size() > 0) {
                                     int maxItems = Math.min(holidaylist.size(), 5);
-                                    for (int i=0; i<maxItems; i++){
+                                    for (int i = 0; i < maxItems; i++) {
                                         List<HashMap<String, String>> festivalList = new ArrayList<>();
                                         View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
                                         ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
@@ -432,30 +432,31 @@ public class MainActivity extends AppCompatActivity {
                                         ParsingApiData.parseXmlDataFromDetailInfo2(response);
                                         //Log.d("festivalinfo response: ", response);
                                         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                                        LinkedHashMap<String, String> firstMap = null;
 
-                                        if (!parsedFestivalList.isEmpty()) {
-                                            LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
-                                            String detailInfo = firstMap.get("infotext");
-
-                                            //문자열길이 일정수 넘어가면 ...형태로 표시
-                                            if (detailInfo != null && detailInfo.length() > 40) {
-                                                detailInfo = detailInfo.substring(0, 40) + "...";
-                                            }
-
-                                            //html 형태 변환하여 setText
-                                            if (detailInfo != null) {
-                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                                    overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
-                                                } else {
-                                                    overviewTextView.setText(Html.fromHtml(detailInfo));
-                                                }
-                                            } else {
-                                                // detailInfo가 null인 경우에 대한 처리 추가
-                                            }
-
-                                        } else {
-                                            // Handle the case where the list is empty
+                                        try {
+                                            firstMap = parsedFestivalList.get(0);
+                                        } catch (IndexOutOfBoundsException e) {
                                         }
+                                        String detailInfo = firstMap.get("infotext");
+
+                                        //문자열길이 일정수 넘어가면 ...형태로 표시
+                                        if (detailInfo != null && detailInfo.length() > 40) {
+                                            detailInfo = detailInfo.substring(0, 40) + "...";
+                                        }
+
+                                        //html 형태 변환하여 setText
+                                        if (detailInfo != null) {
+                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                                overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                            } else {
+                                                overviewTextView.setText(Html.fromHtml(detailInfo));
+                                            }
+                                        } else {
+                                            // detailInfo가 null인 경우에 대한 처리 추가
+                                        }
+
+
                                     }
 
                                     @Override
