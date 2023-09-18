@@ -819,7 +819,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 String enddate = enddateClick.getText().toString();
 
                 // 시작 및 종료 날짜-시간 문자열을 적절한 형식으로 변환
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
                 try {
                     Date startDate = sdf.parse(startdate);
                     Date endDate = sdf.parse(enddate);

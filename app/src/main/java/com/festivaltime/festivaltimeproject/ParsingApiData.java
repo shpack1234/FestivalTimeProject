@@ -305,7 +305,7 @@ public class ParsingApiData {
 
                     festivalInfo.put("sponsor1tel", tel);
                     festivalInfo.put("eventstartdate", startdate);
-                    festivalInfo.put("eventstartdate", enddate);
+                    festivalInfo.put("eventenddate", enddate);
                     festivalInfo.put("playtime", playtime);
                     festivalInfo.put("eventplace", place);
                     festivalInfo.put("usetimefestival", usetime);
