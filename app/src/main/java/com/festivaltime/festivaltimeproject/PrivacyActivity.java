@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -137,34 +138,48 @@ public class PrivacyActivity extends AppCompatActivity {
                     RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                     gender = selectedRadioButton.getText().toString();
 
-                    UserEntity userEntity;
-                    if (loadedUser == null) {
-                        // 신규 사용자
-                        userEntity = new UserEntity();
-                        userEntity.setUserId(userId);
-                        userEntity.setUserFavoriteFestival(new ArrayList<>());
-                        userEntity.setPassword(passwordText);
-                        userEntity.setIsLogin(true);
+                    Log.d("name", name);
+
+                    if(name.length()<2) {
+                        userName.setError("닉네임은 최소 2자 이상 6자 이하로 이루어져 있어야 합니다.");
+                    } else if(loadedUser.getUserId().equals("000000") && !name.equals("admin")) {
+                        userName.setError("admin 계정의 닉네임은 변결할 수 없습니다.");
+                    } else if(gender==null) {
+                        Toast.makeText(getApplicationContext(), "성별을 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     } else {
-                        // 기존 사용자
-                        userEntity = loadedUser;
-                        userEntity.setUserId(loadedUser.getUserId());
-                    }
-                    userEntity.setUserName(name);
-                    userEntity.setUserBirth(birth);
-                    userEntity.setUserGender(gender);
-
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            userDao.insertOrUpdate(userEntity);
+                        UserEntity userEntity;
+                        if (loadedUser == null) {
+                            // 신규 사용자
+                            userEntity = new UserEntity();
+                            userEntity.setUserId(userId);
+                            userEntity.setUserFavoriteFestival(new ArrayList<>());
+                            userEntity.setPassword(passwordText);
+                            userEntity.setIsLogin(true);
+                        } else {
+                            // 기존 사용자
+                            userEntity = loadedUser;
+                            userEntity.setUserId(loadedUser.getUserId());
                         }
-                    });
+                        userEntity.setUserName(name);
+                        userEntity.setUserBirth(birth);
+                        userEntity.setUserGender(gender);
 
-                    finish();
-                    navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                userDao.insertOrUpdate(userEntity);
+                            }
+                        });
+
+                        finish();
+                        navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
+                    }
                 }
             }
         });
+    }
+
+    public void customOnClick(View view) {
+        finish();
     }
 }

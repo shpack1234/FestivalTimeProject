@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -69,21 +70,25 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         changeBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (currentPW.getText().toString().equals(loadedUser.getPassword())) {
-                                    if (changePW.getText().toString().equals(checkPW.getText().toString())) {
-                                        loadedUser.setPassword(changePW.getText().toString());
-                                        executor.execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                userDao.insertOrUpdate(loadedUser);
-                                            }
-                                        });
-                                        finish();
-                                    } else {
-                                        checkPW.setError("비밀번호가 일치하지 않습니다.");
-                                    }
+                                if(loadedUser.getUserId().equals("000000")) {
+                                    Toast.makeText(getApplicationContext(), "admin 계정의 비밀번호는 변경할 수 없습니다.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    currentPW.setError("잘못 된 비밀번호 입니다.");
+                                    if (currentPW.getText().toString().equals(loadedUser.getPassword())) {
+                                        if (changePW.getText().toString().equals(checkPW.getText().toString())) {
+                                            loadedUser.setPassword(changePW.getText().toString());
+                                            executor.execute(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    userDao.insertOrUpdate(loadedUser);
+                                                }
+                                            });
+                                            finish();
+                                        } else {
+                                            checkPW.setError("비밀번호가 일치하지 않습니다.");
+                                        }
+                                    } else {
+                                        currentPW.setError("잘못 된 비밀번호 입니다.");
+                                    }
                                 }
                             }
                         });

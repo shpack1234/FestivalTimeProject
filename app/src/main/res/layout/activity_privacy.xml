@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".PrivacyActivity">
 
+    <ImageButton
+        android:id="@+id/before_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="@android:color/transparent"
+        android:onClick="customOnClick"
+        android:src="@drawable/ic_back_before"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
