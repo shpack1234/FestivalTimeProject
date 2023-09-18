@@ -67,20 +67,24 @@ public class LoginActivity extends AppCompatActivity {
                         loginButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (loadedUser.getUserName().equals(userName.getText().toString()) && loadedUser.getPassword().equals(userPassword.getText().toString())) {
-                                    loadedUser.setIsLogin(true);
-                                    executor.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            userDao.insertOrUpdate(loadedUser);
-                                        }
-                                    });
-                                    finish();
-                                    navigateToSomeActivity.navigateToMainActivity(LoginActivity.this);
-                                } else if (loadedUser.getUserName().equals(userName.getText().toString())) {
-                                    userName.setError("해당 닉네임이 존재 하지 않습니다.");
+                                if(loadedUser==null) {
+                                    Toast.makeText(getApplicationContext(), "회원 가입 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    userPassword.setError("잘못된 비밀번호입니다.");
+                                    if (loadedUser.getUserName().equals(userName.getText().toString()) && loadedUser.getPassword().equals(userPassword.getText().toString())) {
+                                        loadedUser.setIsLogin(true);
+                                        executor.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                userDao.insertOrUpdate(loadedUser);
+                                            }
+                                        });
+                                        finish();
+                                        navigateToSomeActivity.navigateToMainActivity(LoginActivity.this);
+                                    } else if (loadedUser.getUserName().equals(userName.getText().toString())) {
+                                        userName.setError("잘못된 닉네임 입니다.");
+                                    } else {
+                                        userPassword.setError("잘못된 비밀번호 입니다.");
+                                    }
                                 }
                             }
                         });
