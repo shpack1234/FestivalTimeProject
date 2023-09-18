@@ -432,31 +432,29 @@ public class MainActivity extends AppCompatActivity {
                                         ParsingApiData.parseXmlDataFromDetailInfo2(response);
                                         //Log.d("festivalinfo response: ", response);
                                         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                                        LinkedHashMap<String, String> firstMap = null;
+
                                         if (!parsedFestivalList.isEmpty()) {
-                                            firstMap = parsedFestivalList.get(0);
+                                            LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
                                             String detailInfo = firstMap.get("infotext");
+
+                                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                                            if (detailInfo != null && detailInfo.length() > 40) {
+                                                detailInfo = detailInfo.substring(0, 40) + "...";
+                                            }
+
+                                            //html 형태 변환하여 setText
+                                            if (detailInfo != null) {
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                                    overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                                } else {
+                                                    overviewTextView.setText(Html.fromHtml(detailInfo));
+                                                }
+                                            } else {
+                                                // detailInfo가 null인 경우에 대한 처리 추가
+                                            }
+
                                         } else {
                                             // Handle the case where the list is empty
-                                        }
-
-
-
-                                        //문자열길이 일정수 넘어가면 ...형태로 표시
-                                        if (detailInfo != null && detailInfo.length() > 40) {
-                                            detailInfo = detailInfo.substring(0, 40) + "...";
-                                        }
-
-
-                                        //html 형태 변환하여 setText
-                                        if (detailInfo != null) {
-                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                                overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
-                                            } else {
-                                                overviewTextView.setText(Html.fromHtml(detailInfo));
-                                            }
-                                        } else {
-                                            // detailInfo가 null인 경우에 대한 처리 추가
                                         }
                                     }
 
