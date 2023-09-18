@@ -649,15 +649,11 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
         // 시작 날짜 선택 버튼
         Button startdateClick = dialogView.findViewById(R.id.dialog_popup_start_date);
-        Button starttimeClick = dialogView.findViewById(R.id.dialog_popup_start_time);
         Button enddateClick = dialogView.findViewById(R.id.dialog_popup_end_date);
-        Button endtimeClick = dialogView.findViewById(R.id.dialog_popup_end_time);
         Button location = dialogView.findViewById(R.id.dialog_popup_location);
 
         DatePicker StartDatePicker = dialogView.findViewById(R.id.dialog_popup_StartDatePicker);
-        TimePicker StartTimePicker = dialogView.findViewById(R.id.dialog_popup_StartTimePicker);
         DatePicker EndDatePicker = dialogView.findViewById(R.id.dialog_popup_EndDatePicker);
-        TimePicker EndTimePicker = dialogView.findViewById(R.id.dialog_popup_EndTimePicker);
 
         Dialog dialog =dialogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -758,28 +754,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                     case View.GONE:
                     default:
                         StartDatePicker.setVisibility(View.VISIBLE);
-                        StartTimePicker.setVisibility(View.GONE);
                         EndDatePicker.setVisibility(View.GONE);
-                        EndTimePicker.setVisibility(View.GONE);
-                        break;
-                }
-            }
-        });
-
-        starttimeClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // StartTimePicker의 가시성을 토글
-                switch (StartTimePicker.getVisibility()) {
-                    case View.VISIBLE:
-                        StartTimePicker.setVisibility(View.GONE);
-                        break;
-                    case View.GONE:
-                    default:
-                        StartTimePicker.setVisibility(View.VISIBLE);
-                        StartDatePicker.setVisibility(View.GONE);
-                        EndDatePicker.setVisibility(View.GONE);
-                        EndTimePicker.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -797,27 +772,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                     default:
                         EndDatePicker.setVisibility(View.VISIBLE);
                         StartDatePicker.setVisibility(View.GONE);
-                        StartTimePicker.setVisibility(View.GONE);
-                        EndTimePicker.setVisibility(View.GONE);
-                        break;
-                }
-            }
-        });
-
-        endtimeClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // EndTimePicker의 가시성을 토글
-                switch (EndTimePicker.getVisibility()) {
-                    case View.VISIBLE:
-                        EndTimePicker.setVisibility(View.GONE);
-                        break;
-                    case View.GONE:
-                    default:
-                        EndTimePicker.setVisibility(View.VISIBLE);
-                        StartDatePicker.setVisibility(View.GONE);
-                        StartTimePicker.setVisibility(View.GONE);
-                        EndDatePicker.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -835,22 +789,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 });
 
 
-        //시작 시간-시간 변화시
-        StartTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                if (hourOfDay < 10 && minute < 10) {
-                    starttimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
-                } else if (minute < 10) {
-                    starttimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
-                } else if (hourOfDay < 10) {
-                    starttimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
-                } else {
-                    starttimeClick.setText(String.format("%d:%d", hourOfDay, minute));
-                }
-            }
-        });
-
         //end 시간-날짜 변화시
         EndDatePicker.init(EndDatePicker.getYear(), EndDatePicker.getMonth(), EndDatePicker.getDayOfMonth(),
                 new DatePicker.OnDateChangedListener() {
@@ -861,22 +799,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         formattedEndDate = String.format("%04d%02d%02d", year, month + 1, day);
                     }
                 });
-
-        //end 시간-시간 변화시
-        EndTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                if (hourOfDay < 10 && minute < 10) {
-                    endtimeClick.setText(String.format("0%d:0%d", hourOfDay, minute));
-                } else if (minute < 10) {
-                    endtimeClick.setText(String.format("%d:0%d", hourOfDay, minute));
-                } else if (hourOfDay < 10) {
-                    endtimeClick.setText(String.format("0%d:%d", hourOfDay, minute));
-                } else {
-                    endtimeClick.setText(String.format("%d:%d", hourOfDay, minute));
-                }
-            }
-        });
         dialogBuilder.setView(dialogView);
 
 
@@ -894,15 +816,13 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             public void onClick(View v) {
 
                 String startdate = startdateClick.getText().toString();
-                String starttime = starttimeClick.getText().toString();
                 String enddate = enddateClick.getText().toString();
-                String endtime = endtimeClick.getText().toString();
 
                 // 시작 및 종료 날짜-시간 문자열을 적절한 형식으로 변환
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
                 try {
-                    Date startDate = sdf.parse(startdate + " " + starttime);
-                    Date endDate = sdf.parse(enddate + " " + endtime);
+                    Date startDate = sdf.parse(startdate);
+                    Date endDate = sdf.parse(enddate);
 
                     if (endDate.after(startDate)) {
                         // 종료 날짜-시간이 시작 날짜-시간보다 나중일 경우
