@@ -382,8 +382,8 @@ public class MainActivity extends AppCompatActivity {
                                 String id = festivalInfo.get("contentid");
                                 String address1 = festivalInfo.get("address1");
                                 //문자열길이 일정수 넘어가면 ...형태로 표시
-                                if (address1 != null && address1.length() > 20) {
-                                    address1 = address1.substring(0, 20) + "...";
+                                if (address1 != null && address1.length() > 15) {
+                                    address1 = address1.substring(0, 15) + "...";
                                 }
                                 String repImage = festivalInfo.get("img");
                                 String startDateStr = festivalInfo.get("eventstartdate");
@@ -441,8 +441,8 @@ public class MainActivity extends AppCompatActivity {
                                         String detailInfo = firstMap.get("infotext");
 
                                         //문자열길이 일정수 넘어가면 ...형태로 표시
-                                        if (detailInfo != null && detailInfo.length() > 40) {
-                                            detailInfo = detailInfo.substring(0, 40) + "...";
+                                        if (detailInfo != null && detailInfo.length() > 30) {
+                                            detailInfo = detailInfo.substring(0, 30) + "...";
                                         }
 
                                         //html 형태 변환하여 setText
@@ -631,6 +631,8 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
+                            View line = getLayoutInflater().inflate(R.layout.cutline, null);
+                            mainfestivalContainer.addView(line);
 
                         }
                     }

@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -140,7 +141,16 @@ public class EntireViewActivity extends AppCompatActivity {
 
                             titleTextView.setText(title);
                             address.setText(address1 + " " + address2);
-                            overviewText.setText(overview);
+                            //html 형태 변환하여 setText
+                            if (overview != null) {
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                    overviewText.setText(Html.fromHtml(overview, Html.FROM_HTML_MODE_LEGACY));
+                                } else {
+                                    overviewText.setText(Html.fromHtml(overview));
+                                }
+                            } else {
+                                // detailInfo가 null인 경우에 대한 처리 추가
+                            }
 
 
                             favoriteaddButton.setOnClickListener(new View.OnClickListener() {
