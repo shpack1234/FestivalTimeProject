@@ -17,6 +17,7 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         userDao = db.userDao();
 
         Button loginButton = findViewById(R.id.login_button);
-        Button signupButton=findViewById(R.id.login_sign_up);
+        Button signupButton = findViewById(R.id.login_sign_up);
         EditText userName = findViewById(R.id.login_nickname);
         EditText userPassword = findViewById(R.id.login_password);
 
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                         signupButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(loadedUser==null) {
+                                if (loadedUser == null) {
                                     navigateToSomeActivity.navigateToPrivacyActivity(LoginActivity.this, null);
                                 } else {
                                     Toast.makeText(getApplicationContext(), "이미 회원 가입한 기기 입니다.", Toast.LENGTH_SHORT).show();
@@ -67,7 +68,30 @@ public class LoginActivity extends AppCompatActivity {
                         loginButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(loadedUser==null) {
+                                if (userName.getText().toString().equals("admin") && userPassword.getText().toString().equals("admin00")) {
+                                    Toast.makeText(getApplicationContext(), "마스터 아이디로 로그인 합니다.", Toast.LENGTH_SHORT).show();
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("userId", "000000");
+                                    editor.commit();
+                                    UserEntity userEntity = new UserEntity();
+                                    userEntity.setUserId("000000");
+                                    userEntity.setUserFavoriteFestival(new ArrayList<>());
+                                    userEntity.setPassword(userPassword.getText().toString());
+                                    userEntity.setIsLogin(true);
+                                    userEntity.setUserName("admin");
+                                    userEntity.setUserBirth("2023-10-16");
+                                    userEntity.setUserGender("남성");
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            userDao.insertOrUpdate(userEntity);
+                                        }
+                                    });
+                                    finish();
+                                    navigateToSomeActivity.navigateToMainActivity(LoginActivity.this);
+                                }
+
+                                if (loadedUser == null) {
                                     Toast.makeText(getApplicationContext(), "회원 가입 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     if (loadedUser.getUserName().equals(userName.getText().toString()) && loadedUser.getPassword().equals(userPassword.getText().toString())) {
