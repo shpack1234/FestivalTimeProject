@@ -142,7 +142,7 @@ public class PrivacyActivity extends AppCompatActivity {
 
                     if(name.length()<2) {
                         userName.setError("닉네임은 최소 2자 이상 6자 이하로 이루어져 있어야 합니다.");
-                    } else if(loadedUser.getUserId().equals("000000") && !name.equals("admin")) {
+                    } else if(userId.equals("000000") && !name.equals("admin")) {
                         userName.setError("admin 계정의 닉네임은 변결할 수 없습니다.");
                     } else if(gender==null) {
                         Toast.makeText(getApplicationContext(), "성별을 선택해 주세요.", Toast.LENGTH_SHORT).show();
