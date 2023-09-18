@@ -215,29 +215,17 @@
                 android:id="@+id/dialog_popup_start_date"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="2"
+                android:layout_weight="4"
                 android:gravity="center|center"
                 android:textColor="@color/dark_gray"
                 android:background="@drawable/button_style"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
-            <Button
-                android:id="@+id/dialog_popup_start_time"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1.5"
-                android:gravity="center|center"
-                android:background="@drawable/button_style"
-                android:textColor="@color/dark_gray"
-                android:text="@string/default_time"
-                android:textSize="13sp" />
-
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -254,23 +242,6 @@
                 android:layout_height="wrap_content"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:gravity="right"
-            android:layout_marginTop="4dp"
-            android:orientation="vertical">
-
-            <TimePicker
-                android:id="@+id/dialog_popup_StartTimePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:calendarViewShown="false"
-                android:timePickerMode="spinner"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -297,29 +268,17 @@
                 android:id="@+id/dialog_popup_end_date"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="2"
+                android:layout_weight="4"
                 android:textColor="@color/dark_gray"
                 android:gravity="center|center"
                 android:background="@drawable/button_style"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
-            <Button
-                android:id="@+id/dialog_popup_end_time"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1.5"
-                android:gravity="center|center"
-                android:textColor="@color/dark_gray"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/button_style"
-                android:text="@string/default_time"
-                android:textSize="13sp" />
-
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -339,21 +298,6 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:gravity="right"
-            android:orientation="vertical">
-
-            <TimePicker
-                android:id="@+id/dialog_popup_EndTimePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:calendarViewShown="false"
-                android:timePickerMode="spinner"
-                android:visibility="gone" />
-        </LinearLayout>
 
     </LinearLayout>
 
