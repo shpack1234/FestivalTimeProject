@@ -327,8 +327,8 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
                             //문자열길이 일정수 넘어가면 ...형태로 표시
-                            if (location != null && location.length() > 20) {
-                                location = location.substring(0, 20) + "...";
+                            if (location != null && location.length() > 15) {
+                                location = location.substring(0, 15) + "...";
                             }
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
@@ -708,6 +708,10 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
+                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                            if (location != null && location.length() > 15) {
+                                location = location.substring(0, 15) + "...";
+                            }
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             final String[] finalstartDate = {null};
@@ -1080,6 +1084,10 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
+                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                            if (location != null && location.length() > 15) {
+                                location = location.substring(0, 15) + "...";
+                            }
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             final String[] finalstartDate = {null};
@@ -1159,27 +1167,33 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(String response) {
                                     ParsingApiData.parseXmlDataFromDetailInfo2(response);
-                                    //Log.d("festivalinfo response: ", response);
                                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
+                                    LinkedHashMap<String, String> firstMap = null;
 
-                                    String detailInfo = firstMap.get("infotext");
-                                    //문자열길이 일정수 넘어가면 ...형태로 표시
-                                    if (detailInfo != null && detailInfo.length() > 40) {
-                                        detailInfo = detailInfo.substring(0, 40) + "...";
-                                    }
+                                    try {
+                                        firstMap = parsedFestivalList.get(0);
+                                        String detailInfo = firstMap.get("infotext");
 
-
-                                    //html 형태 변환하여 setText
-                                    if (detailInfo != null) {
-                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
-                                        } else {
-                                            overviewTextView.setText(Html.fromHtml(detailInfo));
+                                        //문자열길이 일정수 넘어가면 ...형태로 표시
+                                        if (detailInfo != null && detailInfo.length() > 30) {
+                                            detailInfo = detailInfo.substring(0, 30) + "...";
                                         }
-                                    } else {
-                                        // detailInfo가 null인 경우에 대한 처리 추가
+
+                                        //html 형태 변환하여 setText
+                                        if (detailInfo != null) {
+                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                                overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                            } else {
+                                                overviewTextView.setText(Html.fromHtml(detailInfo));
+                                            }
+                                        } else {
+                                            // detailInfo가 null인 경우에 대한 처리 추가
+                                        }
+                                    } catch (IndexOutOfBoundsException e) {
                                     }
+
+
+
                                 }
 
                                 @Override
@@ -1473,6 +1487,10 @@ public class SearchDetailActivity extends AppCompatActivity {
 
                             String title = festivalInfo.get("title");
                             String location = festivalInfo.get("address");
+                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                            if (location != null && location.length() > 15) {
+                                location = location.substring(0, 15) + "...";
+                            }
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             final String[] finalstartDate = {null};
