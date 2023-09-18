@@ -28,6 +28,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -348,6 +350,23 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear(); // 기존 데이터를 모두 제거
+                                // 이미지 정렬 코드 추가
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 // UI 갱신은 메인 스레드에서 실행
@@ -465,6 +484,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                // 정렬 코드 추가
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -508,6 +543,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                // 정렬 코드 추가
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -550,6 +601,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -592,6 +659,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -635,6 +718,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -677,6 +776,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                // 정렬 코드 추가
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -720,6 +835,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -762,6 +893,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -804,6 +951,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -846,6 +1009,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -887,6 +1066,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -928,6 +1123,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -964,6 +1175,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear(); // 기존 데이터를 모두 제거
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 // UI 갱신은 메인 스레드에서 실행
@@ -1066,6 +1293,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1106,6 +1349,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1146,6 +1405,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1188,6 +1463,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1227,6 +1518,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1269,6 +1576,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1312,6 +1635,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1354,6 +1693,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1396,6 +1751,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1438,6 +1809,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1477,6 +1864,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {
@@ -1516,6 +1919,22 @@ public class SearchScreenActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 festivalList.clear();
+                                Collections.sort(parsedFestivalList, new Comparator<LinkedHashMap<String, String>>() {
+                                    @Override
+                                    public int compare(LinkedHashMap<String, String> o1, LinkedHashMap<String, String> o2) {
+                                        boolean o1HasImage = o1.get("img") != null && !o1.get("img").isEmpty();
+                                        boolean o2HasImage = o2.get("img") != null && !o2.get("img").isEmpty();
+
+                                        if (o1HasImage && !o2HasImage) {
+                                            return -1; // 이미지가 있는 항목을 앞으로
+                                        } else if (!o1HasImage && o2HasImage) {
+                                            return 1; // 이미지가 없는 항목을 뒤로
+                                        } else {
+                                            return 0; // 그 외의 경우 순서 유지
+                                        }
+                                    }
+                                });
+
                                 festivalList.addAll(parsedFestivalList);
 
                                 runOnUiThread(new Runnable() {

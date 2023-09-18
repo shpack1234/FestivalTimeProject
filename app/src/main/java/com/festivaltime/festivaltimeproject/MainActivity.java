@@ -31,7 +31,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -125,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         calendarDao = calendarDatabase.calendarDao();
 
         searchView = findViewById(R.id.main_search_bar);
+        searchView.setQueryHint("어떤 축제를 즐겨볼까요?");
         searchView.setOnTouchListener((v, event) -> {
             searchView.setIconified(false);
             searchView.performClick();
@@ -436,25 +436,26 @@ public class MainActivity extends AppCompatActivity {
 
                                         try {
                                             firstMap = parsedFestivalList.get(0);
+                                            String detailInfo = firstMap.get("infotext");
+
+                                            //문자열길이 일정수 넘어가면 ...형태로 표시
+                                            if (detailInfo != null && detailInfo.length() > 30) {
+                                                detailInfo = detailInfo.substring(0, 30) + "...";
+                                            }
+
+                                            //html 형태 변환하여 setText
+                                            if (detailInfo != null) {
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                                    overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
+                                                } else {
+                                                    overviewTextView.setText(Html.fromHtml(detailInfo));
+                                                }
+                                            } else {
+                                                // detailInfo가 null인 경우에 대한 처리 추가
+                                            }
                                         } catch (IndexOutOfBoundsException e) {
                                         }
-                                        String detailInfo = firstMap.get("infotext");
 
-                                        //문자열길이 일정수 넘어가면 ...형태로 표시
-                                        if (detailInfo != null && detailInfo.length() > 30) {
-                                            detailInfo = detailInfo.substring(0, 30) + "...";
-                                        }
-
-                                        //html 형태 변환하여 setText
-                                        if (detailInfo != null) {
-                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                                overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
-                                            } else {
-                                                overviewTextView.setText(Html.fromHtml(detailInfo));
-                                            }
-                                        } else {
-                                            // detailInfo가 null인 경우에 대한 처리 추가
-                                        }
 
 
                                     }
