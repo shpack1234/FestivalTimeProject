@@ -26,38 +26,31 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.helper.widget.MotionEffect;
-import androidx.core.content.ContextCompat;
-import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
+import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 
 public class SearchDetailActivity extends AppCompatActivity {
     public ImageButton Back_Btn;
@@ -284,7 +277,7 @@ public class SearchDetailActivity extends AppCompatActivity {
 
     private void handleApiResponse3(String response) {
         if (!type.isEmpty() && type.startsWith("A0207")) {
-            ParsingApiData.parseXmlDataFromFestival(response);
+            ParsingApiData.parseXmlDataFromFestivalA(response);
         } else {
             ParsingApiData.parseXmlDataFromFestival(response, type);
         }// 응답을 파싱하여 데이터를 저장

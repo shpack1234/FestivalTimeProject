@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -38,6 +37,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -145,6 +145,12 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat12 = "A02081100";
         cat13 = "A02081200";
         cat14 = "A02081300";
+
+        int apiCallCount = 12; // API 호출 횟수 설정
+        AtomicInteger emptyCategoryCount = new AtomicInteger(0); // 데이터가 없는 카테고리의 수
+        CountDownLatch latch = new CountDownLatch(apiCallCount);
+
+        TextView textView = findViewById(R.id.no_festival_msg);
 
 
         //날짜 서치인지 형태 확인
@@ -364,90 +370,98 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                 festivalList.addAll(parsedFestivalList);
 
-                                // UI 갱신은 메인 스레드에서 실행
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            // UI 갱신 코드
-                                            LinearLayout searchContainer = findViewById(R.id.search_container);
-                                            searchContainer.removeAllViews();
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                            View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
-                                            GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
-                                            festivalImageNText.removeAllViews();
+                                latch.countDown(); // 카운트 감소
 
+                                if (latch.getCount() == 0) {
+                                    // UI 갱신은 메인 스레드에서 실행
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                // UI 갱신 코드
+                                                LinearLayout searchContainer = findViewById(R.id.search_container);
+                                                searchContainer.removeAllViews();
 
-                                            // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
-                                            String textToShow = getTextToShow(cat2);
-                                            TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
-                                            titleTextView.setText(textToShow);
-
-                                            // 축제 건수 띄우는 텍스트
-                                            String progessToShow = "(" + festivalList.size() + "건)";
-                                            TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
-                                            progressTextView.setText(progessToShow);
+                                                View searchContainerView = getLayoutInflater().inflate(R.layout.festivalsearch_container, null);
+                                                GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
+                                                festivalImageNText.removeAllViews();
 
 
-                                            int maxItems = Math.min(festivalList.size(), 6);
+                                                // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
+                                                String textToShow = getTextToShow(cat2);
+                                                TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
+                                                titleTextView.setText(textToShow);
+
+                                                // 축제 건수 띄우는 텍스트
+                                                String progessToShow = "(" + festivalList.size() + "건)";
+                                                TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
+                                                progressTextView.setText(progessToShow);
 
 
-                                            for (int i = 0; i < maxItems; i++) {
-                                                HashMap<String, String> festivalInfo = festivalList.get(i);
-                                                View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
-                                                TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
-                                                ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
+                                                int maxItems = Math.min(festivalList.size(), 6);
 
-                                                String title = festivalInfo.get("title");
-                                                String id = festivalInfo.get("contentid");
-                                                String repImage = festivalInfo.get("img");
 
-                                                searchTextView.setText(title);
-                                                searchTextView.setMaxEms(8);
+                                                for (int i = 0; i < maxItems; i++) {
+                                                    HashMap<String, String> festivalInfo = festivalList.get(i);
+                                                    View festivalItemView = getLayoutInflater().inflate(R.layout.festival_search_imagentext, null);
+                                                    TextView searchTextView = festivalItemView.findViewById(R.id.search_text);
+                                                    ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
-                                                Log.d(TAG, "Rep Image URL: " + repImage);
-                                                if (repImage == null || repImage.isEmpty()) {
-                                                    searchImageButton.setImageResource(R.drawable.ic_image);
-                                                } else {
-                                                    //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
-                                                    Glide
-                                                            .with(SearchScreenActivity.this)
-                                                            .load(repImage)
-                                                            .transform(new CenterCrop(), new RoundedCorners(30))
-                                                            .placeholder(R.drawable.ic_image)
-                                                            .into(searchImageButton);
+                                                    String title = festivalInfo.get("title");
+                                                    String id = festivalInfo.get("contentid");
+                                                    String repImage = festivalInfo.get("img");
+
+                                                    searchTextView.setText(title);
+                                                    searchTextView.setMaxEms(8);
+
+                                                    Log.d(TAG, "Rep Image URL: " + repImage);
+                                                    if (repImage == null || repImage.isEmpty()) {
+                                                        searchImageButton.setImageResource(R.drawable.ic_image);
+                                                    } else {
+                                                        //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(searchImageButton);
+                                                        Glide
+                                                                .with(SearchScreenActivity.this)
+                                                                .load(repImage)
+                                                                .transform(new CenterCrop(), new RoundedCorners(30))
+                                                                .placeholder(R.drawable.ic_image)
+                                                                .into(searchImageButton);
+                                                    }
+                                                    festivalImageNText.addView(festivalItemView);
+
+
+                                                    festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            String contentId = id;
+                                                            // 가져온 contentid 값을 사용하여 원하는 작업을 수행
+                                                            navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId, cat2);
+                                                        }
+                                                    });
+
+
                                                 }
-                                                festivalImageNText.addView(festivalItemView);
 
 
-                                                festivalItemView.setOnClickListener(new View.OnClickListener() {
+                                                searchContainer.addView(searchContainerView);
+
+                                                Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
+                                                detailSearchButton.setOnClickListener(new View.OnClickListener() {
+
                                                     @Override
                                                     public void onClick(View v) {
-                                                        String contentId = id;
-                                                        // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                                        navigateToDetailFestivalActivity(SearchScreenActivity.this, contentId, cat2);
+                                                        navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
                                                     }
                                                 });
-
-
                                             }
-
-
-                                            searchContainer.addView(searchContainerView);
-
-                                            Button detailSearchButton = searchContainerView.findViewById(R.id.detail_search_button);
-                                            detailSearchButton.setOnClickListener(new View.OnClickListener() {
-
-                                                @Override
-                                                public void onClick(View v) {
-                                                    navigateToSomeActivity.navigateToSearchDetailActivity(SearchScreenActivity.this, query, cat2);
-                                                }
-                                            });
                                         }
-                                    }
 
-                                });
-                                secondSemaphore.release();
+                                    });
+                                    secondSemaphore.release();
+                                }
                             }
 
                         });
@@ -497,17 +511,25 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
                                 festivalList.addAll(parsedFestivalList);
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                            loopUI(query, cat3, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+
+                                                loopUI(query, cat3, 3);
+                                            }
+                                            fourthSemaphore.release();
                                         }
-                                        fourthSemaphore.release();
-                                    }
 
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -556,16 +578,25 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
                                 festivalList.addAll(parsedFestivalList);
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat4, 3);
-                                        }
-                                        thirdSemaphore.release();
-                                    }
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                });
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat4, 3);
+                                            }
+                                            thirdSemaphore.release();
+                                        }
+
+                                    });
+                                }
 
                             }
                         });
@@ -613,17 +644,25 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat5, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat5, 3);
+                                            }
+                                            fifthSemaphore.release();
                                         }
-                                        fifthSemaphore.release();
-                                    }
 
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -671,18 +710,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat6, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat6, 3);
+                                            }
+                                            sixthSemaphore.release();
+
                                         }
-                                        sixthSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -730,18 +777,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat7, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat7, 3);
+                                            }
+                                            seventhSemaphore.release();
+
                                         }
-                                        seventhSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -788,18 +843,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat8, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat8, 3);
+                                            }
+                                            eightSemaphore.release();
+
                                         }
-                                        eightSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -847,18 +910,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat9, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat9, 3);
+                                            }
+                                            ninthSemaphore.release();
+
                                         }
-                                        ninthSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -905,18 +976,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat10, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat10, 3);
+                                            }
+                                            tenthSemaphore.release();
+
                                         }
-                                        tenthSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -963,18 +1042,26 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat11, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat11, 3);
+                                            }
+                                            eleventhSemaphore.release();
+
                                         }
-                                        eleventhSemaphore.release();
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -1021,17 +1108,25 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat12, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat12, 3);
+                                            }
+                                            twelveSemaphore.release();
                                         }
-                                        twelveSemaphore.release();
-                                    }
 
-                                });
+                                    });
+                                }
 
                             }
                         });
@@ -1078,17 +1173,31 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat13, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            if (emptyCategoryCount.get() == apiCallCount) {
+                                                // 모든 카테고리에서 데이터가 없으면 메시지 출력
+                                                textView.setText("검색 항목이 존재하지 않습니다.");
+                                            }
+
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat13, 3);
+                                            }
+                                            thirteenSemaphore.release();
                                         }
-                                        thirteenSemaphore.release();
-                                    }
 
-                                });
+                                    });
+                                }
 
                             }
                         });
