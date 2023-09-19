@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.BaseKeyListener;
 import android.util.Log;
 import android.view.View;
@@ -207,15 +208,33 @@ public class FavoriteActivity extends AppCompatActivity {
             favoriteInfoBox.setLayoutParams(layoutParams);
 
             String title = festivalInfo.get("title");
-            String location = festivalInfo.get("address");
+            String location = festivalInfo.get("address1");
             String id = festivalInfo.get("contentid");
             String repImage = festivalInfo.get("img");
             String overview = festivalInfo.get("overview");
             final String[] finalstartDate = {null};
             final String[] finalendDate = {null};
             titleTextView.setText(title);
+            if (location != null && location.length() > 15) {
+                location = location.substring(0, 15) + "...";
+            }
             locationTextView.setText(location);
-            idTextView.setText(overview);
+
+            //문자열길이 일정수 넘어가면 ...형태로 표시
+            if (overview != null && overview.length() > 40) {
+                overview = overview.substring(0, 40) + "...";
+            }
+
+            //html 형태 변환하여 setText
+            if (overview != null) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    idTextView.setText(Html.fromHtml(overview, Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    idTextView.setText(Html.fromHtml(overview));
+                }
+            } else {
+                // detailInfo가 null인 경우에 대한 처리 추가
+            }
 
             if (repImage == null || repImage.isEmpty()) {
                 festivalRepImage.setImageResource(R.drawable.ic_image);
@@ -270,10 +289,8 @@ public class FavoriteActivity extends AppCompatActivity {
             favoriteInfoBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 클릭 시 contentid 값을 가져오는 작업 수행
-                    String contentId = id;
                     // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                    navigateToDetailFestivalActivity(FavoriteActivity.this, contentId);
+                    navigateToDetailFestivalActivity(FavoriteActivity.this, id);
                 }
             });
 

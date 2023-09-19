@@ -284,7 +284,7 @@ public class SearchDetailActivity extends AppCompatActivity {
 
     private void handleApiResponse3(String response) {
         if (!type.isEmpty() && type.startsWith("A0207")) {
-            ParsingApiData.parseXmlDataFromFestivalA(response);
+            ParsingApiData.parseXmlDataFromFestival(response);
         } else {
             ParsingApiData.parseXmlDataFromFestival(response, type);
         }// 응답을 파싱하여 데이터를 저장

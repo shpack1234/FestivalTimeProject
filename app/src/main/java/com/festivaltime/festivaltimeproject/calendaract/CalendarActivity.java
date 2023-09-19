@@ -6,11 +6,6 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,40 +15,38 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Button;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDao;
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
+import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.FetchScheduleTask;
 import com.festivaltime.festivaltimeproject.festivalcalendaract.FestivalCalendarActivity;
-import com.festivaltime.festivaltimeproject.R;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -158,9 +151,8 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
         executor = Executors.newSingleThreadExecutor();
 
-        //상단바 year 현재시간으로 출력, 선택 날짜 현재시간으로 초기화
-        Year_text.setText(sdf.format(date));
         SelectDateView.setText(sdf2.format(date));
+        Year_text.setText(sdf.format(date));
 
         //현재 날짜 set
         selectedDate = Calendar.getInstance();
@@ -331,8 +323,10 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     private void setMonthView() {
         //선택되어있는 달 저장
         int month = selectedDate.get(Calendar.MONTH) + 1;
+        int year = selectedDate.get(Calendar.YEAR);
         //해당 달 월>영어 텍스트뷰
         monthText.setText(Month_eng(month));
+        Year_text.setText(String.valueOf(year));
 
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();

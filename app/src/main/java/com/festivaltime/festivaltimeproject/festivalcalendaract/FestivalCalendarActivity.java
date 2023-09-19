@@ -1,5 +1,6 @@
 package com.festivaltime.festivaltimeproject.festivalcalendaract;
 
+import static com.festivaltime.festivaltimeproject.calendaract.CalendarUtil.selectedDate;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
@@ -115,9 +116,11 @@ public class FestivalCalendarActivity extends AppCompatActivity {
 
     // FestivalCalendarActivity 클래스의 setMonthView 메서드 수정
     private void setMonthView(){
-        int month = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
-        //년월 텍스트뷰
+        int month = selectedDate.get(Calendar.MONTH) + 1;
+        int year = selectedDate.get(Calendar.YEAR);
+        //해당 달 월>영어 텍스트뷰
         monthText.setText(Month_eng(month));
+        Year_text.setText(String.valueOf(year));
 
         ArrayList<Date> dayList = daysInMonthArray();
         FestivalCalendarAdapter adapter = new FestivalCalendarAdapter(this, dayList);
@@ -145,6 +148,7 @@ public class FestivalCalendarActivity extends AppCompatActivity {
         Calendar monthCalendar = (Calendar) CalendarUtil.selectedDate.clone();
 
         monthCalendar.set(Calendar.DAY_OF_MONTH, 1);
+
         int firstDayOfMonth = monthCalendar.get(Calendar.DAY_OF_WEEK)-1;
         monthCalendar.add(Calendar.DAY_OF_MONTH, -firstDayOfMonth);
         while(dayList.size()<42){

@@ -136,7 +136,7 @@ public class ParsingApiData {
                         festivalInfo.put("overview", overview);
                         festivalInfo.put("contentid", contentid);
                         festivalInfo.put("areacode", areacode);
-                        festivalInfo.put("addr1", address);
+                        festivalInfo.put("address", address);
                         festivalInfo.put("cat2", cat2);
                         festivalInfo.put("cat3", cat3);
 
@@ -640,7 +640,9 @@ public class ParsingApiData {
                     String cat3 = getElementText(itemElement, "cat3");
                     String startdate = getElementText(itemElement, "eventstartdate");
                     String enddate = getElementText(itemElement, "eventenddate");
+                    String address = getElementText(itemElement, "addr1");
 
+                    festivalInfo_cat.put("address", address);
                     festivalInfo_cat.put("title", title);
                     festivalInfo_cat.put("mapx", mapx);
                     festivalInfo_cat.put("mapy", mapy);
@@ -685,7 +687,9 @@ public class ParsingApiData {
                     String img = getElementText(itemElement, "firstimage");
                     String startdate = getElementText(itemElement, "eventstartdate");
                     String enddate = getElementText(itemElement, "eventenddate");
+                    String address = getElementText(itemElement, "addr1");
 
+                    festivalInfo_cat.put("address", address);
                     festivalInfo_cat.put("title", title);
                     festivalInfo_cat.put("mapx", mapx);
                     festivalInfo_cat.put("mapy", mapy);
