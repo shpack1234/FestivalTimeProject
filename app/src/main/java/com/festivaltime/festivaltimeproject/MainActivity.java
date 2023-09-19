@@ -182,15 +182,20 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<CalendarEntity> calendarEntities = calendarDao.getCalendarEntitiesByCategory(category);
+                loadedUser = userDao.getUserInfoById(userId);
+                if (loadedUser == null || loadedUser.getIsLogin() == false) { //미로그인시 국경일만 visible하도록 예외처리
+                    Log.e("Err", "No UserInfo");
+                } else {
+                    List<CalendarEntity> calendarEntities = calendarDao.getCalendarEntitiesByCategory(category);
 
-                holidaylist.clear();
-                // 데이터 추출 및 holidaylist에 추가
-                for (CalendarEntity entity : calendarEntities) {
-                    HashMap<String, String> holidayInfo = new HashMap<>();
-                    holidayInfo.put("dateName", "휴가");
-                    holidayInfo.put("locdate", entity.startDate);
-                    holidaylist.add(holidayInfo);
+                    holidaylist.clear();
+                    // 데이터 추출 및 holidaylist에 추가
+                    for (CalendarEntity entity : calendarEntities) {
+                        HashMap<String, String> holidayInfo = new HashMap<>();
+                        holidayInfo.put("dateName", "휴가");
+                        holidayInfo.put("locdate", entity.startDate);
+                        holidaylist.add(holidayInfo);
+                    }
                 }
             }
         }).start();
@@ -455,7 +460,6 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         } catch (IndexOutOfBoundsException e) {
                                         }
-
 
 
                                     }

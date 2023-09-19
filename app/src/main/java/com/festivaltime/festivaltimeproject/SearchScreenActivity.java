@@ -171,6 +171,7 @@ public class SearchScreenActivity extends AppCompatActivity {
             Log.d("location response", queryArray[0]);
             Log.d("date response", queryArray[1]);
 
+
             apiReader.searchKeyword2(apiKey, queryArray[0], query, cat2, new ApiReader.ApiResponseListener() {
 
                 @Override
@@ -185,49 +186,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                             newfestivalList.clear(); // 기존 데이터를 모두 제거
                             newfestivalList.addAll(keywordResults);
 
-                            int maxItems = Math.min(newfestivalList.size(), 6);
-
-                            List<HashMap<String, String>> itemsToRemove = new ArrayList<>();
-
-                            for (int i = 0; i < maxItems; i++) {
-                                HashMap<String, String> result = newfestivalList.get(i);
-
-                                apiReader.FestivalInfo(apiKey, result.get("contentid"), new ApiReader.ApiResponseListener() {
-                                    @Override
-                                    public void onSuccess(String response) {
-                                        Log.d("search&locate response", response);
-                                        ParsingApiData.parseXmlDataFromDetailInfo(response); // 응답을 파싱하여 데이터를 저장
-                                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-
-                                        executor.execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    LinkedHashMap<String, String> parsedItem = parsedFestivalList.get(0);
-                                                    Log.d("item startdate", parsedItem.get("eventstartdate"));
-                                                    Log.d("item enddate", parsedItem.get("eventenddate"));
-
-                                                    if (result.get("title").contains(query) &&
-                                                            queryArray[1].compareTo(parsedItem.get("eventstartdate")) >= 0 &&
-                                                            queryArray[2].compareTo(parsedItem.get("eventenddate")) <= 0) {
-                                                    } else {
-                                                        itemsToRemove.add(result);
-                                                        Log.d("item del", "delete");
-                                                    }
-                                                } catch (IndexOutOfBoundsException e) {
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        Log.e(TAG, "API Error: " + error);
-                                    }
-                                });//api끝부분
-
-                                newfestivalList.removeAll(itemsToRemove);
-                            }
+                            filterHashlist(newfestivalList, queryArray, apiKey);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -2085,6 +2044,56 @@ public class SearchScreenActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void filterHashlist(List<HashMap<String, String>> newfestivalList, String[] queryArray, String apiKey) {
+        List<HashMap<String, String>> itemsToRemove = new ArrayList<>();
+
+        for (int i = 0; i < newfestivalList.size(); i++) {
+            HashMap<String, String> result = newfestivalList.get(i);
+
+            apiReader.FestivalInfo(apiKey, result.get("contentid"), new ApiReader.ApiResponseListener() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.d("search&locate response", response);
+                    ParsingApiData.parseXmlDataFromDetailInfo(response);
+                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LinkedHashMap<String, String> parsedItem = parsedFestivalList.get(0);
+                                Log.d("item startdate", parsedItem.get("eventstartdate"));
+                                Log.d("item enddate", parsedItem.get("eventenddate"));
+
+                                if (result.get("title").contains(query) &&
+                                        queryArray[1].compareTo(parsedItem.get("eventstartdate")) >= 0 &&
+                                        queryArray[2].compareTo(parsedItem.get("eventenddate")) <= 0) {
+                                    // 조건에 맞는 아이템은 유지
+                                } else {
+                                    // 조건에 맞지 않는 아이템은 삭제 대상에 추가
+                                    itemsToRemove.add(result);
+                                    Log.d("item del", "delete");
+                                }
+                            } catch (IndexOutOfBoundsException e) {
+                                // 예외 처리
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "API Error: " + error);
+                }
+            });
+        }
+
+        // 삭제 대상 아이템을 제거
+        newfestivalList.removeAll(itemsToRemove);
+
+    }
+
 
     private String getTextToShow(String type) {
         switch (type) {
