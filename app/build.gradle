@@ -26,7 +26,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId "com.festivaltime.festivaltimeproject"
+        applicationId "festival.festivaltime"
         minSdkVersion 28
         targetSdkVersion 33
         versionCode 1
