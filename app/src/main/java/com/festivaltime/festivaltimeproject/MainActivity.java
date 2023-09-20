@@ -53,6 +53,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         CalendarDao calendarDao = database.calendarDao();
         String category = "#52c8ed"; //휴가 db가져오기위한 category text
 
+        LocalDate today = LocalDate.now();
         List<HashMap<String, String>> holidaylist = new ArrayList<>();
 
         new Thread(new Runnable() {
@@ -219,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                                         List<HashMap<String, String>> festivalList = new ArrayList<>();
                                         View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
                                         ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
+                                        TextView datetext = sliderItemView.findViewById(R.id.date_text);
                                         int finalImages = i;
 
                                         HashMap<String, String> holidayInfo = holidaylist.get(i);
@@ -255,6 +258,18 @@ public class MainActivity extends AppCompatActivity {
                                                                         imageButton.setImageResource(R.drawable.first_image_example);
                                                                     } else {
                                                                         Glide.with(MainActivity.this).load(repImage).transform(new CenterCrop(), new RoundedCorners(30)).placeholder(R.drawable.first_image_example).into(imageButton);
+                                                                    }
+
+                                                                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
+                                                                    SimpleDateFormat outputFormat = new SimpleDateFormat("M/d", Locale.US);
+
+                                                                    try{
+                                                                        Date parsedDate = inputFormat.parse(date);
+                                                                        String formattedDate = outputFormat.format(parsedDate);
+
+                                                                        datetext.setText(formattedDate);
+                                                                    }catch (ParseException e){
+                                                                        e.printStackTrace();
                                                                     }
 
                                                                     imageButton.setOnClickListener(new View.OnClickListener() {

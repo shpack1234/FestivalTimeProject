@@ -39,9 +39,9 @@ public class SearchSetting {
     private String formattedEndDate;
     private TextView textview;
 
-    @Override
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
-    }
+    }*/
 }
