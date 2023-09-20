@@ -13,14 +13,30 @@
         android:background="@drawable/radius_corner"
         app:cardCornerRadius="10dp">
 
-        <ImageButton
-            android:id="@+id/image_button"
+        <!-- FrameLayout으로 이미지와 텍스트 중첩 -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            android:layout_height="wrap_content">
 
+            <ImageButton
+                android:id="@+id/image_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:background="#00000000"
+                android:gravity="center"
+                android:layout_gravity="center" />
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
-
 </LinearLayout>
