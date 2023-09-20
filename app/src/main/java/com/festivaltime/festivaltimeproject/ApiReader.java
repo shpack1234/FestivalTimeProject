@@ -468,7 +468,7 @@ public class ApiReader {
         }
     }
 
-    public void FestivallitLoc(String serviceKey, String startdate, String enddate, String areacode, final ApiResponseListener listener){
+    public void Festivallit2(String serviceKey, String startdate, String enddate, final ApiResponseListener listener){
         try {
             HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
                     .scheme("https")
@@ -479,8 +479,6 @@ public class ApiReader {
                     .addQueryParameter("MobileOS", "AND")
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("listYN", "Y")
-                    .addQueryParameter("arrange", "O")
-                    .addQueryParameter("areaCode", areacode)
                     .addQueryParameter("numOfRows", "100000")
                     .addQueryParameter("eventStartDate", startdate)
                     .addQueryParameter("eventEndDate", enddate)
@@ -802,6 +800,50 @@ public class ApiReader {
                     .addQueryParameter("MobileApp", "FestivalTime")
                     .addQueryParameter("contentId", contentId)
                     .addQueryParameter("contentTypeId", "15")
+                    .addQueryParameter("serviceKey", serviceKey);
+
+            String url = urlBuilder.build().toString();
+            Log.d("url", url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    listener.onError("Network Error");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        listener.onSuccess(responseData);
+                    } else {
+                        listener.onError("Server Error: " + response.code());
+                    }
+                }
+            });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            listener.onError("URL Encoding Error");
+        }
+
+    }
+
+    public void searchImg(String serviceKey, String contentId, final ApiResponseListener listener){
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
+                    .scheme("https")
+                    .host("apis.data.go.kr")
+                    .addPathSegment("B551011")
+                    .addPathSegment("KorService1")
+                    .addPathSegment("detailImage1")
+                    .addQueryParameter("MobileOS", "AND")
+                    .addQueryParameter("MobileApp", "FestivalTime")
+                    .addQueryParameter("contentId", contentId)
+                    .addQueryParameter("imageYN", "Y")
+                    .addQueryParameter("subImageYN", "Y")
+                    .addQueryParameter("numOfRows", "100000")
                     .addQueryParameter("serviceKey", serviceKey);
 
             String url = urlBuilder.build().toString();
