@@ -119,7 +119,6 @@ public class SearchScreenActivity extends AppCompatActivity {
         //날짜 서치용 boolean
         //Boolean searchFestival = false;
 
-        String seoul = "서울";
 
         type = getIntent().getStringExtra("type");
 
@@ -146,7 +145,7 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat13 = "A02081200";
         cat14 = "A02081300";
 
-        int apiCallCount = 12; // API 호출 횟수 설정
+        int apiCallCount = 13; // API 호출 횟수 설정
         AtomicInteger emptyCategoryCount = new AtomicInteger(0); // 데이터가 없는 카테고리의 수
         CountDownLatch latch = new CountDownLatch(apiCallCount);
 
@@ -460,11 +459,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         }
 
                                     });
-                                    secondSemaphore.release();
+
                                 }
                             }
 
                         });
+                        secondSemaphore.release();
 
 
                     }
@@ -525,7 +525,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                                                 loopUI(query, cat3, 3);
                                             }
-                                            fourthSemaphore.release();
+
                                         }
 
                                     });
@@ -533,6 +533,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        fourthSemaphore.release();
                     }
 
 
@@ -592,7 +593,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat4, 3);
                                             }
-                                            thirdSemaphore.release();
+
                                         }
 
                                     });
@@ -600,6 +601,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        thirdSemaphore.release();
                     }
 
 
@@ -658,7 +660,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat5, 3);
                                             }
-                                            fifthSemaphore.release();
+
                                         }
 
                                     });
@@ -666,6 +668,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        fifthSemaphore.release();
                     }
 
 
@@ -724,7 +727,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat6, 3);
                                             }
-                                            sixthSemaphore.release();
 
                                         }
 
@@ -733,6 +735,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        sixthSemaphore.release();
                     }
 
 
@@ -791,7 +794,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat7, 3);
                                             }
-                                            seventhSemaphore.release();
 
                                         }
 
@@ -800,6 +802,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        seventhSemaphore.release();
                     }
 
                     @Override
@@ -857,7 +860,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat8, 3);
                                             }
-                                            eightSemaphore.release();
 
                                         }
 
@@ -866,6 +868,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        eightSemaphore.release();
                     }
 
 
@@ -924,7 +927,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat9, 3);
                                             }
-                                            ninthSemaphore.release();
 
                                         }
 
@@ -933,6 +935,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        ninthSemaphore.release();
                     }
 
                     @Override
@@ -990,7 +993,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat10, 3);
                                             }
-                                            tenthSemaphore.release();
 
                                         }
 
@@ -999,6 +1001,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        tenthSemaphore.release();
                     }
 
                     @Override
@@ -1056,7 +1059,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat11, 3);
                                             }
-                                            eleventhSemaphore.release();
 
                                         }
 
@@ -1065,6 +1067,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        eleventhSemaphore.release();
                     }
 
                     @Override
@@ -1122,7 +1125,6 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat12, 3);
                                             }
-                                            twelveSemaphore.release();
                                         }
 
                                     });
@@ -1130,6 +1132,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        twelveSemaphore.release();
                     }
 
                     @Override
@@ -1185,15 +1188,9 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
 
-                                            if (emptyCategoryCount.get() == apiCallCount) {
-                                                // 모든 카테고리에서 데이터가 없으면 메시지 출력
-                                                textView.setText("검색 항목이 존재하지 않습니다.");
-                                            }
-
                                             if (festivalList.size() > 0) {
                                                 loopUI(query, cat13, 3);
                                             }
-                                            thirteenSemaphore.release();
                                         }
 
                                     });
@@ -1201,6 +1198,7 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+                        thirteenSemaphore.release();
                     }
 
                     @Override
@@ -1244,17 +1242,30 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 });
 
                                 festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    emptyCategoryCount.incrementAndGet(); // 데이터가 없으면 emptyCategoryCount 증가
+                                }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (festivalList.size() > 0) {
-                                            loopUI(query, cat14, 3);
+                                latch.countDown(); // 카운트 감소
+
+                                if (latch.getCount() == 0) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (emptyCategoryCount.get() == apiCallCount) {
+                                                // 모든 카테고리에서 데이터가 없으면 메시지 출력
+                                                textView.setText("검색 항목이 존재하지 않습니다.");
+                                            }
+
+                                            if (festivalList.size() > 0) {
+                                                loopUI(query, cat14, 3);
+                                            }
+
                                         }
 
-                                    }
-
-                                });
+                                    });
+                                }
 
                             }
                         });

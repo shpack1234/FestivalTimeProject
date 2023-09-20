@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
+    public void parsingData(LinearLayout mainfestivalContainer, String apiKey, String response, List<HashMap<String, String>> festivalList) {
         //Log.d("main response", response);
         ParsingApiData.parseXmlDataFromDetail2(response);
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -668,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showPopupDialog() {
+    public void showPopupDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.custom_popup);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
