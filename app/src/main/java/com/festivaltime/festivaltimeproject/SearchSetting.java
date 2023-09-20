@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executor;
 
-public class SearchSetting {
+public class SearchSetting extends AppCompatActivity {
     private SearchView searchView;
     private String query, detailInfo;
     public Date date;
