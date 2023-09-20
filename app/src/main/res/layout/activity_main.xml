@@ -45,7 +45,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/main_search"
         android:layout_marginRight="21dp"
-        android:layout_marginLeft="20dp"
         android:src="@drawable/ic_search_option"
         android:backgroundTint="@color/white"/>
 

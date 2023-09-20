@@ -1,139 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AppSettingActivity">
+    tools:context=".AppSettingActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/appsetting_top"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/before_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:background="@android:color/transparent"
-                android:onClick="customOnClick"
-                android:src="@drawable/ic_back_before"
-                tools:ignore="SpeakableTextPresentCheck" />
+        android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginTop="23dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/AppSetting"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-        </LinearLayout>
-
         <View
-            android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="3dp"
+            android:id="@+id/upper_bar"
             android:background="@color/gray" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/before_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_back_before"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="17dp"
+        android:background="@android:color/transparent"
+        tools:ignore="SpeakableTextPresentCheck"/>
 
 
     <LinearLayout
         android:id="@+id/setting_linear1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appsetting_top">
+        android:layout_height="match_parent"
+        android:layout_below="@id/before_btn"
+        android:layout_above="@+id/bottom_navigation"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/setting_alarm" />
-
-        <Switch
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:switchMinWidth="50dp"
-            android:switchPadding="10dp"
-            android:id="@+id/app_push_alarm"
-            android:text="@string/alarm_push" />
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical">
 
-        <Switch
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"
+                android:text="@string/setting_alarm" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"/>
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="22dp"
+                android:textSize="15sp"
+                android:id="@+id/app_push_alarm"
+                android:text="@string/alarm_push"
+                android:checked="false"
+                android:layout_gravity="center"
+                android:thumb="@drawable/shape_switch_thumb"
+                android:track="@drawable/selector_switch"
+                app:switchMinWidth="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"/>
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="22dp"
+                android:textSize="15sp"
+                android:text="@string/alarm_calender"
+                android:checked="false"
+                android:layout_gravity="center"
+                android:thumb="@drawable/shape_switch_thumb"
+                android:track="@drawable/selector_switch"
+                app:switchMinWidth="10dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:background="#FFE3E3E3"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:switchMinWidth="50dp"
-            android:switchPadding="10dp"
-            android:text="@string/alarm_calender" />
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/search_autosave"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="22dp"
+                android:checked="false"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:thumb="@drawable/shape_switch_thumb"
+                android:track="@drawable/selector_switch"
+                app:switchMinWidth="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/search_autosave_explain"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/setting_linear1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp">
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/search_autosave"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:switchMinWidth="50dp"
-            android:switchPadding="10dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/search_autosave_explain"
-            android:textSize="12sp" />
 
-    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nevigation_background"
-        app:itemIconTint="@drawable/menu_select_color"
-        app:itemTextColor="@drawable/menu_select_color"
-        app:labelVisibilityMode="labeled"
+        android:layout_alignParentBottom="true"
         app:menu="@menu/menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@drawable/menu_select_color"
+        app:itemTextColor="@drawable/menu_select_color" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
