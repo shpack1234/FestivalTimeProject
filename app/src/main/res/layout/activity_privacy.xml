@@ -7,6 +7,31 @@
     android:orientation="vertical"
     tools:context=".PrivacyActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"/>
+
+    </LinearLayout>
+
     <ImageButton
         android:id="@+id/before_btn"
         android:layout_width="42dp"
@@ -16,15 +41,19 @@
         android:src="@drawable/ic_back_before"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="4dp"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="1"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/before_btn">
 
@@ -38,16 +67,16 @@
                 android:id="@+id/privacy_userimage"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:src="@drawable/ic_image" />
+                android:src="@drawable/user_profile"/>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_camera"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="bottom|right"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/round"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:src="@drawable/ic_camera" />
 
         </FrameLayout>
 

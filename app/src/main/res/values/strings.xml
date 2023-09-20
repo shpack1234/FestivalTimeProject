@@ -167,6 +167,9 @@
     <string name="period">기간:</string>
     <string name="festival_review">리뷰</string>
 
+    <!--개인정보-->
+    <string name="privacy">개인정보</string>
+
     <string name="login_message">로그인 후에 이용 가능합니다.</string>
 
 
