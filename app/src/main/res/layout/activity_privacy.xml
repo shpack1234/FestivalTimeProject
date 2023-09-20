@@ -26,15 +26,28 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/before_btn">
 
-        <ImageView
-            android:id="@+id/privacy_userimage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/ic_image" />
+            android:onClick="profileImageOnClick">
+
+            <ImageView
+                android:id="@+id/privacy_userimage"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/ic_image" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_gallery"
+                android:layout_gravity="bottom|right"
+                android:background="@drawable/round"/>
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/privacy_userid"
@@ -51,8 +64,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:ems="6"
+            android:hint="닉네임"
             android:maxLength="6"
             android:textAlignment="center"
+            android:textColorHint="@color/gray"
             android:textSize="15dp"
             android:textStyle="bold" />
 
@@ -116,6 +131,7 @@
                     android:layout_gravity="center"
                     android:ems="10"
                     android:inputType="textPassword"
+                    android:maxLength="15"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -140,6 +156,7 @@
                     android:layout_gravity="center"
                     android:ems="8"
                     android:inputType="textPassword"
+                    android:maxLength="15"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
