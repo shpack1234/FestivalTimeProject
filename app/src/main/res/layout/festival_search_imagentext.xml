@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_imagentext"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/search_imagentext">
+    android:layout_gravity="start|center_vertical"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/search_image"
             android:layout_width="96dp"
             android:layout_height="74dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_gravity="center"
-            android:background="@drawable/radius_corner"/>
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/radius_corner" />
+    </LinearLayout>
 
 
-
-        <TextView
-            android:id="@+id/search_text"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_gravity="center"
-            android:singleLine="false"
-            android:maxLines="1"
-            android:textSize="12sp"
-            android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/search_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:maxLines="1"
+        android:singleLine="false"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 </LinearLayout>

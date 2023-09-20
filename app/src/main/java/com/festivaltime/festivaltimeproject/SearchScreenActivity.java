@@ -37,7 +37,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -145,8 +144,8 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat13 = "A02081200";
         cat14 = "A02081300";
 
-        int apiCallCount = 13; // API 호출 횟수 설정
-        AtomicInteger emptyCategoryCount = new AtomicInteger(0); // 데이터가 없는 카테고리의 수
+        int apiCallCount = 12; // API 호출 횟수 설정
+        //AtomicInteger emptyCategoryCount = new AtomicInteger(0); // 데이터가 없는 카테고리의 수
         CountDownLatch latch = new CountDownLatch(apiCallCount);
 
         TextView textView = findViewById(R.id.no_festival_msg);
@@ -367,7 +366,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
                                 // UI 갱신은 메인 스레드에서 실행
                                 runOnUiThread(new Runnable() {
@@ -502,7 +505,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                festivalList.addAll(parsedFestivalList);
+
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -564,7 +572,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
+
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -625,7 +638,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -687,7 +704,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -749,7 +770,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -810,7 +835,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -872,7 +901,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -933,7 +966,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -994,7 +1031,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -1055,7 +1096,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -1115,7 +1160,12 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
+
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -1175,7 +1225,11 @@ public class SearchScreenActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                festivalList.addAll(parsedFestivalList);
+                                if (parsedFestivalList.isEmpty()) {
+                                    latch.countDown();
+                                } else {
+                                    festivalList.addAll(parsedFestivalList);
+                                }
 
 
                                 runOnUiThread(new Runnable() {
@@ -1198,6 +1252,22 @@ public class SearchScreenActivity extends AppCompatActivity {
 
                             }
                         });
+
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (latch.getCount() == 0) {
+                                            textView.setText("검색 항목이 없습니다.");
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+
                     }
 
                     @Override
