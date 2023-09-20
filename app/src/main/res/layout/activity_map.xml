@@ -62,7 +62,9 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:background="@drawable/radius_corner"
-        android:src="@drawable/ic_undo" />
+        android:src="@drawable/ic_undo"
+        android:scaleType="center"
+        android:layout_gravity="center"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
