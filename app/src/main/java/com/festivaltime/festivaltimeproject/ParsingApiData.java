@@ -592,7 +592,9 @@ public class ParsingApiData {
                     String cat3 = getElementText(itemElement, "cat3");
                     String startdate = getElementText(itemElement, "eventstartdate");
                     String enddate = getElementText(itemElement, "eventenddate");
+                    String address = getElementText(itemElement, "addr1");
 
+                    festivalInfo_cat.put("address", address);
                     festivalInfo_cat.put("title", title);
                     festivalInfo_cat.put("mapx", mapx);
                     festivalInfo_cat.put("mapy", mapy);
