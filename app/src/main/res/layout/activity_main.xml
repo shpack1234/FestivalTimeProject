@@ -10,42 +10,44 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_search"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="49dp"
         android:layout_marginTop="14dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" >
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/main_search_bar"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="match_parent"
             android:layoutDirection="rtl"
+            android:layout_margin="5dp"
+            android:elevation="5dp"
             android:windowSoftInputMode="adjustPan"
             android:queryHint="@string/search_hint"
-            android:background="@drawable/radius_corner"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:searchIcon="@drawable/ic_search"
-            app:iconifiedByDefault="false"/>
-
-        <ImageButton
-            android:id="@+id/detailButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/main_search_bar"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_search_option"
-            android:backgroundTint="@color/white"/>
+            app:iconifiedByDefault="false"
+            android:background="@drawable/roundcorner_searchbar"
+            app:queryBackground="@android:color/transparent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout> <!--검색바-->
+
+    <ImageButton
+        android:id="@+id/detailButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/main_search"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/main_search"
+        android:layout_marginRight="21dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/ic_search_option"
+        android:backgroundTint="@color/white"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"

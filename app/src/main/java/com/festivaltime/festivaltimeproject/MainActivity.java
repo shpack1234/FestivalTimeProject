@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         SpannableString spannableString = new SpannableString(text);
         int startIndex = text.indexOf("HOT!");
         int endIndex = startIndex + "HOT!".length();
-        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6666")), startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#E31B1B")), startIndex, endIndex, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         textview.setText(spannableString);
 
         HashGetter.getHashKey(getApplicationContext());
