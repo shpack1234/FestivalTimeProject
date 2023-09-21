@@ -88,13 +88,6 @@
             android:layout_gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="id : "
-                android:textSize="15dp"
-                android:textStyle="bold"/>
-
-            <TextView
                 android:id="@+id/privacy_userid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,13 +116,13 @@
             android:layout_height="wrap_content"
             android:text="생년월일"
             android:layout_marginTop="10dp"
-            android:textColor="@color/selected_color"
+            android:textColor="@color/darker_gray"
             android:layout_gravity="center"/>
 
         <DatePicker
             android:id="@+id/privacy_userbirth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
@@ -146,6 +139,8 @@
             <RadioButton
                 android:id="@+id/radioButtonMale"
                 android:layout_width="wrap_content"
+                android:buttonTint="@color/black"
+                android:buttonTintMode="multiply"
                 android:layout_height="wrap_content"
                 android:text="남성"/>
 
@@ -156,6 +151,8 @@
             <RadioButton
                 android:id="@+id/radioButtonFemale"
                 android:layout_width="wrap_content"
+                android:buttonTint="@color/black"
+                android:buttonTintMode="multiply"
                 android:layout_height="wrap_content"
                 android:text="여성" />
 

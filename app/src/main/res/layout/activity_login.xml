@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:background="@color/white">
 
 
     <LinearLayout
@@ -49,15 +50,26 @@
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_navigation"
+        android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical">
 
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo"
+            android:elevation="0dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="13dp"
             android:orientation="vertical">
 
             <TextView
@@ -89,6 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="13dp"
             android:orientation="vertical">
 
             <TextView
@@ -162,10 +176,28 @@
             android:textStyle="bold"
             android:textSize="15sp"
             android:layout_marginTop="5dp"
+
+            android:layout_marginBottom="10dp"
             android:text="login"
             android:textColor="@color/black"
             android:background="@drawable/ripple_custom"/>
 
     </LinearLayout>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_nevigation_background"
+        app:itemIconTint="@drawable/menu_select_color"
+        app:itemTextColor="@drawable/menu_select_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,11 @@
 package com.festivaltime.festivaltimeproject;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,6 +22,7 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -114,6 +121,27 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }
                 });
+            }
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(LoginActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(LoginActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(LoginActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(LoginActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(LoginActivity.this);
+                return true;
             }
         });
     }

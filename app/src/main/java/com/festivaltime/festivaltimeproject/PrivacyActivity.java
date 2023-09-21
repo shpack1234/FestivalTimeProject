@@ -1,5 +1,11 @@
 package com.festivaltime.festivaltimeproject;
 
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -34,6 +40,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import android.Manifest;
 
 public class PrivacyActivity extends AppCompatActivity {
@@ -194,6 +202,27 @@ public class PrivacyActivity extends AppCompatActivity {
                         navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
                     }
                 }
+            }
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(PrivacyActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(PrivacyActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(PrivacyActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(PrivacyActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(PrivacyActivity.this);
+                return true;
             }
         });
     }
