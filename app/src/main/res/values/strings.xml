@@ -169,6 +169,7 @@
 
     <!--개인정보-->
     <string name="privacy">개인정보</string>
+    <string name="login">로그인</string>
 
     <string name="login_message">로그인 후에 이용 가능합니다.</string>
 

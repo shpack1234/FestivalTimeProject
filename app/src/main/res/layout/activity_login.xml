@@ -7,6 +7,32 @@
     tools:context=".LoginActivity"
     android:layout_gravity="center">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray"/>
+
+    </LinearLayout>
+
     <ImageButton
         android:id="@+id/before_btn"
         android:layout_width="42dp"
@@ -16,10 +42,12 @@
         android:src="@drawable/ic_back_before"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="4dp"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,97 +56,115 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="닉네임 :"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="NickName"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/bright_orange"
+                android:gravity="center"/>
 
 
             <EditText
                 android:id="@+id/login_nickname"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:autofillHints="Nickname"
+                android:hint="닉네임을 입력하세요."
+                android:textColorHint="@color/gray"
                 android:ems="20"
+                android:background="@drawable/roundcorner_square"
+                android:gravity="center"
                 android:maxLength="6"
                 android:textSize="15sp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="비밀번호 :"
-                android:textSize="15sp"
+                android:text="Password"
+                android:textSize="17sp"
+                android:layout_gravity="center"
+                android:textColor="@color/bright_orange"
                 android:textStyle="bold" />
 
 
             <EditText
                 android:id="@+id/login_password"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:autofillHints="Nickname"
                 android:inputType="textPassword"
+                android:gravity="center"
+                android:hint="비밀번호를 입력하세요."
+                android:textColorHint="@color/gray"
                 android:ems="20"
+                android:background="@drawable/roundcorner_square"
                 android:maxLength="15"
                 android:textSize="15sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/login_sign_up"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="회원가입"
-                android:textSize="10sp"
-                android:textColor="@color/selected_color"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/darker_gray"
                 android:background="@null"/>
 
             <Button
                 android:id="@+id/login_find_nickname"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="닉네임 찾기"
-                android:textSize="10sp"
-                android:textColor="@color/selected_color"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/darker_gray"
                 android:background="@null"/>
 
             <Button
                 android:id="@+id/login_find_password"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="비밀번호 찾기"
-                android:textSize="10sp"
-                android:textColor="@color/selected_color"
+                android:textSize="13sp"
+                android:layout_weight="1"
+                android:textColor="@color/darker_gray"
                 android:background="@null"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="로그인"
-            android:textColor="@color/selected_color"
-            android:background="@drawable/radius_corner"/>
+            android:layout_marginTop="5dp"
+            android:text="login"
+            android:textColor="@color/black"
+            android:background="@drawable/ripple_custom"/>
 
     </LinearLayout>
 
