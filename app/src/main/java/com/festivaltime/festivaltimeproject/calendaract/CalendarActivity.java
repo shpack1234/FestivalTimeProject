@@ -160,22 +160,6 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         //화면 설정
         setMonthView();
 
-        // CalendarDao 인스턴스 생성 (생략)
-        calendarDao = CalendarDatabase.getInstance(this).calendarDao();
-
-        // 데이터베이스에서 일정 데이터를 가져와서 캘린더 레이어에 업데이트하는 작업을 시작합니다.
-        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
-        fetchScheduleTask.fetchSchedules(this);
-
-        //date recyclerview 설정
-        ArrayList<Date> dayList = daysInMonthArray();
-
-        // CalendarAdapter 객체 생성
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules);
-        adapter.setOnDateClickListener(this);
-        // RecyclerView에 어댑터 설정
-        calendarrecycler.setAdapter(adapter);
-
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,11 +198,10 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                     //오류발견: 완료버튼이 아닌 다른화면 선택시 자동 dismiss되어 설정 추가되는 현상> 추후 수정 예정
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        CalendarSetting settingDialog = (CalendarSetting) dialog;
-                        showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
+                        //CalendarSetting settingDialog = (CalendarSetting) dialog;
+                        //showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
                         SelectDateView.setVisibility(View.INVISIBLE); //값 변경시 이전에 선택했던 일정view INVISIBLE 설정
                         schedules.setVisibility(View.INVISIBLE);
-                        setMonthView(); //재설정된 캘린더 view
                     }
                 });
                 dialog.show();
@@ -291,6 +274,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
     @Override
     public void onDateClick(Date selectedDate) {
+        Log.d("CalendarActivity", "onCreate: Calendar activity created.");
         // 클릭된 날짜에 대한 일정 업데이트 처리
         updateUIForSelectedDate(selectedDate);
     }
@@ -318,15 +302,25 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         updateUI(scheduleList); // 매개변수를 전달하여 호출합니다.
     }
 
+    public void setShowOtherMonths(boolean showOtherMonths) {
+        this.showOtherMonths = showOtherMonths;
+    }
 
     //calendar 화면 설정
-    private void setMonthView() {
+    void setMonthView() {
         //선택되어있는 달 저장
         int month = selectedDate.get(Calendar.MONTH) + 1;
         int year = selectedDate.get(Calendar.YEAR);
         //해당 달 월>영어 텍스트뷰
         monthText.setText(Month_eng(month));
         Year_text.setText(String.valueOf(year));
+
+        // CalendarDao 인스턴스 생성 (생략)
+        calendarDao = CalendarDatabase.getInstance(this).calendarDao();
+
+        // 데이터베이스에서 일정 데이터를 가져와서 캘린더 레이어에 업데이트하는 작업을 시작합니다.
+        FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(this, calendarDao);
+        fetchScheduleTask.fetchSchedules(this);
 
         //date recyclerview 설정
         ArrayList<Date> dayList = daysInMonthArray();
@@ -335,6 +329,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7); //recyclerview layout 설정
         calendarrecycler.setLayoutManager(manager);
+        adapter.setOnDateClickListener(this);
         calendarrecycler.setAdapter(adapter);
     }
 
@@ -414,10 +409,6 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                                         }
                                     })
                                     .show();
-                            // 클릭된 일정 데이터를 데이터베이스에서 삭제
-                            /*if (check[0]) {
-                                deleteSchedule(schedule);
-                            }*/
                         }
                     });
                 }

@@ -88,6 +88,11 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
         finish_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // showOtherMonths 값을 설정
+                ((CalendarActivity) mActivity).setShowOtherMonths(othermonth_switch.isChecked());
+                // setMonthView 메서드를 호출하여 캘린더 뷰를 업데이트
+                ((CalendarActivity) mActivity).setMonthView();
+                // 다이얼로그를 닫음
                 dismiss();
             }
         });

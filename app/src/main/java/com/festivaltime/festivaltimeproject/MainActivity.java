@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         HashGetter.getHashKey(getApplicationContext());
         apiReader = new ApiReader();
         String apiKey = getResources().getString(R.string.api_key);
+        String holidayKey = getResources().getString(R.string.holiday_key);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("userId", null);
@@ -167,8 +168,10 @@ public class MainActivity extends AppCompatActivity {
         int[] vacationImages = {R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example};
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdff = new SimpleDateFormat("yyyy.M.d");
         Date date = new Date();
         String todaydate = sdf2.format(date);
+        String todaydatestand = sdff.format(date);
 
         // 날짜 문자열에서 년도와 월 추출
         String year = todaydate.substring(0, 4);
@@ -180,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         CalendarDao calendarDao = database.calendarDao();
         String category = "#52c8ed"; //휴가 db가져오기위한 category text
 
-        LocalDate today = LocalDate.now();
         List<HashMap<String, String>> holidaylist = new ArrayList<>();
 
         new Thread(new Runnable() {
@@ -196,6 +198,12 @@ public class MainActivity extends AppCompatActivity {
                     // 데이터 추출 및 holidaylist에 추가
                     for (CalendarEntity entity : calendarEntities) {
                         HashMap<String, String> holidayInfo = new HashMap<>();
+                        Log.d("startdate", entity.endDate);
+                        Log.d("starttttttttttttdate", todaydatestand);
+
+                        if (entity.endDate.compareTo(todaydatestand) < 0) {
+                            continue; // maxLocdate가 이미 지난 날짜이면 추가하지 않음
+                        }
 
                         String[] parts = entity.startDate.split("\\."); // 점(.)을 구분자로 사용하여 문자열을 분할
                         String formattedDate = parts[0] + String.format("%02d", Integer.parseInt(parts[1])) + String.format("%02d", Integer.parseInt(parts[2]));
@@ -220,10 +228,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
-        apiReader.holiday(apiKey, year, month, new ApiReader.ApiResponseListener() { //api로 국경일 불러옴
+        apiReader.holiday(holidayKey, year, month, new ApiReader.ApiResponseListener() { //api로 국경일 불러옴
             @Override
             public void onSuccess(String response) {
                 ParsingApiData.parseXmlDataFromHoliday(response);
+                Log.d("holiday respnse", response);
                 List<LinkedHashMap<String, String>> groupedHolidayList = ParsingApiData.getHolidayList();
                 List<LinkedHashMap<String, String>> updatedHolidayList = groupAndCombineDates(groupedHolidayList);
 
@@ -236,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if (holidaylist.size() > 0) {
-                                    //int maxItems = Math.min(holidaylist.size(), 5);
                                     for (int i = 0; i < 5; i++) {
                                         List<HashMap<String, String>> festivalList = new ArrayList<>();
                                         View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
@@ -245,9 +253,9 @@ public class MainActivity extends AppCompatActivity {
                                         int finalImages = i;
 
                                         HashMap<String, String> holidayInfo;
-                                        if(holidaylist.size()<=i){ //임시로 반복처리
+                                        if (holidaylist.size() <= i) { //휴가일수가 작은경우 0번째 휴가로 5개까지 계속 검색
                                             holidayInfo = holidaylist.get(0);
-                                        }else{
+                                        } else {
                                             holidayInfo = holidaylist.get(i);
                                         }
 
@@ -278,38 +286,43 @@ public class MainActivity extends AppCompatActivity {
                                                             @Override
                                                             public void run() {
                                                                 if (festivalList.size() > 0) {
-                                                                    HashMap<String, String> festivalInfo = festivalList.get(finalImages);
+                                                                    HashMap<String, String> festivalInfo = null;
+                                                                    if (finalImages >= 0 && finalImages < festivalList.size()) {
+                                                                        festivalInfo = festivalList.get(finalImages);
 
-                                                                    String id = festivalInfo.get("contentid");
-                                                                    String repImage = festivalInfo.get("img");
+                                                                        String id = festivalInfo.get("contentid");
+                                                                        String repImage = festivalInfo.get("img");
 
-                                                                    if (repImage == null || repImage.isEmpty()) {
-                                                                        imageButton.setImageResource(R.drawable.first_image_example);
-                                                                    } else {
-                                                                        Glide.with(MainActivity.this)
-                                                                                .load(repImage)
-                                                                                .fitCenter()
-                                                                                .transform(new CenterCrop(), new RoundedCorners(30))
-                                                                                .placeholder(R.drawable.first_image_example)
-                                                                                .into(imageButton);
-                                                                    }
-
-                                                                    //휴가가 하루일경우 해당 날짜만 settext
-                                                                    if (startholidate.equals(endholidate)) {
-                                                                        String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
-                                                                        String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
-                                                                        datetext.setText(monthtext + "/" + datext);
-                                                                    } else {
-                                                                        datetext.setText(date);
-                                                                    }
-
-                                                                    imageButton.setOnClickListener(new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            String contentId = id;
-                                                                            navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                        if (repImage == null || repImage.isEmpty()) {
+                                                                            imageButton.setImageResource(R.drawable.first_image_example);
+                                                                        } else {
+                                                                            Glide.with(MainActivity.this)
+                                                                                    .load(repImage)
+                                                                                    .fitCenter()
+                                                                                    .transform(new CenterCrop(), new RoundedCorners(30))
+                                                                                    .placeholder(R.drawable.first_image_example)
+                                                                                    .into(imageButton);
                                                                         }
-                                                                    });
+
+                                                                        //휴가가 하루일경우 해당 날짜만 settext
+                                                                        if (startholidate.equals(endholidate)) {
+                                                                            String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
+                                                                            String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
+                                                                            datetext.setText(monthtext + "/" + datext);
+                                                                        } else {
+                                                                            datetext.setText(date);
+                                                                        }
+
+                                                                        imageButton.setOnClickListener(new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View v) {
+                                                                                String contentId = id;
+                                                                                navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                            }
+                                                                        });
+
+                                                                    } else {
+                                                                    }
                                                                 }
                                                             }
                                                         });
@@ -938,10 +951,10 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("검색어: " + query);
     }
 
-    private List<LinkedHashMap<String, String>> groupAndCombineDates(List<LinkedHashMap<String, String>> holidaylist) {
+    private List<LinkedHashMap<String, String>> groupAndCombineDates(List<LinkedHashMap<String, String>> orholidaylist) {
         Map<String, List<String>> dateGroups = new HashMap<>();
 
-        for (LinkedHashMap<String, String> holidayInfo : holidaylist) {
+        for (LinkedHashMap<String, String> holidayInfo : orholidaylist) {
             String dateName = holidayInfo.get("dateName");
             String locdate = holidayInfo.get("locdate");
 
@@ -958,6 +971,10 @@ public class MainActivity extends AppCompatActivity {
         // 날짜 범위 조합
         List<LinkedHashMap<String, String>> combinedList = new ArrayList<>();
 
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String currentLocdate = dateFormat.format(currentDate);
+
         for (Map.Entry<String, List<String>> entry : dateGroups.entrySet()) {
             String dateName = entry.getKey();
             List<String> locdates = entry.getValue();
@@ -965,6 +982,10 @@ public class MainActivity extends AppCompatActivity {
             // 최소 및 최대 locdate
             String minLocdate = Collections.min(locdates);
             String maxLocdate = Collections.max(locdates);
+
+            if (maxLocdate.compareTo(currentLocdate) <= 0) {
+                continue; // maxLocdate가 이미 지난 날짜이면 추가하지 않음
+            }
 
             String minMonth = String.valueOf(Integer.parseInt(minLocdate.substring(4, 6)));
             String minDay = String.valueOf(Integer.parseInt(minLocdate.substring(6, 8)));
@@ -976,7 +997,7 @@ public class MainActivity extends AppCompatActivity {
             // 조합된 목록에 새 항목을 생성
             LinkedHashMap<String, String> combinedInfo = new LinkedHashMap<>();
             combinedInfo.put("dateName", dateName);
-            combinedInfo.put("dateRange", dateRange);
+            combinedInfo.put("locdate", dateRange);
             combinedInfo.put("startdate", minLocdate);
             combinedInfo.put("enddate", maxLocdate);
 
