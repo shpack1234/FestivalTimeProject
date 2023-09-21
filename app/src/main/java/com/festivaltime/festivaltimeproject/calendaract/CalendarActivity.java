@@ -56,6 +56,7 @@ import java.util.concurrent.Executors;
 public class CalendarActivity extends AppCompatActivity implements FetchScheduleTask.FetchScheduleTaskListener, CalendarAdapter.OnDateClickListener {
     private CalendarDao calendarDao;
     private boolean showOtherMonths = true; // 다른 달의 일자를 표시할지 여부를 저장 변수
+    public boolean showft = true, showholi = true;
     //현재 시간 가져오기 now, date, sdf
     public long now = System.currentTimeMillis();
     public Date date = new Date(now);
@@ -81,6 +82,8 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        loadSettings();
 
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -191,7 +194,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
             @Override
             public void onClick(View v) {
                 //CalendarSetting dialog 띄움, 다른달 표시 변수 전송
-                CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths, CalendarActivity.this);
+                CalendarSetting dialog = new CalendarSetting(CalendarActivity.this, showOtherMonths, showft, showholi, CalendarActivity.this);
                 // 팝업 창 배경을 투명으로 설정
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 실행
@@ -306,6 +309,22 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         this.showOtherMonths = showOtherMonths;
     }
 
+    public void setShowft(boolean showft) {
+        this.showft = showft;
+    }
+
+    public void setShowholi(boolean showholi) {
+        this.showholi = showholi;
+    }
+
+    // 설정 로드 메서드
+    private void loadSettings() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        showft = sharedPreferences.getBoolean("showft", true); // showft 설정값을 로드
+        showholi = sharedPreferences.getBoolean("showholi", true); // showholi 설정값을 로드
+        showOtherMonths = sharedPreferences.getBoolean("showOtherMonths", true);
+    }
+
     //calendar 화면 설정
     void setMonthView() {
         //선택되어있는 달 저장
@@ -373,11 +392,27 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                         // 오류시 비출 기본 색상 값 설정
                         categoryColor = "#000000";
                     }
+                    //Log.d("Calendar categorycolor", categoryColor);
 
-                    scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
-                    titleTextView.setText(title); // 일정 데이터를 각 scheduleBox에 담는 작업
+                    Log.d("showft", String.valueOf(showft));
+                    Log.d("showholid", String.valueOf(showholi));
+                    //축제 visible설정시
+                    /*if (showft && categoryColor.equals("#ed5c55")) {
+                    } else if ((!showft) && categoryColor.equals("#ed5c55")){ //축제 invisible설정시 일정에 안담음
+                        continue;
+                    }
+                    //휴가 visible설정시
+                    if (showholi && categoryColor.equals("#52c8ed")) {
+                    } else if ((!showholi) && categoryColor.equals("#52c8ed")){ //축제
+                        continue;
+                    }*/
 
-                    //시작날짜-시간, 종료날짜-시간 분류예정
+                    if ((showft && categoryColor.equals("#ed5c55")) || (showholi && categoryColor.equals("#52c8ed"))) {
+
+                        scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
+                        titleTextView.setText(title); // 일정 데이터를 각 scheduleBox에 담는 작업
+
+                        //시작날짜-시간, 종료날짜-시간 분류예정
                     /*if (selectedDate==startDate){
                         timeTextView.setText(startTime);
                     }
@@ -385,32 +420,33 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                         timeTextView.setText(endTime);
                     }*/
 
-                    scheduleCount++;
-                    // 각 scheduleBox를 scheduleContainer에 추가
-                    scheduleContainer.addView(scheduleBox);
+                        scheduleCount++;
+                        // 각 scheduleBox를 scheduleContainer에 추가
+                        scheduleContainer.addView(scheduleBox);
 
-                    // 삭제 버튼 클릭 리스너 등록
-                    deleteButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Boolean[] check = {false};
-                            new AlertDialog.Builder(CalendarActivity.this)
-                                    .setTitle("일정 삭제")
-                                    .setMessage("일정을 삭제하시겠습니까?")
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            // 확인시 처리 로직
-                                            Toast.makeText(CalendarActivity.this, "일정을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                                            deleteSchedule(schedule);
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                        }
-                                    })
-                                    .show();
-                        }
-                    });
+                        // 삭제 버튼 클릭 리스너 등록
+                        deleteButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final Boolean[] check = {false};
+                                new AlertDialog.Builder(CalendarActivity.this)
+                                        .setTitle("일정 삭제")
+                                        .setMessage("일정을 삭제하시겠습니까?")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                // 확인시 처리 로직
+                                                Toast.makeText(CalendarActivity.this, "일정을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                                                deleteSchedule(schedule);
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                            }
+                                        })
+                                        .show();
+                            }
+                        });
+                    }
                 }
             }
         } catch (ParseException e) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -36,13 +37,15 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
     private CalendarCategoryDao categoryDao;
     private List<CalendarCategoryEntity> categorylist;
     final Switch othermonth_switch;
+    final Switch showft_switch;
+    final Switch showholi_switch;
     final boolean showOtherMonths;
     private boolean deleteVisible = false;
     protected Context mContext;
     public Button finish_btn, del_categories, add_category, close_btn;
     private Executor executor;
 
-    public CalendarSetting(@NonNull Context context, boolean showOtherMonths, Activity activity) {
+    public CalendarSetting(@NonNull Context context, boolean showOtherMonths, boolean showft, boolean showholi, Activity activity) {
         super(context);
         //팝업 애니메이션 위한 윈도우
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -56,6 +59,8 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
         add_category = findViewById(R.id.add_category);
         close_btn = findViewById(R.id.close_del);
         othermonth_switch = findViewById(R.id.othermonth_switch);
+        showft_switch = findViewById(R.id.festival_switch);
+        showholi_switch = findViewById(R.id.vacation_switch);
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -84,18 +89,37 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
             window.setGravity(Gravity.BOTTOM);
         }
 
+        if (showft) {
+            showft_switch.setChecked(true);
+        } else {
+            showft_switch.setChecked(false);
+        }
+
+        if (showholi) {
+            showholi_switch.setChecked(true);
+        } else {
+            showholi_switch.setChecked(false);
+        }
+
         //완료 버튼
         finish_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // showOtherMonths 값을 설정
                 ((CalendarActivity) mActivity).setShowOtherMonths(othermonth_switch.isChecked());
+                ((CalendarActivity) mActivity).setShowft(showft_switch.isChecked());
+                ((CalendarActivity) mActivity).setShowholi(showholi_switch.isChecked());
                 // setMonthView 메서드를 호출하여 캘린더 뷰를 업데이트
                 ((CalendarActivity) mActivity).setMonthView();
+
+                // 설정 값을 저장
+                saveSettings();
+
                 // 다이얼로그를 닫음
                 dismiss();
             }
         });
+
 
         //삭제버튼
         del_categories.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +176,16 @@ public class CalendarSetting extends Dialog implements FetchCategoryTask.FetchCa
             othermonth_switch.setChecked(false);
         }
 
+    }
+
+    private void saveSettings() {
+        // 설정 값을 SharedPreferences에 저장
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("showft", showft_switch.isChecked()); // showft 설정값 저장
+        editor.putBoolean("showholi", showholi_switch.isChecked()); // showholi 설정값 저장
+        editor.putBoolean("showOtherMonths", othermonth_switch.isChecked());
+        editor.apply(); // 변경 사항을 적용합니다.
     }
 
     @Override

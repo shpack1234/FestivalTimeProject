@@ -285,41 +285,43 @@ public class MainActivity extends AppCompatActivity {
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                if (festivalList.size() > 0) {
+                                                                if (festivalList != null && festivalList.size() > 0) {
                                                                     HashMap<String, String> festivalInfo = null;
                                                                     if (finalImages >= 0 && finalImages < festivalList.size()) {
                                                                         festivalInfo = festivalList.get(finalImages);
 
-                                                                        String id = festivalInfo.get("contentid");
-                                                                        String repImage = festivalInfo.get("img");
+                                                                        if (festivalInfo != null) {
+                                                                            String id = festivalInfo.get("contentid");
+                                                                            String repImage = festivalInfo.get("img");
 
-                                                                        if (repImage == null || repImage.isEmpty()) {
-                                                                            imageButton.setImageResource(R.drawable.first_image_example);
-                                                                        } else {
-                                                                            Glide.with(MainActivity.this)
-                                                                                    .load(repImage)
-                                                                                    .fitCenter()
-                                                                                    .transform(new CenterCrop(), new RoundedCorners(30))
-                                                                                    .placeholder(R.drawable.first_image_example)
-                                                                                    .into(imageButton);
-                                                                        }
-
-                                                                        //휴가가 하루일경우 해당 날짜만 settext
-                                                                        if (startholidate.equals(endholidate)) {
-                                                                            String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
-                                                                            String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
-                                                                            datetext.setText(monthtext + "/" + datext);
-                                                                        } else {
-                                                                            datetext.setText(date);
-                                                                        }
-
-                                                                        imageButton.setOnClickListener(new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                String contentId = id;
-                                                                                navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                            if (repImage == null || repImage.isEmpty()) {
+                                                                                imageButton.setImageResource(R.drawable.first_image_example);
+                                                                            } else {
+                                                                                Glide.with(MainActivity.this)
+                                                                                        .load(repImage)
+                                                                                        .fitCenter()
+                                                                                        .transform(new CenterCrop(), new RoundedCorners(30))
+                                                                                        .placeholder(R.drawable.first_image_example)
+                                                                                        .into(imageButton);
                                                                             }
-                                                                        });
+
+                                                                            //휴가가 하루일경우 해당 날짜만 settext
+                                                                            if (startholidate.equals(endholidate)) {
+                                                                                String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
+                                                                                String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
+                                                                                datetext.setText(monthtext + "/" + datext);
+                                                                            } else {
+                                                                                datetext.setText(date);
+                                                                            }
+
+                                                                            imageButton.setOnClickListener(new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    String contentId = id;
+                                                                                    navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                                }
+                                                                            });
+                                                                        }
 
                                                                     } else {
                                                                     }

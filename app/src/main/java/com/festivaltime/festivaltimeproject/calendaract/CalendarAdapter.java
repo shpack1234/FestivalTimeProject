@@ -63,8 +63,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         Calendar dateCalendar = Calendar.getInstance();
         dateCalendar.setTime(monthDate);
 
-        // onBindViewHolder 메서드 내부에 추가
-        Log.d("CalendarAdapter", "onBindViewHolder: Position " + position + " date: " + monthDate);
+        //Log.d("CalendarAdapter", "onBindViewHolder: Position " + position + " date: " + monthDate);
 
         int currentDay = CalendarUtil.selectedDate.get(Calendar.DAY_OF_MONTH);
         int currentMonth = CalendarUtil.selectedDate.get(Calendar.MONTH) + 1;
@@ -153,7 +152,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                     int currentYear = CalendarUtil.selectedDate.get(Calendar.YEAR);
 
                     Log.d("CalendarAdapter", "onDateClick: Selected date: " + selectedDate);
-                    Log.d("CalendarAdapter", "onDateClick: Adapter position: " + adapterPosition);
+                    //Log.d("CalendarAdapter", "onDateClick: Adapter position: " + adapterPosition);
 
                     //이전에 클릭한 날짜 텍스트 색상, 배경 리소스 초기화 위한 if문 (이중 선택한것처럼 보이는 효과 피하도록)
                     if ((showOtherMonths && selectedMonth == currentMonth) || (selectedYear == currentYear && selectedMonth == currentMonth)) {
