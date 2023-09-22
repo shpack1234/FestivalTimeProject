@@ -1,5 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
+import static android.content.ContentValues.TAG;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.reactivex.rxjava3.core.Single;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -249,6 +252,60 @@ public class ApiReader {
         }
 
     }
+
+    public Single<String> searchKeyword2(String serviceKey, String keyword, String cat){
+        return Single.create(emitter -> {
+            try {
+                HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                        .scheme("https")
+                        .host("apis.data.go.kr")
+                        .addPathSegment("B551011")
+                        .addPathSegment("KorService1")
+                        .addPathSegment("searchKeyword1")
+                        .addQueryParameter("numOfRows", "100000")
+                        .addQueryParameter("MobileOS", "AND")
+                        .addQueryParameter("MobileApp", "FestivalTime")
+                        .addQueryParameter("keyword", keyword)
+                        .addQueryParameter("contentTypeId", "15")
+                        .addQueryParameter("serviceKey", serviceKey)
+                        .addQueryParameter("cat2", cat);
+
+                String url = urlBuilder.build().toString();
+                Log.d(TAG, "URL: " + url);
+                Request request = new Request.Builder().url(url).build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        if (!emitter.isDisposed()) {
+                            emitter.onError(e);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String responseData = response.body().string();
+                            if (!emitter.isDisposed()) {
+                                emitter.onSuccess(responseData);
+                            }
+                        } else {
+                            if (!emitter.isDisposed()) {
+                                emitter.onError(new IOException(response.message()));
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(e);
+                }
+            }
+        });
+    }
+
+
+
 
     public void searchKeyword2(String serviceKey, String areacode, String keyword, String cat, final ApiResponseListener listener){
         try {
