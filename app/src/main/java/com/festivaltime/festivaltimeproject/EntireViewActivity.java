@@ -3,6 +3,7 @@ package com.festivaltime.festivaltimeproject;
 import static android.content.ContentValues.TAG;
 
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -21,14 +22,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
@@ -62,9 +66,8 @@ public class EntireViewActivity extends AppCompatActivity {
     private CalendarEntity calendarEntity;
     private CalendarDatabase calendarDatabase;
     private String userId;
-
-
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
+    private List<HashMap<String, String>> samedaylist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,7 @@ public class EntireViewActivity extends AppCompatActivity {
         calendarDao = calendarDatabase.calendarDao();
 
         String contentId = getIntent().getStringExtra("contentid");
+        LinearLayout samedayFestival = findViewById(R.id.entire_sameday_festival_container);
 
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -121,6 +125,15 @@ public class EntireViewActivity extends AppCompatActivity {
                             String title = festivalInfo.get("title");
                             String address1 = festivalInfo.get("address1");
                             String address2 = festivalInfo.get("address2");
+                            String addresstext = "";
+
+                            //주소 null시
+                            if ((address1 == null || address1.contains("null")) &&
+                                    ((address2 == null || address2.contains("null")))) {
+                                addresstext = getString(R.string.null_text);
+                            } else {
+                                addresstext = address1 + " " + address2;
+                            }
                             String id = festivalInfo.get("contentid");
                             String firstImage = festivalInfo.get("img");
                             String overview = festivalInfo.get("overview");
@@ -140,7 +153,7 @@ public class EntireViewActivity extends AppCompatActivity {
                             }
 
                             titleTextView.setText(title);
-                            address.setText(address1 + " " + address2);
+                            address.setText(addresstext);
                             //html 형태 변환하여 setText
                             if (overview != null) {
                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -150,6 +163,7 @@ public class EntireViewActivity extends AppCompatActivity {
                                 }
                             } else {
                                 // detailInfo가 null인 경우에 대한 처리 추가
+                                overviewText.setText(getString(R.string.null_text));
                             }
 
 
@@ -388,6 +402,81 @@ public class EntireViewActivity extends AppCompatActivity {
             }
         });
 
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        String todaydate = sdf2.format(date);
+
+        apiReader.Festivallit2(apiKey, todaydate, todaydate, new ApiReader.ApiResponseListener() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d("entire startdate", todaydate);
+                Log.d("entire enddate", todaydate);
+                Log.d("response", response);
+                ParsingApiData.parseXmlDataFromFestival(response);
+                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        samedaylist.clear();
+                        samedaylist.addAll(parsedFestivalList);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (samedaylist.size() > 0) {
+                                    for (int i = 0; i < 5; i++) {
+                                        View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
+                                        ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
+                                        TextView datetext = sliderItemView.findViewById(R.id.date_text);
+
+                                        HashMap<String, String> samedayInfo = samedaylist.get(i);
+
+                                        String contentid = samedayInfo.get("contentid");
+                                        String img = samedayInfo.get("img");
+                                        String startdate = samedayInfo.get("eventstartdate");
+                                        String enddate = samedayInfo.get("eventenddate");
+
+                                        if (img == null || img.isEmpty()) {
+                                            imageButton.setImageResource(R.drawable.first_image_example);
+                                        } else {
+                                            Glide.with(EntireViewActivity.this)
+                                                    .load(img)
+                                                    .fitCenter()
+                                                    .transform(new CenterCrop(), new RoundedCorners(30))
+                                                    .placeholder(R.drawable.first_image_example)
+                                                    .into(imageButton);
+                                        }
+
+                                        String minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
+                                        String minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
+                                        String maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
+                                        String maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
+
+                                        String entitydate = minMonth + "/" + minDay + "~" + maxMonth + "/" + maxDay;
+                                        datetext.setText(entitydate);
+
+                                        imageButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                String contentId = contentid;
+                                                navigateToDetailFestivalActivity(EntireViewActivity.this, contentId);
+                                            }
+                                        });
+                                        samedayFestival.addView(sliderItemView);
+                                    }
+
+                                }
+
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(MotionEffect.TAG, "API Error: " + error);
+            }
+        });
 
         Intent intent = getIntent();
         if (intent != null) {
