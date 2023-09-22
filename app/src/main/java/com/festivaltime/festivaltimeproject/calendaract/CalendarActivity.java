@@ -198,11 +198,8 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                 // 팝업 창 배경을 투명으로 설정
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() { //dismiss시 실행
-                    //오류발견: 완료버튼이 아닌 다른화면 선택시 자동 dismiss되어 설정 추가되는 현상> 추후 수정 예정
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        //CalendarSetting settingDialog = (CalendarSetting) dialog;
-                        //showOtherMonths = settingDialog.getShowOtherMonths(); // othermonth_switch.isChecked() 값을 가져오고 재설정
                         SelectDateView.setVisibility(View.INVISIBLE); //값 변경시 이전에 선택했던 일정view INVISIBLE 설정
                         schedules.setVisibility(View.INVISIBLE);
                     }
@@ -345,7 +342,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         ArrayList<Date> dayList = daysInMonthArray();
 
         //calendar 어뎁터 사용 위한 정의
-        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules);
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules, showft, showholi);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7); //recyclerview layout 설정
         calendarrecycler.setLayoutManager(manager);
         adapter.setOnDateClickListener(this);
@@ -373,6 +370,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
                 Date startDate = select_sdf.parse(schedule.startDate);
                 Date endDate = select_sdf.parse(schedule.endDate);
                 //db확인용 log
+                Log.d("CalendarDatabase: DateLog", "selectedDate: " + selectedDate);
                 Log.d("CalendarDatabase: DateLog", "startDate: " + startDate);
                 Log.d("CalendarDatabase: DateLog", "endDate: " + endDate);
 
@@ -396,29 +394,21 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
 
                     Log.d("showft", String.valueOf(showft));
                     Log.d("showholid", String.valueOf(showholi));
-                    //축제 visible설정시
-                    /*if (showft && categoryColor.equals("#ed5c55")) {
-                    } else if ((!showft) && categoryColor.equals("#ed5c55")){ //축제 invisible설정시 일정에 안담음
-                        continue;
-                    }
-                    //휴가 visible설정시
-                    if (showholi && categoryColor.equals("#52c8ed")) {
-                    } else if ((!showholi) && categoryColor.equals("#52c8ed")){ //축제
-                        continue;
-                    }*/
 
-                    if ((showft && categoryColor.equals("#ed5c55")) || (showholi && categoryColor.equals("#52c8ed"))) {
+                    if ((showft && categoryColor.equals("#ed5c55")) ||
+                            (showholi && categoryColor.equals("#52c8ed")) ||
+                            ((!categoryColor.equals("#52c8ed")) &&
+                                    (!categoryColor.equals("#ed5c55")))) {
 
                         scheduleCategory.setColorFilter(Color.parseColor(categoryColor));
                         titleTextView.setText(title); // 일정 데이터를 각 scheduleBox에 담는 작업
 
-                        //시작날짜-시간, 종료날짜-시간 분류예정
-                    /*if (selectedDate==startDate){
-                        timeTextView.setText(startTime);
-                    }
-                    else if (selectedDate==endDate){
-                        timeTextView.setText(endTime);
-                    }*/
+                        // 시작날짜-시간, 종료날짜-시간 분류예정
+                        if (selectedDate.compareTo(startDate) == 0) { // selectedDate와 startDate가 같을 때
+                            timeTextView.setText(startTime);
+                        } else if (selectedDate.compareTo(endDate) == 0) { // selectedDate와 endDate가 같을 때
+                            timeTextView.setText(endTime);
+                        }
 
                         scheduleCount++;
                         // 각 scheduleBox를 scheduleContainer에 추가

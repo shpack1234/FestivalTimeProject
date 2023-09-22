@@ -38,7 +38,7 @@ public class FetchScheduleTask {
     }
 
     // 해당 날짜에 속하는 일정 데이터를 가져오는 메소드
-    public List<CalendarEntity> fetchSchedulesForDate(Date date) {
+    public List<CalendarEntity> fetchSchedulesForDate(Date date, boolean showft, boolean showholi) {
         List<CalendarEntity> allSchedules = calendarDao.getAllCalendarEntity();
         List<CalendarEntity> matchingSchedules = new ArrayList<>();
 
@@ -51,14 +51,25 @@ public class FetchScheduleTask {
         dateCalendar.set(Calendar.MILLISECOND, 0);
 
         for (CalendarEntity schedule : allSchedules) {
+            String categoryColor = schedule.category;
             Date startDate = convertStringToDate(schedule.startDate);
             Date endDate = convertStringToDate(schedule.endDate);
 
-            // 시간을 무시한 날짜 비교
-            if (startDate != null && endDate != null &&
-                    !dateCalendar.getTime().before(startDate) &&
-                    !dateCalendar.getTime().after(endDate)) {
-                matchingSchedules.add(schedule);
+            if (categoryColor == null) {
+                // 오류시 비출 기본 색상 값 설정
+                categoryColor = "#000000";
+            }
+
+            if ((showft && categoryColor.equals("#ed5c55")) ||
+                    (showholi && categoryColor.equals("#52c8ed")) ||
+                    ((!categoryColor.equals("#52c8ed")) &&
+                            (!categoryColor.equals("#ed5c55")))) {
+                // 시간을 무시한 날짜 비교
+                if (startDate != null && endDate != null &&
+                        !dateCalendar.getTime().before(startDate) &&
+                        !dateCalendar.getTime().after(endDate)) {
+                    matchingSchedules.add(schedule);
+                }
             }
         }
 
