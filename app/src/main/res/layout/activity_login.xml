@@ -174,11 +174,11 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:layout_marginTop="5dp"
 
             android:layout_marginBottom="10dp"
-            android:text="login"
+            android:text="로그인"
             android:textColor="@color/black"
             android:background="@drawable/ripple_custom"/>
 

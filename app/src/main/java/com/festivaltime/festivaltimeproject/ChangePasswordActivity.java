@@ -41,6 +41,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     boolean userExist = false;
 
     public ImageButton Back_Btn;
+
     private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -58,6 +59,45 @@ public class ChangePasswordActivity extends AppCompatActivity {
         EditText changePW = findViewById(R.id.changePW);
         EditText checkPW = findViewById(R.id.checkPW);
         Button changeBtn = findViewById(R.id.change_button);
+
+        currentPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    // 포커스를 가지면 밑줄 색상을 selected_color로 변경
+                    currentPW.setBackgroundTintList(getResources().getColorStateList(R.color.light_red));
+                } else {
+                    // 포커스를 잃으면 밑줄 색상을 dark_gray로 변경
+                    currentPW.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+                }
+            }
+        });
+
+        changePW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    // 포커스를 가지면 밑줄 색상을 selected_color로 변경
+                    changePW.setBackgroundTintList(getResources().getColorStateList(R.color.light_red));
+                } else {
+                    // 포커스를 잃으면 밑줄 색상을 dark_gray로 변경
+                    changePW.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+                }
+            }
+        });
+
+        checkPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    // 포커스를 가지면 밑줄 색상을 selected_color로 변경
+                    checkPW.setBackgroundTintList(getResources().getColorStateList(R.color.light_red));
+                } else {
+                    // 포커스를 잃으면 밑줄 색상을 dark_gray로 변경
+                    checkPW.setBackgroundTintList(getResources().getColorStateList(R.color.gray));
+                }
+            }
+        });
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -116,6 +156,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+
+
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);//하단 바 navigate 처리
