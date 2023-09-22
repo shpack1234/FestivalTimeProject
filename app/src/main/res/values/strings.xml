@@ -4,6 +4,7 @@
     <string name="search_hint">어떤 축제를 즐겨볼까요?</string>
     <string name="HotFestival">HOT! 한 축제</string>
     <string name="vacation_festival">축제와 함께 하는 휴가!</string>
+    <string name="today_festival">지금 진행중인 축제</string>
     <string name="festival_title">title</string>
     <string name="vacation_recommend">추천 축제</string>
 
@@ -41,6 +42,7 @@
     <string name="Ongoing">진행중</string>
     <string name="Upgoing">진행예정</string>
     <string name="festival_state">축제 상태</string>
+    <string name="null_text">홈페이지를 통해 확인해주세요.</string>
 
 
     <string name="location">지역</string>

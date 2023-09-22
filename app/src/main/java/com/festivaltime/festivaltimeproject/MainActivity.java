@@ -198,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
                     // 데이터 추출 및 holidaylist에 추가
                     for (CalendarEntity entity : calendarEntities) {
                         HashMap<String, String> holidayInfo = new HashMap<>();
-                        Log.d("startdate", entity.endDate);
-                        Log.d("starttttttttttttdate", todaydatestand);
 
                         if (entity.endDate.compareTo(todaydatestand) < 0) {
                             continue; // maxLocdate가 이미 지난 날짜이면 추가하지 않음

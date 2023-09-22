@@ -32,7 +32,7 @@ import java.util.Locale;
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
     private CalendarDao calendarDao;
     ArrayList<Date> dayList;
-    boolean showOtherMonths;
+    boolean showOtherMonths, showft, showholi;
     private RecyclerView recyclerView;
     private OnDateClickListener onDateClickListener;
     private int previousSelectedPosition = -1;
@@ -40,12 +40,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     private ScrollView schedules;
 
     //recyclerview 정렬한 arraylist, 다른달 표시 여부, calendar recyclerview, 선택 날짜, 일정 view
-    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, ScrollView schedules) {
+    public CalendarAdapter(ArrayList<Date> dayList, boolean showOtherMonths, RecyclerView recyclerView, TextView selectDateView, ScrollView schedules, boolean showft, boolean showholi) {
         this.dayList = dayList;
         this.showOtherMonths = showOtherMonths;
         this.recyclerView = recyclerView;
         this.selectDateView = selectDateView;
         this.schedules = schedules;
+        this.showft = showft;
+        this.showholi = showholi;
     }
 
     @NonNull
@@ -225,7 +227,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         }
 
         FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(context, calendarDao);
-        List<CalendarEntity> schedules = fetchScheduleTask.fetchSchedulesForDate(displayDate);
+        List<CalendarEntity> schedules = fetchScheduleTask.fetchSchedulesForDate(displayDate, showft, showholi);
 
         return !schedules.isEmpty();
     }
