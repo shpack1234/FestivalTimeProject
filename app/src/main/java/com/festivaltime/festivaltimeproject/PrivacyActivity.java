@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -61,7 +62,7 @@ public class PrivacyActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 123;
 
     private ImageView privacyUserImage;
-
+    private String imagePath=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +92,7 @@ public class PrivacyActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.privacy_password);
         EditText passwordConfirm = findViewById(R.id.privacy_password_confirm);
         Button logoutButton = findViewById(R.id.login_logout);
+        privacyUserImage=findViewById(R.id.privacy_userimage);
 
         executor.execute(new Runnable() {
             @Override
@@ -103,6 +105,9 @@ public class PrivacyActivity extends AppCompatActivity {
                         if (loadedUser != null) {
                             RadioButton radioButtonMale = findViewById(R.id.radioButtonMale);
                             RadioButton radioButtonFemale = findViewById(R.id.radioButtonFemale);
+
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                            privacyUserImage.setImageBitmap(bitmap);
 
                             LinearLayout passwordBox = findViewById(R.id.privacy_password_box);
                             passwordBox.setVisibility(View.GONE);
@@ -194,6 +199,7 @@ public class PrivacyActivity extends AppCompatActivity {
                         userEntity.setUserName(name);
                         userEntity.setUserBirth(birth);
                         userEntity.setUserGender(gender);
+                        userEntity.setProfileImage(imagePath);
 
                         executor.execute(new Runnable() {
                             @Override
@@ -249,9 +255,8 @@ public class PrivacyActivity extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                 privacyUserImage.setImageBitmap(bitmap);
-                String imagePath = saveImageToFile(bitmap);
-                Intent intent = new Intent(this, MyPageActivity.class);
-                intent.putExtra("imagePath", imagePath);
+                imagePath = saveImageToFile(bitmap);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "이미지를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();

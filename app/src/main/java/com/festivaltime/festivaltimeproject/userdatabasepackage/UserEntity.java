@@ -22,6 +22,8 @@ public class UserEntity {
     private ArrayList<String> userFavoriteFestival;
     private boolean isLogin;
 
+    private String profileImage;
+
     public int getId() {
         return id;
     }
@@ -92,6 +94,14 @@ public class UserEntity {
 
     public void deleteUserFavoriteFestival(String FestivalId) {
         this.userFavoriteFestival.remove(FestivalId);
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage=profileImage;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 
 }

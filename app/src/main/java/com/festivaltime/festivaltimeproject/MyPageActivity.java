@@ -48,6 +48,8 @@ public class MyPageActivity extends AppCompatActivity {
 
     boolean userExist = false;
 
+    private String imagePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +94,6 @@ public class MyPageActivity extends AppCompatActivity {
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
-        String imagePath = getIntent().getStringExtra("imagePath");
         ImageView profileImage = findViewById(R.id.user_profile_image);
 
         AsyncTask.execute(new Runnable() {
@@ -115,6 +116,8 @@ public class MyPageActivity extends AppCompatActivity {
 
                                 userNickname.setText(loadedUser.getUserName());
                                 userIdText.setText("#" + userId);
+
+                                imagePath=loadedUser.getProfileImage();
 
                                 if(imagePath!=null) {
                                     Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
