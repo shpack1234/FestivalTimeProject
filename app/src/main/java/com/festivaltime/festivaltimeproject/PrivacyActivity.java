@@ -35,10 +35,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import com.festivaltime.festivaltimeproject.userdatabasepackage.*;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -55,16 +58,14 @@ public class PrivacyActivity extends AppCompatActivity {
     private UserEntity loadedUser;
     private String userId;
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int PERMISSION_REQUEST_CODE = 2;
-    private ImageView profileImageView;
+    private static final int GALLERY_REQUEST_CODE = 123;
+
+    private ImageView privacyUserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
-
-        profileImageView=findViewById(R.id.privacy_userimage);
 
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -87,9 +88,9 @@ public class PrivacyActivity extends AppCompatActivity {
         DatePicker userBirthDatePicker = findViewById(R.id.privacy_userbirth);
         RadioGroup userGender = findViewById(R.id.privacy_usergender);
         Button saveButton = findViewById(R.id.privacy_savebutton);
-        EditText password=findViewById(R.id.privacy_password);
-        EditText passwordConfirm=findViewById(R.id.privacy_password_confirm);
-        Button logoutButton=findViewById(R.id.login_logout);
+        EditText password = findViewById(R.id.privacy_password);
+        EditText passwordConfirm = findViewById(R.id.privacy_password_confirm);
+        Button logoutButton = findViewById(R.id.login_logout);
 
         executor.execute(new Runnable() {
             @Override
@@ -99,11 +100,11 @@ public class PrivacyActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (loadedUser!=null) {
+                        if (loadedUser != null) {
                             RadioButton radioButtonMale = findViewById(R.id.radioButtonMale);
                             RadioButton radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
-                            LinearLayout passwordBox=findViewById(R.id.privacy_password_box);
+                            LinearLayout passwordBox = findViewById(R.id.privacy_password_box);
                             passwordBox.setVisibility(View.GONE);
 
                             privacy_userid.setText(userId);
@@ -146,10 +147,10 @@ public class PrivacyActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String passwordText=password.getText().toString();
-                String passwordConfirmText=passwordConfirm.getText().toString();
+                String passwordText = password.getText().toString();
+                String passwordConfirmText = passwordConfirm.getText().toString();
 
-                if(!passwordText.equals(passwordConfirmText)) {
+                if (!passwordText.equals(passwordConfirmText)) {
                     passwordConfirm.setError("비밀번호가 일치하지 않습니다.");
                 } else {
                     name = userName.getText().toString();
@@ -163,15 +164,18 @@ public class PrivacyActivity extends AppCompatActivity {
                     // 성별 가져오기
                     int selectedRadioButtonId = userGender.getCheckedRadioButtonId();
                     RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
-                    gender = selectedRadioButton.getText().toString();
+                    if (selectedRadioButton == null) {
+                        Toast.makeText(getApplicationContext(), "성별을 선택해 주세요.", Toast.LENGTH_SHORT).show();
+                        gender = null;
+                    } else {
+                        gender = selectedRadioButton.getText().toString();
+                    }
 
-                    Log.d("name", name);
-
-                    if(name.length()<2) {
+                    if (name.length() < 2) {
                         userName.setError("닉네임은 최소 2자 이상 6자 이하로 이루어져 있어야 합니다.");
-                    } else if(userId.equals("000000") && !name.equals("admin")) {
+                    } else if (userId.equals("000000") && !name.equals("admin")) {
                         userName.setError("admin 계정의 닉네임은 변결할 수 없습니다.");
-                    } else if(gender==null) {
+                    } else if (gender == null) {
                         Toast.makeText(getApplicationContext(), "성별을 선택해 주세요.", Toast.LENGTH_SHORT).show();
                     } else {
                         UserEntity userEntity;
@@ -232,36 +236,39 @@ public class PrivacyActivity extends AppCompatActivity {
     }
 
     public void profileImageOnClick(View view) {
-        Log.d("click", "click");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSION_REQUEST_CODE);
-        } else {
-            openGallery();
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                privacyUserImage.setImageBitmap(bitmap);
+                String imagePath = saveImageToFile(bitmap);
+                Intent intent = new Intent(this, MyPageActivity.class);
+                intent.putExtra("imagePath", imagePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "이미지를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+    private String saveImageToFile(Bitmap bitmap) {
+        File filesDir = getFilesDir();
+        File imageFile = new File(filesDir, "profile_image.jpg");
 
-    private ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri uri) {
-                    if (uri != null) {
-                        // 이미지를 선택한 후의 작업을 여기에 수행합니다.
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                            profileImageView.setImageBitmap(bitmap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-    );
-
-    private void openGallery() {
-        imagePickerLauncher.launch("image/*");
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageFile.getAbsolutePath();
     }
-
 }

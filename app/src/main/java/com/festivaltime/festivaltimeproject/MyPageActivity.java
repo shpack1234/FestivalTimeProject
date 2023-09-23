@@ -14,12 +14,15 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +92,9 @@ public class MyPageActivity extends AppCompatActivity {
         db = UserDataBaseSingleton.getInstance(getApplicationContext());
         userDao = db.userDao();
 
+        String imagePath = getIntent().getStringExtra("imagePath");
+        ImageView profileImage = findViewById(R.id.user_profile_image);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -109,6 +115,14 @@ public class MyPageActivity extends AppCompatActivity {
 
                                 userNickname.setText(loadedUser.getUserName());
                                 userIdText.setText("#" + userId);
+
+                                if(imagePath!=null) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                                    profileImage.setImageBitmap(bitmap);
+                                } else {
+                                    profileImage.setImageResource(R.drawable.ic_user);
+                                }
+
 
                                 userExist = true;
                                 isLogin = true;
