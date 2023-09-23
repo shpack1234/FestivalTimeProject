@@ -189,6 +189,7 @@ public class PrivacyActivity extends AppCompatActivity {
                             userEntity = new UserEntity();
                             userEntity.setUserId(userId);
                             userEntity.setUserFavoriteFestival(new ArrayList<>());
+                            //userEntity.setUserBadge(new ArrayList<>());
                             userEntity.setPassword(passwordText);
                             userEntity.setIsLogin(true);
                         } else {

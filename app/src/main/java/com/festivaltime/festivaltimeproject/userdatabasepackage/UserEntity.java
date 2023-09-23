@@ -20,6 +20,7 @@ public class UserEntity {
     private String userGender;
     private String password;
     private ArrayList<String> userFavoriteFestival;
+    private ArrayList<String> userBadge;
     private boolean isLogin;
 
     private String profileImage;
@@ -84,12 +85,24 @@ public class UserEntity {
         return isLogin;
     }
 
+    public ArrayList<String> getUserBadge() {
+        return userBadge;
+    }
+
     public void setUserFavoriteFestival(ArrayList<String> userFavoriteFestival) {
         this.userFavoriteFestival=userFavoriteFestival;
     }
 
     public void addUserFavoriteFestival(String FestivalId) {
         this.userFavoriteFestival.add(FestivalId);
+    }
+
+    public void setUserBadge(ArrayList<String> userFavoriteFestival) {
+        this.userBadge=userBadge;
+    }
+
+    public void addUserBadge(String BadgeId) {
+        this.userBadge.add(BadgeId);
     }
 
     public void deleteUserFavoriteFestival(String FestivalId) {

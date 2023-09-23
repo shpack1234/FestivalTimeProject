@@ -1,0 +1,193 @@
+<!-- dialog_popup.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_style"
+    android:layout_margin="5dp">
+
+    <!-- 타이틀바 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 닫기 버튼 -->
+        <Button
+            android:id="@+id/dialog_popup_close_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="#00000000"
+            android:gravity="center"
+            android:onClick="mOnClose"
+            android:padding="16dp"
+            android:text="초기화"
+            android:textColor="@color/dark_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="@string/detail_setting"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/dialog_popup_add_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_marginRight="4dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="@string/short_add"
+            android:textColor="@color/selected_color"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="#CFCFCF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:layout_margin="3dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:textColor="@color/black"
+                        android:gravity="center|center"
+                        android:text="@string/festival_state"
+                        android:textSize="14sp" />
+
+
+
+                    <ToggleButton
+                        android:id="@+id/completed"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/completed"
+                        android:textOn="@string/completed"
+                        android:textSize="13sp" />
+
+                    <ToggleButton
+                        android:id="@+id/Ongoing"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/Ongoing"
+                        android:textOn="@string/Ongoing"
+                        android:textSize="13sp" />
+
+                    <ToggleButton
+                        android:id="@+id/Upgoing"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/Upgoing"
+                        android:textOn="@string/Upgoing"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3px"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="#CFCFCF" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:textColor="@color/black"
+                        android:gravity="center|center"
+                        android:text="@string/festival_category"
+                        android:textSize="14sp" />
+
+
+                    <ToggleButton
+                        android:id="@+id/category_festival"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/festival"
+                        android:textOn="@string/festival"
+                        android:textSize="13sp" />
+
+                    <ToggleButton
+                        android:id="@+id/category_event"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:background="@android:color/transparent"
+                        android:textColor="@drawable/toggle_background"
+                        android:gravity="center|center"
+                        android:textOff="@string/event"
+                        android:textOn="@string/event"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

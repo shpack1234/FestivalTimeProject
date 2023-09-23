@@ -43,6 +43,7 @@
     <string name="Upgoing">진행예정</string>
     <string name="festival_state">축제 상태</string>
     <string name="null_text">홈페이지를 통해 확인해주세요.</string>
+    <string name="event">공연/행사</string>
 
 
     <string name="location">지역</string>
@@ -129,9 +130,6 @@
 
     <!--마이 뱃지 string-->
     <string name="holding_badge">보유 뱃지</string>
-    <string name="title_image01">남이섬 어쿠스틱...</string>
-    <string name="title_image02">대한민국 독서대...</string>
-    <string name="title_image03">문정동 로데오거...</string>
     <string name="title">title</string>
     <string name="version">1.0.0</string>
     <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
@@ -178,6 +176,7 @@
 
 
     <string name="favorite_event">찜</string> />
+
 
 
 </resources>

@@ -6,7 +6,7 @@ import androidx.room.TypeConverters;
 
 import com.festivaltime.festivaltimeproject.ArrayListConverter;
 
-@Database(entities = {UserEntity.class}, version = 27)
+@Database(entities = {UserEntity.class}, version = 29)
 @TypeConverters({ArrayListConverter.class})
 public abstract class UserDataBase extends RoomDatabase {
     public abstract UserDao userDao();
