@@ -437,11 +437,14 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
                                 }
                             });
-
+                            final boolean[] isFestivalAdded = {false}; // 이미지 상태를 추적합니다.
                             favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Listener", "addBtn");
+
+
+
                                     executor.execute(new Runnable() {
                                         @Override
                                         public void run() {
