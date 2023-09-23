@@ -41,6 +41,23 @@ import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+
+class ApiResponse {
+    final int index;
+    final String response;
+
+    ApiResponse(int index, String response) {
+        this.index = index;
+        this.response = response;
+    }
+}
+
 public class SearchScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchScreenActivity";
@@ -69,6 +86,9 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore eleventhSemaphore = new Semaphore(0);
     private Semaphore twelveSemaphore = new Semaphore(0);
     private Semaphore thirteenSemaphore = new Semaphore(0);
+
+    List<Semaphore> semaphoreList = Arrays.asList(secondSemaphore, thirdSemaphore, fourthSemaphore, fifthSemaphore, sixthSemaphore, seventhSemaphore, eightSemaphore,
+            ninthSemaphore, tenthSemaphore, eleventhSemaphore, twelveSemaphore, thirteenSemaphore);
 
     MainActivity main = new MainActivity();
 
@@ -131,6 +151,8 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         Bundle bundle = DataHolder.getInstance().getBundle();
 
+        TextView textView = findViewById(R.id.no_festival_msg);
+
 
         cat2 = "A0207";
         cat3 = "A02080500";
@@ -145,13 +167,11 @@ public class SearchScreenActivity extends AppCompatActivity {
         cat12 = "A02081100";
         cat13 = "A02081200";
         cat14 = "A02081300";
-        List<String> categories = Arrays.asList("cat3", "cat4", "cat5", "cat6", "cat7", "cat8", "cat9", "cat10", "cat11", "cat12", "cat13", "cat14");
+        List<String> categories = Arrays.asList(cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12, cat13, cat14);
 
         int apiCallCount = 13; // API 호출 횟수 설정
         //AtomicInteger emptyCategoryCount = new AtomicInteger(0); // 데이터가 없는 카테고리의 수
         CountDownLatch latch = new CountDownLatch(apiCallCount);
-
-        TextView textView = findViewById(R.id.no_festival_msg);
 
 
         //날짜 서치인지 형태 확인
@@ -161,32 +181,68 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         apiReader = new ApiReader();
 
-        /**
-
-        apiReader.searchKeyword2(apiKey, query, cat2)
-                // 백그라운드 스레드에서 네트워크 요청 실행
-                .subscribeOn(Schedulers.io())
-                // 메인 스레드에서 결과 처리
+        /*
+        // 백그라운드 실행 - 일단 주석 처리 해놓을게용 홍홍
+        List<LinkedHashMap<String, String>> totalResult = new ArrayList<>();
+        Observable.concat(
+                        apiReader.searchKeyword2(apiKey, query, cat2)
+                                .toObservable()
+                                .subscribeOn(Schedulers.io())
+                                .map(response -> new ApiResponse(0, response)),
+                        Observable.range(0, categories.size())
+                                .concatMap(index ->
+                                        apiReader.searchKeyword(apiKey, query, categories.get(index))
+                                                .toObservable()
+                                                .subscribeOn(Schedulers.io())
+                                                .map(response -> new ApiResponse(index + 1, response)))
+                )
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<String>() {
+                .subscribe(new Observer<ApiResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(String response) {
-                        // 여기서 response는 API 응답입니다. 이를 파싱하여 UI를 업데이트하면 됩니다.
-                        ParsingApiData.parseXmlDataFromSearchKeyword(response);
+                    public void onNext(ApiResponse apiResponse) {
+                        ParsingApiData.parseXmlDataFromSearchKeyword(apiResponse.response);
                         List<LinkedHashMap<String, String>> result = ParsingApiData.getFestivalList();
-                        loopUI(query, cat2, 6, result, latch);
-                    }
 
+                        if (result.isEmpty()) {
+                            latch.countDown();
+
+                        }
+
+                        totalResult.addAll(result);
+
+                        if (apiResponse.index == 0) {
+                            loopUI(query, cat2, 6, result, latch);
+                        } else {
+                            loopUI(query, categories.get(apiResponse.index - 1), 3, result, latch);
+                        }
+
+                    }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "API Error: " + e.getMessage());
                     }
-                }); **/
+
+                    @Override
+                    public void onComplete() { // 모든 api호출 완료된 후
+                        if (totalResult.isEmpty()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TextView textView = findViewById(R.id.no_festival_msg);
+                                    textView.setText("데이터가 없습니다.");
+                                }
+                            });
+                        }
+
+                    }
+                });
+                
+         */
 
 
         firstSemaphore.release();
@@ -1266,11 +1322,7 @@ public class SearchScreenActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-/**
-                                        if (emptyCategoryCount.get() == apiCallCount) {
-// 모든 카테고리에서 데이터가 없으면 메시지 출력
-                                            textView.setText("검색 항목이 존재하지 않습니다.");
-                                        }**/
+
 
                                         if (festivalList.size() > 0) {
                                             loopUI(query, cat14, 3);
@@ -2266,6 +2318,20 @@ public class SearchScreenActivity extends AppCompatActivity {
         GridLayout festivalImageNText = searchContainerView.findViewById(R.id.festivalSearch_container3);
         festivalImageNText.removeAllViews();
 
+
+        /*
+        if (latch.getCount() == 0) {
+            TextView textView = findViewById(R.id.no_festival_msg);
+            textView.setText("데이터가 없습니다.");
+
+            return;
+        }*/
+
+        if (festivalList.isEmpty()) {
+            return;
+        }
+
+
         // 받아온 type 값에 따라 title_name TextView에 텍스트 설정
         String textToShow = getTextToShow(cat);
         TextView titleTextView = searchContainerView.findViewById(R.id.title_name);
@@ -2274,15 +2340,6 @@ public class SearchScreenActivity extends AppCompatActivity {
         String progessToShow = "(" + festivalList.size() + "건)";
         TextView progressTextView = searchContainerView.findViewById(R.id.title_progress);
         progressTextView.setText(progessToShow);
-
-        if (latch.getCount() == 1 && festivalList.isEmpty()) {
-            TextView emptyTextView = new TextView(this);
-            emptyTextView.setText("데이터가 없습니다.");
-            searchContainer.addView(emptyTextView);
-        }
-
-        latch.countDown();  // 작업이 끝남을 알림
-
 
         int loopItems = Math.min(festivalList.size(), count);
 
