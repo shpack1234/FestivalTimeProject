@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -659,6 +660,52 @@ public class ApiReader {
             listener.onError("URL Encoding Error");
         }
     }
+
+    public Observable<String> Festivallit(String serviceKey, String selectDate) {
+        return Observable.create(emitter -> {
+            try {
+                HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                        .scheme("https")
+                        .host("apis.data.go.kr")
+                        .addPathSegment("B551011")
+                        .addPathSegment("KorService1")
+                        .addPathSegment("searchFestival1")
+                        .addQueryParameter("MobileOS", "AND")
+                        .addQueryParameter("MobileApp", "FestivalTime")
+                        .addQueryParameter("listYN", "Y")
+                        .addQueryParameter("numOfRows", "100000")
+                        .addQueryParameter("eventStartDate", selectDate)
+                        .addQueryParameter("eventEndDate", selectDate)
+                        .addQueryParameter("serviceKey", serviceKey);
+                String url = urlBuilder.build().toString();
+                Log.d(TAG, "FestivalN url: "+url);
+                Request request = new Request.Builder().url(url).build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                        emitter.onError(e); // emit error
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String responseData = response.body().string();
+                            emitter.onNext(responseData); // emit the data received from the API
+                            emitter.onComplete(); // complete the emission of data
+                        } else {
+                            emitter.onError(new Exception ("Server Error: "+response.code()));
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                emitter.onError(e); // emit error
+            }
+        });
+    }
+
 
     //행사정보조회 개수별
     public void FestivalN(String serviceKey, String selectDate, final ApiResponseListener listener) {
