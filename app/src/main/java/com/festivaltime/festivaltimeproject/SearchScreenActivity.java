@@ -27,6 +27,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -87,8 +89,6 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore twelveSemaphore = new Semaphore(0);
     private Semaphore thirteenSemaphore = new Semaphore(0);
 
-    List<Semaphore> semaphoreList = Arrays.asList(secondSemaphore, thirdSemaphore, fourthSemaphore, fifthSemaphore, sixthSemaphore, seventhSemaphore, eightSemaphore,
-            ninthSemaphore, tenthSemaphore, eleventhSemaphore, twelveSemaphore, thirteenSemaphore);
 
     MainActivity main = new MainActivity();
 
@@ -151,8 +151,6 @@ public class SearchScreenActivity extends AppCompatActivity {
 
         Bundle bundle = DataHolder.getInstance().getBundle();
 
-        TextView textView = findViewById(R.id.no_festival_msg);
-
 
         cat2 = "A0207";
         cat3 = "A02080500";
@@ -198,6 +196,65 @@ public class SearchScreenActivity extends AppCompatActivity {
 
             Log.d("location response", queryArray[0]);
             Log.d("date response", queryArray[1]);
+
+
+            Observable<String> keywordSearchObservable = apiReader.searchKeyword2(apiKey, queryArray[0], query, cat2);
+            keywordSearchObservable
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(response -> {
+                        ParsingApiData.parseXmlDataFromSearchKeyword3(response, cat2, null);
+                        List<LinkedHashMap<String, String>> keywordResults = ParsingApiData.getFestivalList();
+                        Log.d(TAG, "Parsed keyword results: " + keywordResults); // 로그 추가
+
+                        return Observable.fromIterable(keywordResults)
+                                .take(6)  // 최대 6개의 결과만 처리합니다.
+                                .concatMapEager(result -> {
+                                    return apiReader.FestivalInfo(apiKey, result.get("contentid"))
+                                            .subscribeOn(Schedulers.io())
+                                            .map(detailResponse -> {
+                                                Log.d("search&locate response", detailResponse);
+                                                ParsingApiData.parseXmlDataFromDetailInfo(detailResponse); // 응답을 파싱하여 데이터를 저장
+                                                List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+
+                                                LinkedHashMap<String, String> parsedItem;
+                                                try {
+                                                    parsedItem = parsedFestivalList.get(0);
+
+                                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                                                    LocalDate startDate1 = LocalDate.parse(queryArray[1], formatter);
+                                                    LocalDate eventStartDate = LocalDate.parse(parsedItem.get("eventstartdate"), formatter);
+                                                    LocalDate eventEndDate = LocalDate.parse(parsedItem.get("eventenddate"), formatter);
+
+                                                    Log.d("item startdate", parsedItem.get("eventstartdate"));
+                                                    Log.d("item enddate", parsedItem.get("eventenddate"));
+
+                                                    if (!(result.get("title").contains(query) &&
+                                                            startDate1.isBefore(eventStartDate) &&
+                                                            !startDate1.isAfter(eventEndDate))) {
+                                                        result.put("_remove_", "true"); // '_remove_' 키에 'true' 값을 설정하여 제거 대상임을 표시합니다.
+                                                        Log.d("item del", "delete");
+                                                    }
+
+                                                } catch (IndexOutOfBoundsException e) {
+                                                }
+
+                                                return result;
+                                            });
+                                })
+                                .filter(result -> !result.containsKey("_remove_")) // '_remove_' 키가 있는 아이템을 제거합니다.
+                                .toList()
+                                .toObservable();  // Single을 Observable로 변환합니다.
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        loopUI(query, cat2, 6, result, latch);
+                    },error -> {
+                        Log.e(TAG, "API Error: ", error);
+                    });
+
+
+
+/*
 
             apiReader.searchKeyword2(apiKey, queryArray[0], query, cat2, new ApiReader.ApiResponseListener() {
 
@@ -347,165 +404,169 @@ public class SearchScreenActivity extends AppCompatActivity {
                 }
 
             });
+*/
 
 
-        } else if (query != null && bundle == null) {
-            Matcher matcher = pattern.matcher(query);
 
-            //키워드 서치
-            if (!matcher.matches()) {
-                Log.d("match", "date match fail");
+    } else if(query !=null&&bundle ==null)
 
-                // 백그라운드 실행
-                List<LinkedHashMap<String, String>> totalResult = new ArrayList<>();
-                Observable.concat(
-                                apiReader.searchKeyword2(apiKey, query, cat2)
-                                        .toObservable()
-                                        .subscribeOn(Schedulers.io())
-                                        .map(response -> new ApiResponse(0, response)),
-                                Observable.range(0, categories.size())
-                                        .concatMap(index ->
-                                                apiReader.searchKeyword(apiKey, query, categories.get(index))
-                                                        .toObservable()
-                                                        .subscribeOn(Schedulers.io())
-                                                        .map(response -> new ApiResponse(index + 1, response)))
-                        )
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<ApiResponse>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-                            }
+    {
+        Matcher matcher = pattern.matcher(query);
 
-                            @Override
-                            public void onNext(ApiResponse apiResponse) {
-                                ParsingApiData.parseXmlDataFromSearchKeyword(apiResponse.response);
-                                List<LinkedHashMap<String, String>> result = ParsingApiData.getFestivalList();
+        //키워드 서치
+        if (!matcher.matches()) {
+            Log.d("match", "date match fail");
 
-                                if (result.isEmpty()) {
-                                    latch.countDown();
+            // 백그라운드 실행
+            List<LinkedHashMap<String, String>> totalResult = new ArrayList<>();
+            Observable.concat(
+                            apiReader.searchKeyword2(apiKey, query, cat2)
+                                    .toObservable()
+                                    .subscribeOn(Schedulers.io())
+                                    .map(response -> new ApiResponse(0, response)),
+                            Observable.range(0, categories.size())
+                                    .concatMap(index ->
+                                            apiReader.searchKeyword(apiKey, query, categories.get(index))
+                                                    .toObservable()
+                                                    .subscribeOn(Schedulers.io())
+                                                    .map(response -> new ApiResponse(index + 1, response)))
+                    )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<ApiResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
 
-                                }
+                        @Override
+                        public void onNext(ApiResponse apiResponse) {
+                            ParsingApiData.parseXmlDataFromSearchKeyword(apiResponse.response);
+                            List<LinkedHashMap<String, String>> result = ParsingApiData.getFestivalList();
 
-                                totalResult.addAll(result);
-
-                                if (apiResponse.index == 0) {
-                                    loopUI(query, cat2, 6, result, latch);
-                                } else {
-                                    loopUI(query, categories.get(apiResponse.index - 1), 3, result, latch);
-                                }
+                            if (result.isEmpty()) {
+                                latch.countDown();
 
                             }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e(TAG, "API Error: " + e.getMessage());
+                            totalResult.addAll(result);
+
+                            if (apiResponse.index == 0) {
+                                loopUI(query, cat2, 6, result, latch);
+                            } else {
+                                loopUI(query, categories.get(apiResponse.index - 1), 3, result, latch);
                             }
 
-                            @Override
-                            public void onComplete() { // 모든 api호출 완료된 후
-                                if (totalResult.isEmpty()) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            TextView textView = findViewById(R.id.no_festival_msg);
-                                            textView.setText("데이터가 없습니다.");
-                                        }
-                                    });
-                                }
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e(TAG, "API Error: " + e.getMessage());
+                        }
 
-
-            } else {
-                Log.d("match", "date match success");
-                // 백그라운드 실행
-                List<LinkedHashMap<String, String>> totalResult = new ArrayList<>();
-                Observable.range(0, categories.size()+1)
-                        .concatMap(index ->
-                                apiReader.Festivallit(apiKey, query)
-                                        .subscribeOn(Schedulers.io())
-                                        .map(response -> new ApiResponse(index, response))
-                        )
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<ApiResponse>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                        @Override
+                        public void onComplete() { // 모든 api호출 완료된 후
+                            if (totalResult.isEmpty()) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        TextView textView = findViewById(R.id.no_festival_msg);
+                                        textView.setText("데이터가 없습니다.");
+                                    }
+                                });
                             }
 
-                            @Override
-                            public void onNext(ApiResponse apiResponse) {
+                        }
+                    });
 
-                                int index = apiResponse.index;
 
-                                if (index == 0) {
-                                    ParsingApiData.parseXmlDataFromFestivalA(apiResponse.response);
-                                } else {
-                                    ParsingApiData.parseXmlDataFromFestival(apiResponse.response, categories.get(index - 1));
-                                }
-                                List<LinkedHashMap<String, String>> result = ParsingApiData.getFestivalList();
+        } else {
+            Log.d("match", "date match success");
+            // 백그라운드 실행
+            List<LinkedHashMap<String, String>> totalResult = new ArrayList<>();
+            Observable.range(0, categories.size() + 1)
+                    .concatMap(index ->
+                            apiReader.Festivallit(apiKey, query)
+                                    .subscribeOn(Schedulers.io())
+                                    .map(response -> new ApiResponse(index, response))
+                    )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<ApiResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
 
-                                if (result.isEmpty()) {
-                                    latch.countDown();
+                        @Override
+                        public void onNext(ApiResponse apiResponse) {
 
-                                }
+                            int index = apiResponse.index;
 
-                                totalResult.addAll(result);
+                            if (index == 0) {
+                                ParsingApiData.parseXmlDataFromFestivalA(apiResponse.response);
+                            } else {
+                                ParsingApiData.parseXmlDataFromFestival(apiResponse.response, categories.get(index - 1));
+                            }
+                            List<LinkedHashMap<String, String>> result = ParsingApiData.getFestivalList();
 
-                                if (apiResponse.index == 0) {
-                                    loopUI(query, cat2, 6, result, latch);
-                                } else {
-                                    loopUI(query, categories.get(apiResponse.index - 1), 3, result, latch);
-                                }
+                            if (result.isEmpty()) {
+                                latch.countDown();
 
                             }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e(TAG, "API Error: " + e.getMessage());
+                            totalResult.addAll(result);
+
+                            if (apiResponse.index == 0) {
+                                loopUI(query, cat2, 6, result, latch);
+                            } else {
+                                loopUI(query, categories.get(apiResponse.index - 1), 3, result, latch);
                             }
 
-                            @Override
-                            public void onComplete() { // 모든 api호출 완료된 후
-                                if (totalResult.isEmpty()) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            TextView textView = findViewById(R.id.no_festival_msg);
-                                            textView.setText("데이터가 없습니다.");
-                                        }
-                                    });
-                                }
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e(TAG, "API Error: " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() { // 모든 api호출 완료된 후
+                            if (totalResult.isEmpty()) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        TextView textView = findViewById(R.id.no_festival_msg);
+                                        textView.setText("데이터가 없습니다.");
+                                    }
+                                });
                             }
-                        });
+
+                        }
+                    });
 
 
-            }
-
-            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setSelectedItemId(R.id.action_home);
-            bottomNavigationView.setOnItemSelectedListener(item -> {
-                if (item.getItemId() == R.id.action_home) {
-                    navigateToMainActivity(SearchScreenActivity.this);
-                    return true;
-                } else if (item.getItemId() == R.id.action_map) {
-                    navigateToMapActivity(SearchScreenActivity.this);
-                    return true;
-                } else if (item.getItemId() == R.id.action_calendar) {
-                    navigateToCalendarActivity(SearchScreenActivity.this);
-                    return true;
-                } else if (item.getItemId() == R.id.action_favorite) {
-                    navigateToFavoriteActivity(SearchScreenActivity.this);
-                    return true;
-                } else {
-                    navigateToMyPageActivity(SearchScreenActivity.this);
-                    return true;
-                }
-            });
         }
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.action_home) {
+                navigateToMainActivity(SearchScreenActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_map) {
+                navigateToMapActivity(SearchScreenActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_calendar) {
+                navigateToCalendarActivity(SearchScreenActivity.this);
+                return true;
+            } else if (item.getItemId() == R.id.action_favorite) {
+                navigateToFavoriteActivity(SearchScreenActivity.this);
+                return true;
+            } else {
+                navigateToMyPageActivity(SearchScreenActivity.this);
+                return true;
+            }
+        });
     }
+
+}
 
 
     private void fetchAndDisplayData(String apiKey, String query, String cat, Semaphore
