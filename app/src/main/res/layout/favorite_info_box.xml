@@ -103,7 +103,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="4"
                 android:background="@android:color/transparent"
-                android:src="@drawable/minus" />
+                android:src="@mipmap/cancel_bookmark" />
         </LinearLayout>
     </LinearLayout>
 
