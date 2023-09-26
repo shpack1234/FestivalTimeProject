@@ -63,6 +63,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -71,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
     public Date date;
     public SimpleDateFormat sdf;
     private ApiReader apiReader;
-    private Executor executor;
-
     private final int numberOfLayouts = 3;
+    private ExecutorService executor;
 
     private CalendarDao calendarDao;
     private CalendarEntity calendarEntity;
@@ -87,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     private String formattedStartDate;
     private String formattedEndDate;
     private TextView textview;
-    private TextView textview2;
 
 
     @Override
@@ -164,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
         banner.setAdapter(adapter);
         adapter.startAutoSlide();
 
-
-        int[] vacationImages = {R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example, R.drawable.first_image_example};
-
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat sdff = new SimpleDateFormat("yyyy.M.d");
         Date date = new Date();
@@ -177,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         String year = todaydate.substring(0, 4);
         String month = todaydate.substring(4, 6);
 
+        executor = Executors.newCachedThreadPool();
+
         LinearLayout vacationFestival = findViewById(R.id.main_vacation_festival_container);
 
         CalendarDatabase database = CalendarDatabase.getInstance(MainActivity.this);
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<HashMap<String, String>> holidaylist = new ArrayList<>();
 
-        new Thread(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 loadedUser = userDao.getUserInfoById(userId);
@@ -224,21 +223,17 @@ public class MainActivity extends AppCompatActivity {
                         holidaylist.add(holidayInfo);
                     }
                 }
-            }
-        }).start();
-        apiReader.holiday(holidayKey, year, month, new ApiReader.ApiResponseListener() { //api로 국경일 불러옴
-            @Override
-            public void onSuccess(String response) {
-                ParsingApiData.parseXmlDataFromHoliday(response);
-                Log.d("holiday respnse", response);
-                List<LinkedHashMap<String, String>> groupedHolidayList = ParsingApiData.getHolidayList();
-                List<LinkedHashMap<String, String>> updatedHolidayList = groupAndCombineDates(groupedHolidayList);
 
-                holidaylist.addAll(updatedHolidayList);
-
-                executor.execute(new Runnable() {
+                apiReader.holiday(holidayKey, year, month, new ApiReader.ApiResponseListener() { //api로 국경일 불러옴
                     @Override
-                    public void run() {
+                    public void onSuccess(String response) {
+                        ParsingApiData.parseXmlDataFromHoliday(response);
+                        Log.d("holiday respnse", response);
+                        List<LinkedHashMap<String, String>> groupedHolidayList = ParsingApiData.getHolidayList();
+                        List<LinkedHashMap<String, String>> updatedHolidayList = groupAndCombineDates(groupedHolidayList);
+
+                        holidaylist.addAll(updatedHolidayList);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -274,58 +269,51 @@ public class MainActivity extends AppCompatActivity {
                                                 ParsingApiData.parseXmlDataFromFestival(response);
                                                 List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
 
-                                                executor.execute(new Runnable() {
+                                                festivalList.clear();
+                                                festivalList.addAll(parsedFestivalList);
+
+                                                runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        festivalList.clear();
-                                                        festivalList.addAll(parsedFestivalList);
+                                                        if (festivalList != null && festivalList.size() > 0) {
+                                                            HashMap<String, String> festivalInfo = null;
+                                                            if (finalImages >= 0 && finalImages < festivalList.size()) {
+                                                                festivalInfo = festivalList.get(finalImages);
 
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                if (festivalList != null && festivalList.size() > 0) {
-                                                                    HashMap<String, String> festivalInfo = null;
-                                                                    if (finalImages >= 0 && finalImages < festivalList.size()) {
-                                                                        festivalInfo = festivalList.get(finalImages);
+                                                                if (festivalInfo != null) {
+                                                                    String id = festivalInfo.get("contentid");
+                                                                    String repImage = festivalInfo.get("img");
 
-                                                                        if (festivalInfo != null) {
-                                                                            String id = festivalInfo.get("contentid");
-                                                                            String repImage = festivalInfo.get("img");
-
-                                                                            if (repImage == null || repImage.isEmpty()) {
-                                                                                imageButton.setImageResource(R.drawable.first_image_example);
-                                                                            } else {
-                                                                                Glide.with(MainActivity.this)
-                                                                                        .load(repImage)
-                                                                                        .fitCenter()
-                                                                                        .transform(new CenterCrop(), new RoundedCorners(30))
-                                                                                        .placeholder(R.drawable.first_image_example)
-                                                                                        .into(imageButton);
-                                                                            }
-
-                                                                            //휴가가 하루일경우 해당 날짜만 settext
-                                                                            if (startholidate.equals(endholidate)) {
-                                                                                String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
-                                                                                String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
-                                                                                datetext.setText(monthtext + "/" + datext);
-                                                                            } else {
-                                                                                datetext.setText(date);
-                                                                            }
-
-                                                                            imageButton.setOnClickListener(new View.OnClickListener() {
-                                                                                @Override
-                                                                                public void onClick(View v) {
-                                                                                    String contentId = id;
-                                                                                    navigateToDetailFestivalActivity(MainActivity.this, contentId);
-                                                                                }
-                                                                            });
-                                                                        }
-
+                                                                    if (repImage == null || repImage.isEmpty()) {
+                                                                        imageButton.setImageResource(R.drawable.first_image_example);
                                                                     } else {
+                                                                        Glide.with(MainActivity.this)
+                                                                                .load(repImage)
+                                                                                .fitCenter()
+                                                                                .transform(new CenterCrop(), new RoundedCorners(30))
+                                                                                .placeholder(R.drawable.first_image_example)
+                                                                                .into(imageButton);
                                                                     }
+
+                                                                    //휴가가 하루일경우 해당 날짜만 settext
+                                                                    if (startholidate.equals(endholidate)) {
+                                                                        String monthtext = String.valueOf(Integer.parseInt(startholidate.substring(4, 6)));
+                                                                        String datext = String.valueOf(Integer.parseInt(startholidate.substring(6, 8)));
+                                                                        datetext.setText(monthtext + "/" + datext);
+                                                                    } else {
+                                                                        datetext.setText(date);
+                                                                    }
+
+                                                                    imageButton.setOnClickListener(new View.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(View v) {
+                                                                            String contentId = id;
+                                                                            navigateToDetailFestivalActivity(MainActivity.this, contentId);
+                                                                        }
+                                                                    });
                                                                 }
                                                             }
-                                                        });
+                                                        }
                                                     }
                                                 });
 
@@ -343,25 +331,18 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     }
-                });
-            }
 
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "Holiday API Error: " + error);
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "Holiday API Error: " + error);
+                    }
+                });
+
             }
         });
 
-        executor = new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                new Thread(command).start();
-            }
-        };
-
         String[] mainFestivalArea = {"서울", "경기도", "부산", "전라북도"};
         String[] mainFestivalAreaCode = {"1", "31", "6", "37"};
-
 
         for (int area = 0; area < 4; area++) {
             List<HashMap<String, String>> festivalList = new ArrayList<>();
@@ -385,7 +366,6 @@ public class MainActivity extends AppCompatActivity {
             mainFestivalContainerGroup.addView(mainfestivalContainer);
         }
 
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item ->
@@ -408,6 +388,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 액티비티 종료 시 ExecutorService 종료
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+        }
     }
 
 
