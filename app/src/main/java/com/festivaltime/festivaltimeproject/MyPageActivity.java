@@ -13,10 +13,12 @@ import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.naviga
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToPrivacyActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -148,7 +150,9 @@ public class MyPageActivity extends AppCompatActivity {
     }
 
     public void InquiryOnClick(View v) {
-        navigateToInquiryActivity(MyPageActivity.this);
+        Intent urlintent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://open.kakao.com/o/sEEKjlJf"));
+        startActivity(urlintent);
+        //navigateToInquiryActivity(MyPageActivity.this);
     }
 
     public void LoginOnClick(View v) {
