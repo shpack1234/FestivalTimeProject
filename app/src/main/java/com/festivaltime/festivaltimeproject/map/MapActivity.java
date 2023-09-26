@@ -619,7 +619,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         for (int i = 0; i < marker.length; i++) {
             Log.d("Tag", String.valueOf(Info.get(i).second));
         }
-        Bitmap originalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map_marking);
+        Bitmap originalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.region_inmap);
         Bitmap resizedMarkerBitmapArea = Bitmap.createScaledBitmap(originalMarkerBitmap, 100, 100, false);
         Bitmap resizedMarkerBitmapFestival = Bitmap.createScaledBitmap(originalMarkerBitmap, 50, 50, false);
         for (int i = 0; i < marker.length; i++) {
