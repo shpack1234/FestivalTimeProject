@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
         String[] mainFestivalArea = {"서울", "경기도", "부산", "전라북도"};
         String[] mainFestivalAreaCode = {"1", "31", "6", "37"};
 
-        for (int area = 0; area < 4; area++) {
+        for (int area = 0; area < 3; area++) {
             List<HashMap<String, String>> festivalList = new ArrayList<>();
             LinearLayout mainFestivalContainerGroup = findViewById(R.id.main_festival_container_group);
             LinearLayout mainfestivalContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.main_festival_container, null);
