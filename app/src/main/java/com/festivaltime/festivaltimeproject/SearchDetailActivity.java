@@ -18,9 +18,11 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +68,8 @@ public class SearchDetailActivity extends AppCompatActivity {
     private Executor executor;
 
     private boolean isLoading = false;
+    public Switch proceedSwitch;
+    private boolean checkproceed = false;
     private int currentPage = 1; // 시작 페이지
     private final int ITEMS_PER_PAGE = 10; // 페이지당 아이템 수
     private String apiKey;
@@ -91,6 +95,7 @@ public class SearchDetailActivity extends AppCompatActivity {
         Log.d(TAG, "hello");
         Back_Btn = findViewById(R.id.before_btn);
         Scroll_View = findViewById(R.id.scroll_view);
+        proceedSwitch = findViewById(R.id.proceed_check);
         executor = Executors.newSingleThreadExecutor();
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -110,13 +115,223 @@ public class SearchDetailActivity extends AppCompatActivity {
 
 
         calendarDatabase = CalendarDatabase.getInstance(this);
-
-
         //날짜 서치인지 형태 확인
         String regex = "\\d{4}\\d{2}\\d{2}";
         Pattern pattern = Pattern.compile(regex);
 
-        //
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        String todaydate = sdf2.format(date);
+
+        /*proceedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (bundle != null) {
+                        String startDate = bundle.getString("startdate");
+                        String endDate = bundle.getString("enddate");
+                        String selectedLocation = bundle.getString("location");
+
+                        // startDate와 endDate가 null인 경우 기본값 설정
+                        if (startDate == null || endDate == null) {
+                            startDate = todaydate;
+                            endDate = todaydate;
+                        } else {
+                            // startDate와 endDate가 모두 null이 아니라면 비교해서 설정
+                            if (compareDates(todaydate, endDate) < 0) {
+                                // endDate가 오늘 날짜 이전이거나 같은 경우
+                            } else {
+                                startDate = todaydate;
+                                endDate = todaydate;
+                            }
+                        }
+
+                        String[] queryArray = new String[3];
+                        queryArray[0] = selectedLocation;
+                        queryArray[1] = startDate;
+                        queryArray[2] = endDate;
+
+                        Log.d("queries: ", queryArray[0]);
+                        Log.d("queries: ", queryArray[1]);
+                        Log.d("queries: ", queryArray[2]);
+
+
+                        apiReader.searchFestival(apiKey, queryArray[0], queryArray[1], queryArray[2], new ApiReader.ApiResponseListener() {
+                            @Override
+                            public void onSuccess(String response) {
+                                FilterFestival(response);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG, "API Error: " + error);
+                            }
+                        });
+                    }
+
+                    if (query != null) {
+                        Matcher matcher = pattern.matcher(query);
+
+                        //키워드 서치
+                        if (!matcher.matches()) {
+                            Log.d("match", "date match fail");
+
+                            if (!type.isEmpty() && type.startsWith("A0207")) {
+                                // type이 "A0207"로 시작하는 경우
+                                apiReader.searchKeyword2(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        handleApiResponse(response, todaydate, isChecked);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            } else {
+                                // 그 외의 경우
+                                apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        handleApiResponse(response, todaydate, isChecked);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            }
+                        }
+                        //달력 검색인 경우
+                        else { //진행종료 날짜 선택시 자동 조정되서 미처리함
+                            Log.d("match", "date match success");
+                            if (!type.isEmpty() && type.startsWith("A0207")) {
+                                apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                                    public void onSuccess(String response) {
+                                        handleApiResponse3(response);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            } else {
+                                apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                                    public void onSuccess(String response) {
+                                        handleApiResponse3(response);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    if (bundle != null) {
+                        String startDate = bundle.getString("startdate");
+                        String endDate = bundle.getString("enddate");
+                        String selectedLocation = bundle.getString("location");
+
+                        Log.d("startDate", startDate);
+                        Log.d("endD", endDate);
+                        Log.d("selLoc", selectedLocation);
+                        // {0/0/0] 형태로 ,,,,했음
+                        String[] queryArray = new String[3];
+                        queryArray[0] = selectedLocation;
+                        queryArray[1] = startDate;
+                        queryArray[2] = endDate;
+
+                        Log.d("queries: ", queryArray[0]);
+                        Log.d("queries: ", queryArray[1]);
+                        Log.d("queries: ", queryArray[2]);
+
+
+                        apiReader.searchFestival(apiKey, queryArray[0], queryArray[1], queryArray[2], new ApiReader.ApiResponseListener() {
+                            @Override
+                            public void onSuccess(String response) {
+                                FilterFestival(response);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG, "API Error: " + error);
+                            }
+                        });
+                    }
+
+                    if (query != null) {
+                        Matcher matcher = pattern.matcher(query);
+
+                        //키워드 서치
+                        if (!matcher.matches()) {
+                            Log.d("match", "date match fail");
+
+                            if (!type.isEmpty() && type.startsWith("A0207")) {
+                                // type이 "A0207"로 시작하는 경우
+                                apiReader.searchKeyword2(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        handleApiResponse(response, todaydate, isChecked);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            } else {
+                                // 그 외의 경우
+                                apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        handleApiResponse(response, todaydate, isChecked);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            }
+                        }
+                        //달력 검색인 경우
+                        else {
+                            Log.d("match", "date match success");
+                            if (!type.isEmpty() && type.startsWith("A0207")) {
+                                apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                                    public void onSuccess(String response) {
+                                        handleApiResponse3(response);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            } else {
+                                apiReader.Festivallit(apiKey, query, new ApiReader.ApiResponseListener() {
+                                    public void onSuccess(String response) {
+                                        handleApiResponse3(response);
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e(TAG, "API Error: " + error);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });*/
+
         if (bundle != null) {
             String startDate = bundle.getString("startdate");
             String endDate = bundle.getString("enddate");
@@ -161,7 +376,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                     apiReader.searchKeyword2(apiKey, query, type, new ApiReader.ApiResponseListener() {
                         @Override
                         public void onSuccess(String response) {
-                            handleApiResponse(response);
+                            handleApiResponse(response, todaydate, false);
                         }
 
                         @Override
@@ -174,7 +389,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                     apiReader.searchKeyword(apiKey, query, type, new ApiReader.ApiResponseListener() {
                         @Override
                         public void onSuccess(String response) {
-                            handleApiResponse(response);
+                            handleApiResponse(response, todaydate, false);
                         }
 
                         @Override
@@ -272,7 +487,9 @@ public class SearchDetailActivity extends AppCompatActivity {
                         titleNameTextView.setText(textToShow);
 
                         for (HashMap<String, String> festivalInfo : festivalList) {
-                            if(!festivalInfo.get("title").equals(query)){continue;}
+                            if (!festivalInfo.get("title").equals(query)) {
+                                continue;
+                            }
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
@@ -413,7 +630,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Listener", "addBtn");
-
 
 
                                     executor.execute(new Runnable() {
@@ -785,7 +1001,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d("Button Listener", "addBtn");
-
 
 
                                     executor.execute(new Runnable() {
@@ -1378,7 +1593,7 @@ public class SearchDetailActivity extends AppCompatActivity {
     }
 
 
-    private void handleApiResponse(String response) {
+    private void handleApiResponse(String response, String todaydate, boolean ischeckpro) {
 
         Log.d("response", response);
         ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
@@ -1501,6 +1716,9 @@ public class SearchDetailActivity extends AppCompatActivity {
                                     Log.e(TAG, "API Error: " + error);
                                 }
                             });
+                            if(ischeckpro && (compareDates(todaydate, finalendDate[0]) < 0)){
+                                continue;
+                            }
 
                             apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
                                 @Override
@@ -1530,7 +1748,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         }
                                     } catch (IndexOutOfBoundsException e) {
                                     }
-
 
 
                                 }
@@ -2137,6 +2354,18 @@ public class SearchDetailActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private int compareDates(String date1, String date2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date d1 = sdf.parse(date1);
+            Date d2 = sdf.parse(date2);
+            return d1.compareTo(d2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0; // 오류 발생 시 0 반환 또는 오류 처리 방식에 따라 수정
+        }
     }
 
     private String getTextToShow(String type) {

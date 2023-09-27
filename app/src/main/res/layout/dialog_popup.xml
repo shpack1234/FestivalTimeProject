@@ -73,7 +73,7 @@
                 android:layout_margin="3dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -136,7 +136,7 @@
                     android:layout_height="3px"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="#CFCFCF" />
+                    android:background="#CFCFCF" />-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

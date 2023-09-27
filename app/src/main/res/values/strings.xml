@@ -132,7 +132,7 @@
     <string name="holding_badge">보유 뱃지</string>
     <string name="title">title</string>
     <string name="version">1.0.0</string>
-    <string name="api_key">HdKCANJUYTL+ISr7diKfFrqa799Hzt+hsbTMYDFitQ0hkS8r9chW84iZyXeiHGjXmaKq6d2aN7OPAM1imqUoFw==</string>
+    <string name="api_key">xLV6ByAGjdurVThsvWr9wCsU/w+jaSsnixgt7qRjzfPgP3WfH69rN/Ws3BkIUuk+v7fTs3vqFPQcvsHBHwFH4w==</string>
     <string name="holiday_key">xLV6ByAGjdurVThsvWr9wCsU/w+jaSsnixgt7qRjzfPgP3WfH69rN/Ws3BkIUuk+v7fTs3vqFPQcvsHBHwFH4w==</string>
 
     <string name="title_activity_settings">settings</string>
@@ -161,6 +161,7 @@
     <!--축제 검색후 페이지-->
     <string name="search_festival">축제</string>
     <string name="search_showAll">전체보기</string>
+    <string name="proceed_show">종료제외 보기</string>
 
     <!--축제 전체보기-->
     <string name="address">주소</string>
