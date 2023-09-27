@@ -336,11 +336,11 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
             PlacesApi placesApi = retrofit.create(PlacesApi.class);
 
-            Call<ApiResponseModel> call = placesApi.searchPlaces(
+            Call<ApiResponseModel> call_food = placesApi.searchPlaces(
                     "음식점", selectedMarkerPoint.getMapPointGeoCoord().longitude,
                     selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000);
 
-            call.enqueue(new Callback<ApiResponseModel>() {
+            call_food.enqueue(new Callback<ApiResponseModel>() {
                 @Override
                 public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
                     if (response.isSuccessful()) {
@@ -350,11 +350,41 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         ApiResponseModel restApiData = gson.fromJson(apiResponse.getJsonString(), ApiResponseModel.class);
 
                         if (restApiData != null) {
-                            Log.d("hello", "not null");
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            Log.d("API Response", "Number of places: " + placesCount);
                             showPlacesOnMap(places, "food_inmap",70,70); // "food_inmap" 아이콘으로 표시
+                        } else {
+                            Log.e("API Error", "Response body is null");
+                        }
+
+                    } else {
+                        Log.e("API Error", "Response Code: " + response.code() + " - Message: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponseModel> call, Throwable t) {
+                    Log.e("Network Error", t.getMessage());
+                }
+            });
+
+            Call<ApiResponseModel> call_hotel = placesApi.searchPlaces(
+                    "숙박", selectedMarkerPoint.getMapPointGeoCoord().longitude,
+                    selectedMarkerPoint.getMapPointGeoCoord().latitude, 1000);
+
+            call_hotel.enqueue(new Callback<ApiResponseModel>() {
+                @Override
+                public void onResponse(Call<ApiResponseModel> call, Response<ApiResponseModel> response) {
+                    if (response.isSuccessful()) {
+                        ApiResponseModel apiResponse = response.body();
+                        Gson gson = new Gson();
+
+                        ApiResponseModel restApiData = gson.fromJson(apiResponse.getJsonString(), ApiResponseModel.class);
+
+                        if (restApiData != null) {
+                            List<PoiItem> places = restApiData.getDocuments();
+                            int placesCount = places.size(); // 리스트의 크기를 가져옴
+                            showPlacesOnMap(places, "hotel_inmap",70,70); // "food_inmap" 아이콘으로 표시
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -375,7 +405,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
             View popupView;
 
-            //음식점
+            //음식점, 숙소
             if (mapPOIItem.getTag() == 101) {
                 popupView = getLayoutInflater().inflate(R.layout.etc_callout_balloon, null);
 
@@ -607,6 +637,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 for (PoiItem place : places) {
                     MapPOIItem poiItem = new MapPOIItem();
                     poiItem.setItemName(place.getPlaceName() + "," + place.getAddressName());
+                    poiItem.setTag(101);
                     poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
 
                     // 아이콘 설정
@@ -615,12 +646,12 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         Bitmap resizedFoodIcon = Bitmap.createScaledBitmap(foodIcon, width, height, false);
                         poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                         poiItem.setCustomImageBitmap(resizedFoodIcon); // 맛집 아이콘
-                    } /*else if (iconResource.equals("hotel_inmap")) {
+                    } else if (iconResource.equals("hotel_inmap")) {
                         Bitmap hotelIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.hotel_inmap);
                         Bitmap resizedHotelIcon = Bitmap.createScaledBitmap(hotelIcon, width, height, false);
                         poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                         poiItem.setCustomImageBitmap(resizedHotelIcon); // 숙소 아이콘
-                    } */
+                    }
 
                     mapView.addPOIItem(poiItem);
                 }
