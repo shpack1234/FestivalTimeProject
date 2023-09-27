@@ -74,7 +74,7 @@
                     android:id="@+id/festival_slider"
                     android:layout_width="match_parent"
                     android:layout_height="273dp"
-                    android:background="@drawable/rectangle"
+                    android:background="@drawable/slider_rectangle"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="back_and_forth"
                     app:sliderAutoCycleEnabled="true"
@@ -99,22 +99,54 @@
                         android:id="@+id/festival_firstimage"
                         android:layout_width="145dp"
                         android:layout_height="195dp"
-                        android:background="@drawable/rectangle" />
+                        android:background="@drawable/image_round_corner"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:scaleType="centerCrop"/>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginEnd="5dp"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="49dp"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/calendar_addButton"
+                                android:layout_width="38dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="0dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/bookmark" />
+
+                            <Space
+                                android:layout_width="5dp"
+                                android:layout_height="0dp"/>
+
+                            <ImageButton
+                                android:id="@+id/favorite_addButton"
+                                android:layout_width="38dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/plus" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:layout_marginTop="20dp"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="10dp"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -135,7 +167,7 @@
                                     android:id="@+id/start_date"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="2dp"
+                                    android:layout_marginStart="3dp"
                                     android:textColor="@color/black"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
@@ -145,11 +177,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
-                                android:layout_marginStart="30dp"
+                                android:layout_marginStart="40dp"
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="16dp"
+                                    android:layout_width="15dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="~"
@@ -162,40 +194,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
+                                    android:layout_marginStart="3dp"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="0.1"
-                            android:layout_marginTop="20dp"
-                            android:orientation="horizontal">
-
-                            <ImageButton
-                                android:id="@+id/calendar_addButton"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginBottom="0dp"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@mipmap/bookmark" />
-
-                            <Space
-                                android:layout_width="5dp"
-                                android:layout_height="0dp"/>
-
-                            <ImageButton
-                                android:id="@+id/favorite_addButton"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:src="@mipmap/plus" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -257,15 +259,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/black"
-                android:layout_marginStart="7dp"
-                android:layout_marginEnd="7dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3px"
-                android:background="#CFCFCF" />
+                android:layout_height="7dp"
+                android:background="#FFE3E3E3"/>
 
             <TextView
                 android:id="@+id/text_view2"
@@ -280,7 +275,8 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:scrollbars="none"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:id="@+id/entire_sameday_festival_container"
@@ -294,8 +290,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3px"
-                android:background="#CFCFCF" />
+                android:layout_height="7dp"
+                android:layout_marginTop="11dp"
+                android:background="#FFE3E3E3"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

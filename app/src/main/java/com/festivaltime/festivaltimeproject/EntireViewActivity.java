@@ -33,6 +33,7 @@ import androidx.room.Room;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
@@ -147,8 +148,8 @@ public class EntireViewActivity extends AppCompatActivity {
                                 Glide
                                         .with(EntireViewActivity.this)
                                         .load(firstImage)
-                                        .transform(new CenterCrop())
-                                        .placeholder(R.drawable.ic_image)
+                                        .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
+                                        .placeholder(R.drawable.radius_corner)
                                         .into(festivalFirstImage);
                             }
 
@@ -156,7 +157,7 @@ public class EntireViewActivity extends AppCompatActivity {
                             address.setText(addresstext);
                             //html 형태 변환하여 setText
                             if (overview != null) {
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     overviewText.setText(Html.fromHtml(overview, Html.FROM_HTML_MODE_LEGACY));
                                 } else {
                                     overviewText.setText(Html.fromHtml(overview));
