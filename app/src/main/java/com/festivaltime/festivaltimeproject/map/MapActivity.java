@@ -354,7 +354,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
                             Log.d("API Response", "Number of places: " + placesCount);
-                            showPlacesOnMap(places);
+                            showPlacesOnMap(places, "food_inmap",70,70); // "food_inmap" 아이콘으로 표시
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -600,6 +600,35 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         });
     }
 
+    private void showPlacesOnMap(List<PoiItem> places, String iconResource, int width, int height) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (PoiItem place : places) {
+                    MapPOIItem poiItem = new MapPOIItem();
+                    poiItem.setItemName(place.getPlaceName() + "," + place.getAddressName());
+                    poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
+
+                    // 아이콘 설정
+                    if (iconResource.equals("food_inmap")) {
+                        Bitmap foodIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.food_inmap);
+                        Bitmap resizedFoodIcon = Bitmap.createScaledBitmap(foodIcon, width, height, false);
+                        poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                        poiItem.setCustomImageBitmap(resizedFoodIcon); // 맛집 아이콘
+                    } /*else if (iconResource.equals("hotel_inmap")) {
+                        Bitmap hotelIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.hotel_inmap);
+                        Bitmap resizedHotelIcon = Bitmap.createScaledBitmap(hotelIcon, width, height, false);
+                        poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                        poiItem.setCustomImageBitmap(resizedHotelIcon); // 숙소 아이콘
+                    } */
+
+                    mapView.addPOIItem(poiItem);
+                }
+            }
+        });
+    }
+
+
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
 
@@ -621,7 +650,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         }
         Bitmap originalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.region_inmap);
         Bitmap resizedMarkerBitmapArea = Bitmap.createScaledBitmap(originalMarkerBitmap, 100, 100, false);
-        Bitmap resizedMarkerBitmapFestival = Bitmap.createScaledBitmap(originalMarkerBitmap, 50, 50, false);
+        // 원하는 축제 아이콘을 mipmap에서 가져오기
+        Bitmap festivalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.festival_inmap);
+        Bitmap resizedFestivalMarkerBitmap = Bitmap.createScaledBitmap(festivalMarkerBitmap, 100, 100, false);
+
         for (int i = 0; i < marker.length; i++) {
             marker[i].setItemName(Info.get(i).first);
             Log.d("Tag", Info.get(i).second);
@@ -630,9 +662,9 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             marker[i].setMarkerType(MapPOIItem.MarkerType.CustomImage);
             if(marker[i].getTag()<100)
                 marker[i].setCustomImageBitmap(resizedMarkerBitmapArea);
-            else marker[i].setCustomImageBitmap(resizedMarkerBitmapFestival);
+            else marker[i].setCustomImageBitmap(resizedFestivalMarkerBitmap);
             marker[i].setCustomImageAutoscale(false);
-            marker[i].setCustomImageAnchor(0.5f, 1.0f);
+            marker[i].setCustomImageAnchor(0.5f, 0.5f);
             mapView.addPOIItem(marker[i]);
         }
     }
