@@ -449,6 +449,53 @@ public class ApiReader {
         });
     }
 
+    public Observable<String> searchKeyword3(String serviceKey, String areacode, String keyword, String cat) {
+        return Observable.create(emitter -> {
+            try {
+                HttpUrl.Builder urlBuilder = new HttpUrl.Builder() // 수정된 부분
+                        .scheme("https")
+                        .host("apis.data.go.kr")
+                        .addPathSegment("B551011")
+                        .addPathSegment("KorService1")
+                        .addPathSegment("searchKeyword1")
+                        .addQueryParameter("numOfRows", "10")
+                        .addQueryParameter("MobileOS", "AND")
+                        .addQueryParameter("MobileApp", "FestivalTime")
+                        .addQueryParameter("keyword", keyword)
+                        .addQueryParameter("contentTypeId", "15")
+                        .addQueryParameter("serviceKey", serviceKey)
+                        .addQueryParameter("areaCode", areacode)
+                        .addQueryParameter("cat3", cat);
+
+                String url = urlBuilder.build().toString();
+                Log.d(TAG, "url: " + url);
+
+                Request request = new Request.Builder().url(url).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                        emitter.onError(e); // 네트워크 오류를 전달합니다.
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String responseData = response.body().string();
+                            emitter.onNext(responseData); // 응답 데이터를 전달합니다.
+                            emitter.onComplete(); // 완료 이벤트를 전달합니다.
+                        } else {
+                            emitter.onError(new IOException(
+                                    "Server Error: " + response.code()));  // 서버 오류를 전달합니다.
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                emitter.onError(e);  // URL 인코딩 오류 등의 예외를 전달합니다.
+            }
+        });
+    }
 
     //지역기반서치 목록별
     public void searchLocation(String serviceKey, String areacode, final ApiResponseListener listener){
