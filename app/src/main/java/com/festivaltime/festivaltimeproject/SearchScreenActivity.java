@@ -89,6 +89,9 @@ public class SearchScreenActivity extends AppCompatActivity {
     private Semaphore twelveSemaphore = new Semaphore(0);
     private Semaphore thirteenSemaphore = new Semaphore(0);
 
+    private static final String PREFS_NAME = "MyAppPreferences";
+    private static final String SEARCH_KEY = "LastSearchQuery";
+
 
     MainActivity main = new MainActivity();
 
@@ -131,7 +134,10 @@ public class SearchScreenActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 return false;
             }
+
         });
+
+
 
         executor = Executors.newSingleThreadExecutor();
 
@@ -140,6 +146,9 @@ public class SearchScreenActivity extends AppCompatActivity {
         //날짜 서치용 boolean
         //Boolean searchFestival = false;
 
+        if (query != null && !query.isEmpty()) {
+            SearchView searchView = findViewById(R.id.main_search_bar);
+            searchView.setQuery(query, false);}
 
         type = getIntent().getStringExtra("type");
 
