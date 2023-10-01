@@ -44,6 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -375,9 +376,16 @@ public class SearchScreenActivity extends AppCompatActivity {
                             )
                             .observeOn(AndroidSchedulers.mainThread());
 
-            Disposable disposable = keywordSearchObservable2.subscribe(resultListForCategory -> {}, error -> {
-                Log.e(TAG,"API Error: ", error);
-            });
+            Disposable disposable = Completable.fromObservable(keywordSearchObservable)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete(() -> {
+                        // 'keywordSearchObservable'가 완료되면 로그 출력 (필요에 따라 수정)
+                        Log.d(TAG, "Completed keywordSearchObservable");
+                    })
+                    .andThen(keywordSearchObservable2)
+                    .subscribe(resultListForCategory -> {}, error -> {
+                        Log.e(TAG,"API Error: ", error);
+                    });
 
 
 
