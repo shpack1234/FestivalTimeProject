@@ -22,7 +22,7 @@
             android:gravity="center"
             android:onClick="mOnClose"
             android:padding="16dp"
-            android:text="초기화"
+            android:text="@string/close"
             android:textColor="@color/dark_gray"
             android:textSize="13sp" />
 

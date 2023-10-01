@@ -722,10 +722,7 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
-        //진행상황 버튼
-        ToggleButton completedToggle = findViewById(R.id.completed);
-        ToggleButton ongoingToggle = findViewById(R.id.Ongoing);
-        ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
+
         // 시작 날짜 선택 버튼
         Button startdateClick = dialogView.findViewById(R.id.dialog_popup_start_date);
         Button enddateClick = dialogView.findViewById(R.id.dialog_popup_end_date);

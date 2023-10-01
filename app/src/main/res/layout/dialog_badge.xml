@@ -1,0 +1,104 @@
+<!-- dialog_popup.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/popup_style"
+    android:layout_margin="5dp">
+
+    <!-- 타이틀바 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 닫기 버튼 -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="@string/upload_badge"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/dialog_popup_add_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginRight="4dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="@string/short_add"
+            android:textColor="@color/selected_color"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="#CFCFCF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:gravity="center|center">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="500dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/black">
+            <ImageView
+                android:id="@+id/badge_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_user" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/badge_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="(축제를 선택해주세요.)"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진 선택"/>
+
+            <Button
+                android:id="@+id/select_ft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="축제 선택"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

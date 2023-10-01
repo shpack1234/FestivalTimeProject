@@ -217,6 +217,7 @@
                     android:background="#CFCFCF" />
 
                 <LinearLayout
+                    android:id="@+id/up_cal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -251,12 +252,14 @@
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_above="@+id/bottom_navigation"
+                    android:layout_below="@+id/up_cal">
 
                     <TextView
                         android:id="@+id/calendar_SelectDateView"
@@ -286,7 +289,7 @@
 
                     </ScrollView>
 
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
             <include layout="@layout/blur_layout"/>

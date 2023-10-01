@@ -130,6 +130,7 @@
 
     <!--마이 뱃지 string-->
     <string name="holding_badge">보유 뱃지</string>
+    <string name="upload_badge">뱃지 만들기</string>
     <string name="title">title</string>
     <string name="version">1.0.0</string>
     <string name="api_key">xLV6ByAGjdurVThsvWr9wCsU/w+jaSsnixgt7qRjzfPgP3WfH69rN/Ws3BkIUuk+v7fTs3vqFPQcvsHBHwFH4w==</string>
