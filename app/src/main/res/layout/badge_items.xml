@@ -8,6 +8,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:cardCornerRadius="500dp"
         app:strokeWidth="1dp"
         app:strokeColor="@color/black">
@@ -22,6 +24,7 @@
         android:id="@+id/badge_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="4dp"
         android:text="나도 축제왕 할래"
         android:textColor="@color/black"

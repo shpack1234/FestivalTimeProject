@@ -11,10 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -52,7 +54,10 @@ import com.kakao.vectormap.label.Badge;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -166,36 +171,64 @@ public class BadgeActivity extends AppCompatActivity {
         GridLayout badgeContainer = findViewById(R.id.badge_container);
         badgeContainer.removeAllViews(); // 기존 뱃지를 모두 제거
 
-        int maxColumnCount = 3;
-
         for (int i = 0; i < badges.size(); i++) {
             BadgeEntity badge = badges.get(i);
 
-            // 뱃지를 동적으로 생성하고 UI에 추가하기 전에 로그 추가
-            Log.d("BadgeActivity", "Adding Badge: " + badge.badgeName);
+            // 뱃지 레이아웃을 동적으로 생성
+            View badgeLayout = getLayoutInflater().inflate(R.layout.badge_items, null);
 
-            // 뱃지를 동적으로 생성하고 UI에 추가
-            LayoutInflater inflater = LayoutInflater.from(BadgeActivity.this);
-            View badgeItemView = inflater.inflate(R.layout.badge_items, null);
+            ImageView badgeImage = badgeLayout.findViewById(R.id.badge_image);
+            TextView badgeName = badgeLayout.findViewById(R.id.badge_name);
 
-            ImageView badgeImage = badgeItemView.findViewById(R.id.badge_image);
-            TextView badgeName = badgeItemView.findViewById(R.id.badge_name);
+            // 뱃지 이미지와 이름 설정
+            badgeImage.setImageBitmap(BitmapFactory.decodeFile(badge.imagePath));
+            badgeName.setText(badge.badgeName);
 
-            Bitmap bitmap = BitmapFactory.decodeFile(badge.imagePath);
-            badgeImage.setImageBitmap(bitmap);
-            badgeName.setText(badge.badgeName); // 뱃지 이름 설정
+            // 각 뱃지 레이아웃에 고유한 ID 설정
+            badgeLayout.setId(View.generateViewId());
 
-            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-            layoutParams.width = 0; // 너비를 0으로 설정하여 가중치를 적용
-            layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT; // 높이는 WRAP_CONTENT로 설정
-            int rowIndex = i / maxColumnCount; // 현재 행 번호 계산
-            int columnIndex = i % maxColumnCount; // 현재 열 번호 계산
-            layoutParams.rowSpec = GridLayout.spec(rowIndex);
-            layoutParams.columnSpec = GridLayout.spec(columnIndex, 1f); // 가중치 적용
-
-            badgeItemView.setLayoutParams(layoutParams);
-            badgeContainer.addView(badgeItemView);
+            // 뱃지 레이아웃을 badgeContainer에 추가
+            badgeContainer.addView(badgeLayout);
         }
+    }
+
+    // 뱃지 UI 업데이트
+    private void updateBadgeUI() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // 백그라운드 스레드에서 뱃지 데이터베이스를 조회하고 UI를 업데이트
+                List<BadgeEntity> badges = badgeDao.getAllBadges();
+
+                // UI 업데이트 메서드 호출
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GridLayout badgeContainer = findViewById(R.id.badge_container);
+                        badgeContainer.removeAllViews(); // 기존 뱃지를 모두 제거
+                        for (int i = 0; i < badges.size(); i++) {
+                            BadgeEntity badge = badges.get(i);
+
+                            // 뱃지 레이아웃을 동적으로 생성
+                            View badgeLayout = getLayoutInflater().inflate(R.layout.badge_items, null);
+
+                            ImageView badgeImage = badgeLayout.findViewById(R.id.badge_image);
+                            TextView badgeName = badgeLayout.findViewById(R.id.badge_name);
+
+                            // 뱃지 이미지와 이름 설정
+                            badgeImage.setImageBitmap(BitmapFactory.decodeFile(badge.imagePath));
+                            badgeName.setText(badge.badgeName);
+
+                            // 각 뱃지 레이아웃에 고유한 ID 설정
+                            badgeLayout.setId(View.generateViewId());
+
+                            // 뱃지 레이아웃을 badgeContainer에 추가
+                            badgeContainer.addView(badgeLayout);
+                        }
+                    }
+                });
+            }
+        });
     }
 
 
@@ -219,19 +252,37 @@ public class BadgeActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        // select_img와 select_ft에서 내용 가져오기
-                        String badgeNameText = ft_name.getText().toString();
+                // select_img와 select_ft에서 내용 가져오기
+                String badgeNameText = ft_name.getText().toString();
 
-                        // upload_img의 Drawable을 Bitmap으로 변환
-                        Bitmap badgeBitmap = ((BitmapDrawable) upload_img.getDrawable()).getBitmap();
-                        badgeDatabase = BadgeDatabase.getInstance(getApplicationContext());
-                        badgeDao = badgeDatabase.badgeDao();
+                // 업로드된 이미지 Drawable 가져오기
+                Drawable drawable = upload_img.getDrawable();
 
-                        if (badgeBitmap != null) {
+                // 뱃지 이미지 Bitmap 초기화
+                final Bitmap badgeBitmap;
+
+                if (drawable instanceof BitmapDrawable) {
+                    // BitmapDrawable인 경우 직접 Bitmap을 가져옵니다.
+                    badgeBitmap = ((BitmapDrawable) drawable).getBitmap();
+                } else if (drawable instanceof VectorDrawable) {
+                    // VectorDrawable인 경우 Bitmap으로 변환합니다.
+                    VectorDrawable vectorDrawable = (VectorDrawable) drawable;
+                    badgeBitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(badgeBitmap);
+                    vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    vectorDrawable.draw(canvas);
+                } else {
+                    badgeBitmap = null;
+                }
+
+                if ((badgeBitmap == null) || (badgeNameText.equals("(축제를 선택해주세요.)"))) {
+                    Toast.makeText(BadgeActivity.this, "뱃지 정보를 확인하세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 뱃지 이미지를 사용하여 작업을 수행합니다.
                             String badgeImagePath = saveImageToFile(badgeBitmap); // 이미지 파일 경로를 얻음
                             Log.d("BadgeActivity", "Badge Image Path: " + badgeImagePath); // 로그 추가
 
@@ -248,6 +299,7 @@ public class BadgeActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         dialog.dismiss();
+                                        updateBadgeUI();
                                     }
                                 });
                             } else {
@@ -258,18 +310,12 @@ public class BadgeActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(BadgeActivity.this, "뱃지 이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
                         }
-                    }
-                });
+                    });
+                }
             }
         });
+
 
         select_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,10 +332,9 @@ public class BadgeActivity extends AppCompatActivity {
                 new LoadFTTask(select_ft, ft_name).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
-        new LoadFTTask(select_ft, ft_name).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
         dialog.show();
     }
+
 
     private class LoadFTTask extends AsyncTask<Void, Void, List<CalendarEntity>> {
         private Button selectFt;
@@ -370,7 +415,9 @@ public class BadgeActivity extends AppCompatActivity {
 
     private String saveImageToFile(Bitmap bitmap) {
         File filesDir = getFilesDir();
-        File imageFile = new File(filesDir, "profile_image.jpg");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "profile_image_" + timeStamp + ".jpg";
+        File imageFile = new File(filesDir, imageFileName);
 
         try {
             FileOutputStream fos = new FileOutputStream(imageFile);
@@ -378,9 +425,11 @@ public class BadgeActivity extends AppCompatActivity {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return null; // 파일 저장 실패 시 null 반환
         }
         return imageFile.getAbsolutePath();
     }
+
 }
 
 
