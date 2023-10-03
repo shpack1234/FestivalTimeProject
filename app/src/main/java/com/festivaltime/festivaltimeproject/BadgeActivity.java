@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,14 +23,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.festivaltime.festivaltimeproject.calendaract.CalendarPopupActivity;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
+import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
@@ -41,11 +50,16 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class BadgeActivity extends AppCompatActivity {
 
     ImageButton back_Btn;
+    private ImageView upload_img;
+    private Button select_ft;
+    private TextView ft_name;
     int count;
+    protected Context mContext;
 
     private UserDataBase db;
     private UserDao userDao;
@@ -61,6 +75,12 @@ public class BadgeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_badge);
+        mContext = this;
+
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_badge, null);
+        ft_name = dialogView.findViewById(R.id.badge_name);
+        select_ft = dialogView.findViewById(R.id.select_ft);
 
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -109,7 +129,6 @@ public class BadgeActivity extends AppCompatActivity {
                                 layoutParams.columnSpec = GridLayout.spec(columnIndex);
 
 
-
                                 GridLayout badgeContainer = findViewById(R.id.badge_container);
                                 badgeItemView.setLayoutParams(layoutParams);
                                 badgeContainer.addView(badgeItemView);
@@ -121,7 +140,7 @@ public class BadgeActivity extends AppCompatActivity {
             }
         });
 
-        Button uploadButton=findViewById(R.id.badge_upload_button);
+        Button uploadButton = findViewById(R.id.badge_upload_button);
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,11 +185,13 @@ public class BadgeActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_badge, null);
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
 
-        ImageView upload_img = dialogView.findViewById(R.id.badge_image);
-        TextView ft_name = dialogView.findViewById(R.id.badge_name);
+        upload_img = dialogView.findViewById(R.id.badge_image);
+        //TextView ft_name = dialogView.findViewById(R.id.badge_name);
 
         Button select_img = dialogView.findViewById(R.id.upload_image);
-        Button select_ft = dialogView.findViewById(R.id.select_ft);
+        //Button select_ft = dialogView.findViewById(R.id.select_ft);
+
+        dialogBuilder.setView(dialogView); // 다이얼로그에 뷰 추가
 
         Dialog dialog = dialogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -178,24 +199,76 @@ public class BadgeActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.dismiss();
             }
         });
 
         select_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // 갤러리에서 이미지를 선택하기 위한 Intent 생성
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
             }
         });
 
         select_ft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new LoadCategoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+        new LoadCategoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        dialog.show();
+    }
+
+    private class LoadCategoryTask extends AsyncTask<Void, Void, List<CalendarEntity>> {
+        @Override
+        protected List<CalendarEntity> doInBackground(Void... voids) {
+            // 데이터베이스 인스턴스 생성
+            CalendarDatabase festivalDataBase = CalendarDatabase.getInstance(mContext);
+
+            // 데이터베이스에서 카테고리 목록을 가져옴
+            return festivalDataBase.calendarDao().getCalendarEntitiesByCategory("#ed5c55");
+        }
+
+        @Override
+        protected void onPostExecute(List<CalendarEntity> festivals) {
+            // 데이터베이스에서 가져온 카테고리 목록을 메뉴에 추가하는 코드
+            setupFestivalMenu(festivals);
+        }
+    }
+    private void setupFestivalMenu(List<CalendarEntity> festivals) {
+        // 팝업 메뉴를 생성하고 위치 지정
+        PopupMenu popupMenu = new PopupMenu(this, ft_name);
+
+        // 메뉴 인플레이션
+        popupMenu.getMenuInflater().inflate(R.menu.dialog_badge, popupMenu.getMenu());
+
+        // 동적으로 추가할 그룹 ID
+        int groupId = R.id.dynamic_items_group;
+
+        // 데이터베이스에서 가져온 카테고리 목록을 메뉴에 추가
+        for (CalendarEntity fesitval : festivals) {
+            popupMenu.getMenu().add(groupId, Menu.NONE, Menu.NONE, fesitval.getTitle());
+        }
+
+        // 팝업 메뉴 아이템 클릭 리스너 설정
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // 선택한 메뉴 아이템의 이름을 가져와서 처리
+                String selectedCategory = item.getTitle().toString();
+
+                // 선택한 카테고리 이름을 설정
+                ft_name.setText(selectedCategory);
+                return true;
             }
         });
 
+        // 팝업 메뉴 보이기
+        popupMenu.show();
     }
 
     @Override
@@ -206,15 +279,17 @@ public class BadgeActivity extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                //privacyUserImage.setImageBitmap(bitmap);
-                //imagePath = saveImageToFile(bitmap);
 
+                if (upload_img != null) {
+                    upload_img.setImageBitmap(bitmap);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "이미지를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
     private String saveImageToFile(Bitmap bitmap) {
         File filesDir = getFilesDir();
         File imageFile = new File(filesDir, "profile_image.jpg");

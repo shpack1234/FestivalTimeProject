@@ -252,7 +252,7 @@
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -289,7 +289,7 @@
 
                     </ScrollView>
 
-                </FrameLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <include layout="@layout/blur_layout"/>

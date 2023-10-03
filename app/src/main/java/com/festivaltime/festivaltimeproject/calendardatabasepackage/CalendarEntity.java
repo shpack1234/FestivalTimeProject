@@ -49,5 +49,9 @@ public class CalendarEntity {
         this.contentid = contentid;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     // Getter와 Setter (필요한 경우)
 }
