@@ -32,6 +32,13 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
+    public static void navigateToMapActivity(Activity thisActivity, String festivalName) {
+        Intent intent = new Intent(thisActivity, MapActivity.class);
+        intent.putExtra("festivalName", festivalName);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
     public static void navigateToCalendarActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, CalendarActivity.class);
         thisActivity.startActivity(intent);

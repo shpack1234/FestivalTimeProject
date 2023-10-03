@@ -10,21 +10,21 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_nevigation_background"
         android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu"
-        app:labelVisibilityMode="labeled"
+        android:background="@drawable/bottom_nevigation_background"
         app:itemIconTint="@drawable/menu_select_color"
         app:itemTextColor="@drawable/menu_select_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu"
         tools:ignore="MissingConstraints" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -83,7 +83,7 @@
                     app:sliderIndicatorMargin="15dp"
                     app:sliderIndicatorOrientation="horizontal"
                     app:sliderScrollTimeInSec="3"
-                    app:sliderStartAutoCycle="true"/>
+                    app:sliderStartAutoCycle="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,10 +99,10 @@
                         android:id="@+id/festival_firstimage"
                         android:layout_width="145dp"
                         android:layout_height="195dp"
-                        android:background="@drawable/image_round_corner"
                         android:layout_gravity="center"
+                        android:background="@drawable/image_round_corner"
                         android:gravity="center"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
 
                     <LinearLayout
@@ -130,7 +130,7 @@
 
                             <Space
                                 android:layout_width="5dp"
-                                android:layout_height="0dp"/>
+                                android:layout_height="0dp" />
 
                             <ImageButton
                                 android:id="@+id/favorite_addButton"
@@ -193,8 +193,8 @@
                                     android:id="@+id/end_date"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
                                     android:layout_marginStart="3dp"
+                                    android:textColor="@color/black"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
@@ -202,13 +202,14 @@
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -228,9 +229,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -251,8 +253,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -260,23 +262,61 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="7dp"
-                android:background="#FFE3E3E3"/>
+                android:background="#FFE3E3E3" />
+
+            <LinearLayout
+                android:id="@+id/map_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="위치"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="20dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지도에서 보기"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:textColor="@color/selected_color"
+                    android:layout_marginTop="15dp"
+                    android:onClick="mapOnClick"/>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="#FFE3E3E3" />
 
             <TextView
                 android:id="@+id/text_view2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:text="@string/today_festival"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_margin="16dp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:overScrollMode="never">
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/entire_sameday_festival_container"
@@ -292,7 +332,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="7dp"
                 android:layout_marginTop="11dp"
-                android:background="#FFE3E3E3"/>
+                android:background="#FFE3E3E3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -304,17 +344,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/festival_review"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/review_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
+                    android:text="(0건)"
                     android:textColor="@color/black"
-                    android:text="(0건)"/>
+                    android:textSize="13sp" />
 
             </LinearLayout>
         </LinearLayout>

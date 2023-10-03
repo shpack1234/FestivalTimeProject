@@ -219,6 +219,8 @@ public class ParsingApiData {
                     String img = getElementText(itemElement, "firstimage2");
                     String overview = getElementText(itemElement, "overview");
                     String contentid = getElementText(itemElement, "contentid");
+                    String mapx=getElementText(itemElement, "mapx");
+                    String mapy=getElementText(itemElement, "mapy");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("address1", address1);
@@ -226,6 +228,8 @@ public class ParsingApiData {
                     festivalInfo.put("img", img);
                     festivalInfo.put("overview", overview);
                     festivalInfo.put("contentid", contentid);
+                    festivalInfo.put("mapx", mapx);
+                    festivalInfo.put("mapy", mapy);
 
                     festivalList.add(festivalInfo);
                 }

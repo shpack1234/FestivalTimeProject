@@ -75,7 +75,7 @@ public class MyPageActivity extends AppCompatActivity {
                     navigateToMainActivity(MyPageActivity.this);
                     return true;
                 case R.id.action_map:
-                    navigateToMapActivity(MyPageActivity.this);
+                    navigateToMapActivity(MyPageActivity.this, null);
                     return true;
                 case R.id.action_calendar:
                     navigateToCalendarActivity(MyPageActivity.this);

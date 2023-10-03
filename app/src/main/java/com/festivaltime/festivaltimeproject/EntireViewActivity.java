@@ -14,18 +14,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.room.Room;
@@ -38,11 +43,16 @@ import com.festivaltime.festivaltimeproject.calendaract.ScheduleLoader;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.map.MapActivity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +66,8 @@ import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class EntireViewActivity extends AppCompatActivity {
+public class EntireViewActivity extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.OpenAPIKeyAuthenticationResultListener {
+    private MapView mapView;
     public ImageButton Back_Btn;
     private ApiReader apiReader;
     private Executor executor;
@@ -69,6 +80,11 @@ public class EntireViewActivity extends AppCompatActivity {
     private String userId;
     private List<HashMap<String, String>> festivalList = new ArrayList<>();
     private List<HashMap<String, String>> samedaylist = new ArrayList<>();
+
+    private String mapx;
+    private String mapy;
+
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +139,7 @@ public class EntireViewActivity extends AppCompatActivity {
                             ImageButton favoriteaddButton = findViewById(R.id.favorite_addButton);
                             ImageButton calendaraddButton = findViewById(R.id.calendar_addButton);
 
-                            String title = festivalInfo.get("title");
+                            title = festivalInfo.get("title");
                             String address1 = festivalInfo.get("address1");
                             String address2 = festivalInfo.get("address2");
                             String addresstext = "";
@@ -166,6 +182,17 @@ public class EntireViewActivity extends AppCompatActivity {
                                 // detailInfo가 null인 경우에 대한 처리 추가
                                 overviewText.setText(getString(R.string.null_text));
                             }
+
+                            mapx = festivalInfo.get("mapx");
+                            mapy = festivalInfo.get("mapy");
+
+                            mapView = new MapView(EntireViewActivity.this);
+                            ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+                            mapViewContainer.addView(mapView);
+                            onMapViewInitialized(mapView);
+                            executor = Executors.newSingleThreadExecutor();
+
+                            mapView.setMapViewEventListener(EntireViewActivity.this);
 
 
                             favoriteaddButton.setOnClickListener(new View.OnClickListener() {
@@ -423,7 +450,7 @@ public class EntireViewActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (samedaylist.size() > 0) {
+                                if (samedaylist.size() == 5) {
                                     for (int i = 0; i < 5; i++) {
                                         View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
                                         ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
@@ -495,6 +522,7 @@ public class EntireViewActivity extends AppCompatActivity {
             }
         });
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -518,4 +546,116 @@ public class EntireViewActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onMapViewInitialized(MapView mapView) {
+        MapPoint festivalPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(mapy), Double.parseDouble(mapx));
+        mapView.setMapCenterPointAndZoomLevel(festivalPoint, 3, false);
+
+        Pair<Double, Double> area = new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx));
+
+        MapPOIItem marker = new MapPOIItem();
+        marKingFestival(marker, area, title);
+    }
+
+
+    @Override
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+    }
+
+    @Override
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onDaumMapOpenAPIKeyAuthenticationResult(MapView mapView, int i, String s) {
+
+    }
+
+    @Override
+    public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
+
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
+
+    }
+
+    @Override
+    public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+
+    }
+
+    private void marKingFestival(@NonNull MapPOIItem marker, Pair<Double, Double> location, String festivalTitle) {
+        Bitmap festivalMarkerBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.festival_inmap);
+        Bitmap resizedFestivalMarkerBitmap = Bitmap.createScaledBitmap(festivalMarkerBitmap, 100, 100, false);
+
+        marker.setItemName(festivalTitle);
+        marker.setMapPoint(MapPoint.mapPointWithGeoCoord(location.first, location.second));
+        marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+        marker.setCustomImageBitmap(resizedFestivalMarkerBitmap);
+        marker.setCustomImageAutoscale(false);
+        marker.setCustomImageAnchor(0.5f, 0.5f);
+        mapView.addPOIItem(marker);
+
+    }
+
+    public void mapOnClick(View v) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout mapContainer=findViewById(R.id.map_container);
+                mapContainer.removeView(mapView);
+                onPause();
+                navigateToSomeActivity.navigateToMapActivity(EntireViewActivity.this,title);
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mapView != null) {
+            ViewGroup mapViewContainer = findViewById(R.id.map_view);
+            mapViewContainer.removeView(mapView);
+            mapView = null;
+        }
+    }
 }

@@ -112,6 +112,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private String formattedEndDate;
 
     boolean isFestivalVisible;
+    String festivalName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        mapView = new MapView(this);
+        mapView = new MapView(MapActivity.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
         onMapViewInitialized(mapView);
@@ -141,7 +143,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.map_search_fade_in);
         fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.map_search_fade_out);
 
-        ImageButton mapResetButton=findViewById(R.id.map_reset_button);
+        ImageButton mapResetButton = findViewById(R.id.map_reset_button);
 
         searchEditText = findViewById(R.id.map_search_bar);
         searchEditText.setOnTouchListener((v, event) -> {
@@ -150,10 +152,16 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             return true;
         });
 
+        festivalName = getIntent().getStringExtra("festivalName");
+        if (festivalName != null) {
+            showSearchedFestival(mapView, festivalName);
+            festivalName = null;
+        }
+
         //상세 검색 버튼
-        
+
         ImageButton searchoptionbutton = findViewById(R.id.detailButton);
-         searchoptionbutton.setOnClickListener(new View.OnClickListener() {
+        searchoptionbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupDialog();
@@ -161,7 +169,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         });
         searchEditText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {       //검색 시 검색 내용 SearchActivity 로 전달
+            public boolean onQueryTextSubmit(String s) {
                 query = s;
                 showSearchedFestival(mapView, query);
                 return false;
@@ -186,17 +194,22 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         bottomNavigationView.setSelectedItemId(R.id.action_map);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.action_home) {
+                onPause();
                 navigateToMainActivity(MapActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_map) {
+                onPause();
                 return false;
             } else if (item.getItemId() == R.id.action_calendar) {
+                onPause();
                 navigateToCalendarActivity(MapActivity.this);
                 return true;
             } else if (item.getItemId() == R.id.action_favorite) {
+                onPause();
                 navigateToFavoriteActivity(MapActivity.this);
                 return true;
             } else {
+                onPause();
                 navigateToMyPageActivity(MapActivity.this);
                 return true;
             }
@@ -205,12 +218,12 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
-        isFestivalVisible=false;
+        isFestivalVisible = false;
 
-        MapPoint centerPoint=MapPoint.mapPointWithGeoCoord(36.5, 127.5);
+        MapPoint centerPoint = MapPoint.mapPointWithGeoCoord(36.5, 127.5);
 
         mapView.removeAllPOIItems();
-        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,false);
+        mapView.setMapCenterPointAndZoomLevel(centerPoint, 11, false);
         areas.add(new Pair<>(37.5665, 126.9780)); //서울 1
         areas.add(new Pair<>(37.4562, 126.7052)); //인천 2
         areas.add(new Pair<>(36.3504, 127.3845)); //대전 3
@@ -264,7 +277,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int zoomLevel) {
-        if (zoomLevel >= 10 && isFestivalVisible==true) {
+        if (zoomLevel >= 10 && isFestivalVisible == true) {
             mapView.removeAllPOIItems();
             onMapViewInitialized(mapView);
         }
@@ -288,7 +301,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     @Override
     public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-        if(searchBarLayout.getVisibility()==View.VISIBLE) {
+        if (searchBarLayout.getVisibility() == View.VISIBLE) {
             searchBarLayout.startAnimation(fadeOutAnimation); // 사라지는 애니메이션 실행
             searchBarLayout.setVisibility(View.GONE); // 검색 바 레이아웃을 숨기도록 설정
         }
@@ -319,7 +332,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
         // 축제 선택 시
         if (mapPOIItem.getTag() > 100) {
-            isFestivalVisible=true;
+            isFestivalVisible = true;
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -352,7 +365,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         if (restApiData != null) {
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            showPlacesOnMap(places, "food_inmap",70,70); // "food_inmap" 아이콘으로 표시
+                            showPlacesOnMap(places, "food_inmap", 70, 70); // "food_inmap" 아이콘으로 표시
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -384,7 +397,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         if (restApiData != null) {
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            showPlacesOnMap(places, "hotel_inmap",70,70); // "food_inmap" 아이콘으로 표시
+                            showPlacesOnMap(places, "hotel_inmap", 70, 70); // "food_inmap" 아이콘으로 표시
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -502,7 +515,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
 
         } else { //지역 선택 시
-            isFestivalVisible=true;
+            isFestivalVisible = true;
 
             mapView.setMapCenterPointAndZoomLevel(selectedMarkerPoint, 5, true);
 
@@ -558,14 +571,13 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     }
 
     private void showSearchedFestival(MapView mapView, String query) {
-        isFestivalVisible=false;
+        isFestivalVisible = false;
         mapView.removeAllPOIItems();
 
 
-        MapPoint centerPoint=MapPoint.mapPointWithGeoCoord(36.5, 127.5);
-        mapView.setMapCenterPointAndZoomLevel(centerPoint,11,true);
+        MapPoint centerPoint = MapPoint.mapPointWithGeoCoord(36.5, 127.5);
 
-        apiReader=new ApiReader();
+        apiReader = new ApiReader();
         apiReader.searchKeyword(apiKey, query, new ApiReader.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
@@ -589,6 +601,13 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                             Log.d("contentid", contentid);
                             areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
                             areaFestivalInfo.add(new Pair<>(title, contentid));
+
+                            if(parsedFestivalList.size()==1) {
+                                MapPoint festivalPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(mapy), Double.parseDouble(mapx));
+                                mapView.setMapCenterPointAndZoomLevel(festivalPoint, 3, true);
+                            } else {
+                                mapView.setMapCenterPointAndZoomLevel(centerPoint, 11, true);
+                            }
                         }
 
                         runOnUiThread(new Runnable() {
@@ -691,7 +710,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             marker[i].setTag(Integer.parseInt(Info.get(i).second));
             marker[i].setMapPoint(MapPoint.mapPointWithGeoCoord(location.get(i).first, location.get(i).second));
             marker[i].setMarkerType(MapPOIItem.MarkerType.CustomImage);
-            if(marker[i].getTag()<100)
+            if (marker[i].getTag() < 100)
                 marker[i].setCustomImageBitmap(resizedMarkerBitmapArea);
             else marker[i].setCustomImageBitmap(resizedFestivalMarkerBitmap);
             marker[i].setCustomImageAutoscale(false);
@@ -701,7 +720,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     }
 
     private void showPopupDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,R.style.custom_popup);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.custom_popup);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.map_dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
@@ -712,10 +731,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
 
         //카테고리 버튼
-        ToggleButton festivalToggle=findViewById(R.id.category_festival);
-        ToggleButton eventToggle=findViewById(R.id.category_event);
+        ToggleButton festivalToggle = findViewById(R.id.category_festival);
+        ToggleButton eventToggle = findViewById(R.id.category_event);
 
-        Dialog dialog =dialogBuilder.create();
+        Dialog dialog = dialogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialogBuilder.setView(dialogView);
@@ -750,5 +769,13 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             }
         });
     }
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mapView != null) {
+            ViewGroup mapViewContainer = findViewById(R.id.map_view);
+            mapViewContainer.removeView(mapView);
+            mapView = null;
+        }
+    }
 }

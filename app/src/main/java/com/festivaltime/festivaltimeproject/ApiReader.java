@@ -969,6 +969,7 @@ public class ApiReader {
                     .addQueryParameter("defaultYN", "Y")
                     .addQueryParameter("firstImageYN", "Y")
                     .addQueryParameter("addrinfoYN", "Y")
+                    .addQueryParameter("mapinfoYN", "Y")
                     .addQueryParameter("overviewYN", "Y")
                     .addQueryParameter("serviceKey", serviceKey);
 
