@@ -13,8 +13,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/my_page"
+            android:layout_marginTop="23dp"
+            android:text="@string/my_badge"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
         android:layout_height="42dp"
         android:src="@drawable/ic_back_before"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="17dp"
         android:onClick="customOnClick"
         android:background="@android:color/transparent"
         tools:ignore="SpeakableTextPresentCheck"/>
@@ -58,9 +58,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="인증 사진 업로드"/>
+            android:background="@drawable/roundcorner_square"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="  인증 사진 업로드  "/>
 
     </FrameLayout>
 

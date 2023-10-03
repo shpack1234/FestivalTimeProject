@@ -36,7 +36,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navigation"
         android:layout_below="@+id/bar"
-        android:scrollbars="vertical"
+        android:scrollbars="none"
         android:layout_marginTop="10dp"
         tools:ignore="NotSibling,UnknownId">
 

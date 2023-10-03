@@ -106,8 +106,15 @@ public class PrivacyActivity extends AppCompatActivity {
                             RadioButton radioButtonMale = findViewById(R.id.radioButtonMale);
                             RadioButton radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
-                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-                            privacyUserImage.setImageBitmap(bitmap);
+                            if (imagePath != null) {
+                                // 이미지 파일이 있는 경우
+                                Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                                privacyUserImage.setImageBitmap(bitmap);
+                            } else {
+                                // imagePath가 null인 경우 기본 이미지 설정
+                                privacyUserImage.setImageResource(R.mipmap.image);
+                            }
+
 
                             LinearLayout passwordBox = findViewById(R.id.privacy_password_box);
                             passwordBox.setVisibility(View.GONE);

@@ -41,29 +41,36 @@
     <LinearLayout
         android:id="@+id/proceed_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/before_btn"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         tools:ignore="UnknownId"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4.5"/>
+            android:layout_weight="6"/>
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="@string/proceed_show"/>
+            android:orientation="horizontal"
+            android:layout_weight="0">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/proceed_show"/>
 
-        <Switch
-            android:id="@+id/proceed_check"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"/>
+            <Switch
+                android:id="@+id/proceed_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/shape_switch_thumb"
+                android:track="@drawable/selector_switch"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -74,10 +81,11 @@
         android:layout_above="@+id/bottom_navigation"
         android:layout_below="@+id/proceed_layout"
         tools:ignore="UnknownId"
-        android:scrollbars="vertical"
         android:scrollbarThumbVertical="@android:color/darker_gray"
         android:scrollbarSize="8dp"
         android:fadeScrollbars="false"
+        android:scrollbars="none"
+        android:overScrollMode="never"
         android:scrollbarStyle="insideOverlay">
 
         <LinearLayout
