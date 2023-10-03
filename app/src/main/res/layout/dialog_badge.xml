@@ -56,16 +56,21 @@
         android:gravity="center|center">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             app:cardCornerRadius="500dp"
+            android:layout_margin="10dp"
             app:strokeWidth="1dp"
-            app:strokeColor="@color/black">
+            app:strokeColor="@color/dark_gray">
+
             <ImageView
                 android:id="@+id/badge_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_user" />
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/image"
+                />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -74,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="(축제를 선택해주세요.)"
-            android:textColor="@color/black"
+            android:textColor="@color/darker_gray"
             android:textAlignment="center"
             android:textSize="13sp" />
 
@@ -86,13 +91,22 @@
             <Button
                 android:id="@+id/upload_image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
+                android:layout_margin="5dp"
+                android:textColor="@color/bright_orange"
+                android:background="@drawable/ripple_custom"
                 android:text="사진 선택"/>
 
+            <View
+                android:layout_width="10dp"
+                android:layout_height="0dp"/>
             <Button
                 android:id="@+id/select_ft"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
+                android:layout_margin="5dp"
+                android:textColor="@color/bright_orange"
+                android:background="@drawable/ripple_custom"
                 android:text="축제 선택"/>
 
         </LinearLayout>
