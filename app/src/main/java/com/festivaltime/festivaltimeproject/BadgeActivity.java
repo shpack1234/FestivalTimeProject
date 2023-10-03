@@ -1,27 +1,26 @@
 package com.festivaltime.festivaltimeproject;
 
-import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToBadgeActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMyPageActivity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,9 +33,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.festivaltime.festivaltimeproject.calendaract.CalendarPopupActivity;
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryDataBase;
-import com.festivaltime.festivaltimeproject.calendarcategorydatabasepackage.CalendarCategoryEntity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.festivaltime.festivaltimeproject.badgedatabase.BadgeDao;
+import com.festivaltime.festivaltimeproject.badgedatabase.BadgeDatabase;
+import com.festivaltime.festivaltimeproject.badgedatabase.BadgeEntity;
+import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
@@ -44,20 +47,19 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.w3c.dom.Text;
+import com.kakao.vectormap.label.Badge;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class BadgeActivity extends AppCompatActivity {
-
+    private Executor executor = Executors.newSingleThreadExecutor();
     ImageButton back_Btn;
     private ImageView upload_img;
-    private Button select_ft;
-    private TextView ft_name;
     int count;
     protected Context mContext;
 
@@ -66,7 +68,9 @@ public class BadgeActivity extends AppCompatActivity {
     private String userId;
 
     private UserEntity loadedUser;
-
+    private BadgeDao badgeDao;
+    private BadgeEntity badgeEntity;
+    private BadgeDatabase badgeDatabase;
     private boolean isLogin;
 
     private static final int GALLERY_REQUEST_CODE = 123;
@@ -77,10 +81,8 @@ public class BadgeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_badge);
         mContext = this;
 
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_badge, null);
-        ft_name = dialogView.findViewById(R.id.badge_name);
-        select_ft = dialogView.findViewById(R.id.select_ft);
+        badgeDatabase = BadgeDatabase.getInstance(getApplicationContext());
+        badgeDao = badgeDatabase.badgeDao();
 
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -105,40 +107,21 @@ public class BadgeActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                loadedUser = userDao.getUserInfoById(userId);
+                // 백그라운드 스레드에서 뱃지 데이터베이스를 조회하고 UI를 업데이트
+                List<BadgeEntity> badges = badgeDao.getAllBadges();
 
-                if (loadedUser != null) {
-                    if (loadedUser.getIsLogin()) {
-                        userId = loadedUser.getUserId();
-
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                LayoutInflater inflater = LayoutInflater.from(BadgeActivity.this);
-                                View badgeItemView = inflater.inflate(R.layout.badge_items, null);
-
-                                ImageView badgeImage = badgeItemView.findViewById(R.id.badge_image);
-                                TextView badgeName = badgeItemView.findViewById(R.id.badge_name);
-
-                                GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-
-                                int rowIndex = 0; // 원하는 행 번호
-                                int columnIndex = 0; // 원하는 열 번호
-                                layoutParams.rowSpec = GridLayout.spec(rowIndex);
-                                layoutParams.columnSpec = GridLayout.spec(columnIndex);
-
-
-                                GridLayout badgeContainer = findViewById(R.id.badge_container);
-                                badgeItemView.setLayoutParams(layoutParams);
-                                badgeContainer.addView(badgeItemView);
-
-                            }
-                        });
+                // UI 업데이트 메서드 호출
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateBadgeUI(badges);
+                        Log.d("BadgeActivity", "Badge UI updated.");
                     }
-                }
+                });
             }
+
         });
+
 
         Button uploadButton = findViewById(R.id.badge_upload_button);
 
@@ -179,6 +162,43 @@ public class BadgeActivity extends AppCompatActivity {
 
     }
 
+    private void updateBadgeUI(List<BadgeEntity> badges) {
+        GridLayout badgeContainer = findViewById(R.id.badge_container);
+        badgeContainer.removeAllViews(); // 기존 뱃지를 모두 제거
+
+        int maxColumnCount = 3;
+
+        for (int i = 0; i < badges.size(); i++) {
+            BadgeEntity badge = badges.get(i);
+
+            // 뱃지를 동적으로 생성하고 UI에 추가하기 전에 로그 추가
+            Log.d("BadgeActivity", "Adding Badge: " + badge.badgeName);
+
+            // 뱃지를 동적으로 생성하고 UI에 추가
+            LayoutInflater inflater = LayoutInflater.from(BadgeActivity.this);
+            View badgeItemView = inflater.inflate(R.layout.badge_items, null);
+
+            ImageView badgeImage = badgeItemView.findViewById(R.id.badge_image);
+            TextView badgeName = badgeItemView.findViewById(R.id.badge_name);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(badge.imagePath);
+            badgeImage.setImageBitmap(bitmap);
+            badgeName.setText(badge.badgeName); // 뱃지 이름 설정
+
+            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+            layoutParams.width = 0; // 너비를 0으로 설정하여 가중치를 적용
+            layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT; // 높이는 WRAP_CONTENT로 설정
+            int rowIndex = i / maxColumnCount; // 현재 행 번호 계산
+            int columnIndex = i % maxColumnCount; // 현재 열 번호 계산
+            layoutParams.rowSpec = GridLayout.spec(rowIndex);
+            layoutParams.columnSpec = GridLayout.spec(columnIndex, 1f); // 가중치 적용
+
+            badgeItemView.setLayoutParams(layoutParams);
+            badgeContainer.addView(badgeItemView);
+        }
+    }
+
+
     public void showPopupDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.custom_popup);
         LayoutInflater inflater = getLayoutInflater();
@@ -186,10 +206,10 @@ public class BadgeActivity extends AppCompatActivity {
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
 
         upload_img = dialogView.findViewById(R.id.badge_image);
-        //TextView ft_name = dialogView.findViewById(R.id.badge_name);
+        TextView ft_name = dialogView.findViewById(R.id.badge_name);
 
         Button select_img = dialogView.findViewById(R.id.upload_image);
-        //Button select_ft = dialogView.findViewById(R.id.select_ft);
+        Button select_ft = dialogView.findViewById(R.id.select_ft);
 
         dialogBuilder.setView(dialogView); // 다이얼로그에 뷰 추가
 
@@ -199,7 +219,55 @@ public class BadgeActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // select_img와 select_ft에서 내용 가져오기
+                        String badgeNameText = ft_name.getText().toString();
+
+                        // upload_img의 Drawable을 Bitmap으로 변환
+                        Bitmap badgeBitmap = ((BitmapDrawable) upload_img.getDrawable()).getBitmap();
+                        badgeDatabase = BadgeDatabase.getInstance(getApplicationContext());
+                        badgeDao = badgeDatabase.badgeDao();
+
+                        if (badgeBitmap != null) {
+                            String badgeImagePath = saveImageToFile(badgeBitmap); // 이미지 파일 경로를 얻음
+                            Log.d("BadgeActivity", "Badge Image Path: " + badgeImagePath); // 로그 추가
+
+                            if (badgeImagePath != null) {
+                                BadgeEntity badge = new BadgeEntity();
+
+                                badge.imagePath = badgeImagePath; // 이미지 파일 경로를 저장
+                                badge.badgeName = badgeNameText;
+
+                                badgeDao.insertBadge(badge);
+                                Log.d("BadgeActivity", "Badge inserted into database: " + badge.badgeName);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(BadgeActivity.this, "이미지를 저장하는 동안 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(BadgeActivity.this, "뱃지 이미지를 선택하세요.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
 
@@ -215,15 +283,23 @@ public class BadgeActivity extends AppCompatActivity {
         select_ft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LoadCategoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new LoadFTTask(select_ft, ft_name).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
-        new LoadCategoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new LoadFTTask(select_ft, ft_name).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         dialog.show();
     }
 
-    private class LoadCategoryTask extends AsyncTask<Void, Void, List<CalendarEntity>> {
+    private class LoadFTTask extends AsyncTask<Void, Void, List<CalendarEntity>> {
+        private Button selectFt;
+        private TextView ftName;
+
+        public LoadFTTask(Button selectFt, TextView ftName) {
+            this.selectFt = selectFt;
+            this.ftName = ftName;
+        }
+
         @Override
         protected List<CalendarEntity> doInBackground(Void... voids) {
             // 데이터베이스 인스턴스 생성
@@ -236,12 +312,14 @@ public class BadgeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<CalendarEntity> festivals) {
             // 데이터베이스에서 가져온 카테고리 목록을 메뉴에 추가하는 코드
-            setupFestivalMenu(festivals);
+            setupFestivalMenu(festivals, ftName, selectFt);
         }
     }
-    private void setupFestivalMenu(List<CalendarEntity> festivals) {
+
+    private void setupFestivalMenu(List<CalendarEntity> festivals, TextView ft_name, Button
+            select_ft) {
         // 팝업 메뉴를 생성하고 위치 지정
-        PopupMenu popupMenu = new PopupMenu(this, ft_name);
+        PopupMenu popupMenu = new PopupMenu(this, select_ft);
 
         // 메뉴 인플레이션
         popupMenu.getMenuInflater().inflate(R.menu.dialog_badge, popupMenu.getMenu());
