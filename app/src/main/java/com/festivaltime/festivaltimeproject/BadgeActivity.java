@@ -261,23 +261,22 @@ public class BadgeActivity extends AppCompatActivity {
                 // 뱃지 이미지 Bitmap 초기화
                 final Bitmap badgeBitmap;
 
-                if (drawable instanceof BitmapDrawable) {
-                    // BitmapDrawable인 경우 직접 Bitmap을 가져옵니다.
-                    badgeBitmap = ((BitmapDrawable) drawable).getBitmap();
-                } else if (drawable instanceof VectorDrawable) {
-                    // VectorDrawable인 경우 Bitmap으로 변환합니다.
-                    VectorDrawable vectorDrawable = (VectorDrawable) drawable;
-                    badgeBitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(badgeBitmap);
-                    vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                    vectorDrawable.draw(canvas);
-                } else {
-                    badgeBitmap = null;
-                }
 
-                if ((badgeBitmap == null) || (badgeNameText.equals("(축제를 선택해주세요.)"))) {
-                    Toast.makeText(BadgeActivity.this, "뱃지 정보를 확인하세요.", Toast.LENGTH_SHORT).show();
-                } else {
+                if (drawable != null && drawable.toString().equals("android.graphics.drawable.BitmapDrawable@b266c29") && !badgeNameText.equals("(축제를 선택해주세요.)")) {
+                    if (drawable instanceof BitmapDrawable) {
+                        // BitmapDrawable인 경우 직접 Bitmap을 가져옵니다.
+                        badgeBitmap = ((BitmapDrawable) drawable).getBitmap();
+                    } else if (drawable instanceof VectorDrawable) {
+                        // VectorDrawable인 경우 Bitmap으로 변환합니다.
+                        VectorDrawable vectorDrawable = (VectorDrawable) drawable;
+                        badgeBitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(badgeBitmap);
+                        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                        vectorDrawable.draw(canvas);
+                    } else {
+                        badgeBitmap = null;
+                    }
+
                     // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
                     executor.execute(new Runnable() {
                         @Override
@@ -312,6 +311,8 @@ public class BadgeActivity extends AppCompatActivity {
                             }
                         }
                     });
+                } else {
+                    Toast.makeText(BadgeActivity.this, "뱃지 정보를 확인하세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
