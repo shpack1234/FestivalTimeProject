@@ -19,7 +19,16 @@ android {
     compileSdkVersion 33
     buildToolsVersion "33.0.0"
 
-    
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
+            universalApk true
+        }
+    }
+
+
     sourceSets {
         main {
             jniLibs.srcDirs=['src/main/jniLibs']
