@@ -66,6 +66,7 @@ public class BadgeActivity extends AppCompatActivity {
     ImageButton back_Btn;
     private ImageView upload_img;
     int count;
+    Boolean check_img = false;
     protected Context mContext;
 
     private UserDataBase db;
@@ -255,68 +256,62 @@ public class BadgeActivity extends AppCompatActivity {
                 // select_img와 select_ft에서 내용 가져오기
                 String badgeNameText = ft_name.getText().toString();
 
-                // 업로드된 이미지 Drawable 가져오기
-                Drawable drawable = upload_img.getDrawable();
+                if (upload_img.getDrawable() != null && check_img && !badgeNameText.equals("(축제를 선택해주세요.)")) {
+                    // 업로드된 이미지 Drawable 가져오기
+                    Drawable drawable = upload_img.getDrawable();
 
-                // 뱃지 이미지 Bitmap 초기화
-                final Bitmap badgeBitmap;
+                    // 뱃지 이미지 Bitmap 초기화
+                    final Bitmap badgeBitmap;
 
-
-                if (drawable != null && drawable.toString().equals("android.graphics.drawable.BitmapDrawable@b266c29") && !badgeNameText.equals("(축제를 선택해주세요.)")) {
                     if (drawable instanceof BitmapDrawable) {
                         // BitmapDrawable인 경우 직접 Bitmap을 가져옵니다.
                         badgeBitmap = ((BitmapDrawable) drawable).getBitmap();
-                    } else if (drawable instanceof VectorDrawable) {
-                        // VectorDrawable인 경우 Bitmap으로 변환합니다.
-                        VectorDrawable vectorDrawable = (VectorDrawable) drawable;
-                        badgeBitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                        Canvas canvas = new Canvas(badgeBitmap);
-                        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                        vectorDrawable.draw(canvas);
-                    } else {
-                        badgeBitmap = null;
-                    }
 
-                    // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 뱃지 이미지를 사용하여 작업을 수행합니다.
-                            String badgeImagePath = saveImageToFile(badgeBitmap); // 이미지 파일 경로를 얻음
-                            Log.d("BadgeActivity", "Badge Image Path: " + badgeImagePath); // 로그 추가
+                        // 데이터베이스 작업을 Executor를 사용하여 백그라운드 스레드에서 실행
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 뱃지 이미지를 사용하여 작업을 수행합니다.
+                                String badgeImagePath = saveImageToFile(badgeBitmap); // 이미지 파일 경로를 얻음
+                                Log.d("BadgeActivity", "Badge Image Path: " + badgeImagePath); // 로그 추가
 
-                            if (badgeImagePath != null) {
-                                BadgeEntity badge = new BadgeEntity();
+                                if (badgeImagePath != null) {
+                                    BadgeEntity badge = new BadgeEntity();
 
-                                badge.imagePath = badgeImagePath; // 이미지 파일 경로를 저장
-                                badge.badgeName = badgeNameText;
+                                    badge.imagePath = badgeImagePath; // 이미지 파일 경로를 저장
+                                    badge.badgeName = badgeNameText;
 
-                                badgeDao.insertBadge(badge);
-                                Log.d("BadgeActivity", "Badge inserted into database: " + badge.badgeName);
+                                    badgeDao.insertBadge(badge);
+                                    Log.d("BadgeActivity", "Badge inserted into database: " + badge.badgeName);
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        updateBadgeUI();
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(BadgeActivity.this, "이미지를 저장하는 동안 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            updateBadgeUI();
+                                        }
+                                    });
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(BadgeActivity.this, "이미지를 저장하는 동안 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        // 선택된 이미지가 BitmapDrawable이 아닌 경우에 대한 처리를 추가할 수 있습니다.
+                        // 예를 들어, Toast 메시지를 표시하거나 다른 작업을 수행할 수 있습니다.
+                        Toast.makeText(BadgeActivity.this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(BadgeActivity.this, "뱃지 정보를 확인하세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
         select_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -405,6 +400,7 @@ public class BadgeActivity extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
 
                 if (upload_img != null) {
+                    check_img = true;
                     upload_img.setImageBitmap(bitmap);
                 }
             } catch (Exception e) {
