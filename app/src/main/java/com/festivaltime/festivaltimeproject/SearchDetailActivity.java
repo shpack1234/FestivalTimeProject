@@ -49,7 +49,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -308,6 +310,9 @@ public class SearchDetailActivity extends AppCompatActivity {
 
 
     private void FilterFestival(String response) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        List<Callable<Void>> apiRequests = new ArrayList<>();
+
         if (!type.isEmpty() && type.startsWith("A0207")) {
             ParsingApiData.parseXmlDataFromFestivalA(response);
         } else {
