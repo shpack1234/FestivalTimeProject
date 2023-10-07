@@ -56,6 +56,7 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -531,9 +532,12 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             String selectedAreaNum = String.valueOf(mapPOIItem.getTag());
 
             if (isDetial) {  // 기간 설정 시
+                String startDate_String = String.format("%04d%02d%02d", startYear, startMonth, startDay);
+                String endDate_String = String.format("%04d%02d%02d", endYear, endMonth, endDay);
 
-                String startDate_String = String.valueOf(startYear) + String.valueOf(startMonth) + String.valueOf(startDay);
-                String endDate_String = String.valueOf(endYear) + String.valueOf(endMonth) + String.valueOf(endDay);
+                Log.d("st", startDate_String);
+                Log.d("en", endDate_String);
+
                 apiReader.FestivallitLoc(apiKey, startDate_String, endDate_String, selectedAreaNum, new ApiReader.ApiResponseListener() {
                     @Override
                     public void onSuccess(String response) {
@@ -827,9 +831,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                 endYear = endDate.getYear();
                                 endMonth = endDate.getMonth() + 1;
                                 endDay = endDate.getDayOfMonth();
-
-                                Log.d("hi", String.valueOf(startYear) + String.valueOf(startMonth) + String.valueOf(startDay));
-                                Log.d("bye", String.valueOf(endYear) + String.valueOf(endMonth) + String.valueOf(endDay));
 
                                 onMapViewInitialized(mapView);
                                 alertDialog.dismiss();
