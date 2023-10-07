@@ -44,6 +44,7 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.smarteist.autoimageslider.SliderView;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -130,6 +131,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                             festivalList.clear(); // 기존 데이터를 모두 제거
                             festivalList.addAll(parsedFestivalList);
                             for (HashMap<String, String> festivalInfo : festivalList) {
+                                ImageView festivalBack = findViewById(R.id.slider_image_);
                                 TextView titleTextView = findViewById(R.id.festival_title);
                                 TextView address = findViewById(R.id.festival_address);
                                 ImageView festivalFirstImage = findViewById(R.id.festival_firstimage);
@@ -151,6 +153,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                 }
                                 String id = festivalInfo.get("contentid");
                                 String firstImage = festivalInfo.get("img");
+                                String backImage = festivalInfo.get("img1");
                                 String overview = festivalInfo.get("overview");
                                 final String[] finalstartDate = {null};
                                 final String[] finalendDate = {null};
@@ -165,6 +168,17 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                             .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
                                             .placeholder(R.drawable.radius_corner)
                                             .into(festivalFirstImage);
+                                }
+
+                                if (backImage == null || backImage.isEmpty()) {
+                                    festivalBack.setImageResource(R.drawable.ic_image);
+                                } else {
+                                    Glide
+                                            .with(EntireViewActivity.this)
+                                            .load(backImage)
+                                            .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
+                                            .placeholder(R.drawable.radius_corner)
+                                            .into(festivalBack);
                                 }
 
                                 titleTextView.setText(title);
