@@ -1,10 +1,10 @@
 <!-- dialog_popup.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/popup_style"
-    android:layout_margin="5dp">
+    android:layout_margin="15dp">
 
     <!-- 타이틀바 -->
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_weight="3"
             android:background="#00000000"
             android:gravity="center"
-            android:text="@string/detail_setting"
+            android:text="기간 설정"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
             android:layout_marginRight="4dp"
             android:background="#00000000"
             android:gravity="center"
-            android:text="@string/short_add"
+            android:text="확인"
             android:textColor="@color/selected_color"
             android:textSize="15sp" />
 
@@ -75,59 +75,26 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="180dp"
                     android:orientation="horizontal">
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@color/black"
                         android:gravity="center|center"
-                        android:text="@string/festival_state"
+                        android:text="시작 날짜"
                         android:textSize="14sp" />
 
-
-
-                    <ToggleButton
-                        android:id="@+id/completed"
+                    <DatePicker
+                        android:id="@+id/map_start_date"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:checked="false"
-                        android:background="@android:color/transparent"
-                        android:textColor="@drawable/toggle_background"
-                        android:gravity="center|center"
-                        android:textOff="@string/completed"
-                        android:textOn="@string/completed"
-                        android:textSize="13sp" />
-
-                    <ToggleButton
-                        android:id="@+id/Ongoing"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:checked="false"
-                        android:background="@android:color/transparent"
-                        android:textColor="@drawable/toggle_background"
-                        android:gravity="center|center"
-                        android:textOff="@string/Ongoing"
-                        android:textOn="@string/Ongoing"
-                        android:textSize="13sp" />
-
-                    <ToggleButton
-                        android:id="@+id/Upgoing"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:checked="false"
-                        android:background="@android:color/transparent"
-                        android:textColor="@drawable/toggle_background"
-                        android:gravity="center|center"
-                        android:textOff="@string/Upgoing"
-                        android:textOn="@string/Upgoing"
-                        android:textSize="13sp" />
+                        android:datePickerMode="spinner"
+                        android:calendarViewShown="false"/>
 
                 </LinearLayout>
 
@@ -140,45 +107,26 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="180dp"
                     android:orientation="horizontal">
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:textColor="@color/black"
                         android:gravity="center|center"
-                        android:text="@string/festival_category"
+                        android:text="종료 날짜"
                         android:textSize="14sp" />
 
-
-                    <ToggleButton
-                        android:id="@+id/category_festival"
+                    <DatePicker
+                        android:id="@+id/map_end_date"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:checked="false"
-                        android:background="@android:color/transparent"
-                        android:textColor="@drawable/toggle_background"
-                        android:gravity="center|center"
-                        android:textOff="@string/festival"
-                        android:textOn="@string/festival"
-                        android:textSize="13sp" />
-
-                    <ToggleButton
-                        android:id="@+id/category_event"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:checked="false"
-                        android:background="@android:color/transparent"
-                        android:textColor="@drawable/toggle_background"
-                        android:gravity="center|center"
-                        android:textOff="@string/event"
-                        android:textOn="@string/event"
-                        android:textSize="13sp" />
+                        android:datePickerMode="spinner"
+                        android:calendarViewShown="false"/>
 
                 </LinearLayout>
 

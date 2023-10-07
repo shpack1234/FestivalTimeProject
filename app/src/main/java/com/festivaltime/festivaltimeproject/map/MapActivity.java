@@ -113,6 +113,14 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
     boolean isFestivalVisible;
     String festivalName;
+    boolean isDetial = false;
+    private int startYear;
+    private int startMonth;
+    private int startDay;
+
+    private int endYear;
+    private int endMonth;
+    private int endDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -521,52 +529,102 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
 
             apiReader = new ApiReader();
             String selectedAreaNum = String.valueOf(mapPOIItem.getTag());
-            apiReader.areaBasedSync(apiKey, selectedAreaNum, new ApiReader.ApiResponseListener() {
-                @Override
-                public void onSuccess(String response) {
-                    Log.d("response", response);
-                    ParsingApiData.parseXmlDataFromAreaBasedSync(response); // 응답을 파싱하여 데이터를 저장
 
-                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                    Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            areaFestivals.clear();
-                            areaFestivalInfo.clear();
-                            for (HashMap<String, String> festivalInfo : parsedFestivalList) {
-                                String title = festivalInfo.get("title");
-                                String mapx = festivalInfo.get("mapx");
-                                String mapy = festivalInfo.get("mapy");
-                                String contentid = festivalInfo.get("contentid");
+            if (isDetial) {  // 기간 설정 시
 
-                                Log.d("title", title);
-                                Log.d("contentid", contentid);
-                                areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
-                                areaFestivalInfo.add(new Pair<>(title, contentid));
-                            }
+                String startDate_String = String.valueOf(startYear) + String.valueOf(startMonth) + String.valueOf(startDay);
+                String endDate_String = String.valueOf(endYear) + String.valueOf(endMonth) + String.valueOf(endDay);
+                apiReader.FestivallitLoc(apiKey, startDate_String, endDate_String, selectedAreaNum, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromAreaBasedSync(response); // 응답을 파싱하여 데이터를 저장
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MapPOIItem[] marker = new MapPOIItem[areaFestivals.size()];
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                areaFestivals.clear();
+                                areaFestivalInfo.clear();
+                                for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                                    String title = festivalInfo.get("title");
+                                    String mapx = festivalInfo.get("mapx");
+                                    String mapy = festivalInfo.get("mapy");
+                                    String contentid = festivalInfo.get("contentid");
 
-                                    for (int i = 0; i < marker.length; i++) {
-                                        marker[i] = new MapPOIItem();
-                                    }
-
-                                    marKingFestivalGroup(marker, areaFestivals, areaFestivalInfo);
+                                    areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                                    areaFestivalInfo.add(new Pair<>(title, contentid));
                                 }
-                            });
-                        }
-                    });
-                }
 
-                @Override
-                public void onError(String error) {
-                    Log.e(TAG, "API Error: " + error);
-                }
-            });
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MapPOIItem[] marker = new MapPOIItem[areaFestivals.size()];
+
+                                        for (int i = 0; i < marker.length; i++) {
+                                            marker[i] = new MapPOIItem();
+                                        }
+
+                                        marKingFestivalGroup(marker, areaFestivals, areaFestivalInfo);
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "API Error: " + error);
+                    }
+                });
+
+            } else {
+                apiReader.areaBasedSync(apiKey, selectedAreaNum, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromAreaBasedSync(response); // 응답을 파싱하여 데이터를 저장
+
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                areaFestivals.clear();
+                                areaFestivalInfo.clear();
+                                for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                                    String title = festivalInfo.get("title");
+                                    String mapx = festivalInfo.get("mapx");
+                                    String mapy = festivalInfo.get("mapy");
+                                    String contentid = festivalInfo.get("contentid");
+
+                                    areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                                    areaFestivalInfo.add(new Pair<>(title, contentid));
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MapPOIItem[] marker = new MapPOIItem[areaFestivals.size()];
+
+                                        for (int i = 0; i < marker.length; i++) {
+                                            marker[i] = new MapPOIItem();
+                                        }
+
+                                        marKingFestivalGroup(marker, areaFestivals, areaFestivalInfo);
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "API Error: " + error);
+                    }
+                });
+            }
         }
     }
 
@@ -602,7 +660,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                             areaFestivals.add(new Pair<>(Double.parseDouble(mapy), Double.parseDouble(mapx)));
                             areaFestivalInfo.add(new Pair<>(title, contentid));
 
-                            if(parsedFestivalList.size()==1) {
+                            if (parsedFestivalList.size() == 1) {
                                 MapPoint festivalPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(mapy), Double.parseDouble(mapx));
                                 mapView.setMapCenterPointAndZoomLevel(festivalPoint, 3, true);
                             } else {
@@ -725,21 +783,20 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         View dialogView = inflater.inflate(R.layout.map_dialog_popup, null);
         Button cancelButton = dialogView.findViewById(R.id.dialog_popup_close_btn);
         Button confirmButton = dialogView.findViewById(R.id.dialog_popup_add_btn);
-        //진행상황 버튼
-        ToggleButton completedToggle = findViewById(R.id.completed);
-        ToggleButton ongoingToggle = findViewById(R.id.Ongoing);
-        ToggleButton upgoingToggle = findViewById(R.id.Upgoing);
 
-        //카테고리 버튼
-        ToggleButton festivalToggle = findViewById(R.id.category_festival);
-        ToggleButton eventToggle = findViewById(R.id.category_event);
+        DatePicker startDate = dialogView.findViewById(R.id.map_start_date);
+        DatePicker endDate = dialogView.findViewById(R.id.map_end_date);
+
+        if (isDetial == true) {
+            startDate.init(startYear, startMonth - 1, startDay, null);
+            endDate.init(endYear, endMonth - 1, endDay, null);
+        }
+
 
         Dialog dialog = dialogBuilder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialogBuilder.setView(dialogView);
-
-
         AlertDialog alertDialog = dialogBuilder.create();
 
         executor.execute(new Runnable() {
@@ -752,15 +809,30 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         cancelButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // 취소 버튼을 눌렀을 때 실행할 코드 작성
-                                alertDialog.dismiss(); // 팝업 대화상자 닫기
+                                isDetial = false;
+                                onMapViewInitialized(mapView);
+                                alertDialog.dismiss();
                             }
                         });
 
                         confirmButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //if(festivalToggle.isChecked())
+                                isDetial = true;
+
+                                startYear = startDate.getYear();
+                                startMonth = startDate.getMonth() + 1;
+                                startDay = startDate.getDayOfMonth();
+
+                                endYear = endDate.getYear();
+                                endMonth = endDate.getMonth() + 1;
+                                endDay = endDate.getDayOfMonth();
+
+                                Log.d("hi", String.valueOf(startYear) + String.valueOf(startMonth) + String.valueOf(startDay));
+                                Log.d("bye", String.valueOf(endYear) + String.valueOf(endMonth) + String.valueOf(endDay));
+
+                                onMapViewInitialized(mapView);
+                                alertDialog.dismiss();
                             }
                         });
                         alertDialog.show();
@@ -769,6 +841,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             }
         });
     }
+
     @Override
     protected void onPause() {
         super.onPause();
