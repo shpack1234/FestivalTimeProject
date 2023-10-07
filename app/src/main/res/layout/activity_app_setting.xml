@@ -86,25 +86,6 @@
                 android:track="@drawable/selector_switch"
                 app:switchMinWidth="10dp"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray"/>
-
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="22dp"
-                android:textSize="15sp"
-                android:text="@string/alarm_calender"
-                android:checked="false"
-                android:layout_gravity="center"
-                android:thumb="@drawable/shape_switch_thumb"
-                android:track="@drawable/selector_switch"
-                app:switchMinWidth="10dp"/>
         </LinearLayout>
 
         <View
@@ -112,42 +93,6 @@
             android:layout_height="7dp"
             android:background="#FFE3E3E3"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp">
-
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/search_autosave"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="22dp"
-                android:checked="false"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                android:thumb="@drawable/shape_switch_thumb"
-                android:track="@drawable/selector_switch"
-                app:switchMinWidth="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="22dp"
-                android:layout_marginBottom="15dp"
-                android:text="@string/search_autosave_explain"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
