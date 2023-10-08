@@ -160,11 +160,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ViewPager2 banner = findViewById(R.id.main_festival_banner);  //배너
-        int[] bannerImages = {R.drawable.image02, R.drawable.image02, R.drawable.image02};
+        String[] bannerImageUrls = {
+                "http://tong.visitkorea.or.kr/cms/resource/98/3012698_image2_1.jpg",
+                "http://tong.visitkorea.or.kr/cms/resource/15/2594915_image2_1.jpg",
+                "http://tong.visitkorea.or.kr/cms/resource/62/2786362_image2_1.jpg"
+        };
+        String[] ids = {"3012714","506926","2786391"};
 
-        ImageBannerAdapter adapter = new ImageBannerAdapter(this, bannerImages, banner);
+        ImageBannerAdapter adapter = new ImageBannerAdapter(this, bannerImageUrls, ids, banner, this);
         banner.setAdapter(adapter);
-        adapter.startAutoSlide();
+
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat sdff = new SimpleDateFormat("yyyy.M.d");
