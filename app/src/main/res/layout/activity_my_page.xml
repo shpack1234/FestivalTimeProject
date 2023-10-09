@@ -144,6 +144,19 @@
                                 android:src="@drawable/ic_entirebadge" />
                         </LinearLayout>
 
+                        <TextView
+                            android:id="@+id/badge_message"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginLeft="5dp"
+                            android:text="뱃지를 추가해보세요!"
+                            android:textSize="16sp"
+                            android:textColor="@color/bright_orange"
+                            android:textStyle="bold"
+                            android:layout_centerHorizontal="true"
+                            android:visibility="gone" />
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -167,6 +180,7 @@
                                 app:layout_constraintDimensionRatio="1:1">
 
                                 <ImageView
+                                    android:id="@+id/img1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:src="@drawable/image01" />
@@ -190,6 +204,7 @@
                                 app:layout_constraintDimensionRatio="1:1">
 
                                 <ImageView
+                                    android:id="@+id/img2"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:src="@drawable/image02" />
@@ -212,6 +227,7 @@
                                 app:layout_constraintDimensionRatio="1:1">
 
                                 <ImageView
+                                    android:id="@+id/img3"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:src="@drawable/image03" />
