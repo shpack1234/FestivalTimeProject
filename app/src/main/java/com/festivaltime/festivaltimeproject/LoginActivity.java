@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         Button signupButton = findViewById(R.id.login_sign_up);
         EditText userName = findViewById(R.id.login_nickname);
         EditText userPassword = findViewById(R.id.login_password);
+        Button findNickname=findViewById(R.id.login_find_nickname);
 
         executor.execute(new Runnable() {
             @Override
@@ -116,6 +117,17 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         userPassword.setError("잘못된 비밀번호 입니다.");
                                     }
+                                }
+                            }
+                        });
+
+                        findNickname.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(loadedUser==null) {
+                                    Toast.makeText(getApplicationContext(), "회원 가입 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    navigateToSomeActivity.navigateToFindNickNameActivity(LoginActivity.this);
                                 }
                             }
                         });
