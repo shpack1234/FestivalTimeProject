@@ -89,7 +89,6 @@ public class ImageBannerAdapter extends RecyclerView.Adapter<ImageBannerAdapter.
     public class ImageViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        String imageId;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,7 +97,7 @@ public class ImageBannerAdapter extends RecyclerView.Adapter<ImageBannerAdapter.
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String contentId = imageId; // 클릭한 이미지의 ID를 contentId로 설정
+                    String contentId = imageIds[getAdapterPosition()];
                     navigateToDetailFestivalActivity(activity, contentId);
                 }
             });
