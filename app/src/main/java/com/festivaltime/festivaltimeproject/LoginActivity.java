@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText userName = findViewById(R.id.login_nickname);
         EditText userPassword = findViewById(R.id.login_password);
         Button findNickname=findViewById(R.id.login_find_nickname);
+        Button findPassword=findViewById(R.id.login_find_password);
 
         executor.execute(new Runnable() {
             @Override
@@ -128,6 +129,17 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "회원 가입 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     navigateToSomeActivity.navigateToFindNickNameActivity(LoginActivity.this);
+                                }
+                            }
+                        });
+
+                        findPassword.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(loadedUser==null) {
+                                    Toast.makeText(getApplicationContext(), "회원 가입 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    navigateToSomeActivity.navigateToFindPasswordActivity(LoginActivity.this);
                                 }
                             }
                         });
