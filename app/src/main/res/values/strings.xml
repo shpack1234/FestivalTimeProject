@@ -177,8 +177,8 @@
     <string name="login_message">로그인 후에 이용 가능합니다.</string>
 
 
-    <string name="favorite_event">찜</string> />
-
+    <string name="favorite_event">찜</string>
+    />
 
 
 </resources>

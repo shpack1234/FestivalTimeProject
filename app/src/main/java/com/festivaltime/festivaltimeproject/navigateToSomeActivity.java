@@ -119,4 +119,10 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
+
+    public static void navigateToFindNickNameActivity(Activity thisActivity) {
+        Intent intent = new Intent(thisActivity, FindNickNameActivity.class);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
 }
