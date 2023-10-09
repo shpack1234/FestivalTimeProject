@@ -62,7 +62,8 @@ public class PrivacyActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST_CODE = 123;
 
     private ImageView privacyUserImage;
-    private String imagePath=null;
+    private String imagePath = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,8 @@ public class PrivacyActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.privacy_password);
         EditText passwordConfirm = findViewById(R.id.privacy_password_confirm);
         Button logoutButton = findViewById(R.id.login_logout);
-        privacyUserImage=findViewById(R.id.privacy_userimage);
+        Button deleteButton = findViewById(R.id.login_Delete);
+        privacyUserImage = findViewById(R.id.privacy_userimage);
 
         executor.execute(new Runnable() {
             @Override
@@ -149,8 +151,33 @@ public class PrivacyActivity extends AppCompatActivity {
                                     navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
                                 }
                             });
+
+                            deleteButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    executor.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (loadedUser.getUserId().equals("000000")) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "admin 계정은 탈퇴할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            } else {
+                                                userDao.delete(loadedUser);
+                                                finish();
+                                                navigateToSomeActivity.navigateToMainActivity(PrivacyActivity.this);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
                         } else {
                             logoutButton.setVisibility(View.GONE);
+                            deleteButton.setVisibility(View.GONE);
+
                         }
                     }
                 });
@@ -271,6 +298,7 @@ public class PrivacyActivity extends AppCompatActivity {
             }
         }
     }
+
     private String saveImageToFile(Bitmap bitmap) {
         File filesDir = getFilesDir();
         File imageFile = new File(filesDir, "profile_image.jpg");
