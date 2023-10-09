@@ -160,7 +160,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
 
                                 Log.d("imgUrl", firstImage);
                                 if (firstImage == null || firstImage.isEmpty()) {
-                                    festivalFirstImage.setImageResource(R.drawable.ic_image);
+                                    festivalFirstImage.setImageResource(R.mipmap.empty_image);
                                 } else {
                                     Glide
                                             .with(EntireViewActivity.this)
@@ -171,7 +171,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                 }
 
                                 if (backImage == null || backImage.isEmpty()) {
-                                    festivalBack.setImageResource(R.drawable.ic_image);
+                                    festivalBack.setImageResource(R.mipmap.empty_image);
                                 } else {
                                     Glide
                                             .with(EntireViewActivity.this)
@@ -476,13 +476,13 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                             String enddate = samedayInfo.get("eventenddate");
 
                                             if (img == null || img.isEmpty()) {
-                                                imageButton.setImageResource(R.drawable.first_image_example);
+                                                imageButton.setImageResource(R.mipmap.empty_image);
                                             } else {
                                                 Glide.with(EntireViewActivity.this)
                                                         .load(img)
                                                         .fitCenter()
                                                         .transform(new CenterCrop(), new RoundedCorners(30))
-                                                        .placeholder(R.drawable.first_image_example)
+                                                        .placeholder(R.mipmap.empty_image)
                                                         .into(imageButton);
                                             }
 

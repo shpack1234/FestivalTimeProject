@@ -145,7 +145,14 @@
                 android:textSize="13sp"
                 android:layout_weight="1"
                 android:textColor="@color/darker_gray"
-                android:background="@null"/>
+                android:background="@android:color/transparent"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/dark_gray"/>
 
             <Button
                 android:id="@+id/login_find_nickname"
@@ -155,7 +162,14 @@
                 android:textSize="13sp"
                 android:layout_weight="1"
                 android:textColor="@color/darker_gray"
-                android:background="@null"/>
+                android:background="@android:color/transparent"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/dark_gray"/>
 
             <Button
                 android:id="@+id/login_find_password"
@@ -165,7 +179,7 @@
                 android:textSize="13sp"
                 android:layout_weight="1"
                 android:textColor="@color/darker_gray"
-                android:background="@null"/>
+                android:background="@android:color/transparent"/>
         </LinearLayout>
 
         <Button

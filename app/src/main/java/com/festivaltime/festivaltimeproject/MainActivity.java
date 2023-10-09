@@ -292,13 +292,13 @@ public class MainActivity extends AppCompatActivity {
                                                                     String repImage = festivalInfo.get("img");
 
                                                                     if (repImage == null || repImage.isEmpty()) {
-                                                                        imageButton.setImageResource(R.drawable.first_image_example);
+                                                                        imageButton.setImageResource(R.mipmap.empty_image);
                                                                     } else {
                                                                         Glide.with(MainActivity.this)
                                                                                 .load(repImage)
                                                                                 .fitCenter()
                                                                                 .transform(new CenterCrop(), new RoundedCorners(30))
-                                                                                .placeholder(R.drawable.first_image_example)
+                                                                                .placeholder(R.mipmap.empty_image)
                                                                                 .into(imageButton);
                                                                     }
 
