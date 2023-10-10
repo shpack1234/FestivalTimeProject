@@ -35,7 +35,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
 
@@ -67,13 +67,14 @@
                 android:background="@color/gray" />
 
             <FrameLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/festival_slider"
                     android:layout_width="match_parent"
                     android:layout_height="273dp"
+                    android:scaleType="fitCenter"
                     android:background="@drawable/slider_rectangle"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="back_and_forth"
