@@ -84,7 +84,7 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         setContentView(R.layout.activity_calendar);
 
         loadSettings();
-
+        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();

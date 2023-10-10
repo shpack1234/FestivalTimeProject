@@ -32,6 +32,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.helper.widget.MotionEffect;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -86,6 +88,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entire_view);
+        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();
@@ -446,70 +449,24 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
             Date date = new Date();
             String todaydate = sdf2.format(date);
 
+
+            // RecyclerView 초기화
+            RecyclerView recyclerView = findViewById(R.id.entire_sameday_festival_container);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            List<LinkedHashMap<String, String>> samedaylist = new ArrayList<>();
+
+            EntireTodayAdapter adapter = new EntireTodayAdapter(this, samedaylist);
+            recyclerView.setAdapter(adapter);
+
             apiReader.Festivallit2(apiKey, todaydate, todaydate, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("entire startdate", todaydate);
-                    Log.d("entire enddate", todaydate);
-                    Log.d("response", response);
                     ParsingApiData.parseXmlDataFromFestival(response);
                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            samedaylist.clear();
-                            samedaylist.addAll(parsedFestivalList);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (samedaylist.size() == 5) {
-                                        for (int i = 0; i < 5; i++) {
-                                            View sliderItemView = getLayoutInflater().inflate(R.layout.slider_item, null);
-                                            ImageButton imageButton = sliderItemView.findViewById(R.id.image_button);
-                                            TextView datetext = sliderItemView.findViewById(R.id.date_text);
+                    samedaylist.addAll(parsedFestivalList);
 
-                                            HashMap<String, String> samedayInfo = samedaylist.get(i);
-
-                                            String contentid = samedayInfo.get("contentid");
-                                            String img = samedayInfo.get("img");
-                                            String startdate = samedayInfo.get("eventstartdate");
-                                            String enddate = samedayInfo.get("eventenddate");
-
-                                            if (img == null || img.isEmpty()) {
-                                                imageButton.setImageResource(R.mipmap.empty_image);
-                                            } else {
-                                                Glide.with(EntireViewActivity.this)
-                                                        .load(img)
-                                                        .fitCenter()
-                                                        .transform(new CenterCrop(), new RoundedCorners(30))
-                                                        .placeholder(R.mipmap.empty_image)
-                                                        .into(imageButton);
-                                            }
-
-                                            String minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
-                                            String minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
-                                            String maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
-                                            String maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
-
-                                            String entitydate = minMonth + "/" + minDay + "~" + maxMonth + "/" + maxDay;
-                                            datetext.setText(entitydate);
-
-                                            imageButton.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    String contentId = contentid;
-                                                    navigateToDetailFestivalActivity(EntireViewActivity.this, contentId);
-                                                }
-                                            });
-                                            samedayFestival.addView(sliderItemView);
-                                        }
-
-                                    }
-
-                                }
-                            });
-                        }
-                    });
+                    adapter.notifyDataSetChanged();
                 }
 
                 @Override

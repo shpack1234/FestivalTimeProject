@@ -33,6 +33,7 @@ public class FindNickNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_nick_name);
 
+        getSupportActionBar().hide();
         TextView nicknameText = findViewById(R.id.nickname_hint);
         Button inquiryButton = findViewById(R.id.nickname_inquiry);
 

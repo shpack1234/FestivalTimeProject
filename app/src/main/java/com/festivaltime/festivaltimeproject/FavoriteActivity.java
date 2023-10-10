@@ -85,6 +85,7 @@ public class FavoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
+        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();

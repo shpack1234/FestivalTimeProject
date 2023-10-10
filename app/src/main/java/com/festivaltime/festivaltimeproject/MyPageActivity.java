@@ -71,6 +71,7 @@ public class MyPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
 
+        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();
