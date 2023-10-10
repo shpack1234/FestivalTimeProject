@@ -125,4 +125,10 @@ public class navigateToSomeActivity {
         thisActivity.startActivity(intent);
         thisActivity.overridePendingTransition(0,0);
     }
+
+    public static void navigateToFindPasswordActivity(Activity thisActivity) {
+        Intent intent = new Intent(thisActivity, FindPasswordActivity.class);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
 }

@@ -261,20 +261,6 @@ public class FavoriteActivity extends AppCompatActivity {
                         finalstartDate[0] = introInfo.get("eventstartdate");
                         finalendDate[0] = introInfo.get("eventenddate");
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            LinearLayout festivalContainer = findViewById(R.id.festival_container);
-                            festivalContainer.removeAllViews();
-
-                            for (LinkedHashMap<String, String> festivalInfo : festivalList) {   //API 파싱한 데이터를 해시맵 리스트에 저장한 뒤 불러옴
-                                View favoriteInfoBox = getLayoutInflater().inflate(R.layout.favorite_info_box, null);
-                                TextView locationTextView = favoriteInfoBox.findViewById(R.id.festival_location);
-                                String location = festivalInfo.get("eventplace");
-                                locationTextView.setText(location);
-                            }
-                        }
-                    });
 
                 }
 
