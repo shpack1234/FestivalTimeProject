@@ -1,20 +1,17 @@
 package com.festivaltime.festivaltimeproject;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +38,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Handler;
 
 public class FestivalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_ITEM = 0;
@@ -106,13 +102,10 @@ public class FestivalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public void addData(List<HashMap<String, String>> data, String areaName) {
-        // 현재 어댑터에 있는 데이터에 추가 데이터를 더합니다.
         festivalList.addAll(data);
 
-        // 지역 이름을 사용하여 지역별 데이터를 구분할 수 있도록 처리
         areaNames.add(areaName);
 
-        // 어댑터에 데이터가 변경되었음을 알립니다.
         notifyDataSetChanged();
     }
 
