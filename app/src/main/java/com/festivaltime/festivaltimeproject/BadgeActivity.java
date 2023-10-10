@@ -87,7 +87,6 @@ public class BadgeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_badge);
         mContext = this;
 
-        getSupportActionBar().hide();
         badgeDatabase = BadgeDatabase.getInstance(getApplicationContext());
         badgeDao = badgeDatabase.badgeDao();
 

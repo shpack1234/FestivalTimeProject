@@ -35,31 +35,36 @@ public class EntireTodayAdapter extends RecyclerView.Adapter<EntireTodayAdapter.
         LinkedHashMap<String, String> samedayInfo = data.get(position);
 
         String img = samedayInfo.get("img");
-        if (img == null || img.isEmpty()) {
-            holder.imageButton.setImageResource(R.mipmap.empty_image);
-        } else {
-            Glide.with(holder.itemView.getContext())
-                    .load(img)
-                    .fitCenter()
-                    .transform(new CenterCrop(), new RoundedCorners(30))
-                    .placeholder(R.mipmap.empty_image)
-                    .into(holder.imageButton);
-        }
-
-        String startdate = samedayInfo.get("eventstartdate");
-        String enddate = samedayInfo.get("eventenddate");
-        String minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
-        String minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
-        String maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
-        String maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
-        String entitydate = minMonth + "/" + minDay + "~" + maxMonth + "/" + maxDay;
-        holder.datetext.setText(entitydate);
-
-        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+        activity.runOnUiThread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                String contentId = samedayInfo.get("contentid");
-                navigateToSomeActivity.navigateToDetailFestivalActivity(activity, contentId);
+            public void run() {
+                if (img == null || img.isEmpty()) {
+                    holder.imageButton.setImageResource(R.mipmap.empty_image);
+                } else {
+                    Glide.with(holder.itemView.getContext())
+                            .load(img)
+                            .fitCenter()
+                            .transform(new CenterCrop(), new RoundedCorners(30))
+                            .placeholder(R.mipmap.empty_image)
+                            .into(holder.imageButton);
+                }
+
+                String startdate = samedayInfo.get("eventstartdate");
+                String enddate = samedayInfo.get("eventenddate");
+                String minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
+                String minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
+                String maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
+                String maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
+                String entitydate = minMonth + "/" + minDay + "~" + maxMonth + "/" + maxDay;
+                holder.datetext.setText(entitydate);
+
+                holder.imageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String contentId = samedayInfo.get("contentid");
+                        navigateToSomeActivity.navigateToDetailFestivalActivity(activity, contentId);
+                    }
+                });
             }
         });
     }

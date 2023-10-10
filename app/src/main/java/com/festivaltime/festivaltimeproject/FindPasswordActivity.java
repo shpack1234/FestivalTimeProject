@@ -35,7 +35,6 @@ public class FindPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_password);
 
-        getSupportActionBar().hide();
         EditText nicknameEditText = findViewById(R.id.find_password_nickname);
         DatePicker birth = findViewById(R.id.find_password_birth);
         Button confirmButton = findViewById(R.id.find_password_confirm_button);

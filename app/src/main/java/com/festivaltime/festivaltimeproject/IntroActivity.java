@@ -29,7 +29,6 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceStare);
         setContentView(R.layout.activity_intro);
 
-        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();

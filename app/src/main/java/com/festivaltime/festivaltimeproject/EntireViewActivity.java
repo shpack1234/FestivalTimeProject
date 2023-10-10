@@ -2,7 +2,6 @@ package com.festivaltime.festivaltimeproject;
 
 import static android.content.ContentValues.TAG;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
-import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToDetailFestivalActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMapActivity;
@@ -46,7 +45,6 @@ import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.smarteist.autoimageslider.SliderView;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -88,7 +86,6 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entire_view);
-        getSupportActionBar().hide();
         //상태바 아이콘 어둡게
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decor = getWindow().getDecorView();
@@ -113,7 +110,6 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
         calendarDao = calendarDatabase.calendarDao();
 
         String contentId = getIntent().getStringExtra("contentid");
-        LinearLayout samedayFestival = findViewById(R.id.entire_sameday_festival_container);
 
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -457,16 +453,23 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
             List<LinkedHashMap<String, String>> samedaylist = new ArrayList<>();
 
             EntireTodayAdapter adapter = new EntireTodayAdapter(this, samedaylist);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(EntireViewActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
 
             apiReader.Festivallit2(apiKey, todaydate, todaydate, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    ParsingApiData.parseXmlDataFromFestival(response);
-                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                    samedaylist.addAll(parsedFestivalList);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ParsingApiData.parseXmlDataFromFestival(response);
+                            List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                            samedaylist.addAll(parsedFestivalList);
 
-                    adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
 
                 @Override
