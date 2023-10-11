@@ -34,6 +34,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -43,8 +44,12 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.DataHolder;
+import com.festivaltime.festivaltimeproject.EntireViewActivity;
 import com.festivaltime.festivaltimeproject.MainActivity;
 import com.festivaltime.festivaltimeproject.ParsingApiData;
 import com.festivaltime.festivaltimeproject.R;
@@ -102,6 +107,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private ConstraintLayout searchBarLayout;
 
     private SearchView searchEditText;
+
+    private String firstImage;
 
     private ImageButton searchButton;
 
@@ -456,6 +463,35 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 selectedFestivalName = mapPOIItem.getItemName();
                 popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
                 String contentId = String.valueOf(mapPOIItem.getTag());
+
+                apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("response", response);
+                        ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
+
+                        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
+                        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
+                        runOnUiThread(new Runnable() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void run() { //UI 추가 부분
+                                festivalList.clear(); // 기존 데이터를 모두 제거
+                                festivalList.addAll(parsedFestivalList);
+                                for (HashMap<String, String> festivalInfo : festivalList) {
+
+                                    firstImage = festivalInfo.get("firstimage1");
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
                 apiReader.detailIntro(apiKey, contentId, new ApiReader.ApiResponseListener() {
                     @Override
                     public void onSuccess(String response) {
@@ -489,6 +525,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
                                     TextView festivalLoc = popupView.findViewById(R.id.festival_location);
                                     TextView festivalPer = popupView.findViewById(R.id.festival_period);
+                                    ImageView firstImageView=popupView.findViewById(R.id.festival_rep_image);
                                     titleTextView.setText(mapPOIItem.getItemName());
                                     festivalLoc.setText(location);
                                     festivalPer.setText(eventStart + " ~ " + eventEnd);
@@ -498,6 +535,17 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
 
                                     popupWindow.showAtLocation(mapView, Gravity.TOP, 0, 0);
+
+                                    if (firstImage == null || firstImage.isEmpty()) {
+                                        firstImageView.setImageResource(R.mipmap.empty_image);
+                                    } else {
+                                        Glide
+                                                .with(MapActivity.this)
+                                                .load(firstImage)
+                                                .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
+                                                .placeholder(R.drawable.radius_corner)
+                                                .into(firstImageView);
+                                    }
 
 
                                     // 팝업 창 내부의 버튼 등의 UI 요소에 대한 동작 처리
