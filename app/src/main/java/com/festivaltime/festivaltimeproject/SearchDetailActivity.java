@@ -374,7 +374,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
-                                Glide.with(SearchDetailActivity.this)
+                                Glide.with(getApplicationContext())
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
@@ -745,7 +745,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                                 festivalRepImage.setImageResource(R.drawable.ic_image);
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
-                                Glide.with(SearchDetailActivity.this)
+                                Glide.with(getApplicationContext())
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
@@ -1131,7 +1131,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
                                 Glide
-                                        .with(SearchDetailActivity.this)
+                                        .with(getApplicationContext())
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
@@ -1507,7 +1507,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
                                 Glide
-                                        .with(SearchDetailActivity.this)
+                                        .with(getApplicationContext())
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
@@ -1920,7 +1920,7 @@ public class SearchDetailActivity extends AppCompatActivity {
                             } else {
                                 //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
                                 Glide
-                                        .with(SearchDetailActivity.this)
+                                        .with(getApplicationContext())
                                         .load(repImage)
                                         .transform(new CenterCrop(), new RoundedCorners(30))
                                         .placeholder(R.drawable.ic_image)
