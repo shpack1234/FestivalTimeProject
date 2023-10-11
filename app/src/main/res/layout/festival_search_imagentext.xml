@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_imagentext"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="start|center_vertical"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    android:orientation="vertical">
+    android:layout_gravity="start|center_vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/search_image"
-            android:layout_width="96dp"
-            android:layout_height="74dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/radius_corner" />
-    </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/search_image"
+        android:layout_width="96dp"
+        android:layout_height="74dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/radius_corner"
+        app:layout_constraintBottom_toTopOf="@+id/search_text"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/search_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:maxLines="1"
         android:singleLine="false"
         android:textColor="@color/black"
-        android:textSize="12sp" />
-</LinearLayout>
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/search_image"
+        app:layout_constraintEnd_toEndOf="@+id/search_image"
+        app:layout_constraintTop_toBottomOf="@+id/search_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

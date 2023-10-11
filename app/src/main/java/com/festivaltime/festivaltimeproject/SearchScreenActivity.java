@@ -885,6 +885,7 @@ public class SearchScreenActivity extends AppCompatActivity {
         progressTextView.setText(progessToShow);
 
         int loopItems = Math.min(festivalList.size(), count);
+        int columns = festivalImageNText.getColumnCount(); // 그리드 레이아웃 열 개수
 
         for (int i = 0; i < loopItems; i++) {
             HashMap<String, String> festivalInfo = festivalList.get(i);
@@ -912,6 +913,15 @@ public class SearchScreenActivity extends AppCompatActivity {
                         .into(searchImageButton);
             }
             festivalImageNText.addView(festivalItemView);
+
+            int row = i / columns; // 현재 아이템이 위치할 행 인덱스
+            int col = i % columns; // 현재 아이템이 위치할 열 인덱스
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.rowSpec = GridLayout.spec(row); // 행 위치 지정
+            params.columnSpec = GridLayout.spec(col); // 열 위치 지정
+
+            festivalItemView.setLayoutParams(params);
 
 
             festivalItemView.setOnClickListener(new View.OnClickListener() {
