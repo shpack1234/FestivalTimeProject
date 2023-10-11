@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="@drawable/callout_balloon_background">
+    android:background="@drawable/map_information">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/upper_box"
@@ -16,7 +16,8 @@
             android:id="@+id/festival_rep_image"
             android:layout_width="150dp"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@drawable/radius_corner"
             android:contentDescription="festival image"
@@ -26,10 +27,11 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="95dp"
             android:orientation="vertical"
             android:layout_weight="2"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/festival_rep_image"
@@ -40,8 +42,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:textSize="13sp"
+                android:layout_gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/festival_location"
@@ -49,7 +58,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="13sp"
+                android:layout_gravity="center"
                 android:textStyle="bold" />
 
             <TextView
@@ -58,24 +68,27 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="13sp"
+                android:layout_gravity="center"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <Button
         android:id="@+id/festival_detail_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="120dp"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:text="상세보기"
         android:textColor="#43F42E"
         android:textSize="12sp"
         android:textStyle="bold" />
+
+
 
 
 </RelativeLayout>
