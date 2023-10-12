@@ -51,11 +51,23 @@ public class EntireTodayAdapter extends RecyclerView.Adapter<EntireTodayAdapter.
 
                 String startdate = samedayInfo.get("eventstartdate");
                 String enddate = samedayInfo.get("eventenddate");
-                String minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
-                String minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
-                String maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
-                String maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
+                String minMonth = "";
+                String minDay = "";
+                String maxMonth = "";
+                String maxDay = "";
+
+                if (startdate != null && startdate.length() >= 8) {
+                    minMonth = String.valueOf(Integer.parseInt(startdate.substring(4, 6)));
+                    minDay = String.valueOf(Integer.parseInt(startdate.substring(6, 8)));
+                }
+
+                if (enddate != null && enddate.length() >= 8) {
+                    maxMonth = String.valueOf(Integer.parseInt(enddate.substring(4, 6)));
+                    maxDay = String.valueOf(Integer.parseInt(enddate.substring(6, 8)));
+                }
+
                 String entitydate = minMonth + "/" + minDay + "~" + maxMonth + "/" + maxDay;
+
                 holder.datetext.setText(entitydate);
 
                 holder.imageButton.setOnClickListener(new View.OnClickListener() {

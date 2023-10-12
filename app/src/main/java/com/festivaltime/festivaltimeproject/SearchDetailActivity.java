@@ -276,24 +276,11 @@ public class SearchDetailActivity extends AppCompatActivity {
             public void run() {
                 LinearLayout festivalContainer = findViewById(R.id.festival_container);
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-
-                Date currentDate = new Date(); // 현재 날짜 가져오기
-
                 for (int i = 0; i < festivalContainer.getChildCount(); i++) {
                     View child = festivalContainer.getChildAt(i);
-                    TextView stateTextView = child.findViewById(R.id.festival_date);
-                    Date startDate = null;
+                    TextView stateTextView = child.findViewById(R.id.festival_state);
 
-                    if (stateTextView != null) {
-                        try {
-                            startDate = dateFormat.parse(stateTextView.getText().toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    if (startDate != null && currentDate.after(startDate)) {
+                    if (stateTextView != null && stateTextView.getText().toString().equals("종료됨")) {
                         child.setVisibility(show ? View.GONE : View.VISIBLE);
                     } else {
                         child.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -378,13 +365,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             String startDateStr = festivalInfo.get("eventstartdate");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
-                                    festivaldate.setText(startDateStr);
-                                }
-                            });
                             String endDateStr = festivalInfo.get("eventenddate");
                             titleTextView.setText(title);
                             locationTextView.setText(location);
@@ -756,13 +736,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             String startDateStr = festivalInfo.get("eventstartdate");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
-                                    festivaldate.setText(startDateStr);
-                                }
-                            });
                             String endDateStr = festivalInfo.get("eventenddate");
                             titleTextView.setText(title);
                             locationTextView.setText(location);
@@ -1162,13 +1135,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
 
                                         String startDateStr = introInfo.get("eventstartdate");
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
-                                                festivaldate.setText(startDateStr);
-                                            }
-                                        });
 
                                         String endDateStr = introInfo.get("eventenddate");
                                         finalstartDate[0] = introInfo.get("eventstartdate");
@@ -1585,13 +1551,6 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         String startDateStr = introInfo.get("eventstartdate");
                                         String endDateStr = introInfo.get("eventenddate");
                                         finalstartDate[0] = introInfo.get("eventstartdate");
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
-                                                festivaldate.setText(startDateStr);
-                                            }
-                                        });
                                         finalendDate[0] = introInfo.get("eventenddate");
 
                                         // 날짜 문자열을 Date 객체로 변환
