@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -43,6 +45,9 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.ApiReader;
 import com.festivaltime.festivaltimeproject.DataHolder;
 import com.festivaltime.festivaltimeproject.MainActivity;
@@ -195,6 +200,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         mapResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mapView.removeAllPOIItems();
                 onMapViewInitialized(mapView);
             }
         });
@@ -232,8 +238,6 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         isFestivalVisible = false;
 
         MapPoint centerPoint = MapPoint.mapPointWithGeoCoord(36.5, 127.5);
-
-        mapView.removeAllPOIItems();
         mapView.setMapCenterPointAndZoomLevel(centerPoint, 11, false);
         areas.add(new Pair<>(37.5665, 126.9780)); //서울 1
         areas.add(new Pair<>(37.4562, 126.7052)); //인천 2
@@ -444,16 +448,26 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 TextView titleTextView = popupView.findViewById(R.id.etc_detail_title);
                 TextView etcNearFestival = popupView.findViewById(R.id.etc_near_festival);
                 TextView etcLoc = popupView.findViewById(R.id.etc_location);
+                Button etcDetailButton=popupView.findViewById(R.id.etc_detail_button);
                 String[] etcInfo = mapPOIItem.getItemName().split(",");
                 titleTextView.setText(etcInfo[0]);
                 etcNearFestival.setText("근처 축제   " + selectedFestivalName);
                 etcLoc.setText("위치   " + etcInfo[1]);
+                Uri etcUrl=Uri.parse(etcInfo[2]);
 
                 int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
                 int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
                 int yOffset = bottomBarHeight + popupHeight; // 팝업 높이만큼 추가 오프셋
 
                 popupWindow.showAtLocation(mapView, Gravity.TOP, 0, 0);
+
+                etcDetailButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(Intent.ACTION_VIEW, etcUrl);
+                        startActivity(intent);
+                    }
+                });
             } else {
                 selectedFestivalName = mapPOIItem.getItemName();
                 popupView = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
@@ -475,7 +489,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                 festivalList.addAll(parsedFestivalList);
                                 for (HashMap<String, String> festivalInfo : festivalList) {
 
-                                    String firstimage1 = festivalInfo.get("firstimage1");
+                                    firstImage = festivalInfo.get("img1");
 
                                 }
                             }
@@ -521,6 +535,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
                                     TextView festivalLoc = popupView.findViewById(R.id.festival_location);
                                     TextView festivalPer = popupView.findViewById(R.id.festival_period);
+                                    ImageView firstImageView=popupView.findViewById(R.id.festival_rep_image);
                                     String title = mapPOIItem.getItemName();
                                     if (title != null && title.length() > 15) {
                                         title = title.substring(0, 15) + "...";
@@ -531,6 +546,18 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     }
                                     festivalLoc.setText(location);
                                     festivalPer.setText(eventStart + " ~ " + eventEnd);
+
+
+                                    if (firstImage == null || firstImage.isEmpty()) {
+                                        firstImageView.setImageResource(R.mipmap.empty_image);
+                                    } else {
+                                        Glide
+                                                .with(MapActivity.this)
+                                                .load(firstImage)
+                                                .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
+                                                .placeholder(R.drawable.radius_corner)
+                                                .into(firstImageView);
+                                    }
 
                                     int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
                                     int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
@@ -756,7 +783,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
             public void run() {
                 for (PoiItem place : places) {
                     MapPOIItem poiItem = new MapPOIItem();
-                    poiItem.setItemName(place.getPlaceName() + "," + place.getAddressName());
+                    poiItem.setItemName(place.getPlaceName() + "," + place.getAddressName() + "," + place.getPlaceUrl());
                     poiItem.setTag(101);
                     poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
 

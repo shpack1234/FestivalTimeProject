@@ -216,7 +216,7 @@ public class ParsingApiData {
                     String title = getElementText(itemElement, "title");
                     String address1 = getElementText(itemElement, "addr1");
                     String address2 = getElementText(itemElement, "addr2");
-                    String img1 = getElementText(itemElement, "firstimage1");
+                    String img1 = getElementText(itemElement, "firstimage");
                     String img = getElementText(itemElement, "firstimage2");
                     String overview = getElementText(itemElement, "overview");
                     String contentid = getElementText(itemElement, "contentid");

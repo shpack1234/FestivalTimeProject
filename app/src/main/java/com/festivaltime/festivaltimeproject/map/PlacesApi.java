@@ -13,5 +13,6 @@ public interface PlacesApi {
             @Query("x") double longitude,
             @Query("y") double latitude,
             @Query("radius") int radius
+
     );
 }
