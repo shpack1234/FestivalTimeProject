@@ -276,19 +276,33 @@ public class SearchDetailActivity extends AppCompatActivity {
             public void run() {
                 LinearLayout festivalContainer = findViewById(R.id.festival_container);
 
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+
+                Date currentDate = new Date(); // 현재 날짜 가져오기
+
                 for (int i = 0; i < festivalContainer.getChildCount(); i++) {
                     View child = festivalContainer.getChildAt(i);
-                    TextView stateTextView = child.findViewById(R.id.festival_state);
+                    TextView stateTextView = child.findViewById(R.id.festival_date);
+                    Date startDate = null;
 
-                    if (stateTextView != null && stateTextView.getText().toString().equals("진행중")) {
-                        child.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }else{
+                    if (stateTextView != null) {
+                        try {
+                            startDate = dateFormat.parse(stateTextView.getText().toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (startDate != null && currentDate.after(startDate)) {
                         child.setVisibility(show ? View.GONE : View.VISIBLE);
+                    } else {
+                        child.setVisibility(show ? View.VISIBLE : View.GONE);
                     }
                 }
             }
         });
     }
+
 
 
     // 모든 container를 visible 또는 숨기는 함수
@@ -305,8 +319,6 @@ public class SearchDetailActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void FilterFestival(String response) {
@@ -366,6 +378,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             String startDateStr = festivalInfo.get("eventstartdate");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
+                                    festivaldate.setText(startDateStr);
+                                }
+                            });
                             String endDateStr = festivalInfo.get("eventenddate");
                             titleTextView.setText(title);
                             locationTextView.setText(location);
@@ -737,6 +756,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                             String id = festivalInfo.get("contentid");
                             String repImage = festivalInfo.get("img");
                             String startDateStr = festivalInfo.get("eventstartdate");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
+                                    festivaldate.setText(startDateStr);
+                                }
+                            });
                             String endDateStr = festivalInfo.get("eventenddate");
                             titleTextView.setText(title);
                             locationTextView.setText(location);
@@ -1057,402 +1083,13 @@ public class SearchDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void handleApiResponse2(String response, List<LinkedHashMap<String, String>> festivalResults) {
-
-        Log.d("response", response);
-        if (!type.isEmpty() && type.startsWith("A0207")) {
-            ParsingApiData.parseXmlDataFromSearchKeyword3(response, type, null);
-        } else {
-            ParsingApiData.parseXmlDataFromSearchKeyword3(response, null, type);
-        }// 응답을 파싱하여 데이터를 저장
-
-        List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-        // UI 갱신을 위한 작업을 executor를 사용하여 백그라운드 스레드에서 실행
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                festivalList.clear(); // 기존 데이터를 모두 제거
-                festivalList.addAll(parsedFestivalList);
-
-                for (LinkedHashMap<String, String> item : festivalResults) {
-                    for (LinkedHashMap<String, String> parsedItem : parsedFestivalList) {
-                        String title = item.get("title");
-                        if (title != null && title.contains(query) && item.equals(parsedItem)) {
-                            // title 값에 query가 포함되어 있고, item과 parsedItem이 같다면
-                            festivalList.add(item); // festivalList에 추가
-                        }
-                    }
-                }
-
-                // UI 갱신은 메인 스레드에서 실행
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI 갱신 코드
-                        LinearLayout festivalContainer = findViewById(R.id.festival_container);
-                        festivalContainer.removeAllViews();
-
-                        String textToShow = getTextToShow(type);
-                        TextView titleNameTextView = findViewById(R.id.Entire_view_title);
-                        titleNameTextView.setText(textToShow);
-
-                        for (HashMap<String, String> festivalInfo : festivalList) {
-                            View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
-                            TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
-                            TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
-                            TextView overviewTextView = festivalInfoBox.findViewById(R.id.festival_overview);
-                            ImageButton festivalRepImage = festivalInfoBox.findViewById(R.id.festival_rep_image);
-                            ImageButton calendaraddButton = festivalInfoBox.findViewById(R.id.calendar_addButton);
-                            ImageButton favoriteaddButton = festivalInfoBox.findViewById(R.id.favorite_addButton);
-
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                            );
-                            layoutParams.setMargins(0, 0, 0, 40);
-                            festivalInfoBox.setLayoutParams(layoutParams);
-
-                            String title = festivalInfo.get("title");
-                            String location = festivalInfo.get("address");
-                            //문자열길이 일정수 넘어가면 ...형태로 표시
-                            if (location != null && location.length() > 15) {
-                                location = location.substring(0, 15) + "...";
-                            }
-                            String id = festivalInfo.get("contentid");
-                            String repImage = festivalInfo.get("img");
-                            final String[] finalstartDate = {null};
-                            final String[] finalendDate = {null};
-                            titleTextView.setText(title);
-                            locationTextView.setText(location);
-
-                            Log.d(TAG, "Rep Image URL: " + repImage);
-                            if (repImage == null || repImage.isEmpty()) {
-                                festivalRepImage.setImageResource(R.drawable.ic_image);
-                            } else {
-                                //Picasso.get().load(repImage).placeholder(R.drawable.ic_image).into(festivalRepImage);
-                                Glide
-                                        .with(getApplicationContext())
-                                        .load(repImage)
-                                        .transform(new CenterCrop(), new RoundedCorners(30))
-                                        .placeholder(R.drawable.ic_image)
-                                        .into(festivalRepImage);
-                            }
-                            apiReader.detailIntro(apiKey, id, new ApiReader.ApiResponseListener() {
-                                @Override
-                                public void onSuccess(String response) {
-                                    // ApiReader에서 가져온 데이터를 ParsingApiData를 사용하여 파싱
-                                    ParsingApiData.parseXmlDataFromdetailIntro(response);
-
-                                    // 축제의 시작일과 종료일 가져오기
-                                    List<LinkedHashMap<String, String>> detailIntroList = ParsingApiData.getFestivalList();
-                                    if (!detailIntroList.isEmpty()) {
-                                        LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
-
-                                        String startDateStr = introInfo.get("eventstartdate");
-                                        String endDateStr = introInfo.get("eventenddate");
-                                        finalstartDate[0] = introInfo.get("eventstartdate");
-                                        finalendDate[0] = introInfo.get("eventenddate");
-
-                                        // 날짜 문자열을 Date 객체로 변환
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-
-                                        Date startDate = null;
-                                        Date endDate = null;
-                                        Date currentDate = new Date(); // 현재 날짜 가져오기
-
-                                        try {
-                                            startDate = dateFormat.parse(startDateStr);
-                                            endDate = dateFormat.parse(endDateStr);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        // 축제의 상태를 판단하여 텍스트뷰에 설정
-                                        TextView stateTextView = festivalInfoBox.findViewById(R.id.festival_state);
-                                        if (startDate != null && endDate != null) {
-                                            if (currentDate.before(startDate)) {
-                                                // 현재 날짜가 시작일 이전인 경우
-                                                stateTextView.setText("진행예정");
-                                                stateTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light)); // 주황색으로 설정
-                                            } else if (currentDate.after(endDate)) {
-                                                // 현재 날짜가 종료일 이후인 경우
-                                                stateTextView.setText("종료됨");
-                                                stateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray)); // 회색으로 설정
-                                            } else {
-                                                // 현재 날짜가 시작일과 종료일 사이에 있는 경우
-                                                stateTextView.setText("진행중");
-                                                stateTextView.setTextColor(getResources().getColor(android.R.color.holo_green_light)); // 초록색으로 설정
-                                            }
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    Log.e(TAG, "API Error: " + error);
-                                }
-                            });
-
-                            apiReader.FestivalInfo2(apiKey, id, new ApiReader.ApiResponseListener() {
-                                @Override
-                                public void onSuccess(String response) {
-                                    ParsingApiData.parseXmlDataFromDetailInfo2(response);
-                                    //Log.d("festivalinfo response: ", response);
-                                    List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-                                    LinkedHashMap<String, String> firstMap = parsedFestivalList.get(0);
-
-                                    String detailInfo = firstMap.get("infotext");
-                                    //문자열길이 일정수 넘어가면 ...형태로 표시
-                                    if (detailInfo != null && detailInfo.length() > 40) {
-                                        detailInfo = detailInfo.substring(0, 40) + "...";
-                                    }
-
-
-                                    //html 형태 변환하여 setText
-                                    if (detailInfo != null) {
-                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                            overviewTextView.setText(Html.fromHtml(detailInfo, Html.FROM_HTML_MODE_LEGACY));
-                                        } else {
-                                            overviewTextView.setText(Html.fromHtml(detailInfo));
-                                        }
-                                    } else {
-                                        // detailInfo가 null인 경우에 대한 처리 추가
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    Log.e(MotionEffect.TAG, "API Error: " + error);
-                                }
-                            });
-
-                            festivalContainer.addView(festivalInfoBox);
-
-                            festivalInfoBox.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // 클릭 시 contentid 값을 가져오는 작업 수행
-                                    String contentId = id;
-                                    // 가져온 contentid 값을 사용하여 원하는 작업을 수행
-                                    navigateToDetailFestivalActivity(SearchDetailActivity.this, contentId);
-                                }
-                            });
-
-                            favoriteaddButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Log.d("Button Listener", "addBtn");
-                                    executor.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            String contentId = id;
-                                            loadedUser = userDao.getUserInfoById(userId);
-                                            if (loadedUser != null) {
-                                                if (loadedUser.getIsLogin()) {
-                                                    if (loadedUser.getUserFavoriteFestival().contains(contentId)) {
-                                                        Log.d("Festival Id", contentId);
-                                                        Log.d("Button Listener", "ID already exists in userFavoriteFestival");
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-
-                                                    } else {
-                                                        Log.d("Festival Id", contentId);
-                                                        loadedUser.addUserFavoriteFestival(contentId);
-                                                        userDao.insertOrUpdate(loadedUser); // 사용자 정보 업데이트
-                                                    }
-                                                } else {
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                }
-                                            } else {
-                                                Log.e("No UserInfo", "You should get your information in MyPage");
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-
-
-                            calendaraddButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    executor.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                                                SimpleDateFormat targetDateFormat = new SimpleDateFormat("yyyy.M.d", Locale.getDefault());
-                                                Date currentDate = new Date();
-                                                String currentDateStr = sdf.format(currentDate);
-
-                                                String CompareStartDate = finalstartDate[0];
-                                                String CompareEndDate = finalendDate[0];
-
-                                                Log.d("startdate: ", "Start Date: " + CompareStartDate);
-                                                Log.d("enddate: ", "End Date: " + CompareEndDate);
-
-                                                String startTime = "";
-                                                String endTime = "";
-
-                                                loadedUser = userDao.getUserInfoById(userId);
-                                                calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                calendarDao = calendarDatabase.calendarDao();
-                                                if (loadedUser != null) {
-                                                    if (loadedUser.getIsLogin()) {
-                                                        if (calendarDao.getAllContentIds().contains(id)) {
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    Toast.makeText(getApplicationContext(), "이미 추가된 축제입니다", Toast.LENGTH_SHORT).show();
-                                                                    Log.d("Button Listener", "Festival already exists in Calendar");
-                                                                }
-                                                            });
-                                                        } else {
-                                                            Date compareDate = sdf.parse(CompareEndDate);
-                                                            Date current = sdf.parse(currentDateStr);
-
-                                                            //날짜없으면 추가안되도록 설정
-                                                            if (CompareStartDate != null && CompareEndDate != null) {
-                                                                if (current.compareTo(compareDate) <= 0) {
-                                                                    Log.d("Button Action", "Add about Festival to Calendar");
-
-                                                                    Date originalStartDate = sdf.parse(CompareStartDate);
-                                                                    String formattedStartDate = targetDateFormat.format(originalStartDate);
-                                                                    Date originalEndDate = sdf.parse(CompareEndDate);
-                                                                    String formattedEndDate = targetDateFormat.format(originalEndDate);
-
-                                                                    // 일수 계산 위해 밀리초로 날짜 변환
-                                                                    long startDateMillis = originalStartDate.getTime();
-                                                                    long endDateMillis = originalEndDate.getTime();
-
-                                                                    // 두 날짜 사이의 일 수 계산
-                                                                    long daysBetween = (endDateMillis - startDateMillis) / (1000 * 60 * 60 * 24);
-
-                                                                    // 14일(2주) 이상인 경우 팝업
-                                                                    if (daysBetween >= 14) {
-                                                                        runOnUiThread(new Runnable() {
-                                                                            @Override
-                                                                            public void run() {
-                                                                                AddFT dialog = new AddFT(SearchDetailActivity.this, title, id, formattedStartDate, formattedEndDate);
-                                                                                dialog.show();
-
-                                                                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                                                                    @Override
-                                                                                    public void onDismiss(DialogInterface dialog) {
-                                                                                        // 팝업이 닫힐 때 실행할 코드 작성 부분
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        });
-                                                                    } else {
-
-                                                                        Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
-                                                                        Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
-
-                                                                        calendarDatabase = CalendarDatabase.getInstance(getApplicationContext());
-                                                                        calendarDao = calendarDatabase.calendarDao();
-
-                                                                        // CalendarEntity 생성
-                                                                        CalendarEntity event = new CalendarEntity();
-                                                                        event.title = title;
-                                                                        event.startDate = formattedStartDate;
-                                                                        event.endDate = formattedEndDate;
-                                                                        event.startTime = startTime;
-                                                                        event.endTime = endTime;
-                                                                        event.category = "#ed5c55";
-                                                                        event.contentid = id;
-
-                                                                        // CalendarEntityDao를 사용하여 데이터베이스에 이벤트 추가
-                                                                        calendarDao.InsertSchedule(event);
-                                                                    }
-                                                                } else {
-                                                                    runOnUiThread(new Runnable() {
-                                                                        @Override
-                                                                        public void run() {
-                                                                            Toast.makeText(getApplicationContext(), "이미 지난 축제입니다", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    });
-                                                                }
-                                                            } else {
-                                                                runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        Toast.makeText(getApplicationContext(), "축제날짜를 확인해주세요", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-                                                    } else {
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                Toast.makeText(getApplicationContext(), "로그인 후에 이용 가능합니다.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                                    }
-
-                                                }
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        }
-                                    });
-                                }
-                            });
-
-
-                            // 스크롤 이벤트 리스너 설정
-                            Scroll_View.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                                @Override
-                                public void onScrollChanged() {
-                                    if (!isLoading) {
-                                        // 현재 스크롤 위치
-                                        int scrollY = Scroll_View.getScrollY();
-                                        // 현재 보여지는 영역의 높이
-                                        int visibleHeight = Scroll_View.getHeight();
-                                        // 스크롤 전체 영역의 높이
-                                        int totalHeight = Scroll_View.getChildAt(0).getHeight();
-
-                                        // 마지막에 도달했는지 체크
-                                        if (scrollY + visibleHeight >= totalHeight) {
-                                            // 추가 데이터 로드
-                                            currentPage++; // 다음 페이지 로드를 위해 currentPage 증가
-                                            loadMoreData();
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
-    }
-
 
     private void handleApiResponse(String response, String todaydate, boolean ischeckpro) {
 
-        Log.d("response", response);
+        //Log.d("response", response);
         ParsingApiData.parseXmlDataFromSearchKeyword(response); // 응답을 파싱하여 데이터를 저장
 
         List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
-        Log.d(TAG, "Festival List Size: " + parsedFestivalList.size());
-
         // UI 갱신을 위한 작업을 executor를 사용하여 백그라운드 스레드에서 실행
         executor.execute(new Runnable() {
             @Override
@@ -1525,6 +1162,14 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         LinkedHashMap<String, String> introInfo = detailIntroList.get(0); // 첫 번째 항목 가져오기
 
                                         String startDateStr = introInfo.get("eventstartdate");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
+                                                festivaldate.setText(startDateStr);
+                                            }
+                                        });
+
                                         String endDateStr = introInfo.get("eventenddate");
                                         finalstartDate[0] = introInfo.get("eventstartdate");
                                         finalendDate[0] = introInfo.get("eventenddate");
@@ -1940,6 +1585,13 @@ public class SearchDetailActivity extends AppCompatActivity {
                                         String startDateStr = introInfo.get("eventstartdate");
                                         String endDateStr = introInfo.get("eventenddate");
                                         finalstartDate[0] = introInfo.get("eventstartdate");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                TextView festivaldate = festivalInfoBox.findViewById(R.id.festival_date);
+                                                festivaldate.setText(startDateStr);
+                                            }
+                                        });
                                         finalendDate[0] = introInfo.get("eventenddate");
 
                                         // 날짜 문자열을 Date 객체로 변환
