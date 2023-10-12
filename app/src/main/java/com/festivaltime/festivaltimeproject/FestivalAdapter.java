@@ -388,6 +388,23 @@ public class FestivalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.title = title;
         }
 
+        private void showAddFTDialog(final String title, final String id, final String formattedStartDate, final String formattedEndDate) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // UI 관련 작업을 여기서 수행
+                    AddFT dialog = new AddFT(activity, title, id, formattedStartDate, formattedEndDate);
+                    dialog.show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            // 팝업이 닫힐 때 실행할 코드 작성 부분
+                        }
+                    });
+                }
+            });
+        }
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
@@ -442,15 +459,8 @@ public class FestivalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     // 14일(2주) 이상인 경우 팝업
                                     if (daysBetween >= 14) {
                                         // 팝업을 표시
-                                        AddFT dialog = new AddFT(activity, title, id, formattedStartDate, formattedEndDate);
-                                        dialog.show();
+                                        showAddFTDialog(title, id, formattedStartDate, formattedEndDate);
 
-                                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialog) {
-                                                // 팝업이 닫힐 때 실행할 코드 작성 부분
-                                            }
-                                        });
                                     } else {
                                         Log.d("formattedStartDate: ", "Formatted Start Date: " + formattedStartDate);
                                         Log.d("formattedEndDate: ", "Formatted End Date: " + formattedEndDate);
