@@ -374,13 +374,16 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                     if (response.isSuccessful()) {
                         ApiResponseModel apiResponse = response.body();
                         Gson gson = new Gson();
-
                         ApiResponseModel restApiData = gson.fromJson(apiResponse.getJsonString(), ApiResponseModel.class);
 
                         if (restApiData != null) {
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            showPlacesOnMap(places, "food_inmap", 70, 70); // "food_inmap" 아이콘으로 표시
+                            if (places.size() != 0) {
+                                showPlacesOnMap(places, "food_inmap", 70, 70);
+                            } else {
+                                Log.e("API Error", "List is null");
+                            }
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -412,7 +415,11 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                         if (restApiData != null) {
                             List<PoiItem> places = restApiData.getDocuments();
                             int placesCount = places.size(); // 리스트의 크기를 가져옴
-                            showPlacesOnMap(places, "hotel_inmap", 70, 70); // "food_inmap" 아이콘으로 표시
+                            if (places.size() != 0) {
+                                showPlacesOnMap(places, "hotel_inmap", 70, 70);
+                            } else {
+                                Log.e("API Error", "List is null");
+                            }
                         } else {
                             Log.e("API Error", "Response body is null");
                         }
@@ -448,12 +455,12 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 TextView titleTextView = popupView.findViewById(R.id.etc_detail_title);
                 TextView etcNearFestival = popupView.findViewById(R.id.etc_near_festival);
                 TextView etcLoc = popupView.findViewById(R.id.etc_location);
-                Button etcDetailButton=popupView.findViewById(R.id.etc_detail_button);
+                Button etcDetailButton = popupView.findViewById(R.id.etc_detail_button);
                 String[] etcInfo = mapPOIItem.getItemName().split(",");
                 titleTextView.setText(etcInfo[0]);
                 etcNearFestival.setText("근처 축제   " + selectedFestivalName);
                 etcLoc.setText("위치   " + etcInfo[1]);
-                Uri etcUrl=Uri.parse(etcInfo[2]);
+                Uri etcUrl = Uri.parse(etcInfo[2]);
 
                 int bottomBarHeight = findViewById(R.id.bottom_navigation).getHeight();
                 int popupHeight = popupView.getMeasuredHeight(); // 팝업 높이 측정
@@ -464,7 +471,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                 etcDetailButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent(Intent.ACTION_VIEW, etcUrl);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, etcUrl);
                         startActivity(intent);
                     }
                 });
@@ -535,7 +542,7 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     TextView titleTextView = popupView.findViewById(R.id.festival_detail_title);
                                     TextView festivalLoc = popupView.findViewById(R.id.festival_location);
                                     TextView festivalPer = popupView.findViewById(R.id.festival_period);
-                                    ImageView firstImageView=popupView.findViewById(R.id.festival_rep_image);
+                                    ImageView firstImageView = popupView.findViewById(R.id.festival_rep_image);
                                     String title = mapPOIItem.getItemName();
                                     if (title != null && title.length() > 15) {
                                         title = title.substring(0, 15) + "...";
@@ -761,23 +768,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
         });
     }
 
-    private void showPlacesOnMap(List<PoiItem> places) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (PoiItem place : places) {
-                    MapPOIItem poiItem = new MapPOIItem();
-                    poiItem.setTag(101);
-                    poiItem.setItemName(place.getPlaceName() + "," + place.getAddressName());
-                    poiItem.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(place.getY()), Double.parseDouble(place.getX())));
-                    poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
-                    mapView.addPOIItem(poiItem);
-                }
-            }
-        });
-    }
-
-    private void showPlacesOnMap(List<PoiItem> places, String iconResource, int width, int height) {
+    private void showPlacesOnMap(List<PoiItem> places, String iconResource, int width,
+                                 int height) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -813,16 +805,19 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     }
 
     @Override
-    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem
+            mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
 
     }
 
     @Override
-    public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+    public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint
+            mapPoint) {
 
     }
 
-    private void marKingFestivalGroup(@NonNull MapPOIItem[] marker, List<Pair<Double, Double>> location, List<Pair<String, String>> Info) {
+    private void marKingFestivalGroup(@NonNull MapPOIItem[]
+                                              marker, List<Pair<Double, Double>> location, List<Pair<String, String>> Info) {
         for (int i = 0; i < marker.length; i++) {
             Log.d("Tag", String.valueOf(Info.get(i).second));
         }
