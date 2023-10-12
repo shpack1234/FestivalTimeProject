@@ -157,10 +157,11 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                 final String[] finalstartDate = {null};
                                 final String[] finalendDate = {null};
 
-                                Log.d("imgUrl", firstImage);
+
                                 if (firstImage == null || firstImage.isEmpty()) {
                                     festivalFirstImage.setImageResource(R.mipmap.empty_image);
                                 } else {
+                                    Log.d("imgUrl", firstImage);
                                     Glide
                                             .with(EntireViewActivity.this)
                                             .load(firstImage)

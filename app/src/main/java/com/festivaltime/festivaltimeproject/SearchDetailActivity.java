@@ -1494,8 +1494,9 @@ public class SearchDetailActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         LinearLayout festivalContainer = findViewById(R.id.festival_container);
+                        List<HashMap<String, String>> copyOfFestivalList = new ArrayList<>(parsedFestivalList);
 
-                        for (HashMap<String, String> festivalInfo : parsedFestivalList) {
+                        for (HashMap<String, String> festivalInfo : copyOfFestivalList) {
                             View festivalInfoBox = getLayoutInflater().inflate(R.layout.festival_info_box, null);
                             TextView titleTextView = festivalInfoBox.findViewById(R.id.festival_title);
                             TextView locationTextView = festivalInfoBox.findViewById(R.id.festival_location);
