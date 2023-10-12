@@ -503,11 +503,13 @@ public class SearchScreenActivity extends AppCompatActivity {
                                             ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
                                             String title = festivalInfo.get("title");
+                                             if (title != null && title.length() > 8) {
+                                                title = title.substring(0, 8) + "...";
+                                            }
                                             String id = festivalInfo.get("contentid");
                                             String repImage = festivalInfo.get("img");
 
                                             searchTextView.setText(title);
-                                            searchTextView.setMaxEms(8);
 
                                             Log.d(TAG, "Rep Image URL: " + repImage);
                                             if (repImage == null || repImage.isEmpty()) {
@@ -790,11 +792,13 @@ public class SearchScreenActivity extends AppCompatActivity {
             ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
             String title = festivalInfo.get("title");
+            if (title != null && title.length() > 8) {
+                title = title.substring(0, 8) + "...";
+            }
             String id = festivalInfo.get("contentid");
             String repImage = festivalInfo.get("img");
 
             searchTextView.setText(title);
-            searchTextView.setMaxEms(8);
 
             Log.d(TAG, "Rep Image URL: " + repImage);
             if (repImage == null || repImage.isEmpty()) {
@@ -894,6 +898,9 @@ public class SearchScreenActivity extends AppCompatActivity {
             ImageButton searchImageButton = festivalItemView.findViewById(R.id.search_image);
 
             String title = festivalInfo.get("title");
+            if (title != null && title.length() > 8) {
+                title = title.substring(0, 8) + "...";
+            }
             String id = festivalInfo.get("contentid");
             String repImage = festivalInfo.get("img");
 
