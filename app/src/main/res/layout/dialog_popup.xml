@@ -165,6 +165,8 @@
                         android:layout_weight="4"
                         android:textColor="@color/dark_gray"
                         android:background="@drawable/button_style"
+                        android:backgroundTintMode="multiply"
+                        android:backgroundTint="@color/white"
                         android:gravity="center|center"
                         android:text="@string/location_select"
                         android:textSize="13sp" />
@@ -219,6 +221,8 @@
                 android:gravity="center|center"
                 android:textColor="@color/dark_gray"
                 android:background="@drawable/button_style"
+                android:backgroundTintMode="multiply"
+                android:backgroundTint="@color/white"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
@@ -272,6 +276,8 @@
                 android:textColor="@color/dark_gray"
                 android:gravity="center|center"
                 android:background="@drawable/button_style"
+                android:backgroundTintMode="multiply"
+                android:backgroundTint="@color/white"
                 android:text="@string/default_date"
                 android:textSize="13sp" />
 
