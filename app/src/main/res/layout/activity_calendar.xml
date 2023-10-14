@@ -58,23 +58,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="42dp">
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="7" />
+                android:layout_weight="2" />
 
             <Button
                 android:id="@+id/calendar_festical_btn"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:background="#00ff0000"
                 android:drawableStart="@drawable/ic_cal_festi"
                 android:drawableEnd="@drawable/ic_cal_nxtbtn"
-                android:gravity="right|center"
                 android:text="@string/festi_cal"
+                android:layout_weight="0.1"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
@@ -82,15 +81,15 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/calendar_box"
-            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="719dp"
             android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/calendar_box"
             tools:ignore="NotSibling">
 
-        <FrameLayout
+            <FrameLayout
                 android:id="@+id/calendar_box"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
@@ -231,37 +230,45 @@
                     <LinearLayout
                         android:id="@+id/up_cal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp">
 
                         <Button
                             android:id="@+id/calendar_cal_setting"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="#00ff0000"
                             android:text="@string/cal_setting"
                             android:textColor="@color/purple_700"
                             android:textSize="13sp" />
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="3" />
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="2" />
 
-                        <Button
-                            android:id="@+id/calendar_add_Btn"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:background="#00ff0000"
-                            android:drawableLeft="@drawable/ic_add_cal"
-                            android:gravity="center|center"
-                            android:text="@string/add_button"
-                            android:textColor="@color/black"
-                            android:textSize="13sp" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_add_cal" />
+
+                            <Button
+                                android:id="@+id/calendar_add_Btn"
+                                android:layout_width="60dp"
+                                android:layout_height="match_parent"
+                                android:background="#00ff0000"
+                                android:text="@string/add_button"
+                                android:textColor="@color/black"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -302,7 +309,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"/>
+                            android:layout_height="50dp" />
 
 
                     </LinearLayout>
@@ -311,7 +318,7 @@
 
                 <include layout="@layout/blur_layout" />
 
-        </FrameLayout>
+            </FrameLayout>
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

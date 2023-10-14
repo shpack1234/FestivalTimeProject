@@ -48,19 +48,21 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/bottom_navigation"
         android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:orientation="vertical">
 
 
         <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
             android:layout_gravity="center"
             android:src="@drawable/logo"
             android:elevation="0dp"/>
@@ -68,8 +70,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
             android:orientation="vertical">
 
             <TextView
@@ -85,7 +87,7 @@
             <EditText
                 android:id="@+id/login_nickname"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="39dp"
                 android:autofillHints="Nickname"
                 android:hint="닉네임을 입력하세요."
                 android:textColorHint="@color/gray"
@@ -101,8 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
             android:orientation="vertical">
 
             <TextView
@@ -118,7 +120,7 @@
             <EditText
                 android:id="@+id/login_password"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="39dp"
                 android:autofillHints="Nickname"
                 android:inputType="textPassword"
                 android:gravity="center"
@@ -139,8 +141,8 @@
 
             <Button
                 android:id="@+id/login_sign_up"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:text="회원가입"
                 android:textSize="12sp"
                 android:layout_weight="1"
@@ -156,8 +158,8 @@
 
             <Button
                 android:id="@+id/login_find_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:text="닉네임 찾기"
                 android:textSize="12sp"
                 android:layout_weight="1"
@@ -173,8 +175,8 @@
 
             <Button
                 android:id="@+id/login_find_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:text="비밀번호 찾기"
                 android:textSize="12sp"
                 android:layout_weight="1"

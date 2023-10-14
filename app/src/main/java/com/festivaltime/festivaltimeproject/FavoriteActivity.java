@@ -122,7 +122,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
                     //찜 축제 없음
                     if (favoriteFestivals.size() == 0) {
-                        textView.setText("찜 축제를 추가하고 원하는 축제를 편하게 찾아보세요!");
+                        textView.setText("찜할 축제를 추가해보세요!");
                     } else {   //찜 축제 있음
                         for (String festivalId : favoriteFestivals) {
                             Log.d("Favorite Festival", festivalId);
