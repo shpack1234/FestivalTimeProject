@@ -225,9 +225,21 @@ public class MainActivity extends AppCompatActivity {
                         ParsingApiData.parseXmlDataFromHoliday(response);
                         Log.d("holiday response", response);
                         List<LinkedHashMap<String, String>> groupedHolidayList = ParsingApiData.getHolidayList();
-                        List<LinkedHashMap<String, String>> updatedHolidayList = groupAndCombineDates(groupedHolidayList);
+                        holidaylist.addAll(groupAndCombineDates(groupedHolidayList));
 
-                        holidaylist.addAll(updatedHolidayList);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                RecyclerView recyclerView = findViewById(R.id.holi_recycler_view);
+                                holidayFestivalAdapter holiadapter = new holidayFestivalAdapter(getApplicationContext(), holidaylist, MainActivity.this);
+                                //recyclerView.setHorizontalScrollBarEnabled(false);
+
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                                recyclerView.setLayoutManager(layoutManager);
+
+                                recyclerView.setAdapter(holiadapter);
+                            }
+                        });
                     }
 
                     @Override
@@ -236,20 +248,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-            }
-        });
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RecyclerView recyclerView = findViewById(R.id.holi_recycler_view);
-                holidayFestivalAdapter holiadapter = new holidayFestivalAdapter(getApplicationContext(), holidaylist, MainActivity.this);
-                //recyclerView.setHorizontalScrollBarEnabled(false);
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                recyclerView.setLayoutManager(layoutManager);
-
-                recyclerView.setAdapter(holiadapter);
             }
         });
 
@@ -572,6 +570,9 @@ public class MainActivity extends AppCompatActivity {
             String dateName = holidayInfo.get("dateName");
             String locdate = holidayInfo.get("locdate");
 
+            // 추가된 데이터를 로그로 확인
+            Log.d("HolidayInfo", "dateName: " + dateName + ", locdate: " + locdate);
+
             if (dateGroups.containsKey(dateName)) {
                 dateGroups.get(dateName).add(locdate);
             } else {
@@ -614,6 +615,10 @@ public class MainActivity extends AppCompatActivity {
             combinedInfo.put("locdate", dateRange);
             combinedInfo.put("startdate", minLocdate);
             combinedInfo.put("enddate", maxLocdate);
+
+
+            // 추가된 데이터를 로그로 확인
+            Log.d("HolidayInfo", "dateName: " + dateName + ", locdate: " + minLocdate);
 
             combinedList.add(combinedInfo);
         }
