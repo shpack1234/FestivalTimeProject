@@ -298,7 +298,12 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     // FetchScheduleTask에서 일정 데이터를 가져온 후, 캘린더 레이어에 업데이트하는 메서드
     @Override
     public void onFetchCompleted(List<CalendarEntity> scheduleList) {
-        updateUI(scheduleList); // 매개변수를 전달하여 호출합니다.
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateUI(scheduleList); // 매개변수를 전달하여 호출합니다.
+            }
+        });
     }
 
     public void setShowOtherMonths(boolean showOtherMonths) {
