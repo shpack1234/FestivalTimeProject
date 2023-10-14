@@ -96,6 +96,14 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0,0);
     }
 
+    public static void navigateToDetailFestivalActivity(Activity thisActivity, String contentId, boolean shouldNavigateBackToMapActivity) {
+        Intent intent = new Intent(thisActivity, EntireViewActivity.class);
+        intent.putExtra("contentid", contentId);
+        intent.putExtra("shouldNavigateBackToMapActivity", shouldNavigateBackToMapActivity);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0,0);
+    }
+
     public static void navigateToDetailFestivalActivity(Activity thisActivity, String contentId,String type) {
         Intent intent = new Intent(thisActivity, EntireViewActivity.class);
         intent.putExtra("contentid", contentId);

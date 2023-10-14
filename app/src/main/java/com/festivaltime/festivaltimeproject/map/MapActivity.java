@@ -130,6 +130,8 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
     private int endMonth;
     private int endDay;
 
+    private boolean shouldNavigateBackToMapActivity = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -578,8 +580,10 @@ public class MapActivity extends AppCompatActivity implements MapView.MapViewEve
                                     detailButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            shouldNavigateBackToMapActivity=true;
                                             int contentId = mapPOIItem.getTag();
-                                            navigateToDetailFestivalActivity(MapActivity.this, String.valueOf(contentId));
+                                            navigateToDetailFestivalActivity(MapActivity.this, String.valueOf(contentId), shouldNavigateBackToMapActivity);
+                                            shouldNavigateBackToMapActivity=false;
                                         }
                                     });
 
