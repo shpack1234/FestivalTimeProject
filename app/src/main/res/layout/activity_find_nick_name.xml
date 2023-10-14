@@ -15,20 +15,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/nickname_hint"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="20dp"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="닉네임 : "
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
+
+
+            <TextView
+                android:id="@+id/nickname_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/nickname_inquiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="문의하기"
-            android:background="@null"
+            android:background="@android:color/transparent"
+            android:textColor="@color/light_red"
             android:onClick="inquiryOnClick"/>
 
     </LinearLayout>
