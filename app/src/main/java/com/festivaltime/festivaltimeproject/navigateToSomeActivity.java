@@ -45,6 +45,13 @@ public class navigateToSomeActivity {
         thisActivity.overridePendingTransition(0, 0);
     }
 
+    public static void navigateMainToCalendarActivity(Activity thisActivity, boolean popup) {
+        Intent intent = new Intent(thisActivity, CalendarActivity.class);
+        intent.putExtra("popup", popup);
+        thisActivity.startActivity(intent);
+        thisActivity.overridePendingTransition(0, 0);
+    }
+
     public static void navigateToFavoriteActivity(Activity thisActivity) {
         Intent intent = new Intent(thisActivity, FavoriteActivity.class);
         thisActivity.startActivity(intent);

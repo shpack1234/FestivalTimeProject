@@ -1,6 +1,7 @@
 package com.festivaltime.festivaltimeproject;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateMainToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToCalendarActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToFavoriteActivity;
 import static com.festivaltime.festivaltimeproject.navigateToSomeActivity.navigateToMainActivity;
@@ -251,6 +252,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextView holidayText = findViewById(R.id.holiday_text);
+        holidayText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateMainToCalendarActivity(MainActivity.this, true);
+            }
+        });
 
         String[] mainFestivalArea = {"서울", "경기도", "부산", "전라북도"};
         String[] mainFestivalAreaCode = {"1", "31", "6", "37"};
