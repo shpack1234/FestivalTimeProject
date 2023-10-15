@@ -162,6 +162,36 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
         //화면 설정
         setMonthView();
 
+        // Intent로부터 전달된 값 확인
+        boolean openPopup = getIntent().getBooleanExtra("popup", false); // 기본값을 false로 설정
+
+        // openPopup 값이 true이면 팝업을 엽니다.
+        if (openPopup) {
+            Popup_btn = new CalendarPopupActivity(CalendarActivity.this);
+            // 선택한 날짜 popup 전송 후 startdate, enddate default 값으로 설정
+            Popup_btn.startdateClick.setText(SelectDateView.getText().toString());
+            Popup_btn.enddateClick.setText(SelectDateView.getText().toString());
+
+            Popup_btn.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    FetchScheduleTask fetchScheduleTask = new FetchScheduleTask(CalendarActivity.this, calendarDao);
+                    fetchScheduleTask.fetchSchedules(new FetchScheduleTask.FetchScheduleTaskListener() {
+                        @Override
+                        public void onFetchCompleted(List<CalendarEntity> scheduleList) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateUI(scheduleList);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            Popup_btn.show();
+        }
+
         //이전 달 버튼
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override

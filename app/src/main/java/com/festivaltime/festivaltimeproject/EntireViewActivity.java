@@ -40,6 +40,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDao;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarDatabase;
 import com.festivaltime.festivaltimeproject.calendardatabasepackage.CalendarEntity;
+import com.festivaltime.festivaltimeproject.map.MapActivity;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDao;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBase;
 import com.festivaltime.festivaltimeproject.userdatabasepackage.UserDataBaseSingleton;
@@ -82,6 +83,22 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
 
     private String title;
 
+    private boolean shouldNavigateBackToMapActivity;
+
+    @Override
+    public void onBackPressed() {
+        // 원하는 뒤로가기 동작을 정의
+        if (shouldNavigateBackToMapActivity) {
+            Intent intent = new Intent(this, MapActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onBackPressed(); // 기본 뒤로가기 동작 실행
+        }
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +127,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
         calendarDao = calendarDatabase.calendarDao();
 
         String contentId = getIntent().getStringExtra("contentid");
+        shouldNavigateBackToMapActivity=getIntent().getBooleanExtra("shouldNavigateBackToMapActivity", false);
 
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
