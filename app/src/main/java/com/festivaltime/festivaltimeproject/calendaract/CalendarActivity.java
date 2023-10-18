@@ -390,6 +390,27 @@ public class CalendarActivity extends AppCompatActivity implements FetchSchedule
     // 화면을 업데이트하는 메서드
     private void updateUI(List<CalendarEntity> scheduleList) {
         //setMonthView();
+
+        //선택되어있는 달 저장
+        int month = selectedDate.get(Calendar.MONTH) + 1;
+        int year = selectedDate.get(Calendar.YEAR);
+        //해당 달 월>영어 텍스트뷰
+        monthText.setText(Month_eng(month));
+        Year_text.setText(String.valueOf(year));
+
+        // CalendarDao 인스턴스 생성 (생략)
+        calendarDao = CalendarDatabase.getInstance(this).calendarDao();
+
+        //date recyclerview 설정
+        ArrayList<Date> dayList = daysInMonthArray();
+
+        //calendar 어뎁터 사용 위한 정의
+        CalendarAdapter adapter = new CalendarAdapter(dayList, showOtherMonths, calendarrecycler, SelectDateView, schedules, showft, showholi);
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 7); //recyclerview layout 설정
+        calendarrecycler.setLayoutManager(manager);
+        adapter.setOnDateClickListener(this);
+        calendarrecycler.setAdapter(adapter);
+
         LinearLayout scheduleContainer = findViewById(R.id.schedule_container);
         scheduleContainer.removeAllViews();
 
