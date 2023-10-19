@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,7 +100,6 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +128,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
         calendarDao = calendarDatabase.calendarDao();
 
         String contentId = getIntent().getStringExtra("contentid");
-        shouldNavigateBackToMapActivity=getIntent().getBooleanExtra("shouldNavigateBackToMapActivity", false);
+        shouldNavigateBackToMapActivity = getIntent().getBooleanExtra("shouldNavigateBackToMapActivity", false);
 
         String apiKey = getResources().getString(R.string.api_key);
         apiReader = new ApiReader();
@@ -136,7 +137,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
             apiReader.detailCommon(apiKey, contentId, new ApiReader.ApiResponseListener() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.d("response", response);
+                    Log.d("detailcommon response", response);
                     ParsingApiData.parseXmlDataFromDetailCommon(response); // 응답을 파싱하여 데이터를 저장
 
                     List<LinkedHashMap<String, String>> parsedFestivalList = ParsingApiData.getFestivalList();
@@ -153,13 +154,21 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                 TextView address = findViewById(R.id.festival_address);
                                 ImageView festivalFirstImage = findViewById(R.id.festival_firstimage);
                                 TextView overviewText = findViewById(R.id.festival_overview);
+                                Button homepageText = findViewById(R.id.festival_homepageaddr);
                                 ImageButton favoriteaddButton = findViewById(R.id.favorite_addButton);
                                 ImageButton calendaraddButton = findViewById(R.id.calendar_addButton);
 
                                 title = festivalInfo.get("title");
                                 String address1 = festivalInfo.get("address1");
                                 String address2 = festivalInfo.get("address2");
+                                String homepage = festivalInfo.get("homepage");
                                 String addresstext = "";
+
+                                Html.fromHtml(homepage);
+
+                                if (homepage.startsWith("홈페이지")) {
+                                    homepage=homepage.replace("홈페이지", "");
+                                }
 
                                 //주소 null시
                                 if ((address1 == null || address1.contains("null")) &&
@@ -183,7 +192,7 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                     Glide
                                             .with(EntireViewActivity.this)
                                             .load(firstImage)
-                                            .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
+                                            .transform(new CenterCrop(), new RoundedCorners(45)) // 둥근 테두리 반지름을 조절할 수 있음
                                             .placeholder(R.drawable.radius_corner)
                                             .into(festivalFirstImage);
                                 }
@@ -194,13 +203,17 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
                                     Glide
                                             .with(EntireViewActivity.this)
                                             .load(backImage)
-                                            .transform(new CenterCrop(), new RoundedCorners(46)) // 둥근 테두리 반지름을 조절할 수 있음
-                                            .placeholder(R.drawable.radius_corner)
+                                            .transform(new CenterCrop()) // 둥근 테두리 반지름을 조절할 수 있음
                                             .into(festivalBack);
                                 }
 
                                 titleTextView.setText(title);
                                 address.setText(addresstext);
+                                if (homepage == null) {
+                                    homepageText.setVisibility(View.GONE);
+                                } else {
+                                    homepageText.setText(Html.fromHtml(homepage));
+                                }
                                 //html 형태 변환하여 setText
                                 if (overview != null) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -224,7 +237,13 @@ public class EntireViewActivity extends AppCompatActivity implements MapView.Map
 
                                 mapView.setMapViewEventListener(EntireViewActivity.this);
 
-
+                                homepageText.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent urlintent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(Html.fromHtml(homepageText.getText().toString()))));
+                                        startActivity(urlintent);
+                                    }
+                                });
                                 favoriteaddButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {

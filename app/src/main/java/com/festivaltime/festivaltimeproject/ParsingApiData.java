@@ -222,6 +222,7 @@ public class ParsingApiData {
                     String contentid = getElementText(itemElement, "contentid");
                     String mapx=getElementText(itemElement, "mapx");
                     String mapy=getElementText(itemElement, "mapy");
+                    String homepage=getElementText(itemElement, "homepage");
 
                     festivalInfo.put("title", title);
                     festivalInfo.put("address1", address1);
@@ -232,6 +233,7 @@ public class ParsingApiData {
                     festivalInfo.put("contentid", contentid);
                     festivalInfo.put("mapx", mapx);
                     festivalInfo.put("mapy", mapy);
+                    festivalInfo.put("homepage", homepage);
 
                     festivalList.add(festivalInfo);
                 }

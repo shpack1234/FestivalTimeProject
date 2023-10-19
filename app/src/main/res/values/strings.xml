@@ -168,6 +168,7 @@
     <string name="address">주소</string>
     <string name="summary">개요</string>
     <string name="period">기간:</string>
+    <string name="homepageaddr">홈페이지</string>
     <string name="festival_review">리뷰</string>
 
     <!--개인정보-->
